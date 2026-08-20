@@ -67,6 +67,10 @@ conversation) → keep it, and demote D3. Zero hits → remove the flag and reco
 the question is closed with evidence instead of a comment. Expect the possibility of zero: there are
 open upstream reports of align mode producing no hits for hybrid agent prompt layouts.
 
+**One decision rides on the outcome.** `preserve_thinking: false` in the route was justified by this
+deployment being unable to reuse KV cache, which makes Qwen's own reason for the `true` default void.
+Real hits restore that reason, so re-decide the flag instead of inheriting it.
+
 **Watch for:** `align` mode is experimental in vLLM's own words. Any correctness oddity — a wrong
 answer on a repeated prompt, a tool call that doesn't match its arguments — revert immediately and
 do not debug around it.

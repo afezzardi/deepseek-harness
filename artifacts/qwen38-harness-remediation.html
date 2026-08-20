@@ -473,7 +473,8 @@ details > *:not(summary) { margin-top: .75rem; }
   </div>
   <ol class="seq">
     <li><div class="body"><h3>Measure align-mode prefix caching before optimising anything</h3>
-      <p>Add <code>--enable-prefix-caching</code> to the chat arm, restart, confirm the log names <code>align</code> mode, then re-read the concurrency line and require preemptions at zero. Run the same task twice and read the hit rate and <code>cached_tokens</code>. This is the only step that can invalidate the others, so it goes first. If hits are real, D3 stops being your dominant cost; if they are zero, you have closed the question with evidence instead of a comment.</p></div></li>
+      <p>Add <code>--enable-prefix-caching</code> to the chat arm, restart, confirm the log names <code>align</code> mode, then re-read the concurrency line and require preemptions at zero. Run the same task twice and read the hit rate and <code>cached_tokens</code>. This is the only step that can invalidate the others, so it goes first. If hits are real, D3 stops being your dominant cost; if they are zero, you have closed the question with evidence instead of a comment.</p>
+      <p><b>One decision rides on the outcome.</b> <code>preserve_thinking: false</code> was chosen because this deployment could not reuse KV cache, making Qwen's own justification for the default void. Real hits restore that justification, so the flag has to be re-decided rather than inherited.</p></div></li>
     <li><div class="body"><h3>Close the concurrency mismatch</h3>
       <p>D4 is unguarded and its failure mode is a hang. Cap <code>maxConcurrentAgents</code> at 4, or drop the subagent and workflow rows — which also removes ~1,800 tokens of schema. Do this regardless of how step 1 turns out; it is a safety bound, not an optimisation.</p></li>
     <li><div class="body"><h3>Build the regression gate the report asked for</h3>
