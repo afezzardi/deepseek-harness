@@ -568,7 +568,7 @@ Default vLLM sampling parameters have been overridden by the model's
           </tbody>
         </table>
       </div>
-      <p>Because this checkpoint cannot prefix-cache (<code>supports_mamba_prefix_caching=False</code>), every step re-prefills from token 0 — about 2 s at 13k, and 38.8 s at 130k on your measured curve. On a 20-turn task that is minutes of pure re-prefill before any thinking happens.</p>
+      <p>Because prefix caching is off on this engine, every step re-prefills from token 0 — about 2 s at 13k, and 38.8 s at 130k on your measured curve. On a 20-turn task that is minutes of pure re-prefill before any thinking happens. <b>The reason it is off is not what this report assumed:</b> <code>supports_mamba_prefix_caching=False</code> selects a mode, not the feature. See R1 of the remediation report. The costs measured here hold for the engine as deployed, and would not survive real cache hits.</p>
       <p>This is composition work, not code work: the skill catalog, workspace instructions and runtime-context snapshot arrive as separate <code>user/message</code> rows and can be trimmed independently. It is also where your "make the code less verbose" instinct pays off in latency rather than aesthetics.</p>
     </div>
 
@@ -643,7 +643,8 @@ agent-default-model:
     </div>
     <div class="finding">
       <div class="fhead"><h3>Why <code>preserve_thinking: false</code> diverges from your eval profile</h3><span class="chip gap">your call</span></div>
-      <p>Qwen defaults it true and justifies that with KV-cache reuse. This deployment cannot prefix-cache, so that benefit is void while the cost stands: retained reasoning re-prefills from token 0 on every turn, and you measured 38.8 s at 130k.</p>
+      <p>Qwen defaults it true and justifies that with KV-cache reuse. Prefix caching is off as deployed, so that benefit is void <em>today</em> while the cost stands: retained reasoning re-prefills from token 0 on every turn, and you measured 38.8 s at 130k.</p>
+      <p><b>This justification depends on caching staying off, which is now an open question.</b> If the align-mode experiment in R1 produces real hits, the KV-reuse benefit Qwen cites returns and <code>preserve_thinking: false</code> has to be re-decided rather than inherited from this report.</p>
       <p><code>REALWORLD_PROFILE</code> sets it <code>true</code> — correct for eval reproducibility, and I have deliberately diverged for agent-loop economics. If you would rather keep one profile across both surfaces, flip it; the trade is decision continuity across turns against per-turn prefill.</p>
     </div>
   </div>

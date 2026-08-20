@@ -13,6 +13,7 @@ carries a status header saying which parts.
 
 | File | What it is |
 |---|---|
+| `AGENTS.md` (+ `CLAUDE.md` symlink) | Scoped guidance for future sessions: the reference repos on `srvhapeda` and how to reach them, verification discipline, the live-config sync rule, and the git rule. |
 | `NEXT-SESSION.md` | **Start here.** The ranked experiment queue with exact commands, boot gates, and pass/fail criteria. Operationalises the foundation assessment's Phases 2 and 3. |
 | `qwen38-harness-remediation.html` | **Current.** Ranked remediation path: two defects fixed and wire-proven, three corrections to the bring-up report, one new concurrency defect, and the prefix-caching experiment that outranks the rest. |
 | `qwen38-harness-bringup.html` | Wire-level verification: 11 endpoint gates, 6 route corrections, the reasoning-field root cause. Authoritative except for §Next, C6, and its prefix-caching claim. |
