@@ -1,0 +1,742 @@
+<title>Qwen3.8 Harness Bring-Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --ground: #F7F9FB;
+  --surface: #FFFFFF;
+  --surface-2: #EDF1F5;
+  --ink: #131A21;
+  --ink-muted: #56646F;
+  --rule: #D5DDE5;
+  --rule-soft: #E7ECF1;
+  --accent: #1F5C8B;
+  --accent-soft: #E2ECF4;
+  --ok: #1B6E52;
+  --ok-soft: #E0F0E9;
+  --warn: #8F4C16;
+  --warn-soft: #F7EADC;
+  --bad: #9E2B22;
+  --bad-soft: #F7E4E1;
+  --shadow: 0 1px 2px rgba(19,26,33,.05), 0 8px 24px -16px rgba(19,26,33,.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0E1318;
+    --surface: #151C23;
+    --surface-2: #1C242D;
+    --ink: #E3E9EE;
+    --ink-muted: #94A2AE;
+    --rule: #29343E;
+    --rule-soft: #1F2831;
+    --accent: #74B6E2;
+    --accent-soft: #162835;
+    --ok: #5CC59C;
+    --ok-soft: #122A22;
+    --warn: #DA9C57;
+    --warn-soft: #2C2115;
+    --bad: #E5837A;
+    --bad-soft: #2E1917;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0E1318;
+  --surface: #151C23;
+  --surface-2: #1C242D;
+  --ink: #E3E9EE;
+  --ink-muted: #94A2AE;
+  --rule: #29343E;
+  --rule-soft: #1F2831;
+  --accent: #74B6E2;
+  --accent-soft: #162835;
+  --ok: #5CC59C;
+  --ok-soft: #122A22;
+  --warn: #DA9C57;
+  --warn-soft: #2C2115;
+  --bad: #E5837A;
+  --bad-soft: #2E1917;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.6);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.1rem, 4vw, 3rem) 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.25rem;
+}
+
+.prose { max-width: 68ch; }
+
+h1, h2, h3 {
+  font-family: "IBM Plex Serif", ui-serif, Georgia, serif;
+  text-wrap: balance;
+  margin: 0;
+  letter-spacing: -0.012em;
+}
+h1 { font-size: clamp(2rem, 4.4vw, 2.85rem); font-weight: 600; line-height: 1.14; }
+h2 { font-size: clamp(1.32rem, 2.4vw, 1.62rem); font-weight: 600; line-height: 1.24; }
+h3 { font-size: 1.06rem; font-weight: 600; line-height: 1.3; }
+
+p, li { margin: 0; }
+section > p + p { margin-top: .85rem; }
+
+.eyebrow {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .705rem;
+  font-weight: 500;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px;
+}
+
+code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace; }
+:not(pre) > code {
+  font-size: .855em;
+  background: var(--surface-2);
+  border: 1px solid var(--rule-soft);
+  padding: .08em .34em;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+pre {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .82rem;
+  line-height: 1.62;
+  box-shadow: var(--shadow);
+}
+pre .c { color: var(--ink-muted); }
+pre .k { color: var(--accent); font-weight: 500; }
+pre .s { color: var(--ok); }
+
+/* ── header ─────────────────────────────────────────── */
+header { display: flex; flex-direction: column; gap: 1.15rem; }
+.meta {
+  display: flex; flex-wrap: wrap; gap: .4rem 1.4rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .755rem; color: var(--ink-muted);
+  padding-top: 1.05rem; border-top: 1px solid var(--rule);
+}
+.meta b { font-weight: 500; color: var(--ink); }
+
+.verdict {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ok);
+  border-radius: 5px;
+  padding: 1.15rem 1.3rem;
+  box-shadow: var(--shadow);
+  max-width: 72ch;
+}
+.verdict p { font-size: 1.045rem; }
+.verdict p + p { margin-top: .7rem; }
+
+.superseded {
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in srgb, var(--warn) 34%, transparent);
+  border-left: 3px solid var(--warn);
+  border-radius: 5px;
+  padding: .95rem 1.15rem;
+  max-width: 72ch;
+  font-size: .93rem;
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.superseded b { color: var(--ink); }
+
+/* ── status chips ───────────────────────────────────── */
+.chip {
+  display: inline-block;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .665rem; font-weight: 600; letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: .17em .5em; border-radius: 3px; white-space: nowrap;
+  border: 1px solid transparent;
+}
+.chip.pass  { color: var(--ok);   background: var(--ok-soft);   border-color: color-mix(in srgb, var(--ok) 26%, transparent); }
+.chip.fixed { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 26%, transparent); }
+.chip.gap   { color: var(--warn); background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+.chip.bad   { color: var(--bad);  background: var(--bad-soft);  border-color: color-mix(in srgb, var(--bad) 28%, transparent); }
+
+/* ── tables ─────────────────────────────────────────── */
+.tw { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); box-shadow: var(--shadow); }
+table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+th, td { text-align: left; padding: .62rem .85rem; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+thead th {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .685rem; font-weight: 600; letter-spacing: .085em; text-transform: uppercase;
+  color: var(--ink-muted); background: var(--surface-2);
+  border-bottom: 1px solid var(--rule); white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+td.st { width: 1%; white-space: nowrap; }
+table code { white-space: nowrap; }
+
+/* ── finding blocks ─────────────────────────────────── */
+.findings { display: flex; flex-direction: column; gap: 1.1rem; }
+.finding {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: .7rem;
+}
+.finding.d { border-left: 3px solid var(--warn); }
+.finding.f { border-left: 3px solid var(--accent); }
+.fhead { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; }
+.fhead h3 { flex: 1 1 22ch; }
+.finding p, .finding li { font-size: .945rem; max-width: 70ch; }
+.finding ul { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: .3rem; }
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: .3rem 1rem; font-size: .875rem; }
+.kv dt { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .775rem; color: var(--ink-muted); padding-top: .12rem; }
+.kv dd { margin: 0; }
+
+/* ── sequence ───────────────────────────────────────── */
+ol.seq { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 1rem; }
+ol.seq > li {
+  counter-increment: s;
+  display: grid; grid-template-columns: 2.1rem 1fr; gap: 0 .95rem;
+  align-items: start;
+}
+ol.seq > li::before {
+  content: counter(s);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .8rem; font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: 4px;
+  width: 2.1rem; height: 1.7rem;
+  display: grid; place-items: center;
+  font-variant-numeric: tabular-nums;
+}
+ol.seq h3 { margin-bottom: .3rem; }
+ol.seq .body { max-width: 68ch; display: flex; flex-direction: column; gap: .55rem; }
+ol.seq p { font-size: .945rem; }
+
+hr.div { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+section { display: flex; flex-direction: column; gap: 1.1rem; }
+.shead { display: flex; flex-direction: column; gap: .35rem; }
+.note { font-size: .845rem; color: var(--ink-muted); max-width: 74ch; }
+
+details {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 6px; padding: .8rem 1rem;
+}
+details[open] { padding-bottom: 1rem; }
+summary { cursor: pointer; font-weight: 500; font-size: .92rem; }
+details > *:not(summary) { margin-top: .8rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Verification report &middot; 2026-08-20</div>
+  <h1>Qwen3.8-27B on DeepSeek Harness</h1>
+  <div class="verdict">
+    <p><b>The harness runs on your model, and the agent loop is sound.</b> A two-tool, two-step task returned three facts, all correct, with reasoning blocks, parallel tool calls, and tool results fed back through a second model step.</p>
+    <p>Getting there took six configuration corrections and one surface change, each verified on the wire. Two of them would have shipped a silently degraded agent: one that never thinks, and one whose model never sees its own prior reasoning inside a tool chain. Neither raises an error. The remaining defects are configuration or add-on work; none is architectural.</p>
+  </div>
+  <div class="superseded">
+    <p><b>Partly superseded, 2026-08-20.</b> Read <a href="qwen38-harness-remediation.html">the remediation report</a> alongside this one.</p>
+    <p><b>Wrong here.</b> The premise behind D3 that this checkpoint cannot prefix-cache. <code>supports_mamba_prefix_caching=False</code> selects a <em>mode</em> — vLLM 0.27.1 falls back to <code>align</code> — it does not disable the feature. See R1 there.</p>
+    <p><b>Also revised.</b> C6 adjusts the wrong side of the inequality; lowering declared <code>maxTokens</code> raises the admission ceiling and beats lowering <code>thresholdRatio</code> on both margin and usable context (R3). D1 is fixed and wire-proven, and the same bug was found in compaction summarization, where it is fail-closed (D1b). The <code>off</code> path listed below as unproven is now observed on the wire. §Next is replaced.</p>
+  </div>
+  <div class="meta">
+    <span><b>Checkout</b> 141eb6fef8 &middot; 0.1.0-rc.8</span>
+    <span><b>Engine</b> vllm-0.27.1-ad8d5a63</span>
+    <span><b>Route</b> chat-model &middot; 131072/32768</span>
+    <span><b>Profile</b> headless + A1 purge</span>
+  </div>
+</header>
+
+<hr class="div">
+
+<!-- ══ GATE BOARD ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Endpoint gates</div>
+    <h2>Every row the assessment said to prove before touching the harness</h2>
+    <p class="note">All eleven rows were executed against the live gateway. These were <span class="chip bad">unproven</span> in the consolidated assessment — every one was an endpoint fact no amount of code reading could settle.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="st">Result</th><th>Gate</th><th>Observation</th></tr></thead>
+      <tbody>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Model identity</td><td><code>GET /v1/models</code> returns 7 ids; <code>chat-model</code> reports <span class="mono">max_input 131072</span>, <span class="mono">max_output 32768</span></td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Streaming</td><td>SSE terminates cleanly; nothing follows <code>[DONE]</code></td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Reasoning</td><td>Structured <code>reasoning_content</code> deltas — 29 on one call. The field is <code>reasoning_content</code>, never <code>reasoning</code></td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Effort control</td><td><code>low</code>/<code>medium</code>/<code>xhigh</code> each accepted and distinct; <code>high</code> returns HTTP 400 from the template's own <code>raise_exception</code></td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Tool choice</td><td>Structured <code>tool_calls</code>, stable id, valid JSON arguments, <code>finish_reason: tool_calls</code></td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Multi-step tools</td><td>assistant <code>tool_calls</code> + <code>role: tool</code> results → next assistant response. Works with <em>and</em> without <code>reasoning_content</code> replayed</td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Parallel tools</td><td>Two calls in one response stayed on distinct indices; arguments streamed in 5 chunks each and both parsed as valid JSON</td></tr>
+        <tr><td class="st"><span class="chip gap">caveat</span></td><td>Usage</td><td>Usage arrives <b>after</b> <code>finish_reason</code>, on a chunk that still carries a non-empty <code>choices</code> array. pi-ai absorbs this; see finding F4</td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Cancellation</td><td>Abort at 2,124 bytes released server work immediately; the next request was served in 0.1 s</td></tr>
+        <tr><td class="st"><span class="chip pass">pass</span></td><td>Overflow</td><td>Stable HTTP 400 <code>ContextWindowExceededError</code>, correctly classified by LiteLLM — not a truncated success</td></tr>
+        <tr><td class="st"><span class="chip bad">confirmed</span></td><td>Empty output</td><td>The <code>content: null</code> trap reproduces exactly as your how-to documents. At <span class="mono">max_tokens</span> 16 <em>and</em> 64 with thinking on: <code>finish_reason: length</code>, <code>content: None</code>, reasoning consumed the whole budget. This one is load-bearing — see D1</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ CORRECTIONS ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Corrections</div>
+    <h2>Six things the assessment got wrong that change the config</h2>
+    <p class="note">The consolidated assessment's candidate route was verified schema-valid field by field. It was also, in two places, functionally inert — which is precisely the hazard its own §4 warns about, landing inside its own recommendation.</p>
+  </div>
+
+  <div class="findings">
+
+    <div class="finding f">
+      <div class="fhead"><h3>C1 &mdash; <code>thinkingFormat: qwen-chat-template</code> silently discards your effort config</h3><span class="chip fixed">fixed</span></div>
+      <p>The name matches the model, so it reads as the obvious choice. Its implementation in pi-ai 0.82.1 ignores the configured <code>chatTemplateKwargs</code> dict entirely:</p>
+<pre><span class="c">// node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js:574</span>
+<span class="k">else if</span> (compat.thinkingFormat === <span class="s">"qwen-chat-template"</span> &amp;&amp; model.reasoning) {
+    params.chat_template_kwargs = {
+        enable_thinking: !!options?.reasoningEffort,
+        preserve_thinking: <span class="k">true</span>,          <span class="c">// hardcoded</span>
+    };                                    <span class="c">// no effort sent, at all</span>
+}</pre>
+      <p>Three consequences: your <code>chatTemplateKwargs</code> is never read, no effort value reaches the model, and because this is an <code>else if</code> it also short-circuits the later top-level <code>reasoning_effort</code> branch. You would get on/off thinking and nothing else, with no error anywhere.</p>
+      <p><b>Use <code>chat-template</code>.</b> That branch calls <code>buildChatTemplateKwargs</code> and honours the dict, including literal values. Proven on the wire below.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>C2 &mdash; the route needs a profile-level <code>reasoning:</code> default</h3><span class="chip fixed">fixed</span></div>
+      <p>Omit it and the harness runs the model in instruct mode on every request. My first successful run answered correctly with <code>outputTokens: 4</code> and no reasoning block — a passing test that proved nothing about the reasoning path.</p>
+      <p>This is the most dangerous class of error here, because the agent still works. Any quality judgement formed from such a run is invalid, and nothing in the transcript says so. Set <code>reasoning: medium</code>, matching your stack's stated agentic default.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>C3 &mdash; <code>apiKeyEnv</code> names the gateway key, not the engine key</h3><span class="chip fixed">fixed</span></div>
+      <p>The assessment's draft said <code>VLLM_API_KEY</code>. That credential never leaves the gateway container and the engines publish no host port, so it is unusable from here. The field is a free-form credential <em>reference</em> (<code>role('credential-ref')</code>), not a vLLM convention — so it should read <code>LITELLM_MASTER_KEY</code> and match reality.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>C4 &mdash; purge ledger A1 is mandatory, not optional</h3><span class="chip fixed">fixed</span></div>
+      <p>The assessment ranks dropping the three <code>typert</code> rows as the highest-ratio <em>optional</em> win. In a source-plane run it is a hard prerequisite: <code>typert-loader</code> resolves built <code>lib/typert.host.js</code> artifacts and boot fails outright without them. Either disable the rows or run <code>pnpm run build</code> first.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>C5 &mdash; a trap that is already guarded, not a repair</h3><span class="chip pass">nothing to fix</span></div>
+      <p>Listed here among corrections, which was misleading of me: nothing was broken. The assessment got this right, and it stays visible because the failure mode is sharp.</p>
+      <p><code>off</code> is not a fourth effort value. It is a different switch — <code>enable_thinking: false</code> — and the two config lines below produce exactly that separation:</p>
+<pre>off    -> chat_template_kwargs.enable_thinking = false,  reasoning_effort key <b>ABSENT</b>
+low    -> enable_thinking = true,   reasoning_effort = <span class="s">"low"</span>
+medium -> enable_thinking = true,   reasoning_effort = <span class="s">"medium"</span>
+xhigh  -> enable_thinking = true,   reasoning_effort = <span class="s">"xhigh"</span></pre>
+      <p><code>$var: thinking.enabled</code> resolves to <code>!!reasoningEffort</code>, and <code>omitWhenOff: true</code> drops the effort key entirely rather than sending <code>null</code> — the same absent-versus-null distinction your <code>wire.mjs</code> asserts on.</p>
+      <p>The template hard-validates against <code>('xhigh', 'medium', 'low')</code> and raises otherwise, and <code>high</code> is the OpenAI-ecosystem default value — so a client offering it fails every request. Declaring only these four pins <code>minimal</code>, <code>high</code> and <code>max</code> to <code>null</code>, making the 400 structurally unreachable rather than merely unlikely.</p>
+      <p class="note">The <code>medium</code> path is wire-observed. The <code>off</code> path is code-determined — I read both branches but did not capture it on the wire. <code>reasoning: off</code> is settable at profile level, so it is one run to confirm.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>C6 &mdash; a recoverable stumble, not a failure &mdash; and my first fix was wrong</h3><span class="chip gap">downgraded</span></div>
+      <p>vLLM enforces <span class="mono">prompt + max_tokens &le; max_model_len</span>. The rejection is explicit about it:</p>
+<pre>This model's maximum context length is <b>131072</b> tokens. However, you
+requested <b>16</b> output tokens and your prompt contains at least
+<b>131057</b> input tokens, for a total of at least <b>131073</b> tokens.</pre>
+      <p>With <code>maxTokens: 32768</code> declared, any prompt above <b>98,304</b> tokens returns 400 even though the context nominally fits. The harness treats <code>contextWindow</code> as a configuration claim and drives compaction from it, so a route claiming 131072 will hit hard 400s in long sessions rather than compacting.</p>
+      <p><b>The gap is real but bounded.</b> <code>DEFAULT_THRESHOLD_RATIO = 0.8</code> over <code>contextWindow: 131072</code> puts pressure compaction at <b>104,857</b> — above the 98,304 ceiling, leaving a 6,553-token band where a request 400s before compaction fires.</p>
+      <p><b>It is then recovered, which I originally missed.</b> <code>compactIfNeeded</code> accepts a <code>context-overflow</code> trigger that "bypasses the normal threshold and retained-tail policy", prunes tool results, forces one compaction and retries under <code>maxOverflowRetries</code>. Recovery depends on the 400 being classified, so I ran the real error string through the real classifier: <code>isContextWindowExceededError(...)</code> returns <b>true</b> on both surfaces.</p>
+      <p>One detail worth keeping: it matches on vLLM's human-readable <em>"maximum context length"</em> wording, <b>not</b> on LiteLLM's class name — <code>ContextWindowExceededError</code> alone returns <code>false</code>. The message text is what saves it.</p>
+      <p><b>So the cost is one wasted prefill, not a failed turn.</b> And my original remedy — <code>contextWindow: 98304</code> — was actively harmful: it would drop the threshold to 78,643 and cost 26k of usable context. The right fix keeps <code>contextWindow</code> honest and lowers the ratio: <code>thresholdRatio: 0.7</code> puts compaction at <b>91,750</b>, ~6.5k below the ceiling, with margin for the token meter being an estimate.</p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ WIRE PROOF ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Evidence</div>
+    <h2>What the harness actually puts on the wire</h2>
+    <p class="note">Captured through a recording reverse proxy in front of the real gateway. This needed an instrument: the session log deliberately records only model-visible content — <code>request/header</code> carries <code>system</code>, <code>provider</code>, <code>model</code> and <code>maxTokens</code>, but no sampling or template parameters — and the gateway runs <code>set_verbose: false</code> with no request-body logging. Three requests, one task.</p>
+  </div>
+<pre><span class="c">--- [2] /v1/chat/completions  status=200 ---</span>
+  model                : chat-model
+  reasoning_effort     : &lt;ABSENT&gt;          <span class="c">// correct for this format</span>
+  chat_template_kwargs : {<span class="s">"enable_thinking"</span>: true,
+                          <span class="s">"reasoning_effort"</span>: <span class="s">"medium"</span>,
+                          <span class="s">"preserve_thinking"</span>: false}
+  max_tokens           : 32768   stream=true  stream_options={<span class="s">"include_usage"</span>: true}
+  sampling             : temp=-  top_p=-  top_k=-  min_p=-  pres=-  rep=-
+  roles                : [<span class="s">'system'</span>, <span class="s">'user'</span>, <span class="s">'user'</span>, <span class="s">'user'</span>, <span class="s">'user'</span>]
+  system count/first   : 1 / system
+  tools                : 25</pre>
+  <p class="prose">All three placeholders resolved: <code>$var: thinking.enabled</code> → <code>true</code>, <code>$var: thinking.effort</code> → the wire spelling from <code>reasoningEfforts</code>, and the literal <code>preserve_thinking: false</code> passed straight through.</p>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="fhead"><h3>The single-system-message risk came back clean</h3><span class="chip pass">no work needed</span></div>
+      <p>The Qwen3.8 template raises <code>System message must be at the beginning</code> for any system message that is not first, and your <code>coalesceSystemMessages</code> in <code>adapter.mjs</code> exists to force that shape. I expected the harness to need the same patch.</p>
+      <p>It does not. Every request carried <b>exactly one system message, first</b>. The harness routes all auxiliary context — workspace instructions, runtime-context snapshots, the skill catalog — through <code>role: user</code> messages wrapped in <code>&lt;system-reminder&gt;</code> tags. That is structurally the shape this template requires, so no add-on is needed here.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<hr class="div">
+
+<!-- ══ REASONING FIELD ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Root cause</div>
+    <h2>Why reasoning arrives empty: the field was renamed underneath you</h2>
+    <p class="note">vLLM RFC #27755 renamed <code>reasoning_content</code> to <code>reasoning</code>, and newer versions dropped <code>reasoning_content</code> <em>on input</em> entirely. Both halves are live on this stack, and they bite in opposite directions.</p>
+  </div>
+
+  <h3>Output: the two surfaces disagree</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Surface</th><th><code>reasoning_content</code></th><th><code>reasoning</code></th><th>Also hidden at</th></tr></thead>
+      <tbody>
+        <tr><td><code>/v1</code> &mdash; managed, LiteLLM</td><td class="num">len 119</td><td>absent</td><td><code>provider_specific_fields.reasoning</code></td></tr>
+        <tr><td><code>/engine/v1</code> &mdash; raw vLLM 0.27.1</td><td>absent</td><td class="num">len 122</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="prose">Same for streaming deltas. Any client reading one name gets silent emptiness on the other surface — reasoning that "seems empty" while sitting in a field nobody looked at. LiteLLM has been shielding <code>/v1</code> consumers by normalizing back to the old name.</p>
+
+  <h3>Input: the more damaging half</h3>
+  <p class="prose">Measured with <code>/engine/tokenize</code>, which applies the chat template server-side — so the rendered token count is direct evidence of what the template actually saw. A 180-token filler string was placed in each candidate field of one assistant message:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Assistant message carries</th><th class="num">Rendered tokens</th><th class="num">Delta</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>no reasoning field</td><td class="num">84</td><td class="num">&mdash;</td><td>baseline</td></tr>
+        <tr><td><code>reasoning_content: &lt;filler&gt;</code></td><td class="num">84</td><td class="num">0</td><td><span class="chip bad">discarded</span></td></tr>
+        <tr><td><code>reasoning: &lt;filler&gt;</code></td><td class="num">265</td><td class="num">+181</td><td><span class="chip pass">accepted</span></td></tr>
+        <tr><td><code>reasoning_text: &lt;filler&gt;</code></td><td class="num">84</td><td class="num">0</td><td><span class="chip bad">discarded</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="findings">
+    <div class="finding d">
+      <div class="fhead"><h3>What this did to the harness on <code>/v1</code></h3><span class="chip bad">was live</span></div>
+      <p>pi-ai reads all three names, so it never misses reasoning on the way in. But it echoes thinking back under <b>the name it received</b>:</p>
+<pre><span class="c">// openai-completions.js:353, :367</span>
+<span class="k">const</span> reasoningFields = [<span class="s">"reasoning_content"</span>, <span class="s">"reasoning"</span>, <span class="s">"reasoning_text"</span>];
+<span class="k">const</span> thinkingSignature = foundReasoningField;      <span class="c">// the name that carried it</span>
+<span class="c">// :874</span>
+assistantMsg[signature] = nonEmptyThinkingBlocks.map(b =&gt; b.thinking).join(<span class="s">"\n"</span>);</pre>
+      <p>On <code>/v1</code> that closes the loop wrongly: read <code>reasoning_content</code> → echo <code>reasoning_content</code> → <b>vLLM discards it</b>. Inside a tool-call chain the model never sees its own prior reasoning; the template renders an empty <code>&lt;think&gt;&lt;/think&gt;</code>. That is exactly the decision continuity <code>preserve_thinking</code> exists to supply, lost with no error and no log line.</p>
+    </div>
+
+    <div class="finding f">
+      <div class="fhead"><h3>The fix is a URL, not an infrastructure change</h3><span class="chip fixed">applied</span></div>
+      <p><code>baseURL: http://&lt;host&gt;:4000/engine/v1</code>. Reasoning then arrives as <code>reasoning</code>, so pi-ai's signature becomes <code>reasoning</code> and the echo is accepted. Verified that the raw surface carries the complete dsh request shape: <code>chat_template_kwargs</code>, 25 tool schemas, streaming with <code>include_usage</code>, <code>finish_reason: tool_calls</code>, valid JSON arguments, and overflow still classified as context-exceeded.</p>
+      <p><b>Correction to something I nearly reported as a finding.</b> In the first side-by-side, <code>/v1</code> returned <code>stop</code> with no tool call while <code>/engine/v1</code> called the tool. Re-running six times per surface gave <b>6/6 tool calls on both</b>. That was sampling variance at temperature 1.0, not a surface difference.</p>
+      <p><b>Verified end-to-end.</b> A proxied dsh run on <code>/engine/v1</code> captured the second step of a tool chain carrying the assistant message back with the right field name:</p>
+<pre><span class="c">[3] roles=[system, user x4, assistant, tool, tool]</span>
+    assistant keys: [<span class="s">'content'</span>, <span class="s">'reasoning'</span>, <span class="s">'role'</span>, <span class="s">'tool_calls'</span>]
+      &gt;&gt; reasoning: len=105  <span class="s">"I need to check the package.json file ..."</span>
+      tool_calls: 2</pre>
+      <p><code>reasoning</code>, not <code>reasoning_content</code> — so all four links are now measured rather than two measured and two read from source: the surface returns <code>reasoning</code>, pi-ai adopts it as the signature, pi-ai echoes under that name, and vLLM accepts it. Arithmetic on the session log could not have shown this: step 2's input grew by 4,272 tokens dominated by the <code>package.json</code> read, so a ~40-token reasoning inclusion sits inside the margin.</p>
+      <p>This also sharpens the case for keeping pi-ai. A hand-written adapter would have to know that reasoning arrives under three possible names, that the echo must reuse the same name, and that one surface hides it in <code>provider_specific_fields</code>. pi-ai gets all three right today.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ DEFECTS ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Open defects</div>
+    <h2>Three real problems, none architectural</h2>
+  </div>
+
+  <div class="findings">
+
+    <div class="finding d">
+      <div class="fhead"><h3>D1 &mdash; enabling reasoning silently breaks session titling</h3><span class="chip bad">verified defect</span></div>
+      <p>The title plugin issues its own model call at <code>max_tokens: 64</code>. With thinking on, the reasoning block consumes the entire budget, the response comes back <code>content: null</code>, and the title falls back — HTTP 200, tokens billed, no error.</p>
+      <p>The two runs form a clean causal pair, because the only thing that changed between them was <code>reasoning: medium</code>:</p>
+      <dl class="kv">
+        <dt>thinking off</dt><dd><code>session/title</code> → <span class="mono">"Wire OK confirmation"</span>, <span class="mono">source: provider</span> &mdash; succeeded</dd>
+        <dt>thinking medium</dt><dd><code>session/title-llm-request</code> logged, then <b>no provider title follows</b>. Stuck on the fallback <span class="mono">"Read package.json and report the"</span></dd>
+      </dl>
+      <p>The cost is not the title. It is a full ~13k-token prefill per session for a discarded result, on an engine with no prefix caching and a concurrency budget of 5. Purge ledger A4 removes <code>session-title*</code> anyway; do that, or give the title route its own thinking-off model entry.</p>
+    </div>
+
+    <div class="finding d">
+      <div class="fhead"><h3>D2 &mdash; thinking mode is correct; instruct mode is not reachable</h3><span class="chip gap">needs the gateway</span></div>
+      <p>Qwen documents two samplers, and three of six values differ between them. The engine's own boot log states what it applies when a request carries none:</p>
+<pre><span class="c">kb-vllm-chat-fp8 | WARNING [model.py:1637]</span>
+Default vLLM sampling parameters have been overridden by the model's
+`generation_config.json`: {<span class="s">'temperature'</span>: 1.0, <span class="s">'top_k'</span>: 20, <span class="s">'top_p'</span>: 0.95}</pre>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Param</th><th class="num">Thinking</th><th class="num">Instruct</th><th class="num">Engine default</th><th>Harness can send?</th></tr></thead>
+          <tbody>
+            <tr><td><code>temperature</code></td><td class="num">1.0</td><td class="num">0.7</td><td class="num">1.0</td><td>plumbed, but <b>no config surface</b></td></tr>
+            <tr><td><code>top_p</code></td><td class="num">0.95</td><td class="num">0.80</td><td class="num">0.95</td><td>no &mdash; absent from pi-ai</td></tr>
+            <tr><td><code>top_k</code></td><td class="num">20</td><td class="num">20</td><td class="num">20</td><td>no</td></tr>
+            <tr><td><code>min_p</code></td><td class="num">0.0</td><td class="num">0.0</td><td class="num">0.0</td><td>no</td></tr>
+            <tr><td><code>presence_penalty</code></td><td class="num">0.0</td><td class="num">1.5</td><td class="num">0.0</td><td>no</td></tr>
+            <tr><td><code>repetition_penalty</code></td><td class="num">1.0</td><td class="num">1.0</td><td class="num">1.0</td><td>no</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>Thinking mode is fully correct, and not by luck.</b> Qwen ships the thinking sampler in <code>generation_config.json</code> and vLLM adopts it; the remaining three are vLLM defaults that already match. All six align.</p>
+      <p><b>Instruct mode is wrong on three values, and only one is even reachable.</b> pi-ai 0.82.1 writes exactly one sampling field — <code>params.temperature</code> at <code>openai-completions.js:540</code> — and its <code>GenerateOptions</code> has no <code>top_p</code>, <code>top_k</code>, <code>min_p</code>, <code>presence_penalty</code> or <code>repetition_penalty</code> at all. Even <code>temperature</code> has no config surface: it exists in <code>LlmCallConfig</code> and is forwarded by <code>llm-pi-ai/src/adapter.ts:323</code>, but neither the route profile nor <code>agent-default-model</code> settings can set it. So a harness-only fix is impossible for two of the three.</p>
+      <p><b>The gateway is the right place, and it already does this kind of injection.</b> Your <code>litellm/config.yaml</code> binds <code>chat_template_kwargs</code> per alias through <code>extra_body</code>; sampling params bind the same way. Because dsh sends <em>no</em> sampling fields, there is nothing to clobber — unlike <code>chat_template_kwargs</code>, which dsh always sends and which replaces an injected dict wholesale.</p>
+      <p>An instruct alias composes cleanly with a dsh model entry declaring <code>reasoningEfforts: false</code>. That makes it a non-reasoning model, so pi-ai skips the chat-template branch and sends no <code>chat_template_kwargs</code> either — leaving the alias free to supply both the mode and its sampler:</p>
+<pre><span class="c"># litellm/config.yaml</span>
+- model_name: chat-model-instruct
+  litellm_params:
+    model: hosted_vllm/chat-model
+    api_base: http://vllm-chat:8000/v1
+    api_key: os.environ/VLLM_API_KEY
+    temperature: 0.7
+    top_p: 0.80
+    presence_penalty: 1.5
+    extra_body:
+      chat_template_kwargs: {enable_thinking: false}
+      top_k: 20
+      min_p: 0.0
+      repetition_penalty: 1.0</pre>
+      <p>All six values were accepted on both surfaces with the correct behaviour (reasoning length 0 under the instruct set, populated under the thinking set). Since the gateway runs <code>drop_params: false</code>, HTTP 200 is proof they reached the engine rather than being quietly dropped.</p>
+      <p class="note">One tension to note: <code>extra_body</code> injection is a managed-<code>/v1</code> feature, while the reasoning round-trip fix needs <code>/engine/v1</code>. They do not conflict in practice — instruct mode produces no reasoning to round-trip — so the clean arrangement is two dsh provider routes, one per surface, each correct for its mode.</p>
+    </div>
+
+    <div class="finding d">
+      <div class="fhead"><h3>D3 &mdash; the baseline prompt is 13.3k tokens, re-prefilled every step</h3><span class="chip gap">biggest lever</span></div>
+      <p>A three-fact task cost <b>30,896 input tokens</b> across two steps, against roughly 40 tokens of actual instruction. Every contributor was measured exactly, via the engine's own <code>/engine/tokenize</code>:</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Contributor</th><th class="num">Tokens</th><th class="num">Share</th><th>Removed by</th></tr></thead>
+          <tbody>
+            <tr><td>Tool schemas (25 tools)</td><td class="num">6,605</td><td class="num">49.6%</td><td>ledger A3 &mdash; drops ~2,000</td></tr>
+            <tr><td><code>agent-instructions</code> (workspace instructions)</td><td class="num">3,742</td><td class="num">28.1%</td><td>project-side trimming</td></tr>
+            <tr><td><code>skill-catalog</code></td><td class="num">1,971</td><td class="num">14.8%</td><td>ledger A4 &mdash; drops all</td></tr>
+            <tr><td>System prompt</td><td class="num">826</td><td class="num">6.2%</td><td>persona edit</td></tr>
+            <tr><td>Runtime-context snapshot</td><td class="num">93</td><td class="num">0.7%</td><td>keep</td></tr>
+            <tr><td>Your actual instruction</td><td class="num">35</td><td class="num">0.3%</td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>6,667 of message content plus 6,605 of tool schemas is 13,272 against 13,310 measured — accounted for within 38 tokens. <b>The lever is not prose verbosity: half the cost is tool schemas.</b> <code>workflow</code> alone is 1,036 tokens and <code>bash</code> 783. Dropping the subagent and workflow tools plus the skill catalog removes roughly 30% of the baseline for two composition rows.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Step</th><th class="num">Input</th><th class="num">Output</th><th>Blocks returned</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="num">13,310</td><td class="num">120</td><td><code>reasoning</code>, <code>tool-call</code>, <code>tool-call</code></td></tr>
+            <tr><td>2</td><td class="num">17,586</td><td class="num">118</td><td><code>reasoning</code>, <code>text</code></td></tr>
+            <tr><td>title</td><td class="num">~13,300</td><td class="num">64</td><td>discarded &mdash; see D1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Because this checkpoint cannot prefix-cache (<code>supports_mamba_prefix_caching=False</code>), every step re-prefills from token 0 — about 2 s at 13k, and 38.8 s at 130k on your measured curve. On a 20-turn task that is minutes of pure re-prefill before any thinking happens.</p>
+      <p>This is composition work, not code work: the skill catalog, workspace instructions and runtime-context snapshot arrive as separate <code>user/message</code> rows and can be trimmed independently. It is also where your "make the code less verbose" instinct pays off in latency rather than aesthetics.</p>
+    </div>
+
+    <div class="finding">
+      <div class="fhead"><h3>F4 &mdash; usage-after-finish is absorbed, not a violation</h3><span class="chip pass">no action</span></div>
+      <p>Your engine emits <code>finish_reason</code> on one chunk and <code>usage</code> on a <em>later</em> chunk that still carries a non-empty <code>choices</code> array. The harness's own adapter contract is usage-before-finish, nothing after finish, so this looked like a contract break.</p>
+      <p>It is not. pi-ai accumulates into a mutable result object and assigns <code>output.usage</code> before inspecting the choice, then re-emits its own normalized stream. The harness sees a compliant ordering — the observed <code>usage</code> chunk landed before <code>finish</code> in the session log. Worth recording because it is the kind of thing a narrow hand-written adapter would get wrong.</p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ CONFIG ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Working configuration</div>
+    <h2>The route as it now stands</h2>
+    <p class="note"><code>~/.dsh/settings.yaml</code>. Every field below was exercised by the runs in this report.</p>
+  </div>
+<pre>llm-pi-ai:
+  providers:
+    local-qwen:
+      displayName: Local Qwen3.8-27B
+      apiKeyEnv: LITELLM_MASTER_KEY   <span class="c"># C3: gateway key; a credential ref, not a vLLM name</span>
+      api: openai-completions
+      reasoning: medium               <span class="c"># C2: without this the model never thinks</span>
+      baseURL: http://&lt;gpu-host&gt;:4000/engine/v1   <span class="c"># raw surface: closes the reasoning round-trip</span>
+      streamIdleTimeoutMs: 900000     <span class="c"># matches the stack's 900 s stream idle timeout</span>
+      retryPolicy:
+        mode: normal
+        maxRetries: 0                 <span class="c"># the stack retries 0 deliberately; don't reintroduce it here</span>
+      compat:
+        supportsDeveloperRole: false
+        supportsReasoningEffort: true
+        supportsUsageInStreaming: true
+        supportsStrictMode: false
+        maxTokensField: max_tokens
+        thinkingFormat: chat-template <span class="c"># C1: NOT qwen-chat-template</span>
+        chatTemplateKwargs:
+          enable_thinking:
+            $var: thinking.enabled
+          reasoning_effort:
+            $var: thinking.effort
+            omitWhenOff: true         <span class="c"># off = key absent, not null</span>
+          preserve_thinking: false    <span class="c"># see note below</span>
+      models:
+        - id: chat-model              <span class="c"># injects nothing: effort stays under harness control</span>
+          name: Qwen3.8-27B
+          contextWindow: 131072       <span class="c"># C6: honest; fix the threshold, not this</span>
+          maxTokens: 32768
+          reasoningEfforts:           <span class="c"># C5: these four only</span>
+            off:
+            low: low
+            medium: medium
+            xhigh: xhigh
+
+agent-default-model:
+  provider: local-qwen
+  model: chat-model</pre>
+  <p class="prose">Plus one composition row, because compaction must fire below the engine's real admission ceiling rather than below the nominal window (C6):</p>
+<pre><span class="c"># $DSH_HOME/cordis.patch.yml</span>
+- id: compaction-basic
+  config:
+    thresholdRatio: 0.7             <span class="c"># 91,750 &mdash; under the 98,304 ceiling</span></pre>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="fhead"><h3>Why <code>chat-model</code> and not a preset id</h3></div>
+      <p>The gateway's <code>chat-model-medium</code> family bakes effort in by injecting a fixed <code>chat_template_kwargs</code> dict, and a client-supplied dict <em>replaces</em> it wholesale rather than merging. Binding the route to a preset would mean the harness could never change effort at runtime, and any attempt to would silently drop the preset's own setting. <code>chat-model</code> injects nothing, so the harness owns effort per request — verified above.</p>
+    </div>
+    <div class="finding">
+      <div class="fhead"><h3>Why <code>preserve_thinking: false</code> diverges from your eval profile</h3><span class="chip gap">your call</span></div>
+      <p>Qwen defaults it true and justifies that with KV-cache reuse. This deployment cannot prefix-cache, so that benefit is void while the cost stands: retained reasoning re-prefills from token 0 on every turn, and you measured 38.8 s at 130k.</p>
+      <p><code>REALWORLD_PROFILE</code> sets it <code>true</code> — correct for eval reproducibility, and I have deliberately diverged for agent-loop economics. If you would rather keep one profile across both surfaces, flip it; the trade is decision continuity across turns against per-turn prefill.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ NEXT ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Next</div>
+    <h2>What I would do in this order</h2>
+    <p class="note">A real sequence: each step depends on the one before it.</p>
+  </div>
+  <ol class="seq">
+    <li><div class="body"><h3>Close the Day-1 gate properly</h3>
+      <p>The task I ran covers read, shell, a second model step and parallel tool calls. It does <em>not</em> cover a <b>failing</b> tool or a <b>write under approval</b> — the two paths where an agent loop most often breaks. Run one task that does both, then record it as your keyless replay snapshot. Until that snapshot exists you have no regression gate, and every purge below is unguarded.</p></div></li>
+    <li><div class="body"><h3>Cut the wasted per-session model call</h3>
+      <p>Apply purge ledger A4's <code>session-title*</code> rows, or point titling at a thinking-off entry. This is D1, it is one line, and it removes a full prefill per session.</p></div></li>
+    <li><div class="body"><h3>Attack the 13.3k baseline</h3>
+      <p>D3 is your dominant cost and it is pure composition. Measure each contributor by diffing <code>inputTokens</code> as you disable rows — the skill catalog is the obvious first suspect, and on a headless single-agent run most of it earns nothing.</p></div></li>
+    <li><div class="body"><h3>Then decide about deletion</h3>
+      <p>Only now does the B-ledger become rational, because only now do you have a working composition and a gate. The assessment's ordering holds: B1–B4 are low-risk and remove most of the verbosity; relax the per-file 100% coverage gate, which is the single largest change to the marginal cost of every future edit.</p></div></li>
+    <li><div class="body"><h3>Leave the adapter alone</h3>
+      <p>F4 is the argument. A narrow hand-written vLLM adapter is the largest remaining dependency cut, and it would also make you the owner of usage ordering, tool-call assembly, reasoning normalization, cancellation and error taxonomy — all of which pi-ai currently gets right on this endpoint. Schedule it, do not reach for it.</p></div></li>
+  </ol>
+</section>
+
+<hr class="div">
+
+<!-- ══ PERSISTED ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Persisted</div>
+    <h2>Where this knowledge now lives</h2>
+    <p class="note">Most of what was learned here exists nowhere in the repository — it is endpoint behaviour, gateway shape, and pi-ai internals. It is written down in two places so the next session starts from it rather than rediscovering it.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Location</th><th>Contents</th></tr></thead>
+      <tbody>
+        <tr><td><code>artifacts/README.md</code></td><td>Index of every asset here, which prior document is superseded, and the commands to reproduce the verified runs</td></tr>
+        <tr><td><code>artifacts/dsh-settings.yaml</code><br><code>artifacts/dsh-cordis.patch.yml</code></td><td>The working configuration, version-controlled. <code>$DSH_HOME</code> sits outside the checkout, so these copies are the durable record. Credentials referenced by name only.</td></tr>
+        <tr><td><code>artifacts/probes/</code></td><td>Ten endpoint experiments — one per measured claim in this report, each runnable standalone</td></tr>
+        <tr><td><code>artifacts/recproxy.py</code></td><td>Recording proxy: the only instrument that shows sampling and <code>chat_template_kwargs</code></td></tr>
+        <tr><td><code>artifacts/read-session-log.mts</code></td><td>Multi-frame zstd session-log decoder</td></tr>
+        <tr><td>Agent memory</td><td>Eight notes: the load-bearing route fields, the <code>qwen-chat-template</code> trap, the reasoning-field rename, the two samplers, stack topology, source-launch prerequisites, prompt-cost levers, and the compaction-ceiling arithmetic</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="prose">Two traps are worth carrying forward beyond this model, because both produce a passing run rather than an error: <b>a vendor-named compat field whose implementation ignores your configuration</b>, and <b>a response field renamed underneath a client that reads only the old name</b>. Both were schema-valid. Neither logged anything.</p>
+</section>
+
+<hr class="div">
+
+<!-- ══ CAVEATS ══ -->
+<section>
+  <div class="shead">
+    <div class="eyebrow">Still unproven</div>
+    <h2>Stated so silence is not read as confirmation</h2>
+  </div>
+  <div class="findings">
+    <div class="finding">
+      <ul>
+        <li><b>Compaction under real pressure.</b> No session was driven near the window, so C6's harness-side consequence is reasoned from the endpoint's arithmetic, not observed.</li>
+        <li><b>A failing tool, and write-under-approval.</b> Not exercised. Step 1 above.</li>
+        <li><b>The <code>off</code> effort path on the wire.</b> Code-determined from both pi-ai branches, not captured. <code>reasoning: off</code> is settable at profile level, so one run confirms it.</li>
+        <li><b>Images.</b> The checkpoint is vision-capable (<code>language_model_only: false</code>, a 27-layer vision tower). The route declares no image modality, which is the safe posture — over-claiming durably admits an image the session then cannot proceed on. Untested, deliberately.</li>
+        <li><b>Long-horizon tool-call integrity.</b> vLLM issue #39056 reports <code>tool_calls</code> being lost when the model emits <code>&lt;tool_call&gt;</code> inside <code>&lt;think&gt;</code>, on exactly your parser pair (<code>--reasoning-parser qwen3</code> with <code>--tool-call-parser qwen3_coder</code>). It did not reproduce in my runs, but my runs were short. The symptom to watch is <code>finish_reason: stop</code> with reasoning populated and <code>tool_calls</code> empty — an agent that stalls mid-task rather than erroring.</li>
+        <li><b>No gate, lint, typecheck or test run is claimed.</b> <code>pnpm install</code> and <code>pnpm run build</code> both exited 0. Nothing else in the repository's check suite was executed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <details>
+    <summary>Reproduction</summary>
+<pre><span class="c"># credential: gitignored, cwd .env is a read-only credential layer below $DSH_HOME</span>
+printf 'LITELLM_MASTER_KEY=…\n' &gt;&gt; ./.env &amp;&amp; chmod 600 ./.env
+
+<span class="c"># composition: A1 is a prerequisite in a source-plane run, not an optimization</span>
+cat ~/.dsh/cordis.patch.yml     <span class="c"># typert, typert-loader, typert-gateway: disabled</span>
+
+<span class="c"># the runs in this report</span>
+pnpm dsh --profile headless "Reply with exactly: WIRE OK"
+pnpm dsh --profile headless "Read package.json and report the exact version field. \
+  Then run 'git rev-parse --short HEAD' and report the commit. \
+  Finally state how many entries the scripts object has."
+
+<span class="c"># session logs are concatenated zstd frames; a single-frame decode reads only the header</span>
+<span class="c"># scanZstdFrames + decompressZstdFrame from</span>
+<span class="c">#   packages/session/session-persistence-jsonl/src/zstd.ts</span></pre>
+    <p class="note">The chat template was read from the checkpoint itself (<code>Qwen/Qwen3.8-27B</code> via <code>hf download</code>), which is the same template the engine loads — the compose file pins <code>--chat-template</code> to Qwen's own file from the FP8 snapshot. Its <code>('xhigh', 'medium', 'low')</code> validation and its single-leading-system-message rule are therefore authoritative, not inferred from documentation.</p>
+  </details>
+</section>
+
+</div>

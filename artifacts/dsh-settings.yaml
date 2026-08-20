@@ -1,0 +1,108 @@
+# Route: local Qwen3.8-27B behind the LiteLLM gateway.
+#
+# Model id is `chat-model` on purpose: the gateway's `chat-model-<effort>` ids are
+# presets that inject a fixed chat_template_kwargs dict, and a client-supplied dict
+# REPLACES it wholesale. `chat-model` injects nothing, so effort stays under harness
+# control on every request.
+#
+# thinkingFormat is `chat-template`, not `qwen-chat-template`: the latter ignores the
+# configured chatTemplateKwargs entirely and hardcodes {enable_thinking, preserve_thinking},
+# sending no effort at all.
+#
+# Only off/low/medium/xhigh are declared. The Qwen3.8 chat template raises on any other
+# value, which surfaces as HTTP 400; undeclared levels are pinned unsupported.
+llm-pi-ai:
+  providers:
+    local-qwen:
+      displayName: Local Qwen3.8-27B
+      apiKeyEnv: LITELLM_MASTER_KEY
+      api: openai-completions
+      reasoning: medium
+      baseURL: http://100.108.76.12:4000/engine/v1
+      streamIdleTimeoutMs: 900000
+      retryPolicy:
+        mode: normal
+        maxRetries: 0
+      compat:
+        supportsDeveloperRole: false
+        supportsReasoningEffort: true
+        supportsUsageInStreaming: true
+        supportsStrictMode: false
+        maxTokensField: max_tokens
+        thinkingFormat: chat-template
+        chatTemplateKwargs:
+          enable_thinking:
+            $var: thinking.enabled
+          reasoning_effort:
+            $var: thinking.effort
+            omitWhenOff: true
+          preserve_thinking: false
+      models:
+        - id: chat-model
+          name: Qwen3.8-27B
+          contextWindow: 131072
+          maxTokens: 32768
+          reasoningEfforts:
+            off:
+            low: low
+            medium: medium
+            xhigh: xhigh
+
+    # Non-thinking companion to `local-qwen`, for the harness's CAPPED auxiliary
+    # calls (session titling, compaction summarization). Same engine, same raw
+    # surface, same credential; the only difference is `reasoning: off`.
+    #
+    # WHY A SECOND PROVIDER AND NOT A PER-CALL EFFORT: neither auxiliary caller
+    # sets GenerateOptions.reasoningEffort, and the adapter resolves
+    # `options.reasoningEffort ?? profile.reasoning`
+    # (llm-pi-ai/src/adapter.ts:295). The profile default is the only lever, so
+    # the route IS the switch.
+    #
+    # DO NOT "SIMPLIFY" THIS TO `reasoningEfforts: false`. On this raw surface
+    # that inverts the intent: pi-ai's chat-template branch is guarded by
+    # `model.reasoning` (openai-completions.js:580), so a non-reasoning model
+    # sends NO chat_template_kwargs at all -- and the Qwen3.8 template then
+    # takes `enable_thinking is undefined` as TRUE with
+    # `reasoning_effort|default('xhigh')` (chat_template.jinja:46-47). Thinking
+    # would come back ON at MAXIMUM effort, silently. `reasoningEfforts: false`
+    # is only safe against a gateway alias that injects enable_thinking: false.
+    local-qwen-off:
+      displayName: Local Qwen3.8-27B (no thinking)
+      apiKeyEnv: LITELLM_MASTER_KEY
+      api: openai-completions
+      reasoning: off
+      baseURL: http://100.108.76.12:4000/engine/v1
+      streamIdleTimeoutMs: 900000
+      retryPolicy:
+        mode: normal
+        maxRetries: 0
+      compat:
+        supportsDeveloperRole: false
+        supportsReasoningEffort: true
+        supportsUsageInStreaming: true
+        supportsStrictMode: false
+        maxTokensField: max_tokens
+        thinkingFormat: chat-template
+        chatTemplateKwargs:
+          enable_thinking:
+            $var: thinking.enabled
+          reasoning_effort:
+            $var: thinking.effort
+            omitWhenOff: true
+          preserve_thinking: false
+      models:
+        # The levels stay declared even though the profile pins `off`: a model
+        # offering nothing beyond `off` is rejected at load (catalog.ts:708).
+        - id: chat-model
+          name: Qwen3.8-27B (no thinking)
+          contextWindow: 131072
+          maxTokens: 32768
+          reasoningEfforts:
+            off:
+            low: low
+            medium: medium
+            xhigh: xhigh
+
+agent-default-model:
+  provider: local-qwen
+  model: chat-model
