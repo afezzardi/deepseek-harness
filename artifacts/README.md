@@ -13,6 +13,7 @@ carries a status header saying which parts.
 
 | File | What it is |
 |---|---|
+| `NEXT-SESSION.md` | **Start here.** The ranked experiment queue with exact commands, boot gates, and pass/fail criteria. Operationalises the foundation assessment's Phases 2 and 3. |
 | `qwen38-harness-remediation.html` | **Current.** Ranked remediation path: two defects fixed and wire-proven, three corrections to the bring-up report, one new concurrency defect, and the prefix-caching experiment that outranks the rest. |
 | `qwen38-harness-bringup.html` | Wire-level verification: 11 endpoint gates, 6 route corrections, the reasoning-field root cause. Authoritative except for §Next, C6, and its prefix-caching claim. |
 | `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the only home for the row groups, their measured package/dependency/LOC effect, and the ordering constraints. §9's route and ledger A4's titling row are superseded. |
