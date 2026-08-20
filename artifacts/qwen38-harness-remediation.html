@@ -1,0 +1,525 @@
+<title>Qwen3.8 Harness Remediation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root {
+  --ground: #F3F6F4;
+  --surface: #FFFFFF;
+  --sunken: #E8EDEA;
+  --ink: #131E1B;
+  --ink-2: #4E605B;
+  --ink-3: #7C8C87;
+  --rule: #D2DCD8;
+  --rule-2: #E4EBE8;
+  --accent: #0D6B62;
+  --accent-wash: #E0EEEB;
+  --done: #1B6647;
+  --done-wash: #DFEDE5;
+  --open: #8A5210;
+  --open-wash: #F5E9D9;
+  --risk: #9B2B24;
+  --risk-wash: #F6E3E0;
+  --lift: 0 1px 2px rgba(19,30,27,.05), 0 10px 28px -20px rgba(19,30,27,.22);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0C1211;
+    --surface: #141C1A;
+    --sunken: #1B2422;
+    --ink: #E3EAE7;
+    --ink-2: #96A6A1;
+    --ink-3: #728380;
+    --rule: #27332F;
+    --rule-2: #1E2825;
+    --accent: #63C4B7;
+    --accent-wash: #12292A;
+    --done: #58BE93;
+    --done-wash: #10261D;
+    --open: #D69C55;
+    --open-wash: #2A2013;
+    --risk: #E3837A;
+    --risk-wash: #2C1817;
+    --lift: 0 1px 2px rgba(0,0,0,.34), 0 10px 28px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0C1211;
+  --surface: #141C1A;
+  --sunken: #1B2422;
+  --ink: #E3EAE7;
+  --ink-2: #96A6A1;
+  --ink-3: #728380;
+  --rule: #27332F;
+  --rule-2: #1E2825;
+  --accent: #63C4B7;
+  --accent-wash: #12292A;
+  --done: #58BE93;
+  --done-wash: #10261D;
+  --open: #D69C55;
+  --open-wash: #2A2013;
+  --risk: #E3837A;
+  --risk-wash: #2C1817;
+  --lift: 0 1px 2px rgba(0,0,0,.34), 0 10px 28px -20px rgba(0,0,0,.7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(1.9rem, 5vw, 4.25rem) clamp(1.05rem, 4vw, 2.75rem) 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.col { max-width: 68ch; }
+
+h1, h2, h3 {
+  font-family: Newsreader, ui-serif, Georgia, serif;
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.008em;
+}
+h1 { font-size: clamp(2.05rem, 4.6vw, 3rem); font-weight: 500; line-height: 1.1; }
+h2 { font-size: clamp(1.36rem, 2.5vw, 1.7rem); font-weight: 500; line-height: 1.22; }
+h3 { font-size: 1.09rem; font-weight: 600; line-height: 1.3; font-family: "Source Sans 3", ui-sans-serif, sans-serif; }
+
+p, li, dd { margin: 0; }
+
+.tag {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .69rem;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+code, .mono { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace; }
+:not(pre) > code {
+  font-size: .83em;
+  background: var(--sunken);
+  border: 1px solid var(--rule-2);
+  padding: .07em .32em;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+pre {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: .95rem 1.05rem;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .795rem;
+  line-height: 1.6;
+  box-shadow: var(--lift);
+}
+pre b { color: var(--ink); font-weight: 700; }
+pre .c { color: var(--ink-3); }
+pre .k { color: var(--accent); }
+pre .g { color: var(--done); }
+pre .r { color: var(--risk); }
+
+/* header */
+header { display: flex; flex-direction: column; gap: 1.1rem; }
+.stamp {
+  display: flex; flex-wrap: wrap; gap: .35rem 1.35rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .735rem; color: var(--ink-3);
+  padding-top: 1rem; border-top: 1px solid var(--rule);
+}
+.stamp b { font-weight: 500; color: var(--ink-2); }
+
+.lede {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--lift);
+  max-width: 72ch;
+  display: flex; flex-direction: column; gap: .65rem;
+}
+.lede p { font-size: 1.03rem; }
+
+/* chips */
+.chip {
+  display: inline-block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .655rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .18em .5em; border-radius: 3px; white-space: nowrap;
+  border: 1px solid transparent;
+}
+.chip.done { color: var(--done); background: var(--done-wash); border-color: color-mix(in srgb, var(--done) 28%, transparent); }
+.chip.open { color: var(--open); background: var(--open-wash); border-color: color-mix(in srgb, var(--open) 32%, transparent); }
+.chip.risk { color: var(--risk); background: var(--risk-wash); border-color: color-mix(in srgb, var(--risk) 30%, transparent); }
+.chip.info { color: var(--accent); background: var(--accent-wash); border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
+
+/* tables */
+.tw { overflow-x: auto; border: 1px solid var(--rule); border-radius: 5px; background: var(--surface); box-shadow: var(--lift); }
+table { width: 100%; border-collapse: collapse; font-size: .865rem; }
+th, td { text-align: left; padding: .6rem .8rem; border-bottom: 1px solid var(--rule-2); vertical-align: top; }
+thead th {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .665rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-3); background: var(--sunken);
+  border-bottom: 1px solid var(--rule); white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", ui-monospace, monospace; }
+td.s { width: 1%; white-space: nowrap; }
+table code { white-space: nowrap; }
+
+/* item cards */
+.items { display: flex; flex-direction: column; gap: 1rem; }
+.item {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 1.05rem 1.2rem;
+  box-shadow: var(--lift);
+  display: flex; flex-direction: column; gap: .65rem;
+}
+.item.a { border-left: 3px solid var(--done); }
+.item.o { border-left: 3px solid var(--open); }
+.item.x { border-left: 3px solid var(--risk); }
+.item.i { border-left: 3px solid var(--accent); }
+.ihead { display: flex; align-items: baseline; gap: .65rem; flex-wrap: wrap; }
+.ihead h3 { flex: 1 1 20ch; }
+.item p, .item li { font-size: .935rem; max-width: 70ch; }
+.item ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .28rem; }
+.id {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .755rem; font-weight: 700; color: var(--accent);
+  letter-spacing: .04em;
+}
+
+dl.kv { display: grid; grid-template-columns: auto 1fr; gap: .28rem .9rem; font-size: .875rem; margin: 0; }
+dl.kv dt { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .765rem; color: var(--ink-3); padding-top: .1rem; }
+
+/* sequence */
+ol.seq { margin: 0; padding: 0; list-style: none; counter-reset: q; display: flex; flex-direction: column; gap: .95rem; }
+ol.seq > li {
+  counter-increment: q;
+  display: grid; grid-template-columns: 1.95rem 1fr; gap: 0 .9rem; align-items: start;
+}
+ol.seq > li::before {
+  content: counter(q);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .78rem; font-weight: 700;
+  color: var(--accent); background: var(--accent-wash);
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  border-radius: 3px;
+  width: 1.95rem; height: 1.65rem;
+  display: grid; place-items: center;
+  font-variant-numeric: tabular-nums;
+}
+ol.seq .body { max-width: 68ch; display: flex; flex-direction: column; gap: .45rem; }
+ol.seq h3 { margin-bottom: .15rem; }
+ol.seq p { font-size: .935rem; }
+
+section { display: flex; flex-direction: column; gap: 1rem; }
+.shead { display: flex; flex-direction: column; gap: .3rem; }
+.note { font-size: .845rem; color: var(--ink-2); max-width: 74ch; }
+hr.d { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+details { background: var(--sunken); border: 1px solid var(--rule); border-radius: 5px; padding: .75rem .95rem; }
+details[open] { padding-bottom: .95rem; }
+summary { cursor: pointer; font-weight: 600; font-size: .91rem; }
+details > *:not(summary) { margin-top: .75rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="page">
+
+<header>
+  <div class="tag">Remediation ledger &middot; 2026-08-20</div>
+  <h1>Qwen3.8 Harness Remediation</h1>
+  <div class="lede">
+    <p><b>Two defects are fixed and proven on the wire; three claims in the bring-up report are wrong.</b> The largest is that prefix caching was ruled out on this checkpoint. It is reachable in the engine you are already running, and if it works it demotes the report's biggest lever to a rounding error.</p>
+    <p>Everything applied so far is settings-only — no code, no gateway edit, no engine restart. What remains is ranked below, and the first item is an experiment, not a change.</p>
+  </div>
+  <div class="stamp">
+    <span><b>Checkout</b> 141eb6fef8 &middot; 0.1.0-rc.8</span>
+    <span><b>Engine</b> vllm-0.27.1 &middot; Qwen3.8-27B-FP8</span>
+    <span><b>Verified by</b> proxied run + engine source</span>
+    <span><b>Supersedes</b> bring-up &sect;Next</span>
+  </div>
+</header>
+
+<hr class="d">
+
+<!-- ═══ APPLIED ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Applied and verified</div>
+    <h2>One new route fixes two capped auxiliary calls</h2>
+    <p class="note">Both the session-title call and the compaction summarizer were inheriting the agent's thinking route while capped at a small output budget. Neither raises an error when it fails. A second provider entry — same engine, same credential, same raw surface, <code>reasoning: off</code> — fixes both.</p>
+  </div>
+
+  <div class="items">
+
+    <div class="item a">
+      <div class="ihead"><span class="id">D1</span><h3>Session titling burned a full prefill for a discarded result</h3><span class="chip done">fixed &middot; wire-proven</span></div>
+      <p>The chain: <code>session-title-llm</code> caps output at <code>maxOutputTokens: 64</code>; it resolved its route from the session's logged route, so it inherited thinking at <code>medium</code>; the reasoning block consumed the entire budget; <code>finish_reason: length</code> mapped through <code>finishError</code> to a throw; the title fell back. HTTP 200, tokens billed, no error line.</p>
+      <p>The plugin already accepted a route override — <code>provider</code> and <code>model</code>, which must be supplied together. Pointed at the new route, the provider title now lands:</p>
+<pre><span class="c">session/title-llm-request</span>  route={provider: <span class="g">local-qwen-off</span>, model: chat-model}  maxTokens=64
+<span class="c">session/title</span>              <span class="g">"Wire connection verification"</span>  source={kind: <b>provider</b>}</pre>
+      <p>Previously this stopped after the request event, with no provider title following it.</p>
+    </div>
+
+    <div class="item a">
+      <div class="ihead"><span class="id">D1b</span><h3>The same bug sits in compaction, where failing is worst</h3><span class="chip done">fixed</span><span class="chip info">not in the report</span></div>
+      <p>Identical shape, materially worse consequence. <code>summarizeWithLlm</code> caps output at <code>maxTokens</code>, default <b>8192</b>; with <code>summarizationProvider</code> unset it resolves <code>configured ?? latest ?? agentTarget</code> and inherits the agent's <b>thinking</b> route; and its <code>finishError</code> is <b>fail-closed</b> — a max-tokens finish throws <code>summarization truncated at the token cap (incomplete checkpoint)</code>.</p>
+      <p>It fires when the session is at its context ceiling, the one moment where failure means the session cannot continue. Reasoning competes with the summary for the same 8192 tokens, and your own eval data puts <code>chat-model-medium</code> at a mean of 1,792 output tokens with a tail past 11,000 on hard prompts — so the cap is reachable, not theoretical.</p>
+    </div>
+
+    <div class="item i">
+      <div class="ihead"><h3>Both routes on one wire capture, no cross-contamination</h3><span class="chip done">measured</span></div>
+      <p>Captured through the recording proxy on a single run. The title call and the agent call disagree on exactly the field they should:</p>
+<pre><span class="c">[1] title  max_tokens=64     chat_template_kwargs={<span class="r">enable_thinking: False</span>, preserve_thinking: False}  tools=0
+[2] agent  max_tokens=32768  chat_template_kwargs={<span class="g">enable_thinking: True, reasoning_effort: medium</span>, preserve_thinking: False}  tools=25</span></pre>
+      <p>This also closes the report's open caveat that the <code>off</code> path was code-determined but never observed. It is now exercised on every session rather than in a one-off probe.</p>
+    </div>
+
+  </div>
+
+  <details>
+    <summary>Why a second provider rather than a per-call effort — and the trap in the obvious shortcut</summary>
+    <p>Neither auxiliary caller sets <code>GenerateOptions.reasoningEffort</code>, and the adapter resolves <code>options.reasoningEffort ?? profile.reasoning</code>. The profile default is therefore the only available lever, which makes the route itself the switch.</p>
+    <p><b>Do not simplify this to <code>reasoningEfforts: false</code> on the raw surface.</b> That inverts the intent. pi-ai's <code>chat-template</code> branch is guarded by <code>model.reasoning</code>, so a non-reasoning model sends no <code>chat_template_kwargs</code> at all — and the Qwen3.8 template reads an undefined <code>enable_thinking</code> as <b>true</b> with <code>reasoning_effort|default('xhigh')</code>. Thinking returns at <em>maximum</em> effort, silently. <code>reasoningEfforts: false</code> is safe only against a managed gateway alias that injects <code>enable_thinking: false</code>.</p>
+    <p>One mechanical note that would otherwise cost a boot: a patch entry's <code>config</code> <b>replaces</b> the bundle's config rather than merging into it — the loader assigns per top-level key. The title patch restates its whole config block for that reason; omitting <code>targetWords</code> would fail validation at load.</p>
+  </details>
+</section>
+
+<hr class="d">
+
+<!-- ═══ CORRECTIONS ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Corrections</div>
+    <h2>Three things the bring-up report got wrong</h2>
+    <p class="note">All three were checked against the engine actually running on the box — its installed Python, its loaded template, its boot log — rather than against documentation or a prior write-up.</p>
+  </div>
+
+  <div class="items">
+
+    <div class="item x">
+      <div class="ihead"><span class="id">R1</span><h3>Prefix caching was not ruled out. It is one flag away, and untested.</h3><span class="chip risk">largest correction</span></div>
+      <p>Both the report and your infra notes state that <code>supports_mamba_prefix_caching=False</code> means prefix caching is unavailable and no flag changes it. That is not what this image does. The flag selects a <em>mode</em>; it does not gate the feature:</p>
+<pre><span class="c">vllm/model_executor/models/config.py</span>
+613:  <span class="k">if</span> cache_config.enable_prefix_caching:
+616:      <span class="s">"all"</span> <span class="k">if</span> model_config.supports_mamba_prefix_caching <span class="k">else</span> <span class="g">"align"</span>
+628:      cache_config.mamba_cache_mode = <span class="g">"align"</span>
+634:  <span class="k">if</span> cache_config.mamba_cache_mode == <span class="g">"align"</span>:
+636:      <span class="k">assert</span> ...enable_chunked_prefill, <span class="c"># required for 'align'</span></pre>
+      <p><code>align</code> mode's one prerequisite is chunked prefill, and your boot log already reports <code>enable_chunked_prefill=True</code>. The reason nothing happens today is simply that the feature is off: <code>enable_prefix_caching</code> defaults to <code>None</code> in the engine args and resolves from the model's registry support, which for this hybrid lands on <code>False</code> — logged at <code>debug</code>, which is why no line appears in your <code>INFO</code> log. Passing the flag explicitly skips that resolution entirely.</p>
+      <p><b>Why this outranks everything else.</b> The report's dominant cost — a 13.3k-token baseline re-prefilled from token 0 on every step, 38.8 s at full depth — exists <em>because</em> of this. The compaction summarizer is even built deliberately as an exact request prefix in order to reuse provider KV cache. If <code>align</code> mode produces real hits, trimming tool schemas stops being the main lever.</p>
+      <p><b>Treat it as an experiment, not a fix.</b> vLLM calls it experimental in its own log line, there are open upstream reports of zero or poor hit rates for hybrid align mode, and enabling it sets <code>mamba_block_size</code> to <code>block_size</code>, which moves the KV allocation. That means the engine's shape can change — so the boot line <code>Maximum concurrency for 131,072 tokens per request</code> must be re-read and still exceed <code>--max-num-seqs</code>, with preemptions at zero. Fully reversible: remove the flag.</p>
+    </div>
+
+    <div class="item x">
+      <div class="ihead"><span class="id">R2</span><h3>Patching the chat template cannot fix the reasoning round-trip</h3><span class="chip risk">would waste the work</span></div>
+      <p>The natural server-side move — teach the template to accept <code>reasoning_content</code> as well as <code>reasoning</code> — is inert, because the template is not where the name is decided. It already reads <code>reasoning_content</code>:</p>
+<pre><span class="c">chat_template.jinja</span>
+112:  {%- <span class="k">if</span> message.reasoning_content <span class="k">is string</span> %}
+
+<span class="c">vllm/entrypoints/chat_utils.py</span>
+1843:  reasoning = message.get(<span class="g">"reasoning"</span>)            <span class="c"># only the new name is READ</span>
+1869:  result_msg[<span class="g">"reasoning"</span>] = ...
+1870:  result_msg[<span class="g">"reasoning_content"</span>] = ...          <span class="c"># "keep compatibility"</span></pre>
+      <p><code>reasoning_content</code> appears exactly twice in that module: once as a type declaration marked <em>Deprecated</em>, once as that write. It is never read. So the template variable is fed exclusively from the inbound <code>reasoning</code> field, and an inbound <code>reasoning_content</code> is dropped before the template runs — which is precisely why the measured token delta for it was zero.</p>
+      <p>The interception point has to be at or before request parse: the gateway, or the client. Staying on <code>/engine/v1</code> remains the correct and already-verified answer, and it costs nothing except gateway <code>extra_body</code> injection — which only the non-thinking auxiliary routes need anyway.</p>
+    </div>
+
+    <div class="item o">
+      <div class="ihead"><span class="id">R3</span><h3>C6 adjusts the wrong side of the inequality</h3><span class="chip open">your call</span></div>
+      <p>You were right to push on this. The admission ceiling is <code>131,072 &minus; maxTokens</code>, so the report's <code>thresholdRatio: 0.7</code> lowers the compaction trigger to buy margin, when raising the ceiling is free. No measured agent step emitted more than ~120 output tokens; the declared 32,768 is pure admission headroom you never spend.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th><code>maxTokens</code></th><th class="n">Prompt ceiling</th><th class="n">Compaction fires</th><th class="n">Margin</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td>32,768 &middot; ratio 0.8</td><td class="n">98,304</td><td class="n">104,857</td><td class="n">&minus;6,553</td><td>ceiling always hit first</td></tr>
+            <tr><td>32,768 &middot; ratio 0.7 <span class="chip info">deployed</span></td><td class="n">98,304</td><td class="n">91,750</td><td class="n">6,554</td><td>one big tool result jumps it</td></tr>
+            <tr><td><b>16,384 &middot; ratio 0.8</b></td><td class="n">114,688</td><td class="n">104,857</td><td class="n">9,831</td><td>more margin <em>and</em> +13k usable context</td></tr>
+            <tr><td>8,192 &middot; ratio 0.8</td><td class="n">122,880</td><td class="n">104,857</td><td class="n">18,023</td><td>widest margin</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Row three dominates row two on both axes. The only thing surrendered is a single response longer than 16k tokens — roughly 1,200 lines emitted in one message. Not applied, because it trades away output capacity and that is a product decision.</p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="d">
+
+<!-- ═══ NEW ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">New defect</div>
+    <h2>The harness fans out three times wider than the engine admits</h2>
+  </div>
+  <div class="items">
+    <div class="item x">
+      <div class="ihead"><span class="id">D4</span><h3>Default workflow concurrency is 16 against 5 engine slots</h3><span class="chip risk">unguarded</span></div>
+      <p><code>workflow-worker-thread</code> resolves an unset <code>maxConcurrentAgents</code> to <code>min(16, availableParallelism() &minus; 2)</code>. This box reports 24 cores, so the effective default is <b>16 concurrent agents</b>, each holding its own model request. The engine admits <code>--max-num-seqs 5</code>.</p>
+      <p>Oversubscription here is not a throughput trade. A request beyond the fifth slot is not admitted until one ahead stops <em>generating</em>, which scales with the output budget of the request ahead — up to roughly 1,780 s at the advertised ceiling, well past the 900 s stream idle timeout. And the engine's response to pressure is to <b>preempt</b>, which on a checkpoint that cannot prefix-cache means re-prefilling from token 0.</p>
+      <p>The symptom is not an error. It is a workflow that appears to hang and then dies of a timeout. These defaults are calibrated for a hosted API with elastic concurrency, not for a five-slot local engine.</p>
+      <p><b>Two ways out, and they compose:</b> cap <code>maxConcurrentAgents</code> at 4 if you keep the row, or drop the subagent and workflow rows entirely — which the report already wants for their 1,036 and 783 tokens of schema. This turns that purge from a token-cost argument into a safety one.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="d">
+
+<!-- ═══ CLEARED ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Cleared</div>
+    <h2>Risks carried by your Mastra harness that dsh does not have</h2>
+    <p class="note">Your prior harness accumulated twelve client-side workarounds. Two of the load-bearing ones do not apply here, checked against dsh's own captured wire rather than assumed.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="s">State</th><th>Workaround it needed</th><th>Why dsh is exempt</th></tr></thead>
+      <tbody>
+        <tr><td class="s"><span class="chip done">cleared</span></td><td><code>flattenToolSchemas</code> — inline every <code>$ref</code>, throw on cyclic refs, because Qwen3.8 tool schemas must be finite and locally resolvable</td><td>All 25 captured tool schemas are flat: zero <code>$ref</code>, <code>$defs</code>, <code>definitions</code>, <code>anyOf</code>, <code>oneOf</code>, <code>allOf</code></td></tr>
+        <tr><td class="s"><span class="chip done">cleared</span></td><td><code>coalesceSystemMessages</code> — merge every system message into one and force it first, or the template raises</td><td>Every request carries exactly one system message, first; auxiliary context rides as <code>role: user</code></td></tr>
+        <tr><td class="s"><span class="chip open">watch</span></td><td>Effort choice: at <code>low</code>, the model states its answer inside the reasoning block and emits EOS without closing <code>&lt;/think&gt;</code></td><td>Measured at 11% of items on your eval grid, versus once in 690 at <code>medium</code>. The deployed route is <code>medium</code> — keep it there, and do not drop to <code>low</code> for cost</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="d">
+
+<!-- ═══ LEVERS ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Server-side levers</div>
+    <h2>What owning the inference actually buys you</h2>
+    <p class="note">Each row was checked for existence in the installed engine or the live gateway config, not in the documentation. The gateway rows need only a gateway restart; the engine rows need an engine restart and a re-read of the boot shape line.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Lever</th><th>Where</th><th>What it buys</th><th>Cost / caveat</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>--enable-prefix-caching</code></td><td>engine</td>
+          <td>Selects <code>align</code> mode on this hybrid. Potentially removes the dominant per-step cost</td>
+          <td>Experimental upstream; moves <code>mamba_block_size</code>, so re-verify the concurrency shape</td>
+        </tr>
+        <tr>
+          <td><code>--long-prefill-token-threshold</code></td><td>engine</td>
+          <td>Stops a short tool-result turn queueing behind a deep prefill. Default <code>0</code> = disabled</td>
+          <td>Long prefills take roughly twice as long. A fairness dial, and this workload has both shapes</td>
+        </tr>
+        <tr>
+          <td><code>thinking_token_budget</code></td><td>gateway <code>extra_body</code></td>
+          <td>A per-request field in this build. Bounds worst-case reasoning, hence worst-case step latency</td>
+          <td>Your own note: a forced close moved unfinished reasoning into visible output. Needs its own test</td>
+        </tr>
+        <tr>
+          <td><code>chat-model-instruct</code> alias</td><td>gateway</td>
+          <td>The documented instruct sampler (<code>temp 0.7, top_p 0.80, presence_penalty 1.5</code>) which the harness cannot express — pi-ai writes only <code>temperature</code>, and no dsh setting reaches even that</td>
+          <td>Additive: a new <code>model_name</code>, nothing existing changes. Managed <code>/v1</code> only</td>
+        </tr>
+        <tr>
+          <td><code>--default-chat-template-kwargs</code></td><td>engine</td>
+          <td>Server-wide thinking default; request-level kwargs still override</td>
+          <td>Redundant here — the harness already sends explicit kwargs on every request</td>
+        </tr>
+        <tr>
+          <td><code>KV_CACHE_DTYPE_FP8</code></td><td>engine</td>
+          <td>Your measured crossover is 1,355 output tokens: below it fp8 KV is <em>slower</em> per turn at depth</td>
+          <td>Agent steps emit ~120 output tokens. Worth measuring at real session depth before touching — unsetting it halves KV capacity per token</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col">The alias row is the one place where a template patch would have been the wrong instrument and injection is the right one. Because dsh sends no sampling fields at all, an injected sampler has nothing to collide with — unlike <code>chat_template_kwargs</code>, which dsh always sends and which replaces an injected dict wholesale.</p>
+</section>
+
+<hr class="d">
+
+<!-- ═══ SEQUENCE ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Next</div>
+    <h2>The order, and why it is this order</h2>
+    <p class="note">A real dependency chain: each step's outcome changes what the next step should be. The first is deliberately an experiment — running it before the purges could make most of them unnecessary.</p>
+  </div>
+  <ol class="seq">
+    <li><div class="body"><h3>Measure align-mode prefix caching before optimising anything</h3>
+      <p>Add <code>--enable-prefix-caching</code> to the chat arm, restart, confirm the log names <code>align</code> mode, then re-read the concurrency line and require preemptions at zero. Run the same task twice and read the hit rate and <code>cached_tokens</code>. This is the only step that can invalidate the others, so it goes first. If hits are real, D3 stops being your dominant cost; if they are zero, you have closed the question with evidence instead of a comment.</p></div></li>
+    <li><div class="body"><h3>Close the concurrency mismatch</h3>
+      <p>D4 is unguarded and its failure mode is a hang. Cap <code>maxConcurrentAgents</code> at 4, or drop the subagent and workflow rows — which also removes ~1,800 tokens of schema. Do this regardless of how step 1 turns out; it is a safety bound, not an optimisation.</p></li>
+    <li><div class="body"><h3>Build the regression gate the report asked for</h3>
+      <p>Still the right call, and still missing: one task covering a <b>failing tool</b> and a <b>write under approval</b>, recorded as a keyless replay snapshot. Two of the fixes above are silent-failure classes — a lost title, an inherited summarization route — and neither would be caught by a passing run. Until the snapshot exists, every purge below is unguarded.</p></div></li>
+    <li><div class="body"><h3>Drive compaction under real pressure</h3>
+      <p>The one thing D1b's fix does not prove. Push a session past 91,750 estimated tokens and confirm the summary lands on the non-thinking route, that the checkpoint is complete, and that an intentional overflow recovers rather than throwing. This is also the only way to test the R3 arithmetic rather than reason about it.</p></div></li>
+    <li><div class="body"><h3>Then decide about the gateway alias and the sampler</h3>
+      <p>Additive and low-risk, but only worth doing once you know whether the auxiliary routes stay on the raw surface. If step 1 changes the economics, the instruct alias may be the last thing that matters rather than the next.</p></div></li>
+  </ol>
+</section>
+
+<hr class="d">
+
+<!-- ═══ UNPROVEN ═══ -->
+<section>
+  <div class="shead">
+    <div class="tag">Still unproven</div>
+    <h2>Stated so silence is not read as confirmation</h2>
+  </div>
+  <div class="items">
+    <div class="item">
+      <ul>
+        <li><b>Align-mode hit rates.</b> Reachability is proven from the installed source; usefulness is not. Nobody has run it on this checkpoint.</li>
+        <li><b>Compaction under pressure.</b> The route is fixed and the config validated, but no session has been driven near the ceiling. The fail-closed path is read from code.</li>
+        <li><b>The 16-vs-5 fan-out.</b> Derived from the resolved default and the engine's admission limit. Not reproduced as a hang.</li>
+        <li><b>Failing tool, write under approval.</b> Still not exercised — the same gap the bring-up report opened with.</li>
+        <li><b>Long-horizon tool-call integrity.</b> Your own repos never observed a tool call lost inside <code>&lt;think&gt;</code>; it is an anticipated failure, not a measured one. The parser pair and <code>enable_in_reasoning: false</code> are as recommended. Watch for <code>finish_reason: stop</code> with reasoning populated and no tool calls.</li>
+        <li><b>No repository gate was run.</b> No lint, typecheck, test, or doc-sync. The changes here are deployment configuration under <code>$DSH_HOME</code>, not repository source.</li>
+      </ul>
+    </div>
+  </div>
+
+  <details>
+    <summary>What changed on disk, and how to undo it</summary>
+<pre><span class="c"># added: a non-thinking provider on the same raw surface</span>
+~/.dsh/settings.yaml        llm-pi-ai.providers.<b>local-qwen-off</b>   <span class="c">(reasoning: off)</span>
+
+<span class="c"># added: both capped auxiliary calls routed to it</span>
+~/.dsh/cordis.patch.yml     session-title-llm   <span class="c">-> provider/model, full config restated</span>
+                            compaction-basic    <span class="c">-> summarizationProvider/Model</span>
+
+<span class="c"># unchanged</span>
+agent-default-model        <span class="c">local-qwen / chat-model, reasoning medium</span>
+the gateway, the engine    <span class="c">not touched</span></pre>
+    <p class="note">Backups of both files were taken before editing. The agent route is untouched, so reverting the two files restores the previously verified configuration exactly.</p>
+  </details>
+</section>
+
+</div>

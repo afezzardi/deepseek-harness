@@ -1,0 +1,54 @@
+# Home patch layer (applies under every profile).
+#
+# Purge ledger A1: the Typert RPC gateway and its registry/loader. Nothing in a
+# headless run uses them — the api-gateway imports client-connection type-only —
+# and the loader resolves built `lib/typert.host.js` artifacts, so a source-plane
+# run fails at boot without them. Removing the three rows drops ~19 packages
+# (ws, fflate, js-yaml) from the composition.
+- id: typert
+  disabled: true
+- id: typert-loader
+  disabled: true
+- id: typert-gateway
+  disabled: true
+
+# Compaction must fire below the engine's true admission ceiling, not below the
+# nominal context window. vLLM enforces prompt + max_tokens <= max_model_len, so
+# with maxTokens 32768 the usable prompt is 98,304 — but the default
+# thresholdRatio 0.8 over contextWindow 131072 puts pressure compaction at
+# 104,857, i.e. above the ceiling. 0.7 puts it at 91,750, leaving ~6.5k margin
+# for the token meter's estimate. contextWindow stays honest at 131072.
+- id: compaction-basic
+  config:
+    thresholdRatio: 0.7
+    # The same capped-auxiliary-call trap as session-title-llm above, with a far
+    # worse consequence. summarizeWithLlm caps output at maxTokens (default 8192)
+    # and is FAIL-CLOSED: a max-tokens finish throws "summarization truncated at
+    # the token cap (incomplete checkpoint)". With summarizationProvider unset it
+    # resolves `configured ?? latest ?? agentTarget` and inherits the agent's
+    # THINKING route, so the reasoning block competes with the summary for the cap
+    # at exactly the moment the session is at its context ceiling and compaction
+    # is the only way forward.
+    summarizationProvider: local-qwen-off
+    summarizationModel: chat-model
+
+# D1: session titling is a CAPPED auxiliary call -- maxOutputTokens 64 -- and it
+# inherits the agent's route, so on a thinking route the reasoning block consumes
+# the whole budget. finishError maps that max-tokens finish to a throw
+# (session-title-llm/src/index.ts finishError), the title falls back, and the run
+# reports HTTP 200 with tokens billed and no error line. Cost is a full ~13k
+# prefill per session for a discarded result.
+#
+# The whole config block is restated on purpose: applyEntryPatches assigns
+# per top-level key (`target[key] = value`, vendor/include/src/index.ts), so a
+# `config` patch REPLACES the bundle's config rather than merging into it.
+# Omitting targetWords here would fail resolveSessionTitleLlmConfig at load.
+- id: session-title-llm
+  config:
+    targetWords: 5
+    targetCjkCharacters: 10
+    maxInputBytes: 4096
+    maxOutputTokens: 64
+    timeoutMs: 60000
+    provider: local-qwen-off
+    model: chat-model
