@@ -91,14 +91,22 @@ headless. Do these first; each is reversible in one line.
 
 | # | Remove rows | Packages out | External npm out | src LOC out | Cost |
 |---|---|---:|---:|---:|---|
-| A1 **[V]** | `typert`, `typert-loader`, `typert-gateway` | **19** | `ws`, `fflate`, `js-yaml` | 26,552 | Loses the Typert RPC gateway; nothing headless uses it. Highest ratio in the ledger, and **already applied** in `dsh-cordis.patch.yml` |
+| A1 **[V]** | `typert`, `typert-loader`, `typert-gateway` | **19** | `ws`, `fflate`, `js-yaml` | 26,552 | Loses the Typert RPC gateway. Highest ratio in the ledger, and **already applied** in `dsh-cordis.patch.yml`. **Headless-only — it breaks the web profile** (below) |
 | A2 **[V]** | `pwsh-sandbox`, `tool-pwsh`; `session-telemetry-otel` | 4 | 6 × `@opentelemetry/*` | 1,763 | POSIX-only, no product analytics |
 | A3 **[V]** | `subagent` ×4, `tool-subagent*` ×4, `workflow*` ×2, `tool-ralph` | 11 | — | 9,883 | No delegation or orchestration tools, and removes ~1,800 tokens of tool schema. Second rationale in NEXT-SESSION.md E4 — re-run the E2 gate first, since A3 is one of the purges the gate exists to protect |
 | A4 **[V]** | `attachment-local`, `session-query*`, `session-title*`, `goal*`, `jobs*`, `plan-mode`, `web*`, `tool-web`, `commands`, `user-questions`, `command-*`, `skill-badge`, `llm-deepseek`, `anonymous-user-id` | 23 | `sharp`, `turndown`, `@joplin/turndown-plugin-gfm`, `eventsource-parser` | 14,116 | Text-only, no session search, no titles, no slash commands, no live web. Lands exactly on the 67-package minimum |
 
 Cumulative: **124 → 67 packages, 25 → 12 external dependencies, 109,336 → 57,022 source lines.**
 
-Three constraints. **[V]** Keeping the headless `code-runtime` row keeps `@babel/code-frame` and
+**A1 is headless-only, measured 2026-08-21.** Dropping the three `typert` rows makes the **web profile
+boot a broken client tree**: `dsh-client-runtime` injects `typert` and is what provides `remote` and
+`slots`, so all 37 client UI rows cascade into `pending` behind it and the browser shows "Failed to load
+plugins". The server still answers HTTP 200 — Cordis `inject` waits rather than failing — so nothing
+server-side reports a problem. This is purge ledger A's silent-removal hazard, caught in the wild rather
+than in theory. `artifacts/harness-tests/patches/web-typert.yml` re-enables the rows as an overlay for
+web runs, keeping the purge for headless; verified to restore the full UI.
+
+Three further constraints. **[V]** Keeping the headless `code-runtime` row keeps `@babel/code-frame` and
 `picomatch`. **[V]** Every removal is silent — `inject` waits rather than asserts, so a composition
 missing a provider boots cleanly, prints no error, and quietly lacks the capability — so `--dump-config`
 plus one replay snapshot after each step is what makes the ledger safe. **[V]** Copy the Headless
