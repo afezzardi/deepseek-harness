@@ -20,6 +20,7 @@ workload profile, the sandbox and approval findings, and the probes.
 |---|---|
 | `AGENTS.md` (+ `CLAUDE.md` symlink) | Scoped guidance for future sessions: the reference repos and how to reach them, verification discipline, the live-config sync rule, the git rule. |
 | `NEXT-SESSION.md` | **Start here.** Current state, the four claims this fork retracted, the measured workload, the config we run, the ranked queue, the E2 regression gate, and the traps. |
+| `UAT.md` | The user acceptance suite and the regression suite for every future configuration change: 26 cases in seven blocks, the verdict vocabulary, the recorded results per run, and the false-pass shapes to watch for. Case ids are stable and permanent. |
 | `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the row groups, their measured package/dependency/LOC effect, and the ordering constraints. Re-verified against `0.1.1-rc.1`. |
 | `deepseek-harness-plugins-overview.md` | **The 138-row composition inventory** — id, package, intent, layer. How a ledger row group resolves to actual ids. Unchanged at `0.1.1-rc.1`. |
 | `deepseek-harness-foundation-assessment.md` | The benchmark matrix and its Pareto analysis, the pi-ai settings-layer risk register, and the adapter-justification criteria. Trimmed to those three on 2026-08-21; the four-phase evaluation plan it carried was executed and removed. |
@@ -54,6 +55,18 @@ value in `./.env` at the repo root (gitignored) or the process environment.
 | `recproxy.py` | Recording reverse proxy. Logs each request body to JSONL and forwards upstream; streams SSE through with chunked framing. The only way to see sampling and `chat_template_kwargs`, since the session log records model-visible content only and the gateway runs `set_verbose: false`. |
 | `read-session-log.mts` | Decodes `session.jsonl.zstd`. Required because the log is **concatenated zstd frames** — a single-frame decode returns only the session header and looks like an empty log. |
 | `probes/` | The endpoint experiments behind every measured claim. Each reads `LITELLM_MASTER_KEY` from the environment, prints observations only, and writes nothing to the endpoint's state. |
+| `harness-tests/` | The UAT instruments (below). |
+
+`harness-tests/` measures and checks a UAT sitting. Nothing in it contacts the endpoint except the
+metric sampler, which only scrapes counters.
+
+| File | Use |
+|---|---|
+| `harness-tests/metrics.mts` | Folds a decoded session log into per-step tokens, model/tool wall time, tool names, turn outcomes, error codes, approvals and compactions. Timing definitions are `sessionStats`' own (`packages/session/session-stats/src/projection.ts`), and packed chunk rows expand through the product's `decodeStorageRecord`, so both storage layouts fold identically. `--all` folds every session under `$DSH_HOME` and reports an undecodable one instead of omitting it. |
+| `harness-tests/check.sh` | PASS/FAIL for one UAT case's **log-level** criteria: `check.sh <B1.4\|B3.1\|B3.2\|B4.1> [log.zstd]`, newest session by default. Those four are the cases a screen cannot distinguish — a declined write leaves the same screen as a fenced one, and `/compact` reports success having replaced nothing. Exit status is the verdict. |
+| `harness-tests/check-case.mts` | The criteria `check.sh` asserts, one function per case. |
+| `harness-tests/sample-engine-metrics.sh` | Samples the vLLM counters every 10 s into a timestamped JSONL series, for aligning engine behaviour to session times afterwards. Counters are cumulative: a per-scenario figure is the delta between bracketing rows. |
+| `harness-tests/patches/web-typert.yml` | Re-enables the three `typert` rows purge ledger A1 disables. **Required for `--profile web`**: `dsh-client-runtime` injects `typert` and provides `remote` and `slots`, so without it all 37 client UI rows stall in `pending` and the browser shows *"Failed to load plugins"* while the server still answers HTTP 200. |
 
 **The probes print to stdout and persist nothing.** Four published reuse figures were purged for
 exactly that reason (`TUNING.md` §6 row 18). Redirect to a file and cite the file, or do not quote the
