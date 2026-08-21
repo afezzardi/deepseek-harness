@@ -128,17 +128,43 @@ Two consequences that outrank most of the queue:
    Corroboration from the numbers alone: dense snapshotting over a 125,708-token sequence would
    generate ~80 snapshot events per group while only ~12 blocks are held, so the **eviction** path,
    not the snapshot path, sets the steady state.
-2. **Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
-   working set does not fit** — its numerator counts cached-but-reclaimable blocks. The "cold 4-way
-   cannot fit, `floor(473/120) = 3`" derivation in the correction above therefore does **not** follow
-   from occupancy alone; the preemptions are real but still need attributing to a genuine live-set
-   shortfall versus reclamation lagging allocation. Do not promote N=3 to the record until then.
+2. ~~Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
+   working set does not fit.~~ **RETRACTED same day — this was wrong, and `block_pool.py` says so.**
+   `get_usage()` is `1.0 - get_num_free_blocks() / (num_gpu_blocks - 1)` where
+   `get_num_free_blocks()` returns `free_block_queue.num_free_blocks`, and that queue is **unified**:
+   the class docstring says a cached block "may be used by running requests **or in the
+   free_block_queue that could potentially be evicted**", and the free path pushes a block there as
+   soon as `ref_cnt` hits 0 (`blocks_without_hash` prepended, `blocks_with_hash` appended). Eviction
+   is synchronous with allocation — `popleft_n` takes a cache-tagged block and drops its hash. So a
+   cached-but-unreferenced snapshot **already counts as free**, and `free_blocks == 0` means no
+   `ref_cnt == 0` block exists anywhere. **1.000 is genuine exhaustion.**
+
+   Two consequences. **The occupancy-based pass/fail criterion below is void** — evictable blocks were
+   never in the numerator, so sparse retention has no guaranteed effect on this metric and the
+   direction is unknown; do not predict one. And at 1.000 all 473 blocks are *referenced*: live KV is
+   `4 × 81 = 324` attention + `4 × 3 = 12` running mamba states = 336, leaving **~137 referenced
+   blocks that are not live working set**. The source names a mechanism that fits — `_apply_cow` takes
+   "an extra ref beyond the one handed to the request", and `take_partial_tail_offloads` documents the
+   lifetime as "pinned here and **unpinned when the request's blocks are freed**". That is a
+   request-lifetime pin, not a short window, so align's retained boundary states are not raidable
+   cache. That CoW pinning dominates the ~137 is inference, not measured.
+
+   **So cold 4-way genuinely does not fit, and N=3 is better supported than the retraction above
+   implied.** What survives of that objection is only the 81-vs-84 arithmetic point: the *derivation*
+   does not reach the conclusion, but the observation does. One distinct alternative remains unruled:
+   `get_num_blocks_to_allocate(..., apply_admission_cap=True)` can preempt with free blocks available,
+   so check whether that path was active before attributing everything to capacity.
 
 `VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0` is consequently the highest-value inference-layer experiment
 outstanding — one env var, validated at boot, and it preserves the reuse points prefix caching depends
-on by construction rather than by luck. Handed over in `MESSAGE.md` §R3, with the false-pass trap:
-occupancy *always* falls under sparse retention because evictable blocks leave the numerator, so the
-pass criteria are preemption delta, warm reuse percentage, and aggregate throughput from the same run.
+on by construction rather than by luck. Handed over in `MESSAGE.md` §R3.
+
+**Judge it on preemption delta, warm reuse percentage, and aggregate throughput — never on
+occupancy**, and hold no prior about which way occupancy moves. The original justification for that
+instruction ("occupancy always falls, because evictable blocks leave the numerator") was **wrong** and
+is retracted in item 2 above; the instruction survives its own rationale, because the metric now has
+no predicted response to the lever at all. Whether sparse retention reduces the ~137 request-lifetime
+CoW pins is the open question the experiment answers.
 
 **But run the free test first, before any boot** (`MESSAGE.md` §R4.2). Warm 4-way peaked at 0.755 with
 0 preemptions against cold's 0.989/1.000 at the *same* 125,708-token final length, so that pair
@@ -550,14 +576,18 @@ Each of these has already cost someone time on this stack.
   repeat invocation is byte-identical to the last. That is how the E1 4-way row came to be reported as
   a capacity measurement; see the correction in §E1 result. Vary a seed per invocation, and make the
   varying part at least one 1568-token block or it cannot miss.
-- **Occupancy always falls under sparse retention, improvement or not.** `kv_cache_usage_perc` counts
-  cached-but-evictable blocks as not free, so removing snapshots lowers it mechanically. Judge
-  `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` on preemption delta, warm reuse percentage, and aggregate
-  throughput from one run — never on occupancy.
-- **Read the implementation, not the env var's prose.** Two claims in this file were wrong because
-  they came from documentation: that this checkpoint cannot prefix-cache, and that
-  `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` does not apply to Mamba. Both died on contact with
-  `v1/core/` inside the container.
+- **`kv_cache_usage_perc` counts referenced blocks only — cached-but-unreferenced blocks are already
+  FREE.** The free queue is unified (`block_pool.py`), so `1.000` means no `ref_cnt == 0` block exists
+  anywhere and is genuine exhaustion, not cache filler. Two corollaries that each cost a wrong claim
+  here: sparse retention has **no predictable effect** on this metric, and a high reading can never be
+  dismissed as "just cache". Judge retention changes on preemption delta, warm reuse, and throughput.
+- **Read the implementation, not the prose — and not just for features, for the accounting too.** Four
+  claims in this file were wrong because they came from documentation or plausibility: that this
+  checkpoint cannot prefix-cache; that `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` does not apply to Mamba;
+  that retained align pages scale with scheduler steps; and that occupancy near 1.000 could be
+  reclaimable filler. All four died on contact with `v1/core/` inside the container, and each check
+  took minutes. The rule is not "prefer the artifact when convenient" — it is prefer it **before**
+  publishing a mechanism claim.
 - **Two independent timeouts.** Audit the client's as well as the gateway's, against
   (output budget ÷ 19.5 tok/s) + worst-case TTFT. The harness route sets
   `streamIdleTimeoutMs: 900000` and `maxRetries: 0` to match the gateway deliberately — do not
