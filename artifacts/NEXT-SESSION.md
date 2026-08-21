@@ -17,21 +17,51 @@ ANSWERED and nothing is open on either side.** Our handover artifacts are on the
 
 ## Resume here
 
-**Nothing is blocked on the inference side, and nothing on our side is waiting on a boot.** Their Q17
-reply closed the last engine-side dependency: N is not our constraint, `maxConcurrentAgents` is
-unpinned from their admission, and every capacity figure either session argued about defends headroom
-our traffic never touches. Read `MESSAGE.md` from the top and `docs/TUNING.md` §6 before writing down
-any mechanism claim — six entries there are now ours.
+**The live activity is the UAT. The user executes [UAT.md](UAT.md); we analyse.** Everything
+engine-side is closed and stays closed — do not reopen inference tuning, and do not propose new
+measurement of that stack. Their own owner declined further work there on scope grounds, and by both
+sessions' arithmetic our traffic uses ~36 s of prefill per day.
+
+**When the user reports a sitting is done:**
+
+1. Decode every session from the sitting and fold it — but **read the extractor defects below first**;
+   the timing fields are not currently trustworthy.
+2. Confirm **B1.4** and **B4.1** from the log rather than the recorded verdict. Both can be marked PASS
+   while the thing under test is broken: B1.4 passes if the model merely *declines* without ever
+   calling `write` (same screen, same absent file), and B4.1 passes if `/compact` reports success
+   without replacing anything, since the original first message is then still in history.
+3. Align the engine sampler series (`artifacts/results/engine-metrics-*.jsonl`) to session times.
+4. Write the analysis to `artifacts/results/uat-<date>/` and the cycle-2 recommendation.
+
+### Known defects in `artifacts/harness-tests/metrics.mts` — fix before quoting a timing number
+
+From a Codex adversarial review of `beb50dc720`. **Token counts, step counts, tool names, error codes
+and turn outcomes are sound. TTFT and decode are not.**
+
+| # | Defect |
+|---|---|
+| 1 | `decodeMs` is coded first-delta→last-delta; `session-stats` defines it **first-token→assembled-message** |
+| 2 | Deltas are packed only for runs of **≥3** consecutive compatible deltas (`packages/core/session/src/chunk-rows.ts`), so short responses stay as ordinary `assistant/chunk` events the fold ignores — one 4-token session reports TTFT and decode as **zero** |
+| 3 | TTFT takes a packed row's `time0` without requiring the first member to be non-empty, but tool-call rows commonly begin `args: [""]` |
+| 4 | `compactions` counts events, so one successful compaction reports **3** (`compaction/start` + `/summary` + `/end`) |
+| 5 | No `Math.max(0, …)` clamp, and the packed format permits clock reversal (a real `dt: -60` exists in a recorded log) |
+| 6 | Malformed **interior** log lines are silently dropped, and `--all` silently omits undecodable sessions — both create quiet selection bias |
+
+Also corrected by that review, and already fixed in the prose: `remote` is provided by the **API
+gateway**, not `client-runtime` (which provides `slots`); and the proxy-vs-direct latency comparison is
+**n=1 per arm**, so it supports the instrumentation warning but not a general "49 tok/s". The warning
+itself is independently sound — `recproxy.py` forwards 4 KiB reads rather than SSE events.
+
+### Still open on the inference side, and neither needs us
 
 | Pending | Whose | State |
 |---|---|---|
-| **Q18** — head composition | **answered, closed** | They independently confirm 7,455 (their method: 7,499 raw, 7,446 scaffold-adjusted; tool schemas 6,619 **identical to the token**). Two methods, no shared code, 9 tokens apart. Nothing left open |
-| **Q10** — fp8 KV re-price at our shape | theirs | Nothing for us to change either way. If they unset `KV_CACHE_DTYPE_FP8` the pool shrinks ~1.845x, which we do not care about at 19 blocks/request. Re-run E2 afterwards to confirm the route still behaves |
+| **Q10** — fp8 KV re-price at our shape | theirs | Nothing for us to change either way. Re-run E2 afterwards to confirm the route still behaves |
 | **Q3** — pushback on making the warm TTFT series the headline | theirs, open to us | Consciously left unanswered. Only worth a reply if we start caring about published TTFT medians |
 
-Two standing rules, both of which produced retractions: **hand them numbers, not derivations**, and
-**measure a contributor, never fit it** — the 13,253 head was a least-squares intercept, which
-describes a total and is silent about composition.
+Q1-Q18 are all ANSWERED. Two standing rules, both of which produced retractions: **hand them numbers,
+not derivations**, and **measure a contributor, never fit it** — the 13,253 head was a least-squares
+intercept, which describes a total and is silent about composition.
 
 ## Claims this file published and that are now dead
 
@@ -132,10 +162,16 @@ Validated by `--dump-config` (81 rows) and by a **full E2 gate run under this ex
 
 | # | Item | Cost | Owner |
 |---|---|---|---|
-| 1 | **E3** — compaction under real pressure. It cannot happen naturally at 19k prompts; it needs a synthetic deep task | none | ours |
-| 2 | **E4** — fan-out at the bound of 4. No recorded session has ever run a subagent, so the path is unexercised rather than known-good | none | ours |
-| 3 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
-| 4 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
+| 1 | **Run the UAT** — [UAT.md](UAT.md), two sittings | user's time | user |
+| 2 | **Fix the six extractor defects above**, then re-run the golden test and re-derive the backfill's timing columns | none | ours |
+| 3 | **Tighten B1.4 and B4.1** with a `check.sh <case-id>` that decodes the latest session and prints PASS/FAIL for the log-level criteria — the user chose this over deferred verification, so a recorded PASS is sound at the time it is written | none | ours |
+| 4 | Analyse the sitting and write the cycle-2 recommendation | none | ours |
+| 5 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
+| 6 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
+
+E3 (compaction) and E4 (fan-out) are **superseded by the UAT**, which covers both from the surface a
+user actually drives: B4 exercises compaction through `/compact` rather than a synthetic 100k task, and
+B5 exercises delegation.
 
 Done 2026-08-21: the E2 re-run under the new `maxTokens`/`thresholdRatio` pair (passed), and the head
 composition measurement that replaced the intercept.
