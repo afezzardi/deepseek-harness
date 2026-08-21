@@ -46,19 +46,14 @@
 # per top-level key (`target[key] = value`, vendor/include/src/index.ts), so a
 # `config` patch REPLACES the bundle's config rather than merging into it.
 # Omitting targetWords here would fail resolveSessionTitleLlmConfig at load.
-# D4: workflow fan-out is unbounded relative to the engine. maxConcurrentAgents 0
-# means "derive it", and the derivation is min(16, availableParallelism() - 2)
-# (workflow-worker-thread/src/index.ts:151-153) = 16 on this 24-core host, against
-# an engine that admits `--max-num-seqs 4`. Prefill is served one request at a
-# time, so the surplus does not queue gracefully -- it serializes into a
-# worst-case TTFT of N x one prefill.
+# D4: maxConcurrentAgents 0 derives min(16, availableParallelism() - 2) = 16 here
+# (workflow-worker-thread/src/index.ts:151-153). Prefill is serialized, so the
+# surplus becomes a worst-case TTFT of N x one prefill. 4 is our own ceiling, not
+# a mirror of engine admission -- MESSAGE.md Q17 unpinned it. Above 4 needs an
+# observed vllm:num_requests_waiting, not arithmetic.
 #
-# 4 matches current engine admission. Raise this in lockstep if the inference
-# owner raises --max-num-seqs (asked in MESSAGE.md Q17), and not before.
-#
-# `provider: spawn` is restated because a patch entry's `config` REPLACES the
-# bundle's config rather than merging into it; omitting it would silently drop the
-# base bundle's subagent provider selection.
+# `provider: spawn` is restated because a `config` patch replaces rather than
+# merges; omitting it drops the bundle's subagent provider selection.
 - id: workflow-worker-thread
   config:
     provider: spawn

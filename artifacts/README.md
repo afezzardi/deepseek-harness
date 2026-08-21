@@ -75,6 +75,11 @@ number.
 | `probes/probe_prefix_geometry.py` | Which prompt geometries benefit — append-only agent chains vs a shared prefix with long unique suffixes |
 | `probes/probe_prefix_correctness.py` | That a GDN state resume preserves the cached region's content, tested by needle recall rather than by token diff — GDN backends are not batch-invariant, so a token diff is the wrong test |
 | `probes/probe_prefix_saturation.py` | Co-residency of near-full-context sequences. **Has no seed**, so a repeat invocation replays byte-identical prompts and measures a warm run |
+| `probes/probe_head_composition.py` | Which messages make up the per-session prompt constant, and where the reusable prefix ends. Takes a `recproxy.py` log; persists to `results/` |
+
+`results/` holds the persisted artifacts. `head-composition-20260821.json` and
+`e2-gate-wire-20260821.jsonl` are the current pair: the measured prompt composition, and the recorded
+wire bodies for the E2 gate run that produced it.
 
 ## Reproducing
 

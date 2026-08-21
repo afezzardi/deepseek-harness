@@ -10,47 +10,44 @@ both fixes are wire-proven and carried in the `dsh-cordis.patch.yml` comments.
 it.** `kb-mastra-infra/docs/TUNING.md` owns block accounting, prefix-cache geometry, fp8, the shape,
 and — in its §6 — the single retraction ledger for both sessions.
 `kb-mastra-infra/MESSAGE.md` is the exchange, restructured to a strict question/reply schema on
-2026-08-21: **re-read it from the top, do not diff it.** Round 7 (ours) answered their Q8 and Q10-Q16
-and asked Q17. Our handover artifact is on the host at `kb-mastra-infra/artifacts/from-harness/`.
+2026-08-21: **re-read it from the top, do not diff it.** Round 8 (theirs) answered Q17; round 9 (ours)
+filed the head-composition correction as Q18. Our handover artifact is on the host at
+`kb-mastra-infra/artifacts/from-harness/`.
 
 ## Resume here
 
-The last session ended waiting on the inference side. **Do this first, in this order.**
+**Nothing is blocked on the inference side, and nothing on our side is waiting on a boot.** Their Q17
+reply closed the last engine-side dependency: N is not our constraint, `maxConcurrentAgents` is
+unpinned from their admission, and every capacity figure either session argued about defends headroom
+our traffic never touches. Read `MESSAGE.md` from the top and `docs/TUNING.md` §6 before writing down
+any mechanism claim — six entries there are now ours.
 
-1. **Read `kb-mastra-infra/MESSAGE.md` from the top.** Not a diff — it is a strict question/reply
-   schema and the whole file is short. Check the index table for what changed status since round 7.
-2. **Read `docs/TUNING.md` §6 before writing down any mechanism claim.** It is the retraction ledger
-   for both sessions and four entries are ours.
-3. Then act on whichever of the four pending items below has an answer.
-
-| Pending | Whose | What their answer unblocks on our side |
+| Pending | Whose | State |
 |---|---|---|
-| **Q17** — is `--max-num-seqs 4` right for a 13-19k-token consumer? | ours, asked | If N rises, raise `workflow-worker-thread.maxConcurrentAgents` to match **in the same change**, then run E4. If N stays 4, leave the bound at 4 and E4 is still worth one run. **Do not raise ours first** — the bound exists to match admission, not to anticipate it |
-| **Q10** — fp8 KV re-price at our shape | theirs, we supplied the numbers | Nothing for us to change either way. If they unset `KV_CACHE_DTYPE_FP8` the pool shrinks ~1.845x, which we do not care about at 19 blocks/request, and decode should get faster. Just re-run item 0 afterwards to confirm the route still behaves |
-| **Q13/Q14 reuse-geometry replay** against our real geometry | theirs | Validates or falsifies our **90.7%** aggregate-reuse prediction. If it lands far off, the gap is in our geometry description, not in their model — check the byte-identity claim on the wire with `recproxy.py`, since we only verified it at the request-header level |
-| **Q3** — they invited pushback on making the warm TTFT series the headline | theirs, open to us | We did not answer it and consciously left it. Only worth a reply if we start caring about published TTFT medians; their cold-by-default choice is right for a prefill number |
+| **Q18** — head composition: the shared prefix is 7,455 tokens, not 13,253 | ours, filed | Sent as a correction, not a request. It explains their 85.0% replay against our 90.7% claim. Nothing for them to boot |
+| **Q10** — fp8 KV re-price at our shape | theirs | Nothing for us to change either way. If they unset `KV_CACHE_DTYPE_FP8` the pool shrinks ~1.845x, which we do not care about at 19 blocks/request. Re-run E2 afterwards to confirm the route still behaves |
+| **Q3** — pushback on making the warm TTFT series the headline | theirs, open to us | Consciously left unanswered. Only worth a reply if we start caring about published TTFT medians |
 
-**Item 0 is ours and needs no reply from anyone:** re-run the E2 gate under the new
-`maxTokens: 16384` / `thresholdRatio: 0.8` pair. That combination has never been exercised against a
-live engine — it was applied and statically validated after the last gate run.
+Two standing rules, both of which produced retractions: **hand them numbers, not derivations**, and
+**measure a contributor, never fit it** — the 13,253 head was a least-squares intercept, which
+describes a total and is silent about composition.
 
-One standing rule that produced most of the retractions below: **hand them numbers, not derivations.**
-Our block arithmetic in Q17 is deliberately framed as theirs to price.
-
-## Four claims this file published and that are now dead
+## Claims this file published and that are now dead
 
 From `TUNING.md` §6. **Do not reintroduce any of them.**
 
 | Ours | Row | What is actually true |
 |---|---|---|
+| "The prompt head is **13,253 ± 8 tokens**", and the 12,544 / 94.6% / 90.7% figures built on it | their Q17 | An **intercept, not a tokenizer reading**. Measured: a 7,455-token shared prefix, then 5,822 constant tokens sitting *after* the varying task string. First-request reuse is 6,272; aggregate 86.1%. Composition table above |
+| "Our head is a pure function of (checkout path, model name, mounted tool set)" | their Q17 | True of the 7,455-token prefix only. The 5,822 tokens after it track `AGENTS.md` **file content** and the **installed skill set**, neither of which is in that triple. They were never in the shared prefix, so nothing downstream changes — but do not describe them as invariant |
 | "`--max-num-batched-tokens` **never enters** the retention path; retention is block-driven, never step-driven" | 14 | Backwards, and it reversed a *correct* model. Every prefill chunk is clipped to a block boundary and state is written at chunk ends, so the mamba checkpoint stride is `floor(max_num_batched_tokens / block_size) * block_size` = **7,840** as shipped. It governs the **first** request against a prefix only, which is why the flag is still a weak lever — for a different reason (row 20) |
 | "`align` retains one snapshot per block per group, densely"; "≈12.4-12.8 pages/group"; `84 + 3x12 = 120` blocks/request | 15 | One **real** page is materialised per step and earlier slots are null-padded. A request holds ~**1-2 real** mamba blocks per group. The `12` was a back-fit from an observed overflow, never a retention measurement |
 | "`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0` is the highest-value inference-layer experiment outstanding" | 16 | With ~1-2 real mamba blocks per request there is nearly nothing for sparse retention to remove. **Demoted from first to last** — to close the question, not to fix anything |
 | Our reuse figures: 98.8%, 81.2%, 40.6%, 77-86% | 18 | **No artifact exists for any of them.** Confirmed here: every probe under `probes/` prints to stdout and persists nothing, so those numbers exist only as transcriptions into this file and cannot be reproduced as recorded. Their reproducible equivalents are 95.6% on a repeated 32,787-token prompt and 88.1% on a byte-identical 4-way replay |
 
-Two lessons, both already cost real time: read the implementation before publishing a mechanism, **and
-persist the output of any probe whose number you intend to quote.** A figure with no artifact is not a
-measurement.
+Three lessons, all of which cost real time: read the implementation before publishing a mechanism;
+**persist the output of any probe whose number you intend to quote** — a figure with no artifact is not
+a measurement; and **do not let a fitted constant stand in for a measured one.**
 
 Two of their answers close questions of ours outright: `max_tokens` is **not** a KV lever (their Q6),
 and pool exhaustion **preempts, never 5xxes**, so `maxRetries: 0` is safe (their Q7). Only *admission*
@@ -69,22 +66,46 @@ Steps per session: mean 2, max 8. Turns per session: **1** — headless runs one
 Compaction has fired **0** times and cannot at these sizes. Peak simultaneous engine requests: **2**,
 for 0.4-3.4 s at session start, where the auxiliary titling call overlaps main step 1.
 
-**The prompt head is byte-identical across every session we have ever run** — 14/14 over two days,
-SHA-256 verified over the system string and the tool array independently. It is **13,253 ± 8 tokens**
-(least-squares fit of first-step prompt tokens against user-message bytes over 13 sessions; slope
-0.2244 tok/B, residuals within ±8). It carries **no date, timestamp, session id or git state** — the
-only environment-derived bytes are the model name and the checkout path.
+### The head, measured on the wire rather than fitted
 
-Under their measured reuse model (`TUNING.md` §4), our head reuses 7,840 once and then **12,544 tokens,
-94.6%, on every request after**. Applied to the deepest recorded session that predicts **90.7%
-aggregate reuse** warm (138,361 prompt tokens submitted, 12,921 uncached) — a falsifiable number, and
-the first thing to check if reuse ever looks wrong.
+`artifacts/results/head-composition-20260821.json`, via `probes/probe_head_composition.py`. This
+replaces the 13,253-token "head" — that figure was a **regression intercept**, so it described a
+per-session total and said nothing about what was in it or where the reusable part ended.
+
+| Contributor | bytes | rendered tokens | |
+|---|---|---|---|
+| system prompt | 4,148 | 836 | shared |
+| tool schemas (25) | 27,324 | 6,619 | shared |
+| **shared cross-session prefix** | | **7,455** | |
+| user task | 440 | 98 | **diverges** |
+| workspace instructions (root `AGENTS.md`) | 16,374 | 3,748 | after divergence |
+| runtime context snapshot | 481 | 98 | after divergence |
+| skill catalog | 8,971 | 1,976 | after divergence |
+| step-1 total | | 13,375 | |
+
+**The reusable prefix ends at 7,455 tokens, not 13,253.** 5,822 tokens of content that is constant
+across sessions is emitted *after* the per-session task string, so it re-prefills on every new
+session. A new session's first request therefore reuses `floor(7455/1568)*1568 = 6,272`, not 12,544.
+Tool schemas are **89% of everything cacheable** — the lever that matters is the tool set, not the
+system prompt.
+
+Still true, and now verified over all five contributors rather than the two we shipped in Q13: **no
+volatile bytes** — no date, timestamp, session id or git state. Two claims got stronger:
+**append-only is now wire-proven**, SHA-256 per message object, each request a strict prefix-extension
+of the last, with `tools` and the system message byte-identical throughout; and `artifacts/AGENTS.md`
+(7,146 B) is injected **lazily** on first touch of that directory, appended after a tool result, so it
+does not break the prefix.
+
+Aggregate reuse for the deepest recorded session is **86.1%** (138,361 submitted, 19,193 uncached),
+not the 90.7% published here before. Their independent replay of that geometry measured **85.0%** and
+they attributed the gap to a base difference; it was our error, and the corrected figure lands 1.1
+points from their measurement.
 
 **So the saturation work models a workload we do not produce.** Our largest request ever needs
-`ceil(20364/1568) + 6 = 19` blocks against the 90 a full-context request needs. Whether that means
-`--max-num-seqs` can rise well above 4 for us is their **Q17**, handed over deliberately as *their*
-arithmetic to price: the row 4/5/15 family died exactly by our making that kind of derivation
-ourselves.
+`ceil(20364/1568) + 6 = 19` blocks against the 90 a full-context request needs. Their Q17 reply settles
+what follows: 4 is over-provisioned, so is everything else, and that is fine — over-provisioning costs
+nothing here and re-tuning it costs a boot for no measurable win. Our recorded two days are ~36 s of
+prefill per day.
 
 ## Config applied on our side (live `~/.dsh` in sync with `artifacts/`)
 
@@ -92,26 +113,36 @@ ourselves.
 |---|---|---|---|
 | `maxTokens`, both routes | 32768 | **16384** | Admission is `prompt + max_tokens <= max_model_len`, so this is subtracted from usable prompt: the ceiling rises 98,304 → **114,688** (their Q6). Largest output ever observed is 961 tokens, so 16384 is ~17x headroom |
 | `compaction-basic.thresholdRatio` | 0.7 | **0.8** | Compaction fires at 104,857 under a 114,688 ceiling: margin **9,831**, against 6,554 before. `retainTokens` resolves to `floor(131072*0.16) = 20,971`, which the loader requires to be below the threshold |
-| `workflow-worker-thread.maxConcurrentAgents` | 0 (derived 16) | **4** | Matched to engine admission. Raise in lockstep with `--max-num-seqs`, never independently |
+| `workflow-worker-thread.maxConcurrentAgents` | 0 (derived 16) | **4** | Our own ceiling. Originally pinned to engine admission; their Q17 unpinned it. Above 4 needs an observed `vllm:num_requests_waiting`, not arithmetic |
 
-Validated by `--dump-config` (81 rows, all three composing as intended) and by a full E2 gate run on
-the aligned revision. **Not yet re-run under the new `maxTokens`/`thresholdRatio` pair** — that is
-item 0 below.
+Validated by `--dump-config` (81 rows) and by a **full E2 gate run under this exact pair**
+(2026-08-21) — see E2 below. `max_tokens: 16384` confirmed on the wire, not just in config.
 
 ## Queue
 
 | # | Item | Cost | Owner |
 |---|---|---|---|
-| 0 | Re-run the E2 gate under `maxTokens: 16384` / `thresholdRatio: 0.8` | none | ours |
-| 1 | Their **Q17** — is `--max-num-seqs 4` right for a 13-19k consumer? | reply, then maybe 1 boot | inference |
-| 2 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
-| 3 | **E3** — compaction under real pressure. It cannot happen naturally at 19k prompts; it needs a synthetic deep task | none | ours |
-| 4 | **E4** — fan-out, now bounded at 4. Worth exercising once: no recorded session has ever run a subagent | none | ours |
-| 5 | **E5** — instruct alias; gateway restart only | none | inference |
+| 1 | **E3** — compaction under real pressure. It cannot happen naturally at 19k prompts; it needs a synthetic deep task | none | ours |
+| 2 | **E4** — fan-out at the bound of 4. No recorded session has ever run a subagent, so the path is unexercised rather than known-good | none | ours |
+| 3 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
+| 4 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
 
-`--max-num-batched-tokens 3136` is **declined** on our behalf, reasoning in their Q15 reply: for a
-13,253-token head reused 30+ times it buys 4,704 tokens once and costs ~60% fewer tokens per prefill
-step forever. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is last, per row 16.
+Done 2026-08-21: the E2 re-run under the new `maxTokens`/`thresholdRatio` pair (passed), and the head
+composition measurement that replaced the intercept.
+
+`--max-num-batched-tokens 3136` stays **declined**, and the corrected geometry strengthens rather than
+weakens the case. Under the stride model they have since withdrawn (row 21), a 7,455-token prefix would
+reuse **0** at the shipped stride and 6,272 at 3,136 — so the benefit is 6,272 tokens once per prefix
+lifetime, not the 4,704 we told them, against a prefix that has not changed in 45 requests. The cost is
+unchanged: ~60% fewer tokens per prefill step forever, and our warm prefills fit in one 8,192-token step
+today. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is last, per row 16.
+
+**Not worth chasing, recorded so it is not rediscovered as new.** 5,822 tokens of per-session-constant
+content sit after the varying task string, so they re-prefill every session. Emitted *before* the task
+they would extend the shared prefix to ~13,277 tokens and lift first-request reuse from 6,272 to 12,544
+— worth ~1.1 s of prefill per session start, ~8 s/day at our recorded 7 sessions/day. That is an
+upstream prompt-assembly observation, not a fork patch, and it is below the bar either session applies
+to a boot. It is only worth revisiting at a much higher session rate.
 
 Still genuinely open and ours to answer: whether `preserve_thinking: true` wins in interactive
 multi-turn use (below), and whether the nvfp4 arm meets its own `>= 6` boot gate (theirs, unverified
@@ -148,8 +179,11 @@ yielding a stable `error: {name: "FsError", code: "FS_NOT_FOUND"}` that the mode
 than aborting the turn; the out-of-workspace write denied with `FS_SANDBOX_DENIED` and **no file
 created**; and a later step consuming earlier results.
 
-**Passed on the aligned 0.1.1-rc.1 revision (2026-08-21).** Route confirmed on the way past:
-`provider: local-qwen, model: chat-model, reasoningEffort: medium`. D1 is confirmed fixed end to end,
+**Passed on the aligned 0.1.1-rc.1 revision, and passed again under `maxTokens: 16384` /
+`thresholdRatio: 0.8` (2026-08-21, `61ff124e62`).** All five criteria met on the second run; wire
+bodies in `results/e2-gate-wire-20260821.jsonl`. Route confirmed on the way past:
+`provider: local-qwen, model: chat-model, maxTokens: 16384, reasoningEffort: medium`, and
+`max_tokens: 16384` verified on the wire rather than only in config. D1 is confirmed fixed end to end,
 not just by route: `session/title-llm-request` carries `route: {provider: local-qwen-off}` and the
 resulting `session/title` has `source: {kind: provider}`. The earlier `{kind: fallback}` title is the
 optimistic one written before the call, and is expected.
