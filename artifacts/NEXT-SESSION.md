@@ -2,7 +2,7 @@
 
 State at handoff: branch `fork/qwen38-deployment`, rebased onto `upstream/master` at `528c682e06` —
 the `release/dsh-0.1.1-rc.1` merge, upstream PR #2890. `master` is a pristine mirror of
-`upstream/master` (0 ahead, 0 behind); the fork is 8 commits ahead, all inside `artifacts/`. The two
+`upstream/master` (0 ahead, 0 behind); every fork commit is inside `artifacts/`. The two
 capped-auxiliary-call defects (session titling, compaction summarization) are fixed in `~/.dsh`, and
 both fixes are wire-proven and carried in the `dsh-cordis.patch.yml` comments.
 
@@ -12,6 +12,30 @@ and — in its §6 — the single retraction ledger for both sessions.
 `kb-mastra-infra/MESSAGE.md` is the exchange, restructured to a strict question/reply schema on
 2026-08-21: **re-read it from the top, do not diff it.** Round 7 (ours) answered their Q8 and Q10-Q16
 and asked Q17. Our handover artifact is on the host at `kb-mastra-infra/artifacts/from-harness/`.
+
+## Resume here
+
+The last session ended waiting on the inference side. **Do this first, in this order.**
+
+1. **Read `kb-mastra-infra/MESSAGE.md` from the top.** Not a diff — it is a strict question/reply
+   schema and the whole file is short. Check the index table for what changed status since round 7.
+2. **Read `docs/TUNING.md` §6 before writing down any mechanism claim.** It is the retraction ledger
+   for both sessions and four entries are ours.
+3. Then act on whichever of the four pending items below has an answer.
+
+| Pending | Whose | What their answer unblocks on our side |
+|---|---|---|
+| **Q17** — is `--max-num-seqs 4` right for a 13-19k-token consumer? | ours, asked | If N rises, raise `workflow-worker-thread.maxConcurrentAgents` to match **in the same change**, then run E4. If N stays 4, leave the bound at 4 and E4 is still worth one run. **Do not raise ours first** — the bound exists to match admission, not to anticipate it |
+| **Q10** — fp8 KV re-price at our shape | theirs, we supplied the numbers | Nothing for us to change either way. If they unset `KV_CACHE_DTYPE_FP8` the pool shrinks ~1.845x, which we do not care about at 19 blocks/request, and decode should get faster. Just re-run item 0 afterwards to confirm the route still behaves |
+| **Q13/Q14 reuse-geometry replay** against our real geometry | theirs | Validates or falsifies our **90.7%** aggregate-reuse prediction. If it lands far off, the gap is in our geometry description, not in their model — check the byte-identity claim on the wire with `recproxy.py`, since we only verified it at the request-header level |
+| **Q3** — they invited pushback on making the warm TTFT series the headline | theirs, open to us | We did not answer it and consciously left it. Only worth a reply if we start caring about published TTFT medians; their cold-by-default choice is right for a prefill number |
+
+**Item 0 is ours and needs no reply from anyone:** re-run the E2 gate under the new
+`maxTokens: 16384` / `thresholdRatio: 0.8` pair. That combination has never been exercised against a
+live engine — it was applied and statically validated after the last gate run.
+
+One standing rule that produced most of the retractions below: **hand them numbers, not derivations.**
+Our block arithmetic in Q17 is deliberately framed as theirs to price.
 
 ## Four claims this file published and that are now dead
 
