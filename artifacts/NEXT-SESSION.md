@@ -119,10 +119,15 @@ Two consequences that outrank most of the queue:
 
 1. **`align` retains one mamba snapshot per block per group, densely, by default.** The estimator's
    `page_size × (2 + num_speculative_blocks)` is a *reservation* figure, not a retained count — which
-   is the whole reason the boot line under-counts. Retention is block- and alignment-driven, never
-   step-driven: `cache_blocks` uses `num_tokens // block_size`, and `alignment_tokens` is
-   `scheduler_block_size` = `math.lcm(*group_block_sizes)` (`kv_cache_utils.py:659`), so
-   `--max-num-batched-tokens` **never enters this path**.
+   is the whole reason the boot line under-counts. Prefer that framing over "the estimator is wrong":
+   it is a provisioning and admission number, plausibly conservative by design, and the ~12 is a
+   runtime observation, so the two are different kinds of quantity. Retention is block- and
+   alignment-driven, never step-driven: `cache_blocks` uses `num_tokens // block_size`, and
+   `alignment_tokens` is `scheduler_block_size` = `math.lcm(*group_block_sizes)`
+   (`kv_cache_utils.py:659`), so `--max-num-batched-tokens` **never enters this path**.
+   Corroboration from the numbers alone: dense snapshotting over a 125,708-token sequence would
+   generate ~80 snapshot events per group while only ~12 blocks are held, so the **eviction** path,
+   not the snapshot path, sets the steady state.
 2. **Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
    working set does not fit** — its numerator counts cached-but-reclaimable blocks. The "cold 4-way
    cannot fit, `floor(473/120) = 3`" derivation in the correction above therefore does **not** follow
@@ -134,6 +139,13 @@ outstanding — one env var, validated at boot, and it preserves the reuse point
 on by construction rather than by luck. Handed over in `MESSAGE.md` §R3, with the false-pass trap:
 occupancy *always* falls under sparse retention because evictable blocks leave the numerator, so the
 pass criteria are preemption delta, warm reuse percentage, and aggregate throughput from the same run.
+
+**But run the free test first, before any boot** (`MESSAGE.md` §R4.2). Warm 4-way peaked at 0.755 with
+0 preemptions against cold's 0.989/1.000 at the *same* 125,708-token final length, so that pair
+already isolates retention from sequence length: a fixed per-request cap would read alike, and the
+0.23-of-pool gap is instead the signature of hits sharing resident blocks. It costs nothing — the data
+exists — and it tells you whether the retention lever is attacking the cold path specifically, which
+determines which runs the pass criteria should be read off.
 
 ### The shape finding that came out of it: 5 is oversubscribed, 4 is right
 
@@ -167,17 +179,39 @@ tok/s): the warm run skipped part of the prefill. Sampling is *not* the explanat
 selects its peak scrape lexicographically by `(running, kv_usage)` (line 112), so 0.901 is a genuine
 joint single-scrape observation, of a warm run.
 
-**Cold 4-way therefore does NOT fit at full context, and their block model says why.** One shared
-pool of 473 usable blocks; the 64 layers group into 1 attention + 3 mamba groups of 16
+**Cold 4-way does NOT fit at full context — but that is an observation, not a derivation.** One
+shared pool of 473 usable blocks; the 64 layers group into 1 attention + 3 mamba groups of 16
 (`kv_cache_utils.py` splits to equal sizes), and the boot line sums over all four:
-`84 + 3×2 = 90` blocks/request → `474/90 = 5.27x`, which also yields `690,312` exactly. But cold
-runs retained **~12 pages per group per request**, i.e. `84 + 3×12 = 120`, and `4 × 120 = 480 > 473`.
-Observed peaks match block-exactly (`0.989 = 468/473`, `1.000 = 473/473`). So the boot line does not
-ignore mamba — **it under-counts it ~6x**, and `floor(473/120) = 3` is the only N that provably fits
-cold. Two corollaries: lowering `--max-num-seqs` does **not** free mamba pages (they are taken per
-running request from a pool whose sizing has no `max_num_seqs` term, so 5→4 bought admission
+`84 + 3×2 = 90` blocks/request → `474/90 = 5.27x`, which also yields `690,312` exactly. That much is
+correct as written.
+
+**The block back-solve, however, used the wrong attention count, and corrected it says 4 fits.**
+`84 = ceil(131072/1568)` is the max-model-len **address space** — right for the boot estimator's worst
+case, wrong for a back-solve, because paged attention KV is allocated against tokens actually
+processed. Those requests were `117,708 + 8,000 = 125,708` tokens, so actual consumption is
+`ceil(125708/1568) = **81**` blocks, not 84:
+
+| attention blocks | at 12 mamba pages/group | ×4 | vs 473 |
+|---|---|---|---|
+| 84 (as originally derived) | `84 + 36 = 120` | 480 | overflows by 7 |
+| **81 (actual)** | **`81 + 36 = 117`** | **468** | **fits, 5 spare**; `floor(473/117) = 4` |
+
+So the arithmetic does not establish the overflow. **The overflow is established directly** by the
+preemption deltas and a single scrape reading `473/473`. The inference runs the other way: overflow
+was observed, and it *pins* retention at **≈12.4-12.8 pages per group** (overflow at 81 attention
+blocks requires > 12.42). Quote the retention as ≈11-13, not 12; the `480 → 120 → 12` chain is a
+back-fit that happened to round to a multiple of 4.
+
+**Consequently `floor(473/120) = 3` is not a result** and N=3 must not be promoted to the record — see
+also the evictability argument below, which independently undercuts reading occupancy as a capacity
+requirement.
+
+Two corollaries that do stand: lowering `--max-num-seqs` does **not** free mamba pages (they are taken
+per running request from a pool whose sizing has no `max_num_seqs` term, so 5→4 bought admission
 control, not capacity), and prefix caching **buys KV headroom** because a hit shares resident blocks
-instead of allocating new ones — an independent second argument for the flag.
+instead of allocating new ones — an independent second argument for the flag, and the best explanation
+of why the warm 4-way run peaked at 0.755 against cold's 0.989/1.000 at *identical* final sequence
+length.
 
 **The setting stays 4**, decided jointly and recorded in `MESSAGE.md` Q1: preemption here is a
 latency event, not a correctness one; a preempted sequence resumes from its last cached boundary;
