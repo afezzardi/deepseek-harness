@@ -1,5 +1,28 @@
 # Route: local Qwen3.8-27B behind the LiteLLM gateway.
 #
+# baseURL is the RAW `/engine/v1` passthrough, not the managed `/v1`, and this is a
+# correctness requirement rather than a preference. vLLM RFC #27755 renamed
+# `reasoning_content` to `reasoning` and newer versions dropped `reasoning_content`
+# on input entirely; both halves are live here and they bite in opposite directions:
+#   - OUTPUT: `/v1` returns reasoning under `reasoning_content` (LiteLLM normalizes
+#     back to the old name), `/engine/v1` returns it under `reasoning`.
+#   - INPUT: the chat template accepts ONLY `reasoning`. Measured with
+#     /engine/tokenize, a 180-token filler in an assistant message rendered 84 tokens
+#     under `reasoning_content` and `reasoning_text` (both discarded) against 265
+#     under `reasoning` (+181, accepted).
+# pi-ai reads all three names but echoes thinking back under the name it RECEIVED
+# (openai-completions.js:353, :367, :874). So on `/v1` the loop closes wrongly: read
+# `reasoning_content` -> echo `reasoning_content` -> vLLM discards it, and inside a
+# tool-call chain the model never sees its own prior reasoning. The template renders
+# an empty <think></think>, with no error and no log line. On `/engine/v1` the
+# signature becomes `reasoning` and the echo is accepted; verified end to end on a
+# proxied run, where step 2 of a tool chain carried `reasoning: len=105` back.
+#
+# The cost of this choice: `extra_body` injection is a managed-`/v1` feature, so a
+# gateway alias that injects a sampler (see NEXT-SESSION.md E5) cannot live on this
+# surface. They do not conflict in practice, because instruct mode produces no
+# reasoning to round-trip -- one route per surface, each correct for its mode.
+#
 # Model id is `chat-model` on purpose: the gateway's `chat-model-<effort>` ids are
 # presets that inject a fixed chat_template_kwargs dict, and a client-supplied dict
 # REPLACES it wholesale. `chat-model` injects nothing, so effort stays under harness
@@ -47,11 +70,13 @@ llm-pi-ai:
           #    <tool_response> content and tool-role messages never advance it. So in
           #    a headless run every assistant turn is after it and nothing is
           #    stripped. Verified via /tokenize: 75 tokens either way at one user
-          #    turn, 84 (true) vs 76 (false) once a second user turn exists.
+          #    turn, 84 (true) vs 76 (false) once a second user turn exists. Measured
+          #    consequence: across 14 recorded sessions the per-step prompt grows
+          #    strictly monotonically, so headless traffic is append-only on the wire.
           #  - Interactively it is a real trade, not a free win: `false` retroactively
           #    strips thinking from turns at or before the new last user query, which
           #    rewrites history and voids the shared prefix from there on, while
-          #    `true` keeps the prefix append-only but spends the 98,304-token usable
+          #    `true` keeps the prefix append-only but spends the 114,688-token usable
           #    prompt ceiling on old reasoning and makes compaction fire sooner.
           # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
@@ -59,7 +84,15 @@ llm-pi-ai:
         - id: chat-model
           name: Qwen3.8-27B
           contextWindow: 131072
-          maxTokens: 32768
+          # 16384, not the engine's full 32768 headroom. vLLM admission enforces
+          # prompt + max_tokens <= max_model_len, so this value is subtracted from
+          # usable prompt: 32768 caps the prompt at 98,304, 16384 raises it to
+          # 114,688 -- confirmed by the inference owner in MESSAGE.md Q6. It costs
+          # nothing measurable: across 31 recorded main-route requests the largest
+          # output was 961 tokens, so 16384 is ~17x the observed maximum. Auxiliary
+          # callers are unaffected (titling caps at 64, compaction summarization
+          # carries its own maxTokens).
+          maxTokens: 16384
           reasoningEfforts:
             off:
             low: low
@@ -73,7 +106,7 @@ llm-pi-ai:
     # WHY A SECOND PROVIDER AND NOT A PER-CALL EFFORT: neither auxiliary caller
     # sets GenerateOptions.reasoningEffort, and the adapter resolves
     # `options.reasoningEffort ?? profile.reasoning`
-    # (llm-pi-ai/src/adapter.ts:295). The profile default is the only lever, so
+    # (llm-pi-ai/src/adapter.ts:319). The profile default is the only lever, so
     # the route IS the switch.
     #
     # DO NOT "SIMPLIFY" THIS TO `reasoningEfforts: false`. On this raw surface
@@ -118,21 +151,31 @@ llm-pi-ai:
           #    <tool_response> content and tool-role messages never advance it. So in
           #    a headless run every assistant turn is after it and nothing is
           #    stripped. Verified via /tokenize: 75 tokens either way at one user
-          #    turn, 84 (true) vs 76 (false) once a second user turn exists.
+          #    turn, 84 (true) vs 76 (false) once a second user turn exists. Measured
+          #    consequence: across 14 recorded sessions the per-step prompt grows
+          #    strictly monotonically, so headless traffic is append-only on the wire.
           #  - Interactively it is a real trade, not a free win: `false` retroactively
           #    strips thinking from turns at or before the new last user query, which
           #    rewrites history and voids the shared prefix from there on, while
-          #    `true` keeps the prefix append-only but spends the 98,304-token usable
+          #    `true` keeps the prefix append-only but spends the 114,688-token usable
           #    prompt ceiling on old reasoning and makes compaction fire sooner.
           # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
       models:
         # The levels stay declared even though the profile pins `off`: a model
-        # offering nothing beyond `off` is rejected at load (catalog.ts:708).
+        # offering nothing beyond `off` is rejected at load (catalog.ts:688).
         - id: chat-model
           name: Qwen3.8-27B (no thinking)
           contextWindow: 131072
-          maxTokens: 32768
+          # 16384, not the engine's full 32768 headroom. vLLM admission enforces
+          # prompt + max_tokens <= max_model_len, so this value is subtracted from
+          # usable prompt: 32768 caps the prompt at 98,304, 16384 raises it to
+          # 114,688 -- confirmed by the inference owner in MESSAGE.md Q6. It costs
+          # nothing measurable: across 31 recorded main-route requests the largest
+          # output was 961 tokens, so 16384 is ~17x the observed maximum. Auxiliary
+          # callers are unaffected (titling caps at 64, compaction summarization
+          # carries its own maxTokens).
+          maxTokens: 16384
           reasoningEfforts:
             off:
             low: low

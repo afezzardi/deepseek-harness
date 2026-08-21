@@ -1,73 +1,97 @@
-# Next session: experiments, in order
+# Next session: state, queue, and traps
 
-State at handoff: commit `3c8b37bc75` on branch `fork/qwen38-deployment`. `master` is a pristine
-mirror of `upstream/master` (0 ahead, 0 behind). Two defects fixed in `~/.dsh` and wire-proven; see
-`qwen38-harness-remediation.html`.
+State at handoff: branch `fork/qwen38-deployment`, rebased onto `upstream/master` at `528c682e06` —
+the `release/dsh-0.1.1-rc.1` merge, upstream PR #2890. `master` is a pristine mirror of
+`upstream/master` (0 ahead, 0 behind); the fork is 8 commits ahead, all inside `artifacts/`. The two
+capped-auxiliary-call defects (session titling, compaction summarization) are fixed in `~/.dsh`, and
+both fixes are wire-proven and carried in the `dsh-cordis.patch.yml` comments.
 
-**Naming, because two things are both called R3.** `§R2`–`§R5` always mean rounds of the exchange in
-`kb-mastra-infra/MESSAGE.md` on the inference host. Remediation items from
-`qwen38-harness-remediation.html` are written **`remediation R3`** in full. The two are unrelated.
+**The inference record is the authority on everything engine-side, and this file no longer restates
+it.** `kb-mastra-infra/docs/TUNING.md` owns block accounting, prefix-cache geometry, fp8, the shape,
+and — in its §6 — the single retraction ledger for both sessions.
+`kb-mastra-infra/MESSAGE.md` is the exchange, restructured to a strict question/reply schema on
+2026-08-21: **re-read it from the top, do not diff it.** Round 7 (ours) answered their Q8 and Q10-Q16
+and asked Q17. Our handover artifact is on the host at `kb-mastra-infra/artifacts/from-harness/`.
 
-**This file carries several same-day corrections and three retractions.** Where a passage and a
-correction disagree, the correction wins — each one names what it supersedes and why. Four mechanism
-claims here were published and then killed by reading the installed engine source; the pattern is the
-last entry under §Traps, and it is the most transferable thing in the document.
+## Four claims this file published and that are now dead
 
-**E1 is done (2026-08-20) and it changed the ranking — read §E1 result before planning anything.**
-Prefix caching is ON in the fp8 arm and measured working. Two consequences: D3's 13.3k prefill is no
-longer the dominant cost, and the shape holds 4 near-full-context sequences warm — but **not cold**,
-per the 2026-08-21 correction inside §E1 result. Read that correction; the 4-way row was warm.
+From `TUNING.md` §6. **Do not reintroduce any of them.**
 
-**E2 is done (2026-08-21): the gate passes, and it is now the deployment regression gate.** Its
-write criterion turned out untestable as written, one new defect (D6) came out of it, and the
-`test:snapshot` sub-task is settled — it **cannot** target `local-qwen` and recording one would prove
-nothing. All three in §E2 result.
+| Ours | Row | What is actually true |
+|---|---|---|
+| "`--max-num-batched-tokens` **never enters** the retention path; retention is block-driven, never step-driven" | 14 | Backwards, and it reversed a *correct* model. Every prefill chunk is clipped to a block boundary and state is written at chunk ends, so the mamba checkpoint stride is `floor(max_num_batched_tokens / block_size) * block_size` = **7,840** as shipped. It governs the **first** request against a prefix only, which is why the flag is still a weak lever — for a different reason (row 20) |
+| "`align` retains one snapshot per block per group, densely"; "≈12.4-12.8 pages/group"; `84 + 3x12 = 120` blocks/request | 15 | One **real** page is materialised per step and earlier slots are null-padded. A request holds ~**1-2 real** mamba blocks per group. The `12` was a back-fit from an observed overflow, never a retention measurement |
+| "`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0` is the highest-value inference-layer experiment outstanding" | 16 | With ~1-2 real mamba blocks per request there is nearly nothing for sparse retention to remove. **Demoted from first to last** — to close the question, not to fix anything |
+| Our reuse figures: 98.8%, 81.2%, 40.6%, 77-86% | 18 | **No artifact exists for any of them.** Confirmed here: every probe under `probes/` prints to stdout and persists nothing, so those numbers exist only as transcriptions into this file and cannot be reproduced as recorded. Their reproducible equivalents are 95.6% on a repeated 32,787-token prompt and 88.1% on a byte-identical 4-way replay |
 
-**Remaining queue, re-ranked after both.** Ordered by value per boot, and note the first item costs
-no boot at all:
+Two lessons, both already cost real time: read the implementation before publishing a mechanism, **and
+persist the output of any probe whose number you intend to quote.** A figure with no artifact is not a
+measurement.
+
+Two of their answers close questions of ours outright: `max_tokens` is **not** a KV lever (their Q6),
+and pool exhaustion **preempts, never 5xxes**, so `maxRetries: 0` is safe (their Q7). Only *admission*
+returns 400, when `prompt + max_tokens > max_model_len`.
+
+## The measured workload: 13-19k tokens, not 117-131k
+
+All 14 recorded sessions, decoded logs, 31 main-route requests + 14 titling calls:
+
+| | mean | p50 | p95 | max |
+|---|---|---|---|---|
+| prompt tokens | 15,459 | 13,729 | 18,192 | 19,403 |
+| output tokens (reasoning included) | 198 | 120 | 514 | 961 |
+
+Steps per session: mean 2, max 8. Turns per session: **1** — headless runs one task per process.
+Compaction has fired **0** times and cannot at these sizes. Peak simultaneous engine requests: **2**,
+for 0.4-3.4 s at session start, where the auxiliary titling call overlaps main step 1.
+
+**The prompt head is byte-identical across every session we have ever run** — 14/14 over two days,
+SHA-256 verified over the system string and the tool array independently. It is **13,253 ± 8 tokens**
+(least-squares fit of first-step prompt tokens against user-message bytes over 13 sessions; slope
+0.2244 tok/B, residuals within ±8). It carries **no date, timestamp, session id or git state** — the
+only environment-derived bytes are the model name and the checkout path.
+
+Under their measured reuse model (`TUNING.md` §4), our head reuses 7,840 once and then **12,544 tokens,
+94.6%, on every request after**. Applied to the deepest recorded session that predicts **90.7%
+aggregate reuse** warm (138,361 prompt tokens submitted, 12,921 uncached) — a falsifiable number, and
+the first thing to check if reuse ever looks wrong.
+
+**So the saturation work models a workload we do not produce.** Our largest request ever needs
+`ceil(20364/1568) + 6 = 19` blocks against the 90 a full-context request needs. Whether that means
+`--max-num-seqs` can rise well above 4 for us is their **Q17**, handed over deliberately as *their*
+arithmetic to price: the row 4/5/15 family died exactly by our making that kind of derivation
+ourselves.
+
+## Config applied on our side (live `~/.dsh` in sync with `artifacts/`)
+
+| Change | Was | Now | Why |
+|---|---|---|---|
+| `maxTokens`, both routes | 32768 | **16384** | Admission is `prompt + max_tokens <= max_model_len`, so this is subtracted from usable prompt: the ceiling rises 98,304 → **114,688** (their Q6). Largest output ever observed is 961 tokens, so 16384 is ~17x headroom |
+| `compaction-basic.thresholdRatio` | 0.7 | **0.8** | Compaction fires at 104,857 under a 114,688 ceiling: margin **9,831**, against 6,554 before. `retainTokens` resolves to `floor(131072*0.16) = 20,971`, which the loader requires to be below the threshold |
+| `workflow-worker-thread.maxConcurrentAgents` | 0 (derived 16) | **4** | Matched to engine admission. Raise in lockstep with `--max-num-seqs`, never independently |
+
+Validated by `--dump-config` (81 rows, all three composing as intended) and by a full E2 gate run on
+the aligned revision. **Not yet re-run under the new `maxTokens`/`thresholdRatio` pair** — that is
+item 0 below.
+
+## Queue
 
 | # | Item | Cost | Owner |
 |---|---|---|---|
-| 0 | **Mine the warm-vs-cold pair already measured** (§R4.2) — 0.755 vs 0.989/1.000 at identical 125,708-token length | none, data exists | inference |
-| 1 | **`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`** — one env var, validated at boot (§R3.3) | 1 boot | inference |
-| 2 | **E3** — compaction under real pressure, plus remediation R3 | none | ours |
-| 3 | **E4** — fan-out bound; purely harness-side | none | ours |
-| 4 | no-caching cold 4-way control (§Q5) | 1 boot | inference |
-| 5 | `--max-num-batched-tokens 32768` — **latency only** | 1 boot | inference |
-| 6 | **E5** — instruct alias; gateway restart only, engine keeps running | none | inference |
+| 0 | Re-run the E2 gate under `maxTokens: 16384` / `thresholdRatio: 0.8` | none | ours |
+| 1 | Their **Q17** — is `--max-num-seqs 4` right for a 13-19k consumer? | reply, then maybe 1 boot | inference |
+| 2 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
+| 3 | **E3** — compaction under real pressure. It cannot happen naturally at 19k prompts; it needs a synthetic deep task | none | ours |
+| 4 | **E4** — fan-out, now bounded at 4. Worth exercising once: no recorded session has ever run a subagent | none | ours |
+| 5 | **E5** — instruct alias; gateway restart only | none | inference |
 
-On item 1, state the claim at its real strength: it is the only documented dial on how many mamba
-snapshots get registered, and `0` retains the replay boundary and shared-prefix junction *by
-construction* so it sparsifies without defeating reuse. Whether that reduces the ~137 request-lifetime
-CoW-pinned blocks — the plausible proximate cause of the cold preemptions — is **the open question the
-experiment answers, not a prediction**. Do not write it up as "the fix" before it runs.
+`--max-num-batched-tokens 3136` is **declined** on our behalf, reasoning in their Q15 reply: for a
+13,253-token head reused 30+ times it buys 4,704 tokens once and costs ~60% fewer tokens per prefill
+step forever. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is last, per row 16.
 
-`--max-num-batched-tokens 32768` is **demoted** to what it was always for, confirming the
-prefill-serialization ladder: the source shows it never enters the retention path.
-
-**Two models published and retracted the same day. Do not revive either.**
-
-- **§R2.4, retracted in §R3:** retained align pages scale with scheduler steps and therefore with
-  `--max-num-batched-tokens`. Retention is block-driven; that flag is not in the path.
-- **§R3.2, retracted in §R5:** occupancy near 1.000 could be reclaimable filler rather than a real
-  shortfall. Unreferenced cached blocks are *already* counted free, so 1.000 is genuine exhaustion.
-  This retraction **restored** the inference owner's original reading.
-
-## Open questions, all of them
-
-Nothing below is settled. Each names what it would change, so none of it gets re-derived from scratch.
-
-| Question | Blocks | Where |
-|---|---|---|
-| Is the ≈12 retained pages/group a **plateau or a peak** — does retention track total sequence length? | whether `maxTokens` is a KV lever, i.e. whether remediation R3 has a capacity benefit or is purely context-budget | `MESSAGE.md` §Q6, awaiting reply |
-| At pool exhaustion, does an admitted request get **preempted or an error**? | whether our `maxRetries: 0` is safe, or needs a narrow recovery path | `MESSAGE.md` §Q7, awaiting reply |
-| Are the **~137 referenced non-live blocks** actually CoW pins? | whether the retention dial can reach them at all | §E1 result item 2 — inference, never measured |
-| Was `apply_admission_cap` **active** during the cold runs? | a distinct cause of the preemptions that capacity would get blamed for | §E1 result item 2 |
-| Is the 5-way preemption **caused by** align mode? | nothing operational; 4-way is the setting either way | needs the no-caching control, queue item 4 |
-| Does the **nvfp4 arm** meet its own `≥ 6` boot gate? | that arm can never serve until read from its boot line | §E1 result, unverified since 2026-08-20 |
-
-Read first: the remediation report, then §6/§7 of the consolidated assessment (purge ledgers), then
-§Evaluation plan of the foundation assessment (this file operationalises its Phases 2 and 3).
+Still genuinely open and ours to answer: whether `preserve_thinking: true` wins in interactive
+multi-turn use (below), and whether the nvfp4 arm meets its own `>= 6` boot gate (theirs, unverified
+since 2026-08-20).
 
 ```sh
 cd /home/andrea/management/deepseek-harness
@@ -77,591 +101,228 @@ ssh afezzardi@100.108.76.12 hostname  # NOT the ~/.ssh/config alias; that IP is 
 
 ---
 
-## E1 result — Prefix caching, align mode: KEEP IT (measured 2026-08-20)
-
-`--enable-prefix-caching` is now in the fp8 arm's `command:` list, with the full measured record in
-the comment above the flag. The false claim that this checkpoint "cannot prefix-cache" is corrected
-in both arms' shape comments. Revert is deleting the flag; nothing else depends on it.
-
-**All four boot gates passed**, and the source reading was confirmed exactly:
-
-| Check | Result |
-|---|---|
-| mode selected | `Mamba cache mode is set to 'align' ... when prefix caching is enabled` |
-| feature on | `enable_prefix_caching=True`, `enable_chunked_prefill=True` |
-| shape held | `Maximum concurrency ...: 5.27x` (was 5.45x) — read on 2026-08-20 against the then-current `CHAT_MAX_NUM_SEQS=5`; the setting is now **4** |
-| no preemption | 0 across every hit-rate and correctness run — **not** the cold saturation runs, which do preempt (see the 2026-08-21 correction) |
-
-**RESERVATION cost is +3.45% KV per sequence.** `MambaSpec.max_memory_usage_bytes`
-(`v1/kv_cache_interface.py`) returns `page_size_bytes * (2 + num_speculative_blocks)` for `align`
-against `(1 + ...)` for `none`: align *reserves* two mamba pages per GDN layer per sequence — the
-running state plus one boundary checkpoint. That is +48 pages of 3.0625 MiB, and it predicts the new
-KV size to the token: `714,116 × 1392/1440 = 690,312`, measured 690,312. `max_num_blocks_per_req`
-returns `cdiv(max_len, block_size)` = 84, but that bounds the *address space*, not the reservation; a
-code comment at that site says so. Block size is not a dial here — the mamba page is padded to exactly
-the attention page, so the two effects cancel and total mamba bytes per sequence are invariant.
-
-**This paragraph originally read "not one per block". That gloss was wrong and is corrected below:**
-a *running* request under `align` snapshots densely, one state per block per group, and cold
-full-context runs sit at ≈12.4-12.8 retained pages per group rather than 2. Two pages is what the
-sizing estimator reserves; it was never a claim about steady-state retention. Keep the two words
-apart — reservation is a provisioning number, retention is a runtime observation — because conflating
-them is what produced the wrong gloss.
-
-**Reuse is real and large.**
-
-| Shape | Measured |
-|---|---|
-| identical 38,102-token prompt twice | 98.8% (37,632/38,102), 7.32s → 0.28s. The 470-token miss is `38,102 mod 1568` — the trailing partial block |
-| append-only chain, 31k → 62k (agent tool loop) | 0%, 76.8%, 80.8%, 83.7%, 85.9%; each step's hits equal the previous request's full-block count exactly |
-| shared prefix + long unique suffix | 0%, 43.1%, 54.6%, 54.6% |
-| real `dsh --profile headless`, same task, NEW session | 12.22s → 8.86s, 40.6% → 81.2% |
-
-The last row is the one that matters: the ~13.3k system+tools prefix is reused **across sessions**,
-not only within a run, so **D3 is demoted** — that prefill is now paid once and reused, and the
-tool-schema purge is an optional context-budget cleanup rather than the dominant cost lever.
-
-**But cross-session reuse is evictable, and the floor is lower than the headline.** Running the
-saturation tests below — five distinct 117k-token prompts — evicted the shared prefix, and the very
-next `dsh` run fell back to 40.6%; an immediate repeat returned to 81.2%. So 81.2% is what a warm
-cache gives, 40.6% is the guaranteed floor (the intra-run reuse of step 2 over step 1, which cannot
-be evicted mid-run), and heavy unrelated full-context traffic moves you between the two. Plan on the
-floor, not the headline.
-
-**Correctness holds, tested the right way.** GDN backends are not batch-invariant, so cached and
-fresh generations are not bit-exact and a token diff is the wrong test. `probe_prefix_correctness.py`
-instead checks recall of needles embedded *inside* the reused region: 15/15 exact across 3 trials,
-including an arm that asks a different question against the same cached prefix, plus byte-identical
-tool-call arguments over repeats.
-
-**Two limits worth knowing.** Granularity is the 1568-token block, so a shared prefix shorter than
-one block can never hit. And vLLM reports no `cached_tokens`: `prompt_tokens_details` is `null` even
-on a direct authenticated call to the engine, so this is **not** a gateway artifact — monitor with
-`vllm:prefix_cache_queries_total` / `vllm:prefix_cache_hits_total`.
-
-`#45238` does not describe this build. 0.27.1's `MambaManager` sets
-`supports_fine_grained_hash_lookup` and tracks `_producer_partial_tail_reqs` / `last_state_block_idx`
-with copy-on-write of the boundary state, which is why the shared-prefix shape reuses 43-55% instead
-of the 0% that issue predicts.
-
-**CORRECTED 2026-08-21 — this paragraph originally claimed `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is
-"not the mechanism" because "`envs.py` says it applies to sliding-window attention, not Mamba/linear
-attention". That is wrong, and it was read from the env var's prose instead of the implementation.**
-It applies to **both**, and it is the direct dial on retained mamba pages:
-
-- `_validate_prefix_cache_retention_interval` (`v1/core/kv_cache_coordinator.py:30`) states
-  "Retention sparsifies sliding-window and Mamba (linear-attention) checkpoints; full-attention and
-  chunked-local groups cache densely and ignore it", and **raises** when the model has neither a
-  `SlidingWindowSpec` nor a `MambaSpec` group. This model has three `MambaSpec` groups.
-- The coordinator passes `retention_interval` to **every** manager unconditionally (lines 287, 682);
-  each manager decides, and `MambaManager.reachable_block_mask` (`single_type_kv_cache_manager.py:1359`)
-  implements it in full: `None` → **dense, every block (the default)**; `0` → only the
-  `reachable_boundaries`, i.e. the replay boundary and any detected shared-prefix junction; a positive
-  multiple of `scheduler_block_size` → one per segment plus those boundaries.
-
-Two consequences that outrank most of the queue:
-
-1. **`align` retains one mamba snapshot per block per group, densely, by default.** The estimator's
-   `page_size × (2 + num_speculative_blocks)` is a *reservation* figure, not a retained count — which
-   is the whole reason the boot line under-counts. Prefer that framing over "the estimator is wrong":
-   it is a provisioning and admission number, plausibly conservative by design, and the ~12 is a
-   runtime observation, so the two are different kinds of quantity. Retention is block- and
-   alignment-driven, never step-driven: `cache_blocks` uses `num_tokens // block_size`, and
-   `alignment_tokens` is `scheduler_block_size` = `math.lcm(*group_block_sizes)`
-   (`kv_cache_utils.py:659`), so `--max-num-batched-tokens` **never enters this path**.
-   Corroboration from the numbers alone: dense snapshotting over a 125,708-token sequence would
-   register ~80 snapshots per group while only ≈12 blocks per group are *held*, so something other
-   than the snapshot path sets the steady state. Per item 2, that something is **whatever keeps a
-   snapshot referenced** — an unreferenced one is already counted free — which points at the
-   request-lifetime CoW pin rather than at eviction timing.
-2. ~~Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
-   working set does not fit.~~ **RETRACTED same day — this was wrong, and `block_pool.py` says so.**
-   `get_usage()` is `1.0 - get_num_free_blocks() / (num_gpu_blocks - 1)` where
-   `get_num_free_blocks()` returns `free_block_queue.num_free_blocks`, and that queue is **unified**:
-   the class docstring says a cached block "may be used by running requests **or in the
-   free_block_queue that could potentially be evicted**", and the free path pushes a block there as
-   soon as `ref_cnt` hits 0 (`blocks_without_hash` prepended, `blocks_with_hash` appended). Eviction
-   is synchronous with allocation — `popleft_n` takes a cache-tagged block and drops its hash. So a
-   cached-but-unreferenced snapshot **already counts as free**, and `free_blocks == 0` means no
-   `ref_cnt == 0` block exists anywhere. **1.000 is genuine exhaustion.**
-
-   Two consequences. **The occupancy-based pass/fail criterion below is void** — evictable blocks were
-   never in the numerator, so sparse retention has no guaranteed effect on this metric and the
-   direction is unknown; do not predict one. And at 1.000 all 473 blocks are *referenced*: live KV is
-   `4 × 81 = 324` attention + `4 × 3 = 12` running mamba states = 336, leaving **~137 referenced
-   blocks that are not live working set**. The source names a mechanism that fits — `_apply_cow` takes
-   "an extra ref beyond the one handed to the request", and `take_partial_tail_offloads` documents the
-   lifetime as "pinned here and **unpinned when the request's blocks are freed**". That is a
-   request-lifetime pin, not a short window, so align's retained boundary states are not raidable
-   cache. That CoW pinning dominates the ~137 is inference, not measured.
-
-   **So cold 4-way genuinely does not fit, and N=3 is better supported than the retraction above
-   implied.** What survives of that objection is only the 81-vs-84 arithmetic point: the *derivation*
-   does not reach the conclusion, but the observation does. One distinct alternative remains unruled:
-   `get_num_blocks_to_allocate(..., apply_admission_cap=True)` can preempt with free blocks available,
-   so check whether that path was active before attributing everything to capacity.
-
-`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0` is consequently the highest-value inference-layer experiment
-outstanding — one env var, validated at boot, and it preserves the reuse points prefix caching depends
-on by construction rather than by luck. Handed over in `MESSAGE.md` §R3.
-
-**Judge it on preemption delta, warm reuse percentage, and aggregate throughput — never on
-occupancy**, and hold no prior about which way occupancy moves. The original justification for that
-instruction ("occupancy always falls, because evictable blocks leave the numerator") was **wrong** and
-is retracted in item 2 above; the instruction survives its own rationale, because the metric now has
-no predicted response to the lever at all. Whether sparse retention reduces the ~137 request-lifetime
-CoW pins is the open question the experiment answers.
-
-**But run the free test first, before any boot** (`MESSAGE.md` §R4.2). Warm 4-way peaked at 0.755 with
-0 preemptions against cold's 0.989/1.000 at the *same* 125,708-token final length, so that pair
-already isolates retention from sequence length: a fixed per-request cap would read alike, and the
-0.23-of-pool gap is instead the signature of hits sharing resident blocks. It costs nothing — the data
-exists — and it tells you whether the retention lever is attacking the cold path specifically, which
-determines which runs the pass criteria should be read off.
-
-### The shape finding that came out of it: 5 is oversubscribed, 4 is the setting, 3 is what fits cold
-
-The boot concurrency line is a nominal KV figure and does **not** mean N sequences co-reside. A
-short-output concurrency test proves nothing: each request finishes before the next has prefilled, so
-`kv_cache_usage_perc` reads one request's occupancy (0.178 measured) and preemptions stay 0 while the
-sequences never overlap. Forcing long outputs (`min_tokens` + `ignore_eos`) is what creates pressure.
-
-At 117,708-token prompts + 8,000 forced output tokens each:
-
-| Concurrency | Resident | Peak KV | New preemptions | Wall | Aggregate output |
-|---|---|---|---|---|---|
-| 5 | **4** (1 always waiting) | 0.989 | **1** | 684.1s, one request starved 684s vs ~487s | 58.5 tok/s |
-| 4 (**warm** — see below) | 4 | 0.901 | 0 | 377.4s, all within 1s of each other | **84.8 tok/s** |
-
-**Five concurrent is 45% slower in aggregate than four.** The compose default for this arm was
-already `CHAT_MAX_NUM_SEQS_FP8:-${CHAT_MAX_NUM_SEQS:-4}` with the comment "0.70 affords exactly 4";
-the `.env` override to `CHAT_MAX_NUM_SEQS=5` was what oversubscribed it.
-
-**CORRECTION (2026-08-21): the 4-way row above is a WARM run and must not be read as a capacity
-measurement.** The inference-layer owner could not reproduce "zero preemptions at 4-way" and ran it
-three times cold: peaks 0.989 / 1.000 (pool exhausted) with **+1 and +2 preemptions**, against a
-warm repeat that read 0.755 with zero. The cause is in our probe, not in their runs:
-`probes/probe_prefix_saturation.py:49` builds each prompt as
-`" ".join(f"s{k}q{i % 983}" for i in range(n_words))` — a pure function of the worker index with
-**no seed**, so the workers are mutually distinct but *any repeat invocation reproduces
-byte-identical prompts*. The 5-way run went first, so the 4-way replayed prompts the engine had
-just prefilled. 0.901 ≈ 4×106 blocks sits between their warm 0.755 and their cold 0.989, which is
-what partial reuse gives, and it also explains the aggregate throughput gap (84.8 vs their 74.8
-tok/s): the warm run skipped part of the prefill. Sampling is *not* the explanation — the probe
-selects its peak scrape lexicographically by `(running, kv_usage)` (line 112), so 0.901 is a genuine
-joint single-scrape observation, of a warm run.
-
-**Cold 4-way does NOT fit at full context — but that is an observation, not a derivation.** One
-shared pool of 473 usable blocks; the 64 layers group into 1 attention + 3 mamba groups of 16
-(`kv_cache_utils.py` splits to equal sizes), and the boot line sums over all four:
-`84 + 3×2 = 90` blocks/request → `474/90 = 5.27x`, which also yields `690,312` exactly. That much is
-correct as written.
-
-**The block back-solve, however, used the wrong attention count, and corrected it says 4 fits.**
-`84 = ceil(131072/1568)` is the max-model-len **address space** — right for the boot estimator's worst
-case, wrong for a back-solve, because paged attention KV is allocated against tokens actually
-processed. Those requests were `117,708 + 8,000 = 125,708` tokens, so actual consumption is
-`ceil(125708/1568) = **81**` blocks, not 84:
-
-| attention blocks | at 12 mamba pages/group | ×4 | vs 473 |
-|---|---|---|---|
-| 84 (as originally derived) | `84 + 36 = 120` | 480 | overflows by 7 |
-| **81 (actual)** | **`81 + 36 = 117`** | **468** | **fits, 5 spare**; `floor(473/117) = 4` |
-
-So the arithmetic does not establish the overflow. **The overflow is established directly** by the
-preemption deltas and a single scrape reading `473/473`. The inference runs the other way: overflow
-was observed, and it *pins* retention at **≈12.4-12.8 pages per group** (overflow at 81 attention
-blocks requires > 12.42). Quote the retention as ≈11-13, not 12; the `480 → 120 → 12` chain is a
-back-fit that happened to round to a multiple of 4.
-
-**Consequently `floor(473/120) = 3` is not a result** — it is `floor` of a back-fit computed from the
-wrong attention count.
-
-**But that is a complaint about the derivation, not the conclusion.** An earlier version of this
-section also argued that occupancy could not establish a capacity shortfall at all; that argument is
-**retracted** (item 2 of the correction above) — `1.000` is genuine exhaustion. So cold 4-way really
-does not fit, and if the inference owner wants N=3 recorded as a documented worst-case bound there is
-no longer an argument against it. What must not happen is citing `473/120` as its derivation. The
-*operating* setting stays 4, on the latency grounds below, which none of this touches.
-
-Two corollaries that do stand: lowering `--max-num-seqs` does **not** free mamba pages (they are taken
-per running request from a pool whose sizing has no `max_num_seqs` term, so 5→4 bought admission
-control, not capacity), and prefix caching **buys KV headroom** because a hit shares resident blocks
-instead of allocating new ones — an independent second argument for the flag, and the best explanation
-of why the warm 4-way run peaked at 0.755 against cold's 0.989/1.000 at *identical* final sequence
-length.
-
-**The setting stays 4**, decided jointly and recorded in `MESSAGE.md` Q1: preemption here is a
-latency event, not a correctness one; a preempted sequence resumes from its last cached boundary;
-warm agentic traffic is where this deployment lives and 4 is clean warm; and in the exact cold
-full-context regime where 4-way preempts, the 4th slot is already latency-bound by prefill
-serialization rather than throughput-bound; and per the first corollary above, N is admission rather
-than capacity, so it is the wrong instrument for what actually broke. Monitor
-`vllm:num_preemptions_total` delta > 0 instead — it means "this workload left the warm regime".
-
-The original wording here added "the mechanism is retained align pages, which
-`--max-num-batched-tokens` addresses and N does not". **The second half is wrong and is retracted** —
-that flag is not in the retention path (§R3). The retention dial is
-`VLLM_PREFIX_CACHE_RETENTION_INTERVAL`, still unrun.
-
-**Applied by the inference-layer owner, verified on the host 2026-08-20:**
-`kb-mastra-infra/.env` now has `CHAT_MAX_NUM_SEQS=4`, the running container's argv carries
-`--max-num-seqs 4`, and `--enable-prefix-caching` is on both the fp8 and nvfp4 arms so the A/B still
-measures only the checkpoint. The boot line is unchanged at **5.27x**, which is now a comfortable
-margin over 4 instead of 5.27 against 5. The nvfp4 arm's own gate (≥ 6) is still unverified and must
-be read from its boot line before that arm ever serves.
-
-Not yet attributed: whether the preemptions are *caused* by align mode's retained pages or would
-happen without it. Settling it needs the same saturation run with the flag removed (queue item 4).
-**Do not restate this as "4-way is clean either way" — that was written before the cold runs, and cold
-4-way preempts.** What still holds is that the operating decision does not depend on the attribution:
-4 beats 5 on latency regardless, and with caching a preempted sequence resumes from its last cached
-boundary instead of token 0. The record should not claim causation until the control runs.
-
-### `preserve_thinking` re-decided: stays `false`, for a new reason
-
-The old justification is now void, so do not reason from it: it said `false` was free because this
-deployment could not reuse KV. It can. But `false` should still stay, on measured grounds:
-
-- **It is a no-op in headless mode.** `chat_template.jinja:116` keeps a turn's `<think>` when
-  `loop.index0 > ns.last_query_index`, and `last_query_index` (lines 88-97) is the last *real* user
-  message — `<tool_response>` content and `tool`-role messages never advance it. With one user turn
-  every assistant turn is after it. Confirmed via `/tokenize`: one user turn renders **75 tokens
-  either way**; add a second user turn and it becomes 84 (`true`) vs 76 (`false`).
-- **In interactive multi-turn use it is a real trade, not a free win.** `false` retroactively strips
-  thinking from turns at or before the new last user query, which rewrites history and invalidates
-  the shared prefix from the first stripped turn on. `true` keeps the prefix append-only and fully
-  reusable, but accumulates every past reasoning block against a usable prompt ceiling of 98,304,
-  making compaction fire sooner. Which wins depends on reasoning length per turn and session length;
-  that is now a well-defined measurement, not an assumption. Flip it only with that measurement.
-
----
-
-## E2 — The Day-1 regression gate
-
-**DONE 2026-08-21 — jump to §E2 result.** The brief below is the original specification, kept
-because the result corrects one of its criteria rather than merely satisfying it.
-
-The gap the bring-up report opened with, still unclosed. Foundation assessment Phase 2 names the
-exact coverage: read a file, **write under approval policy**, run a command, **one failing tool**,
-and a second model step. The two never exercised are the write and the failure.
+## E2 — the deployment regression gate
 
 ```sh
 pnpm dsh --profile headless "Read artifacts/README.md and report its first heading. \
   Then try to read artifacts/does-not-exist.md and report exactly what happened. \
-  Then write the single line OK to /tmp/dsh-gate.txt. \
-  Finally run 'wc -l < /tmp/dsh-gate.txt' and report the number."
+  Then write the single line OK to the absolute path /home/andrea/dsh-gate-approval.txt and report \
+  exactly what happened, including any error text verbatim. Do not retry with a different path and \
+  do not attempt any sandbox escalation. \
+  Finally run 'git rev-parse --short HEAD' and report the commit."
 ```
 
-Verify from the decoded session log, not from stdout:
+Verify from the **decoded** session log, never stdout:
 
 ```sh
 node --import tsx/esm artifacts/read-session-log.mts \
   "$(ls -t ~/.dsh/sessions/*/session-*/session.jsonl.zstd | head -1)" /tmp/s.jsonl
-grep -o '"type":"[^"]*"' /tmp/s.jsonl | sort | uniq -c | sort -rn
 ```
 
-Required: the failing tool produces a stable error code the model then recovers from (not a turn
-abort); the write goes through the approval path rather than bypassing it; a second model step
-consumes both results.
+Required: `turn/end {kind: completed}`; `request/header` carrying the expected route; the failing read
+yielding a stable `error: {name: "FsError", code: "FS_NOT_FOUND"}` that the model recovers from rather
+than aborting the turn; the out-of-workspace write denied with `FS_SANDBOX_DENIED` and **no file
+created**; and a later step consuming earlier results.
 
-### E2 result — PASSES, but the gate as written cannot test its own write criterion (2026-08-21)
+**Passed on the aligned 0.1.1-rc.1 revision (2026-08-21).** Route confirmed on the way past:
+`provider: local-qwen, model: chat-model, reasoningEffort: medium`. D1 is confirmed fixed end to end,
+not just by route: `session/title-llm-request` carries `route: {provider: local-qwen-off}` and the
+resulting `session/title` has `source: {kind: provider}`. The earlier `{kind: fallback}` title is the
+optimistic one written before the call, and is expected.
 
-One turn, 8 model steps, 9 tool calls, `turn/end reason: {kind: completed}`. Verified from the
-decoded log, not stdout. Route confirmed on the way past: `request/header` carries
-`provider: local-qwen, model: chat-model, maxTokens: 32768, reasoningEffort: medium`.
+**Why the gate targets a path outside `/tmp`.** The original version wrote to `/tmp/dsh-gate.txt` and
+could not test its own approval criterion: `workspace-write` grants `/tmp` by design
+(`packages/sandbox/sandbox/src/roots.ts:54` returns `[workspaceRoot, '/tmp', tmpdir()]`), so a `/tmp`
+write raises no approval and asserts nothing.
 
-| Criterion | Verdict |
-|---|---|
-| failing tool yields a stable error code | **PASS.** `error: {name: "FsError", code: "FS_NOT_FOUND"}`, model-visible text `Error: cannot read "…": not found`, `isError: true` |
-| model recovers rather than aborting the turn | **PASS.** Step 1 read both files in one step; the turn continued through step 8 and ended `completed` |
-| write goes through the approval path | **See below — the gate cannot test this with a `/tmp` target.** Tested separately and it passes |
-| a second model step consumes both results | **PASS.** 8 steps over 9 calls; step 2 acted on step 1's two results |
+**The full write → approval → decision chain is proven** by a variant that permits the escalation
+retry: step 1 denies as above; step 2 re-sends the identical write carrying
+`sandbox_permissions: "danger-full-access"`, which produces `approval/asked` → `approval/decided
+{outcome: "unavailable"}` → `Error: sandbox escalation ... requires approval, but no approval channel
+is available`. Headless has no approval channel, so `ask` resolves `unavailable` and fails closed.
+**One asymmetry when asserting:** the denial carries a structured `error: {name, code}`, but the
+escalation refusal carries `error: null` — the reason exists only as model-visible prose. Assert the
+`approval/decided` event for that step, not an error code.
 
-**The write criterion is untestable as written, and that is a defect in the gate, not the harness.**
-The write to `/tmp/dsh-gate.txt` raised no `approval/asked` and returned `Created file` — correctly,
-because `workspace-write` grants `/tmp` **by design**: `writableRoots` (`packages/sandbox/sandbox/src/roots.ts:54`)
-returns `[workspaceRoot, '/tmp', tmpdir()]`, and the preset's own description is "Write inside the
-workspace and permitted temporary directories". A `/tmp` write can never exercise approval under this
-preset. Two follow-up runs closed the coverage properly, targeting a path outside every grant root:
+### D6 — `/tmp` is not a shared channel between the fs tools and bash on Linux
 
-```sh
-pnpm dsh --profile headless "Write the single line OK to the absolute path \
-  /home/andrea/dsh-gate-approval.txt. Report exactly what happened, including any error text \
-  verbatim. Do not retry with a different path and do not attempt any sandbox escalation."
-```
+`packages/sandbox/sandbox-local/src/profiles.ts:19` mounts `--tmpfs /tmp` for the bwrap dialect — a
+fresh empty tmpfs — while the in-process fs fence derives its allow-list from `writableRoots` and so
+grants the **real** `/tmp`. The two planes disagree about the same declared grant. This deployment
+selects bwrap (0.9.0; the Landlock native addon is not installed), and the Landlock dialect would not
+have the problem, since `profiles.ts:33` grants the real `/tmp` read-write.
 
-- **Denial is fail-closed and stably coded**: `error: {name: "FsError", code: "FS_SANDBOX_DENIED"}`,
-  model-visible `Error: [sandbox: file access denied under workspace-write mode]` plus an escalation
-  hint naming `sandbox_permissions`. No file was created. The model reported it verbatim.
-- **The full write → approval → decision chain is proven** by a second variant that permitted the
-  escalation retry. Step 1 denies as above; step 2 re-sends the identical write carrying
-  `sandbox_permissions: "danger-full-access"` and a justification, which produces
-  `approval/asked {toolName: "write", reason: "escalate sandbox to danger-full-access: …"}` →
-  `approval/decided {outcome: "unavailable"}` → `Error: sandbox escalation to "danger-full-access"
-  requires approval, but no approval channel is available`. No file was created. Headless has no
-  approval channel, so `ask` resolves `unavailable` and fails closed — the correct headless behavior,
-  and what the gate should assert. The main run reaches the same pair via a `bash` escalation at
-  step 7, so both executors are covered.
+This is a **known per-runner difference, not a contradiction**: `roots.ts:5-11` says so and even names
+the direction it guards ("so 'the write tool cannot write /tmp but bash can' asymmetries cannot
+arise"). D6 is the **inverse** direction, which that guarantee does not cover, and `local.spec.ts:72`
+pins the bwrap argv rather than cross-runner observable behavior. Still present at 0.1.1-rc.1;
+upstream added only `--unshare-pid`.
 
-**Rewrite the gate's write step** to target a path outside the workspace *and* outside `/tmp` and
-`os.tmpdir()`; assert `FS_SANDBOX_DENIED`, then an `approval/asked` / `approval/decided` pair on the
-escalation retry. A `/tmp` target asserts nothing.
+**Consequence: `/tmp` is unusable as a handoff between the fs tools and bash on Linux.** Stage such
+files inside the workspace. Worth an upstream issue; not worth a fork patch.
 
-**One asymmetry to know when asserting on this:** the denial carries a structured
-`error: {name, code}`, but the *escalation-refusal* result carries `error: null` — the reason exists
-only as model-visible prose. Assert the `approval/decided` event, not an error code, for that step.
+Also observed, recorded rather than acted on: **a bash timeout is not flagged as an error to the
+model** — a `find /` that timed out returned `isError: false` with only the text `[timed out after
+60000ms] [killed by signal: SIGTERM]`.
 
-### D6 (new) — `/tmp` is not a shared channel between the fs tools and bash on Linux
+### `test:snapshot` cannot target `local-qwen`, and recording one would prove nothing
 
-The main run's final step could not succeed on this platform, for a reason unrelated to the model.
-`bash: line 1: /tmp/dsh-gate.txt: No such file or directory`, while `read` on the same path returned
-`1: OK` and `totalLines: 1`. From inside bash, `ls -la /tmp` shows an **empty** directory whose parent
-is owned `nobody nogroup`.
+Settled by reading the harness. **Replay — the keyless default — never contacts a provider**, so there
+is no route to point anywhere: `resolveConfigPath` (`packages/boot/app-boot/src/index.ts:61-68`)
+rewrites the config basename to `cordis.snapshot.yml` only when `$DSH_SNAPSHOT === 'replay'`; those
+overlays disable the real adapter and insert `llm-replay`, which serves every call from the recorded
+log, as a catch-all `ctx.on('llm/stream', …)` waterfall when no `providers` are configured
+(`packages/test-support/llm-replay/src/index.ts:781-784`).
 
-Cause, exactly: `packages/sandbox/sandbox-local/src/profiles.ts:19` — the bwrap dialect mounts
-`--tmpfs /tmp`, a fresh empty tmpfs, while the in-process fs fence derives its allow-list from
-`writableRoots` and so grants the **real** `/tmp`. The two planes disagree about the same declared
-grant. This deployment selects bwrap (0.9.0 at `/usr/bin/bwrap`; the Landlock native addon is not
-installed) — and the Landlock dialect would *not* have this problem, since `profiles.ts:33` grants
-the real `/tmp` read-write.
+Two facts make targeting the local route impossible rather than merely awkward: **record mode boots the
+live `cordis.yml`**, which hardcodes `deepseek-official`, so pointing it at `local-qwen` means editing
+an upstream example that conflicts on every sync; and **every snapshot runner isolates `$DSH_HOME` into
+a generated temp dir** (`acp-snapshot/src/harness.ts:255`, `loader-smoke/src/index.ts:185`), so our
+`~/.dsh/settings.yaml` — the only place `local-qwen` exists — is unreadable by design, in record mode
+as well as replay.
 
-This is a **known and deliberate** per-runner difference, not a code/design contradiction:
-`roots.ts:5-11` says so, and even names the direction it guards ("so 'the write tool cannot write
-/tmp but bash can' asymmetries cannot arise"). What E2 hit is the **inverse** direction, which that
-guarantee does not cover, and `local.spec.ts:72` pins the bwrap argv rather than cross-runner
-observable behavior. Cost measured here: 5 wasted steps and one 60s bash timeout while the model
-diagnosed it — it got the diagnosis right and then correctly attempted an escalation, which
-fail-closed.
+So a committed fixture would change only the replayed chunk *content*; the replay run would execute
+zero deployment code while *looking* like deployment coverage. The deployment gate is the E2 command
+above, run by hand.
 
-Consequence for us: **`/tmp` is unusable as a handoff between the fs tools and bash on Linux.** Any
-task that writes a file with `write` and then processes it with a shell command must stage it inside
-the workspace. Worth an upstream issue; not worth a fork patch.
+### `preserve_thinking` stays `false`
 
-Two smaller observations from the same log, both recorded rather than acted on:
-
-- **D1 is now confirmed fixed end to end**, not just by route: `session/title-llm-request` carries
-  `route: {provider: local-qwen-off, model: chat-model}` and the resulting `session/title` has
-  `source: {kind: provider, …}`. The earlier `{kind: fallback}` title is the optimistic one written
-  before the call, which is expected.
-- **A bash timeout is not flagged as an error to the model.** Step 5's `find /` returned
-  `isError: false` with only the text `[timed out after 60000ms] [killed by signal: SIGTERM]`. The
-  model handled it, but a timeout is indistinguishable from ordinary output by the `isError` flag.
-
-### The snapshot sub-task, settled: `test:snapshot` cannot target `local-qwen`, and recording one would prove nothing
-
-Resolved by reading the harness rather than by trying it. **Replay — the keyless default — never
-contacts a provider at all**, so there is no route to point anywhere:
-
-1. `resolveConfigPath` (`packages/boot/app-boot/src/index.ts:61-68`) rewrites the `cordis.yml`
-   basename to `cordis.snapshot.yml` **only** when `$DSH_SNAPSHOT === 'replay'`.
-2. Every `*.cordis.snapshot.yml` overlay disables the real adapter and inserts the replay plugin —
-   `- id: llm-deepseek … disabled: true` plus `- id: llm-replay`.
-3. `dsh-llm-replay` serves every call from the recorded session log, either as a routed adapter or,
-   with no `providers` configured, as a catch-all `ctx.on('llm/stream', …)` waterfall
-   (`packages/test-support/llm-replay/src/index.ts:748-751`).
-
-So `provider: deepseek-official` in the example's agent config is an inert label under replay. Two
-further facts make targeting the local route impossible rather than merely awkward:
-
-- **Record mode boots the LIVE `cordis.yml`**, which hardcodes the `llm-deepseek` adapter with
-  `deepseek-official` / `deepseek-v4-flash`. Pointing it at `local-qwen` means editing an upstream
-  example — a file that conflicts on every sync, and that every committed fixture was recorded from.
-- **Every snapshot runner isolates `$DSH_HOME` into a generated temp dir**
-  (`packages/test-support/acp-snapshot/src/harness.ts:255`,
-  `packages/test-support/loader-smoke/src/index.ts:185`). Our `~/.dsh/settings.yaml` — the only place
-  `local-qwen` exists — is therefore unreadable by design, in record mode as well as replay.
-
-**So: do not record a snapshot for this deployment.** Even if recorded against `local-qwen`, the
-committed fixture would only change the replayed chunk *content*; the replay run would still execute
-zero deployment code — no route resolution, no `chat_template_kwargs`, no gateway, no engine. It
-would assert that this repo's agent loop is deterministic, which `pnpm run test:snapshot` already
-asserts, while *looking* like deployment coverage. That is the trap this queue's own discipline warns
-about, and it is the reason to decline.
-
-The deployment-level regression gate is the E2 command above plus the two write variants, verified
-from the decoded session log. It belongs in `artifacts/`, run by hand, not in `test:snapshot`.
+- **It is a no-op in headless.** `chat_template.jinja:116` keeps a turn's `<think>` when
+  `loop.index0 > ns.last_query_index`, and `last_query_index` (lines 88-97) is the last *real* user
+  message — `<tool_response>` content and `tool`-role messages never advance it. With one user turn
+  every assistant turn is after it. Confirmed via `/tokenize`: one user turn renders **75 tokens either
+  way**; a second user turn makes it 84 (`true`) vs 76 (`false`). This is why our headless traffic is
+  append-only on the wire, which is what we told them in Q11.
+- **Interactively it is a real trade.** `false` retroactively strips thinking from turns at or before
+  the new last user query, rewriting history and voiding the shared prefix from the first stripped turn
+  on. `true` keeps the prefix append-only but spends the 114,688-token usable ceiling on old reasoning
+  and makes compaction fire sooner. Flip it only with that measured.
 
 ---
 
-## E3 — Compaction under real pressure
+## E3 — compaction under real pressure
 
-D1b's fix is applied but only the route is proven. The fail-closed path is still read from code, and
-C6/R3's arithmetic is still arithmetic.
+D1b's fix is applied but only the route is proven; the fail-closed path is still read from code.
+**Natural traffic cannot reach it** — 19,403 max prompt against a 104,857 threshold — so this needs a
+synthetic deep task, not a realistic one.
 
 ```sh
-# force the session past the 91,750-token threshold with real tool results
 pnpm dsh --profile headless "List the ten largest .ts files under packages/llm, \
   then read each one in full and summarise what each module is responsible for."
 ```
 
-Verify: a `compaction` event fires; the summary request's route is `local-qwen-off`; the checkpoint
-is complete; **no** `summarization truncated at the token cap` error appears.
+Verify: a `compaction` event fires; the summary request's route is `local-qwen-off`; the checkpoint is
+complete; **no** `summarization truncated at the token cap` error. Then test the overflow path
+deliberately by raising `thresholdRatio` above the admission ceiling so compaction cannot fire first,
+and confirm the 400 is classified and recovered rather than failing the turn. Restore `0.8` after.
 
-Then test the overflow path deliberately. Temporarily set `thresholdRatio: 0.95` in
-`~/.dsh/cordis.patch.yml` so compaction cannot fire before the 98,304 admission ceiling, and confirm
-the 400 is classified and recovered rather than failing the turn. Restore `0.7` afterwards.
+Note for whoever runs it: compaction keeps a **tail** of `floor(131072 * 0.16) = 20,971` tokens and
+summarizes `{first transcript node → cutoff}`, so it rewrites the earliest transcript and the
+divergence point lands immediately after the shared head. Everything after re-prefills — the expensive
+direction, and what we told them in Q11.
 
-**While here, settle remediation R3.** Set `maxTokens: 16384` and `thresholdRatio: 0.8` and re-run.
-Predicted: ceiling 114,688, compaction at 104,857, margin 9,831 — strictly better than today on both
-margin and usable context. Confirm nothing in the agent loop needs more than 16k of output.
+## E4 — exercise the fan-out bound
 
-Open question 6 in `MESSAGE.md` may make this a KV lever too, not just a context-budget one: if
-retained mamba pages track total sequence length rather than prefill alone, halving `maxTokens` cuts
-peak occupancy at 4-way. If the answer is "prefill-dominated", treat remediation R3 as purely a
-context-budget decision and do not claim a KV benefit.
+`maxConcurrentAgents` is now pinned to 4 (above). No recorded session has ever run a subagent, so the
+path is unexercised rather than known-good. Watch `vllm:num_requests_waiting` during the run:
+persistently non-zero means requests are dying of queueing, not slowness. `num_requests_running` counts
+scheduler residency, not simultaneous prefills.
 
----
+Purge ledger A3 covers `subagent` ×4, `tool-subagent*` ×4, `workflow*` ×2, `tool-ralph`, and removes
+~1,800 tokens of tool schema with them. If you drop them, re-run E2 first: A3 is one of the purges the
+gate exists to protect.
 
-## E4 — Reproduce and bound the fan-out defect (D4)
+## E5 — the instruct alias and sampler
 
-```sh
-nproc   # 24 here, so maxConcurrentAgents resolves to min(16, 22) = 16, against 4 admitted engine slots
-```
+Gateway-only, additive, no engine restart. Qwen documents two samplers and three of six values differ;
+**thinking mode is already fully correct and not by luck** — Qwen ships the thinking sampler in
+`generation_config.json`, vLLM adopts it (boot log: `temperature 1.0, top_k 20, top_p 0.95`), and the
+remaining three are vLLM defaults that already match.
 
-**E1 made this worse than the original "16 against 5", in two measured ways.** The engine now admits
-**4** (`--max-num-seqs 4`), and cold full-context it only *fits* 3 (§E1 result); long prefills also do
-not run in parallel: 5 concurrent 123,598-token
-requests produced latencies 40.3 / 78.4 / 116.8 / 154.0 / 187.9s — an arithmetic ladder in ~38s steps,
-because one prefill consumes almost the whole 8,192-token `max_num_batched_tokens` budget per step.
-Worst-case TTFT is therefore `max-num-seqs × own prefill`, measured 188s against a predicted 190s.
-Sixteen agents each carrying an agentic prompt do not queue gracefully behind that; set the bound.
+| Param | Thinking | Instruct | Engine default | Harness can send? |
+|---|---|---|---|---|
+| `temperature` | 1.0 | 0.7 | 1.0 | plumbed, but no config surface |
+| `top_p` | 0.95 | 0.80 | 0.95 | no — absent from pi-ai |
+| `top_k` | 20 | 20 | 20 | no |
+| `min_p` | 0.0 | 0.0 | 0.0 | no |
+| `presence_penalty` | 0.0 | 1.5 | 0.0 | no |
+| `repetition_penalty` | 1.0 | 1.0 | 1.0 | no |
 
-Reproduce the hang, then bound it. Watch `vllm:num_requests_waiting` during the run — persistently
-non-zero means requests are dying of queueing, not slowness. Note `num_requests_running` counts
-scheduler residency, not simultaneous prefills: one request can be decoding a single token while
-another takes nearly the entire batch budget, so read it together with `kv_cache_usage_perc`.
+**Instruct mode is wrong on three values and only one is even reachable**, so a harness-only fix is
+impossible. pi-ai 0.82.1 writes exactly one sampling field — `params.temperature` at
+`openai-completions.js:540` — and its `GenerateOptions` has no `top_p`, `top_k`, `min_p`,
+`presence_penalty` or `repetition_penalty` at all. Even `temperature` has no config surface: it exists
+in `LlmCallConfig` and is forwarded at `llm-pi-ai/src/adapter.ts:347`, but neither the route profile nor
+`agent-default-model` can set it.
 
-Fix, in `~/.dsh/cordis.patch.yml`:
+The gateway is the right place and already does this kind of injection. Because dsh sends **no**
+sampling fields there is nothing to clobber — unlike `chat_template_kwargs`, which dsh always sends and
+which replaces an injected dict wholesale.
 
 ```yaml
-- id: workflow-worker-thread
-  config:
-    maxConcurrentAgents: 4
+# litellm/config.yaml
+- model_name: chat-model-instruct
+  litellm_params:
+    model: hosted_vllm/chat-model
+    api_base: http://vllm-chat:8000/v1
+    api_key: os.environ/VLLM_API_KEY
+    temperature: 0.7
+    top_p: 0.80
+    presence_penalty: 1.5
+    extra_body:
+      chat_template_kwargs: {enable_thinking: false}
+      top_k: 20
+      min_p: 0.0
+      repetition_penalty: 1.0
 ```
 
-Or drop the rows entirely — purge ledger A3 covers `subagent` ×4, `tool-subagent*` ×4, `workflow*`
-×2, `tool-ralph`, and removes ~1,800 tokens of tool schema with them. If you drop them, re-run E2
-first: A3 is one of the purges the gate exists to protect.
+All six values were accepted on both surfaces with the correct behaviour — reasoning length 0 under the
+instruct set, populated under the thinking set. The gateway runs `drop_params: false`, so HTTP 200 is
+proof they reached the engine rather than being quietly dropped.
 
----
-
-## E5 — The instruct alias and sampler (D2)
-
-Gateway-only, additive, no engine restart. Do it after E1, because E1 may change whether the
-auxiliary routes should live on the raw surface at all.
-
-Add to `kb-mastra-infra/litellm/config.yaml` — the exact block is in D2 of the bring-up report:
-`chat-model-instruct`, injecting `enable_thinking: false` plus `temperature 0.7`, `top_p 0.80`,
-`presence_penalty 1.5`, `top_k 20`, `min_p 0.0`, `repetition_penalty 1.0`.
-
-```sh
-ssh afezzardi@100.108.76.12 'cd kb-mastra-infra && cp litellm/config.yaml litellm/config.yaml.bak \
-  && docker compose restart kb-litellm'   # gateway only; the engine keeps running
-```
-
-Then a dsh route `local-qwen-instruct` on managed `/v1` with `reasoningEfforts: false`, and point
-the two auxiliary calls at it instead of `local-qwen-off`.
-
-**Verify on the wire, because this is the one place `reasoningEfforts: false` is safe.** The request
-must carry **no** `chat_template_kwargs` at all — pi-ai's chat-template branch is skipped for a
-non-reasoning model — leaving the gateway's injected dict intact. If dsh sends a dict, it replaces
+Then add a dsh route on the managed `/v1` with `reasoningEfforts: false` and point the two auxiliary
+calls at it. **Verify on the wire, because this is the one place `reasoningEfforts: false` is safe.**
+The request must carry **no** `chat_template_kwargs` at all — pi-ai's chat-template branch is skipped
+for a non-reasoning model — leaving the gateway's injected dict intact. If dsh sends a dict it replaces
 the injection wholesale and you silently get thinking at `xhigh`. Confirm reasoning length 0.
-
----
-
-## E6 — Two remaining engine levers
-
-Independent of the above, both measured-not-assumed.
-
-**`--long-prefill-token-threshold`** (default `0` = disabled). Called "the highest-value engine lever
-left" when this section was written; **`VLLM_PREFIX_CACHE_RETENTION_INTERVAL` has since displaced it**
-(see below and §R3.3). It remains the best *latency* lever, and no longer hypothetical: the
-serialization it addresses is measured. Five concurrent
-123,598-token requests returned in a ~38s arithmetic ladder (40.3 / 78.4 / 116.8 / 154.0 / 187.9s),
-so worst-case TTFT is `--max-num-seqs` × own prefill — 188s measured against 190s predicted — because
-one prefill consumes nearly all of the 8,192-token `max_num_batched_tokens` budget every step. At
-4,096 a short tool-result turn stops waiting behind a 130k prefill, at the cost of long prefills
-taking roughly twice as long. This workload has both shapes, so it is a real fairness dial. Measure
-with mixed short/deep concurrent requests, and record per-request queue time and TTFT separately.
-
-A cheaper comparison to run first, since it needs no new flag: repeat the same five-request workload
-with `--max-num-batched-tokens 32768`. If the ladder spacing shrinks roughly in proportion to the
-number of prefill chunks, the token-budget explanation is confirmed; if it does not, look at
-admission gating instead. **Scope note (2026-08-21): this is a latency experiment only.** It does not
-affect retained mamba pages or KV occupancy — retention is block-driven, and
-`--max-num-batched-tokens` never enters that path (see the correction in §E1 result). Do not bundle it
-with a capacity claim.
-
-**Outranking both of these, and discovered after this section was written:
-`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`.** An env var rather than a flag, validated at boot, and the
-only documented dial on the dense per-block mamba snapshotting. Mechanism and semantics table are in
-the §E1 result correction and in `MESSAGE.md` §R3.3. **It has no predicted effect on occupancy** — judge
-it on preemption delta, warm reuse, and throughput from one run.
-
-**`thinking_token_budget`** — a per-request field in this build, injectable per gateway alias via
-`extra_body`. Bounds worst-case reasoning and therefore worst-case step latency. Your own note
-records the failure mode: a forced close moved unfinished reasoning into visible output. Test that
-specifically before adopting it.
-
-**Do not** re-test `--default-chat-template-kwargs`; it exists here but is redundant, since the
-harness sends explicit kwargs on every request.
 
 ---
 
 ## Traps that produce a passing run
 
-Each of these has already cost someone time on this stack.
+Harness-side. Engine-side traps live in `TUNING.md` §4 and §6; do not copy them back here.
 
 - **`content: null` with HTTP 200 and billed tokens.** The dominant failure shape. Always read
-  `finish_reason`: `stop` means the answer is in the reasoning field and is recoverable; `length`
-  means it is unfinished and must not be recovered.
-- **Effort `low` does this on 11% of items** (78/690 measured); `medium` did it once in 690. Do not
-  drop to `low` to save tokens.
-- **A client `chat_template_kwargs` voids a gateway-injected effort** — it replaces, never merges.
-  Bind to `chat-model` or the raw route when the client drives effort.
-- **`smoke.sh` 30/30 does not prove the engine's shape.** Nothing in an acceptance suite drives five
-  concurrent full-context requests. Read the boot concurrency line.
-- **The boot concurrency line does not prove co-residency either.** It is a nominal KV figure. A
-  concurrency test with short outputs lets each request finish before the next prefills, so nothing
-  overlaps: `kv_cache_usage_perc` reads one request's occupancy and preemptions stay 0 while proving
-  nothing. Force long outputs with `min_tokens` + `ignore_eos`, and require a single scrape showing
-  `num_requests_running == N` together with high `kv_cache_usage_perc` — peaks taken from different
-  scrapes are not a joint observation.
-- **RTK filters command output.** `curl ... | head` returned a JSON *schema* instead of values,
-  which silently corrupts any measurement read that way. Prefix measurement commands with
-  `rtk proxy`.
-- **`probes/tokenize.py` shadows the stdlib `tokenize` module.** Any Python run with
-  `artifacts/probes` as the working directory dies inside the interpreter's own imports
-  (`linecache` → `tokenize`), with a traceback that blames `LITELLM_MASTER_KEY` rather than the
-  shadowing. Run probes by path from the repo root, not from inside `probes/`.
-- **A hit rate needs a shared prefix of at least one block.** Block size here is 1568 tokens, not the
-  usual 16, so short shared prefixes never register a hit and the metric looks like "no sharing".
-- **A saturation probe with no seed measures a WARM run.** `probes/probe_prefix_saturation.py` builds
-  prompts as a pure function of the worker index, so its workers are mutually distinct but every
-  repeat invocation is byte-identical to the last. That is how the E1 4-way row came to be reported as
-  a capacity measurement; see the correction in §E1 result. Vary a seed per invocation, and make the
-  varying part at least one 1568-token block or it cannot miss.
-- **`kv_cache_usage_perc` counts referenced blocks only — cached-but-unreferenced blocks are already
-  FREE.** The free queue is unified (`block_pool.py`), so `1.000` means no `ref_cnt == 0` block exists
-  anywhere and is genuine exhaustion, not cache filler. Two corollaries that each cost a wrong claim
-  here: sparse retention has **no predictable effect** on this metric, and a high reading can never be
-  dismissed as "just cache". Judge retention changes on preemption delta, warm reuse, and throughput.
-- **Read the implementation, not the prose — and not just for features, for the accounting too.** Four
-  claims in this file were wrong because they came from documentation or plausibility: that this
-  checkpoint cannot prefix-cache; that `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` does not apply to Mamba;
-  that retained align pages scale with scheduler steps; and that occupancy near 1.000 could be
-  reclaimable filler. All four died on contact with `v1/core/` inside the container, and each check
-  took minutes. The rule is not "prefer the artifact when convenient" — it is prefer it **before**
-  publishing a mechanism claim.
-- **Two independent timeouts.** Audit the client's as well as the gateway's, against
-  (output budget ÷ 19.5 tok/s) + worst-case TTFT. The harness route sets
+  `finish_reason`: `stop` means the answer is in the reasoning field and is recoverable; `length` means
+  it is unfinished and must not be recovered.
+- **Effort `low` does this on 11% of items** (78/690 measured); `medium` did it once in 690. Do not drop
+  to `low` to save tokens.
+- **A client `chat_template_kwargs` voids a gateway-injected effort** — it replaces, never merges. Bind
+  to `chat-model` or the raw route when the client drives effort.
+- **`reasoningEfforts: false` on the raw surface turns thinking ON at `xhigh`.** It is only safe against
+  a managed alias that injects `enable_thinking: false`.
+- **A patch entry's `config` replaces, it does not merge.** The loader assigns per top-level key, so
+  restate the whole config block or boot fails on a missing required field. `workflow-worker-thread` is
+  the live example: patching `maxConcurrentAgents` without restating `provider: spawn` drops the
+  bundle's provider selection.
+- **Session logs are concatenated zstd frames.** A single-frame decode returns the header and looks
+  like an empty log; use `read-session-log.mts`.
+- **Verify from the decoded log, not stdout.** Every defect found so far returned HTTP 200 with billed
+  tokens and no error line.
+- **RTK filters command output.** `curl … | head` returned a JSON *schema* instead of values, which
+  silently corrupts any measurement read that way. Prefix measurement commands with `rtk proxy`.
+- **`probes/tokenize.py` shadows the stdlib `tokenize` module.** Any Python run with `artifacts/probes`
+  as the working directory dies inside the interpreter's own imports, with a traceback that blames
+  `LITELLM_MASTER_KEY`. Run probes by path from the repo root.
+- **A probe with no seed measures a WARM run.** `probes/probe_prefix_saturation.py` builds prompts as a
+  pure function of the worker index, so its workers are mutually distinct but every repeat invocation is
+  byte-identical to the last. That is how one 4-way row came to be reported as a capacity measurement
+  and later withdrawn (`TUNING.md` §6 row 11).
+- **A probe that prints but does not persist cannot support a published number.** Four of ours were
+  purged for exactly this (row 18). Redirect to a file under `results/` and cite the file.
+- **Two independent timeouts.** Audit the client's as well as the gateway's. The harness route sets
   `streamIdleTimeoutMs: 900000` and `maxRetries: 0` to match the gateway deliberately — do not
   reintroduce retries, since each one is a full re-prefill.
-- **A patch entry's `config` replaces, it does not merge.** The loader assigns per top-level key, so
-  restate the whole config block or boot fails on a missing required field.
-- **`reasoningEfforts: false` on the raw surface turns thinking ON at `xhigh`.** It is only safe
-  against a managed alias that injects `enable_thinking: false`.
 
 ---
 
@@ -675,4 +336,5 @@ git push -u origin fork/qwen38-deployment  # runs pre-push typecheck; fork only
 git fetch upstream --no-tags && git switch master && git merge --ff-only upstream/master
 ```
 
-`upstream` is `deepseek-ai/deepseek-harness` with its push URL deliberately disabled.
+`upstream` is `deepseek-ai/deepseek-harness` with its push URL deliberately disabled. The fork branch
+was rebased onto `0.1.1-rc.1`; the pre-rebase tip is kept as `backup/qwen38-pre-0.1.1`.

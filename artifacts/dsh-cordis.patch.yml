@@ -14,13 +14,16 @@
 
 # Compaction must fire below the engine's true admission ceiling, not below the
 # nominal context window. vLLM enforces prompt + max_tokens <= max_model_len, so
-# with maxTokens 32768 the usable prompt is 98,304 — but the default
-# thresholdRatio 0.8 over contextWindow 131072 puts pressure compaction at
-# 104,857, i.e. above the ceiling. 0.7 puts it at 91,750, leaving ~6.5k margin
-# for the token meter's estimate. contextWindow stays honest at 131072.
+# the ceiling is 131072 - maxTokens, and the route now declares maxTokens 16384
+# (see artifacts/dsh-settings.yaml): ceiling 114,688. thresholdRatio 0.8 puts
+# pressure compaction at 104,857, leaving 9,831 of margin for the token meter's
+# estimate -- strictly better than the previous 0.7-over-a-98,304-ceiling pairing,
+# which fired at 91,750 with only 6,554 of margin. contextWindow stays honest at
+# 131072, and retainTokens resolves to floor(131072 * 0.16) = 20,971, which the
+# loader requires to be below thresholdTokens (compaction-basic/src/config.ts:148).
 - id: compaction-basic
   config:
-    thresholdRatio: 0.7
+    thresholdRatio: 0.8
     # The same capped-auxiliary-call trap as session-title-llm above, with a far
     # worse consequence. summarizeWithLlm caps output at maxTokens (default 8192)
     # and is FAIL-CLOSED: a max-tokens finish throws "summarization truncated at
@@ -43,6 +46,24 @@
 # per top-level key (`target[key] = value`, vendor/include/src/index.ts), so a
 # `config` patch REPLACES the bundle's config rather than merging into it.
 # Omitting targetWords here would fail resolveSessionTitleLlmConfig at load.
+# D4: workflow fan-out is unbounded relative to the engine. maxConcurrentAgents 0
+# means "derive it", and the derivation is min(16, availableParallelism() - 2)
+# (workflow-worker-thread/src/index.ts:151-153) = 16 on this 24-core host, against
+# an engine that admits `--max-num-seqs 4`. Prefill is served one request at a
+# time, so the surplus does not queue gracefully -- it serializes into a
+# worst-case TTFT of N x one prefill.
+#
+# 4 matches current engine admission. Raise this in lockstep if the inference
+# owner raises --max-num-seqs (asked in MESSAGE.md Q17), and not before.
+#
+# `provider: spawn` is restated because a patch entry's `config` REPLACES the
+# bundle's config rather than merging into it; omitting it would silently drop the
+# base bundle's subagent provider selection.
+- id: workflow-worker-thread
+  config:
+    provider: spawn
+    maxConcurrentAgents: 4
+
 - id: session-title-llm
   config:
     targetWords: 5

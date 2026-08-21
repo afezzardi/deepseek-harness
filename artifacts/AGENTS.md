@@ -43,16 +43,22 @@ instead: state what is already applied and must only be verified, the exact edit
 justification with numbers, the boot and load gates that must pass, the rollback, and the traps that
 would produce a false pass. That handoff is the deliverable, not the edit.
 
-**`kb-mastra-infra/MESSAGE.md` is the two-way channel with that owner, and it is the one file there
-we write.** Protocol, set by them: answer inline on the `> REPLY:` lines leaving the question text
-intact, add your own as `> QUESTION (yours):`, and sign each round `--- round N, date, who ---`.
-Conclusions that survive the argument move into their `README.md` / `docker-compose.yml` / `.env` —
-the file itself is the argument, not the record. Round 1 (theirs) and round 2 (ours) are on the host
-as of 2026-08-21; two of our questions are open there.
+**`kb-mastra-infra/MESSAGE.md` is the two-way channel with that owner, and it is the one file there we
+write.** It was restructured on 2026-08-21 into a strict question/reply schema — **re-read it from the
+top, never diff it against an older copy.** Protocol, set by them: it carries questions and replies and
+nothing else; answer inline on the `REPLY:` line; never renumber, reword or delete a question; `Q`
+numbers are global and permanent; append rather than whole-file write, because one round was lost that
+way. Reference a section of the record, never restate it. **An answer that only lives in MESSAGE.md has
+not been adopted** — conclusions that survive move into their `docs/TUNING.md`, `README.md`,
+`docker-compose.yml` or `.env`. Round 7 (ours) is on the host as of 2026-08-21; our Q17 is open there.
 
-Editing it needs one care: each reply *begins* with the `> \`> REPLY:\`` marker, so a sequential
-find-and-replace re-matches inside text it just inserted and silently misaligns every answer. Split
-on the marker and rejoin in one pass.
+`kb-mastra-infra/docs/TUNING.md` is the record, and its **§6 is the single retraction ledger for both
+sessions**. Check a mechanism claim against it before writing one down: four of ours are in there.
+
+Editing MESSAGE.md needs care, because a sequential find-and-replace re-matches inside text it just
+inserted and silently misaligns every answer. Do it as one anchored pass: assert the file's hash first,
+require each target line to read exactly `REPLY:`, apply insertions bottom-up, then diff to prove only
+the reply lines changed and that each reply sits under its own `## Q` header.
 
 Harness-side configuration (`$DSH_HOME`, this checkout) stays ours to change directly.
 
@@ -70,7 +76,10 @@ Harness-side configuration (`$DSH_HOME`, this checkout) stays ours to change dir
 - **Session logs are concatenated zstd frames.** A single-frame decode returns the header and looks
   like an empty log; use `read-session-log.mts`.
 - **Distinguish measured from reasoned in anything you add here**, the way the reference repos do.
-  Both HTML reports carry an explicit "still unproven" section; keep that.
+  Every document here that carries a mechanism claim says which parts are unproven; keep that.
+- **A number with no persisted artifact is not a measurement.** The probes print to stdout and save
+  nothing, and four published reuse figures were purged for exactly that (`TUNING.md` §6 row 18).
+  Redirect a probe to a file and cite the file, or do not quote the number.
 
 ## Live configuration
 

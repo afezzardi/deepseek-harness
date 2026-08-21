@@ -2,7 +2,9 @@
 
 > **Status (2026-08-20): partly superseded.** Read [the consolidated assessment](deepseek-harness-consolidated-assessment.md) first — it is the decision layer over this document.
 >
-> **Still authoritative here.** The benchmark matrix and its Pareto analysis; the pi-ai settings-layer risk register under "Important constraints and risks"; the criteria for when a custom adapter is justified; and the four-phase evaluation plan with its go/no-go criteria.
+> **Still authoritative here.** The benchmark matrix and its Pareto analysis; the pi-ai settings-layer risk register under "Important constraints and risks"; and the criteria for when a custom adapter is justified.
+>
+> **Spent (2026-08-21).** The four-phase evaluation plan. Phase 2's coverage was executed as the E2 regression gate and Phase 3's as the prefix-caching and saturation work; both results, and the queue that replaced this plan, are in [NEXT-SESSION.md](NEXT-SESSION.md). Do not restart the plan from here.
 >
 > **Superseded.** The system map, composition narrative, capability-modularity discussion, turn/tool/persistence lifecycle, and investment scorecard are rewritten in §3–§5 of the consolidated assessment. Four claims here are wrong and were corrected: 233 workspace packages is 226 (C7); a turn is zero or more steps, not one or more (C8); `docs/capability-seams.md` is a hand-maintained catalog rendered by a generator, not a source-derived graph (C10); and the `llm-pi-ai` recommendation omits that the owning architecture note reserves retiring one of the two twin adapters (C9). The candidate `settings.yaml` block is correct — it was re-verified field-by-field against this checkout and now also lives in §9 of the consolidated assessment.
 

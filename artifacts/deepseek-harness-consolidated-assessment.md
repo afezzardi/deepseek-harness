@@ -2,11 +2,26 @@
 
 Date: 2026-08-20. Checkout: `141eb6fef8` on `master`, `0.1.0-rc.8`, tracked tree clean.
 
-> **Status (2026-08-20): §9 superseded, ledger A partly superseded.** Read [the remediation report](qwen38-harness-remediation.html) first, then [the bring-up report](qwen38-harness-bringup.html).
+> **Status (updated 2026-08-21): §9 superseded, ledger A partly superseded.** Read
+> [NEXT-SESSION.md](NEXT-SESSION.md) first for current state.
 >
-> **Superseded here.** §9's candidate route — corrected field by field on the wire as C1–C6 of the bring-up report. Ledger A4's `session-title*` row — titling is now fixed rather than deleted, at one non-thinking request per session. Any claim that this checkpoint cannot prefix-cache — see R1 of the remediation report.
+> **Superseded here.** §9's candidate route — the live route is `dsh-settings.yaml`, whose comments
+> carry the wire-level rationale for every field that was corrected. Ledger A4's `session-title*` row —
+> titling is fixed rather than deleted, at one non-thinking request per session. Any claim that this
+> checkpoint cannot prefix-cache — caching is enabled and measured; `kb-mastra-infra/docs/TUNING.md` §4
+> is the authority.
 >
-> **Still authoritative here, with no equivalent anywhere else.** Purge ledger A in §6 and purge ledger B in §7 — the row groups, their measured package/dependency/LOC effect, and the ordering constraints. Ledger A3 now carries a second rationale beyond token cost: see D4 of the remediation report.
+> **Still authoritative here, with no equivalent anywhere else.** Purge ledger A in §6 and purge ledger
+> B in §7 — the row groups, their measured package/dependency/LOC effect, and the ordering constraints.
+> Re-verified against `0.1.1-rc.1`: the three bundle `cordis.patch.yml` files are byte-identical to
+> `0.1.0-rc.8` in both row count and id set, so every ledger row still resolves. Ledger A3 carries a
+> second rationale beyond token cost — engine admission; see NEXT-SESSION.md E4.
+>
+> The two HTML reports this header used to point at (`qwen38-harness-bringup.html`,
+> `qwen38-harness-remediation.html`) were **deleted on 2026-08-21** as spent transition artifacts. What
+> was still load-bearing moved: the reasoning-field root cause and the `/engine/v1` requirement into
+> `dsh-settings.yaml`; the sampler table and instruct-alias block into NEXT-SESSION.md E5; the defect
+> fixes into the `dsh-cordis.patch.yml` comments.
 
 This document is the decision layer over two surviving prior assets: [foundation assessment](deepseek-harness-foundation-assessment.md) and [plugins overview](deepseek-harness-plugins-overview.md). It keeps what survived falsification, applies the corrections from a since-retired adversarial review, and adds measurements neither contains — the real cost of each shipped plane, and the effect of each purge, computed from this checkout.
 
