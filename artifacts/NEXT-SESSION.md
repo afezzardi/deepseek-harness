@@ -11,7 +11,8 @@ it.** `kb-mastra-infra/docs/TUNING.md` owns block accounting, prefix-cache geome
 and — in its §6 — the single retraction ledger for both sessions.
 `kb-mastra-infra/MESSAGE.md` is the exchange, restructured to a strict question/reply schema on
 2026-08-21: **re-read it from the top, do not diff it.** Round 8 (theirs) answered Q17; round 9 (ours)
-filed the head-composition correction as Q18. Our handover artifact is on the host at
+filed the head-composition correction as Q18 and they answered it the same day. **Every Q1-Q18 is
+ANSWERED and nothing is open on either side.** Our handover artifacts are on the host at
 `kb-mastra-infra/artifacts/from-harness/`.
 
 ## Resume here
@@ -24,7 +25,7 @@ any mechanism claim — six entries there are now ours.
 
 | Pending | Whose | State |
 |---|---|---|
-| **Q18** — head composition: the shared prefix is 7,455 tokens, not 13,253 | ours, filed | Sent as a correction, not a request. It explains their 85.0% replay against our 90.7% claim. Nothing for them to boot |
+| **Q18** — head composition | **answered, closed** | They independently confirm 7,455 (their method: 7,499 raw, 7,446 scaffold-adjusted; tool schemas 6,619 **identical to the token**). Two methods, no shared code, 9 tokens apart. Nothing left open |
 | **Q10** — fp8 KV re-price at our shape | theirs | Nothing for us to change either way. If they unset `KV_CACHE_DTYPE_FP8` the pool shrinks ~1.845x, which we do not care about at 19 blocks/request. Re-run E2 afterwards to confirm the route still behaves |
 | **Q3** — pushback on making the warm TTFT series the headline | theirs, open to us | Consciously left unanswered. Only worth a reply if we start caring about published TTFT medians |
 
@@ -97,9 +98,18 @@ of the last, with `tools` and the system message byte-identical throughout; and 
 does not break the prefix.
 
 Aggregate reuse for the deepest recorded session is **86.1%** (138,361 submitted, 19,193 uncached),
-not the 90.7% published here before. Their independent replay of that geometry measured **85.0%** and
-they attributed the gap to a base difference; it was our error, and the corrected figure lands 1.1
-points from their measurement.
+not the 90.7% published here before. Their independent replay measured **85.0%**: the base difference
+was theirs (a 6,392-token warm base), the constant was ours, and 1.1 points apart by independent
+methods is now recorded in their §4 as the strongest cross-check on `floor(P / 1568) * 1568` either
+session can produce.
+
+**Both numbers above are cross-confirmed, not just ours.** Their independent pricing of the same bytes
+came to 7,499 raw / **7,446** scaffold-adjusted against our 7,455, with tool schemas at **6,619 —
+identical to the token**. Two methods, two sides, no shared code.
+
+One consequence they took into their record: at 7,455 we sit **below the 7,840 stride**, which is the
+regime where warm-up is one *or* two requests unpredictably (`TUNING.md` §6 row 22). For us that is the
+**shipped case, not a corner case** — budget two cold requests per distinct prefix.
 
 **So the saturation work models a workload we do not produce.** Our largest request ever needs
 `ceil(20364/1568) + 6 = 19` blocks against the 90 a full-context request needs. Their Q17 reply settles
@@ -137,12 +147,23 @@ lifetime, not the 4,704 we told them, against a prefix that has not changed in 4
 unchanged: ~60% fewer tokens per prefill step forever, and our warm prefills fit in one 8,192-token step
 today. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is last, per row 16.
 
-**Not worth chasing, recorded so it is not rediscovered as new.** 5,822 tokens of per-session-constant
-content sit after the varying task string, so they re-prefill every session. Emitted *before* the task
-they would extend the shared prefix to ~13,277 tokens and lift first-request reuse from 6,272 to 12,544
-— worth ~1.1 s of prefill per session start, ~8 s/day at our recorded 7 sessions/day. That is an
-upstream prompt-assembly observation, not a fork patch, and it is below the bar either session applies
-to a boot. It is only worth revisiting at a much higher session rate.
+**Declined by both sessions, recorded so it is not rediscovered as new.** 5,822 tokens of
+per-session-constant content sit after the varying task string, so they re-prefill every session.
+Emitted *before* the task they would extend the shared prefix to ~13,277 tokens and lift first-request
+reuse from 6,272 to 12,544, which also moves us from just under the 7,840 stride to just over it. Their
+pricing, which supersedes our first estimate: **~0.93 s off first-turn TTFT, ~6.5 s/day at 7
+sessions/day, ~40 min/year.**
+
+Two counterweights, the second theirs and the one we had missed. It is a one-line ordering change rather
+than a boot, so the cost side is unusually low, and it is **user-perceptible at session start** in a way
+a throughput number is not. Against that: **moving the task string after 5,822 tokens of workspace
+instructions changes what the model reads last**, which is an instruction-following risk neither session
+can price, and not one to accept blind for 40 minutes a year. Their recommendation, which we adopt: **do
+it only if already touching that assembly code.** We are not, so it stays undone and this is not an open
+thread.
+
+The general rule generalised past us and is now consumer guidance in their `HOW-TO.md` caveat 3 —
+`system → tools → remaining constant context → the variable part last`. Read it there.
 
 Still genuinely open and ours to answer: whether `preserve_thinking: true` wins in interactive
 multi-turn use (below), and whether the nvfp4 arm meets its own `>= 6` boot gate (theirs, unverified
