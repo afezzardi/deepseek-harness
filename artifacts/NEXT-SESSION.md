@@ -1,8 +1,17 @@
 # Next session: experiments, in order
 
-State at handoff: commit `3d9a0f5a07` on branch `fork/qwen38-deployment`. `master` is a pristine
+State at handoff: commit `3c8b37bc75` on branch `fork/qwen38-deployment`. `master` is a pristine
 mirror of `upstream/master` (0 ahead, 0 behind). Two defects fixed in `~/.dsh` and wire-proven; see
 `qwen38-harness-remediation.html`.
+
+**Naming, because two things are both called R3.** `§R2`–`§R5` always mean rounds of the exchange in
+`kb-mastra-infra/MESSAGE.md` on the inference host. Remediation items from
+`qwen38-harness-remediation.html` are written **`remediation R3`** in full. The two are unrelated.
+
+**This file carries several same-day corrections and three retractions.** Where a passage and a
+correction disagree, the correction wins — each one names what it supersedes and why. Four mechanism
+claims here were published and then killed by reading the installed engine source; the pattern is the
+last entry under §Traps, and it is the most transferable thing in the document.
 
 **E1 is done (2026-08-20) and it changed the ranking — read §E1 result before planning anything.**
 Prefix caching is ON in the fp8 arm and measured working. Two consequences: D3's 13.3k prefill is no
@@ -14,19 +23,48 @@ write criterion turned out untestable as written, one new defect (D6) came out o
 `test:snapshot` sub-task is settled — it **cannot** target `local-qwen` and recording one would prove
 nothing. All three in §E2 result.
 
-**Remaining queue, re-ranked after both:** the highest-value item left is inference-layer and new —
-**`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`**, read out of the installed source on 2026-08-21 and
-handed over in `MESSAGE.md` §R3. It is one env var, it is the direct dial on the retained mamba
-snapshots that caused the cold-4-way preemptions, and it preserves prefix reuse by construction. Then
-E3 (compaction under real pressure, plus R3), then E4 (fan-out, purely harness-side and needing no
-boot). `--max-num-batched-tokens 32768` is **demoted** back to what it was always for — confirming the
-prefill-serialization ladder — because it provably does not touch retention. E5 is unchanged and
-still gateway-only.
+**Remaining queue, re-ranked after both.** Ordered by value per boot, and note the first item costs
+no boot at all:
 
-**A model I published in `MESSAGE.md` §R2.4 and then retracted in §R3 the same day:** that retained
-align pages scale with scheduler steps, and therefore with `--max-num-batched-tokens`. The source
-says retention is block-driven. Do not revive it; the retraction explains why, and §R3.3 has the
-mechanism that replaced it.
+| # | Item | Cost | Owner |
+|---|---|---|---|
+| 0 | **Mine the warm-vs-cold pair already measured** (§R4.2) — 0.755 vs 0.989/1.000 at identical 125,708-token length | none, data exists | inference |
+| 1 | **`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`** — one env var, validated at boot (§R3.3) | 1 boot | inference |
+| 2 | **E3** — compaction under real pressure, plus remediation R3 | none | ours |
+| 3 | **E4** — fan-out bound; purely harness-side | none | ours |
+| 4 | no-caching cold 4-way control (§Q5) | 1 boot | inference |
+| 5 | `--max-num-batched-tokens 32768` — **latency only** | 1 boot | inference |
+| 6 | **E5** — instruct alias; gateway restart only, engine keeps running | none | inference |
+
+On item 1, state the claim at its real strength: it is the only documented dial on how many mamba
+snapshots get registered, and `0` retains the replay boundary and shared-prefix junction *by
+construction* so it sparsifies without defeating reuse. Whether that reduces the ~137 request-lifetime
+CoW-pinned blocks — the plausible proximate cause of the cold preemptions — is **the open question the
+experiment answers, not a prediction**. Do not write it up as "the fix" before it runs.
+
+`--max-num-batched-tokens 32768` is **demoted** to what it was always for, confirming the
+prefill-serialization ladder: the source shows it never enters the retention path.
+
+**Two models published and retracted the same day. Do not revive either.**
+
+- **§R2.4, retracted in §R3:** retained align pages scale with scheduler steps and therefore with
+  `--max-num-batched-tokens`. Retention is block-driven; that flag is not in the path.
+- **§R3.2, retracted in §R5:** occupancy near 1.000 could be reclaimable filler rather than a real
+  shortfall. Unreferenced cached blocks are *already* counted free, so 1.000 is genuine exhaustion.
+  This retraction **restored** the inference owner's original reading.
+
+## Open questions, all of them
+
+Nothing below is settled. Each names what it would change, so none of it gets re-derived from scratch.
+
+| Question | Blocks | Where |
+|---|---|---|
+| Is the ≈12 retained pages/group a **plateau or a peak** — does retention track total sequence length? | whether `maxTokens` is a KV lever, i.e. whether remediation R3 has a capacity benefit or is purely context-budget | `MESSAGE.md` §Q6, awaiting reply |
+| At pool exhaustion, does an admitted request get **preempted or an error**? | whether our `maxRetries: 0` is safe, or needs a narrow recovery path | `MESSAGE.md` §Q7, awaiting reply |
+| Are the **~137 referenced non-live blocks** actually CoW pins? | whether the retention dial can reach them at all | §E1 result item 2 — inference, never measured |
+| Was `apply_admission_cap` **active** during the cold runs? | a distinct cause of the preemptions that capacity would get blamed for | §E1 result item 2 |
+| Is the 5-way preemption **caused by** align mode? | nothing operational; 4-way is the setting either way | needs the no-caching control, queue item 4 |
+| Does the **nvfp4 arm** meet its own `≥ 6` boot gate? | that arm can never serve until read from its boot line | §E1 result, unverified since 2026-08-20 |
 
 Read first: the remediation report, then §6/§7 of the consolidated assessment (purge ledgers), then
 §Evaluation plan of the foundation assessment (this file operationalises its Phases 2 and 3).
@@ -51,18 +89,24 @@ in both arms' shape comments. Revert is deleting the flag; nothing else depends 
 |---|---|
 | mode selected | `Mamba cache mode is set to 'align' ... when prefix caching is enabled` |
 | feature on | `enable_prefix_caching=True`, `enable_chunked_prefill=True` |
-| shape held | `Maximum concurrency ...: 5.27x` (was 5.45x) — still ≥ `CHAT_MAX_NUM_SEQS=5` |
-| no preemption | 0 across every hit-rate and correctness run |
+| shape held | `Maximum concurrency ...: 5.27x` (was 5.45x) — read on 2026-08-20 against the then-current `CHAT_MAX_NUM_SEQS=5`; the setting is now **4** |
+| no preemption | 0 across every hit-rate and correctness run — **not** the cold saturation runs, which do preempt (see the 2026-08-21 correction) |
 
-**Cost is +3.45% KV per sequence, not the 4x a per-block checkpoint would imply.**
-`MambaSpec.max_memory_usage_bytes` (`v1/kv_cache_interface.py`) returns
-`page_size_bytes * (2 + num_speculative_blocks)` for `align` against `(1 + ...)` for `none`: align
-reserves *two* mamba pages per GDN layer per sequence — the running state plus one boundary
-checkpoint — not one per block. That is +48 pages of 3.0625 MiB, and it predicts the new KV size to
-the token: `714,116 × 1392/1440 = 690,312`, measured 690,312. `max_num_blocks_per_req` returns
-`cdiv(max_len, block_size)` = 84, but that bounds the *address space*, not the reservation; a code
-comment at that site says so. Block size is not a dial here — the mamba page is padded to exactly the
-attention page, so the two effects cancel and total mamba bytes per sequence are invariant.
+**RESERVATION cost is +3.45% KV per sequence.** `MambaSpec.max_memory_usage_bytes`
+(`v1/kv_cache_interface.py`) returns `page_size_bytes * (2 + num_speculative_blocks)` for `align`
+against `(1 + ...)` for `none`: align *reserves* two mamba pages per GDN layer per sequence — the
+running state plus one boundary checkpoint. That is +48 pages of 3.0625 MiB, and it predicts the new
+KV size to the token: `714,116 × 1392/1440 = 690,312`, measured 690,312. `max_num_blocks_per_req`
+returns `cdiv(max_len, block_size)` = 84, but that bounds the *address space*, not the reservation; a
+code comment at that site says so. Block size is not a dial here — the mamba page is padded to exactly
+the attention page, so the two effects cancel and total mamba bytes per sequence are invariant.
+
+**This paragraph originally read "not one per block". That gloss was wrong and is corrected below:**
+a *running* request under `align` snapshots densely, one state per block per group, and cold
+full-context runs sit at ≈12.4-12.8 retained pages per group rather than 2. Two pages is what the
+sizing estimator reserves; it was never a claim about steady-state retention. Keep the two words
+apart — reservation is a provisioning number, retention is a runtime observation — because conflating
+them is what produced the wrong gloss.
 
 **Reuse is real and large.**
 
@@ -126,8 +170,10 @@ Two consequences that outrank most of the queue:
    `alignment_tokens` is `scheduler_block_size` = `math.lcm(*group_block_sizes)`
    (`kv_cache_utils.py:659`), so `--max-num-batched-tokens` **never enters this path**.
    Corroboration from the numbers alone: dense snapshotting over a 125,708-token sequence would
-   generate ~80 snapshot events per group while only ~12 blocks are held, so the **eviction** path,
-   not the snapshot path, sets the steady state.
+   register ~80 snapshots per group while only ≈12 blocks per group are *held*, so something other
+   than the snapshot path sets the steady state. Per item 2, that something is **whatever keeps a
+   snapshot referenced** — an unreferenced one is already counted free — which points at the
+   request-lifetime CoW pin rather than at eviction timing.
 2. ~~Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
    working set does not fit.~~ **RETRACTED same day — this was wrong, and `block_pool.py` says so.**
    `get_usage()` is `1.0 - get_num_free_blocks() / (num_gpu_blocks - 1)` where
@@ -173,7 +219,7 @@ already isolates retention from sequence length: a fixed per-request cap would r
 exists — and it tells you whether the retention lever is attacking the cold path specifically, which
 determines which runs the pass criteria should be read off.
 
-### The shape finding that came out of it: 5 is oversubscribed, 4 is right
+### The shape finding that came out of it: 5 is oversubscribed, 4 is the setting, 3 is what fits cold
 
 The boot concurrency line is a nominal KV figure and does **not** mean N sequences co-reside. A
 short-output concurrency test proves nothing: each request finishes before the next has prefilled, so
@@ -228,9 +274,15 @@ was observed, and it *pins* retention at **≈12.4-12.8 pages per group** (overf
 blocks requires > 12.42). Quote the retention as ≈11-13, not 12; the `480 → 120 → 12` chain is a
 back-fit that happened to round to a multiple of 4.
 
-**Consequently `floor(473/120) = 3` is not a result** and N=3 must not be promoted to the record — see
-also the evictability argument below, which independently undercuts reading occupancy as a capacity
-requirement.
+**Consequently `floor(473/120) = 3` is not a result** — it is `floor` of a back-fit computed from the
+wrong attention count.
+
+**But that is a complaint about the derivation, not the conclusion.** An earlier version of this
+section also argued that occupancy could not establish a capacity shortfall at all; that argument is
+**retracted** (item 2 of the correction above) — `1.000` is genuine exhaustion. So cold 4-way really
+does not fit, and if the inference owner wants N=3 recorded as a documented worst-case bound there is
+no longer an argument against it. What must not happen is citing `473/120` as its derivation. The
+*operating* setting stays 4, on the latency grounds below, which none of this touches.
 
 Two corollaries that do stand: lowering `--max-num-seqs` does **not** free mamba pages (they are taken
 per running request from a pool whose sizing has no `max_num_seqs` term, so 5→4 bought admission
@@ -243,10 +295,14 @@ length.
 latency event, not a correctness one; a preempted sequence resumes from its last cached boundary;
 warm agentic traffic is where this deployment lives and 4 is clean warm; and in the exact cold
 full-context regime where 4-way preempts, the 4th slot is already latency-bound by prefill
-serialization rather than throughput-bound. N is also the wrong instrument — the mechanism is
-retained align pages, which `--max-num-batched-tokens` addresses and N does not. Monitor
-`vllm:num_preemptions_total` delta > 0 instead; it now has a known cause and means "this workload
-left the warm regime".
+serialization rather than throughput-bound; and per the first corollary above, N is admission rather
+than capacity, so it is the wrong instrument for what actually broke. Monitor
+`vllm:num_preemptions_total` delta > 0 instead — it means "this workload left the warm regime".
+
+The original wording here added "the mechanism is retained align pages, which
+`--max-num-batched-tokens` addresses and N does not". **The second half is wrong and is retracted** —
+that flag is not in the retention path (§R3). The retention dial is
+`VLLM_PREFIX_CACHE_RETENTION_INTERVAL`, still unrun.
 
 **Applied by the inference-layer owner, verified on the host 2026-08-20:**
 `kb-mastra-infra/.env` now has `CHAT_MAX_NUM_SEQS=4`, the running container's argv carries
@@ -255,10 +311,12 @@ measures only the checkpoint. The boot line is unchanged at **5.27x**, which is 
 margin over 4 instead of 5.27 against 5. The nvfp4 arm's own gate (≥ 6) is still unverified and must
 be read from its boot line before that arm ever serves.
 
-Not yet attributed: whether the single preemption at 5-way is *caused* by align mode's +3.45% or
-would happen without it. Settling it needs the same saturation run with the flag removed. The
-decision does not depend on it — 4-way is clean either way, and with caching a preempted sequence
-resumes from its last cached boundary instead of token 0 — but the record should not claim it.
+Not yet attributed: whether the preemptions are *caused* by align mode's retained pages or would
+happen without it. Settling it needs the same saturation run with the flag removed (queue item 4).
+**Do not restate this as "4-way is clean either way" — that was written before the cold runs, and cold
+4-way preempts.** What still holds is that the operating decision does not depend on the attribution:
+4 beats 5 on latency regardless, and with caching a preempted sequence resumes from its last cached
+boundary instead of token 0. The record should not claim causation until the control runs.
 
 ### `preserve_thinking` re-decided: stays `false`, for a new reason
 
@@ -444,20 +502,26 @@ Then test the overflow path deliberately. Temporarily set `thresholdRatio: 0.95`
 `~/.dsh/cordis.patch.yml` so compaction cannot fire before the 98,304 admission ceiling, and confirm
 the 400 is classified and recovered rather than failing the turn. Restore `0.7` afterwards.
 
-**While here, settle R3.** Set `maxTokens: 16384` and `thresholdRatio: 0.8` and re-run. Predicted:
-ceiling 114,688, compaction at 104,857, margin 9,831 — strictly better than today on both margin and
-usable context. Confirm nothing in the agent loop needs more than 16k of output.
+**While here, settle remediation R3.** Set `maxTokens: 16384` and `thresholdRatio: 0.8` and re-run.
+Predicted: ceiling 114,688, compaction at 104,857, margin 9,831 — strictly better than today on both
+margin and usable context. Confirm nothing in the agent loop needs more than 16k of output.
+
+Open question 6 in `MESSAGE.md` may make this a KV lever too, not just a context-budget one: if
+retained mamba pages track total sequence length rather than prefill alone, halving `maxTokens` cuts
+peak occupancy at 4-way. If the answer is "prefill-dominated", treat remediation R3 as purely a
+context-budget decision and do not claim a KV benefit.
 
 ---
 
 ## E4 — Reproduce and bound the fan-out defect (D4)
 
 ```sh
-nproc   # 24 here, so maxConcurrentAgents resolves to min(16, 22) = 16, against 5 engine slots
+nproc   # 24 here, so maxConcurrentAgents resolves to min(16, 22) = 16, against 4 admitted engine slots
 ```
 
-**E1 made this worse than "16 against 5", in two measured ways.** The engine holds 4 near-full-context
-sequences, not 5 (§E1 result), and long prefills do not run in parallel: 5 concurrent 123,598-token
+**E1 made this worse than the original "16 against 5", in two measured ways.** The engine now admits
+**4** (`--max-num-seqs 4`), and cold full-context it only *fits* 3 (§E1 result); long prefills also do
+not run in parallel: 5 concurrent 123,598-token
 requests produced latencies 40.3 / 78.4 / 116.8 / 154.0 / 187.9s — an arithmetic ladder in ~38s steps,
 because one prefill consumes almost the whole 8,192-token `max_num_batched_tokens` budget per step.
 Worst-case TTFT is therefore `max-num-seqs × own prefill`, measured 188s against a predicted 190s.
@@ -510,8 +574,10 @@ the injection wholesale and you silently get thinking at `xhigh`. Confirm reason
 
 Independent of the above, both measured-not-assumed.
 
-**`--long-prefill-token-threshold`** (default `0` = disabled). **Now the highest-value engine lever
-left, and no longer hypothetical:** the serialization it addresses is measured. Five concurrent
+**`--long-prefill-token-threshold`** (default `0` = disabled). Called "the highest-value engine lever
+left" when this section was written; **`VLLM_PREFIX_CACHE_RETENTION_INTERVAL` has since displaced it**
+(see below and §R3.3). It remains the best *latency* lever, and no longer hypothetical: the
+serialization it addresses is measured. Five concurrent
 123,598-token requests returned in a ~38s arithmetic ladder (40.3 / 78.4 / 116.8 / 154.0 / 187.9s),
 so worst-case TTFT is `--max-num-seqs` × own prefill — 188s measured against 190s predicted — because
 one prefill consumes nearly all of the 8,192-token `max_num_batched_tokens` budget every step. At
@@ -529,9 +595,9 @@ with a capacity claim.
 
 **Outranking both of these, and discovered after this section was written:
 `VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`.** An env var rather than a flag, validated at boot, and the
-direct dial on the dense per-block mamba snapshotting that caused the cold-4-way preemptions.
-Mechanism, semantics table, predictions, and the false-pass trap are in the §E1 result correction and
-in `MESSAGE.md` §R3.
+only documented dial on the dense per-block mamba snapshotting. Mechanism and semantics table are in
+the §E1 result correction and in `MESSAGE.md` §R3.3. **It has no predicted effect on occupancy** — judge
+it on preemption delta, warm reuse, and throughput from one run.
 
 **`thinking_token_budget`** — a per-request field in this build, injectable per gateway alias via
 `extra_body`. Bounds worst-case reasoning and therefore worst-case step latency. Your own note
