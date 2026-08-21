@@ -22,35 +22,52 @@ engine-side is closed and stays closed — do not reopen inference tuning, and d
 measurement of that stack. Their own owner declined further work there on scope grounds, and by both
 sessions' arithmetic our traffic uses ~36 s of prefill per day.
 
+**Session 1 (blocks B0-B4) ran on 2026-08-21.** Verdicts are in UAT.md's results table; the log-level
+analysis is [results/uat-20260821/analysis.md](results/uat-20260821/analysis.md). Session 2 (B5-B7,
+plus B3.3 which never ran) is next, and **D7 below must be fixed and E2 re-run before it starts.**
+
 **When the user reports a sitting is done:**
 
-1. Decode every session from the sitting and fold it — but **read the extractor defects below first**;
-   the timing fields are not currently trustworthy.
-2. Confirm **B1.4** and **B4.1** from the log rather than the recorded verdict. Both can be marked PASS
-   while the thing under test is broken: B1.4 passes if the model merely *declines* without ever
-   calling `write` (same screen, same absent file), and B4.1 passes if `/compact` reports success
-   without replacing anything, since the original first message is then still in history.
+1. Decode every session from the sitting and fold it with `harness-tests/metrics.mts`.
+2. Run `harness-tests/check.sh` for **B1.4, B3.1, B3.2 and B4.1** rather than trusting the recorded
+   verdict: each of those four is marked PASS from a screen that looks identical when the thing under
+   test never ran. It prints one PASS/FAIL line per criterion and exits with the verdict.
 3. Align the engine sampler series (`artifacts/results/engine-metrics-*.jsonl`) to session times.
 4. Write the analysis to `artifacts/results/uat-<date>/` and the cycle-2 recommendation.
 
-### Known defects in `artifacts/harness-tests/metrics.mts` — fix before quoting a timing number
+### D7 — in the web profile the compaction summarizer runs on the THINKING route
 
-From a Codex adversarial review of `beb50dc720`. **Token counts, step counts, tool names, error codes
-and turn outcomes are sound. TTFT and decode are not.**
+Found by B4.1 on 2026-08-21; mechanism, evidence and fix path in
+[results/uat-20260821/analysis.md](results/uat-20260821/analysis.md). In short: `web-app` disables
+host-plane `compaction-basic` because the backend moves to the per-session preset, the shipped preset
+mounts it with no config, and `~/.dsh/cordis.patch.yml` patches the disabled host row — so
+`summarizeWithLlm` falls back to the session's own thinking route at the default 8,192-token cap.
+**D1b is fixed in headless and unfixed in web**, and the fail-closed throw is live there. The fields
+belong in a user preset under `<dshHome>/.agent-presets`, not in the home patch.
 
-| # | Defect |
-|---|---|
-| 1 | `decodeMs` is coded first-delta→last-delta; `session-stats` defines it **first-token→assembled-message** |
-| 2 | Deltas are packed only for runs of **≥3** consecutive compatible deltas (`packages/core/session/src/chunk-rows.ts`), so short responses stay as ordinary `assistant/chunk` events the fold ignores — one 4-token session reports TTFT and decode as **zero** |
-| 3 | TTFT takes a packed row's `time0` without requiring the first member to be non-empty, but tool-call rows commonly begin `args: [""]` |
-| 4 | `compactions` counts events, so one successful compaction reports **3** (`compaction/start` + `/summary` + `/end`) |
-| 5 | No `Math.max(0, …)` clamp, and the packed format permits clock reversal (a real `dt: -60` exists in a recorded log) |
-| 6 | Malformed **interior** log lines are silently dropped, and `--all` silently omits undecodable sessions — both create quiet selection bias |
+The same mismatch silently drops `thresholdRatio: 0.8` in web, which is harmless only because 0.8 is
+already `DEFAULT_THRESHOLD_RATIO`. **Check every other home-patch entry against
+`dsh --profile web --dump-config` for the same shape** before assuming it applies.
 
-Also corrected by that review, and already fixed in the prose: `remote` is provided by the **API
-gateway**, not `client-runtime` (which provides `slots`); and the proxy-vs-direct latency comparison is
-**n=1 per arm**, so it supports the instrumentation warning but not a general "49 tok/s". The warning
-itself is independently sound — `recproxy.py` forwards 4 KiB reads rather than SSE events.
+### The extractor's timings are the projection's, and one recorded file predates that
+
+The six defects a Codex review found in `metrics.mts` at `beb50dc720` are fixed (2026-08-21). The fold
+now takes its timing definitions from `sessionStats`
+(`packages/session/session-stats/src/projection.ts`) rather than approximating them, expands packed
+chunk rows through the product's own `decodeStorageRecord`, counts one compaction per
+`compaction/end`, clamps every duration at zero, and reports unparseable lines and undecodable
+sessions instead of dropping them. Verified: the E2 golden session reproduces every non-timing field
+exactly, and the 4-token session that reported **zero** TTFT now reports 2,546 ms.
+
+**`results/uat-baseline/all-sessions-backfill.jsonl` was written by the old fold.** Its token, tool,
+step and outcome columns are sound; its `ttftMs`/`decodeMs` are not — re-derive rather than quote. It
+also holds 15 of the 16 sessions that existed when it ran, with no record of why the sixteenth
+(`b52f40b9`, the E2 golden) is absent, which is the selection bias defect 6 named.
+
+Two limits that remain, both in the extractor's own header: the TTFT/decode split is meaningless on a
+run recorded through `recproxy.py`, which forwards 4 KiB reads rather than SSE events and collapses
+every gap to 0-1 ms; and the proxy-vs-direct comparison behind that warning is **n=1 per arm**, enough
+to establish that the proxy destroys the split and not enough to publish a decode rate.
 
 ### Still open on the inference side, and neither needs us
 
@@ -85,6 +102,11 @@ and pool exhaustion **preempts, never 5xxes**, so `maxRetries: 0` is safe (their
 returns 400, when `prompt + max_tokens > max_model_len`.
 
 ## The measured workload: 13-19k tokens, not 117-131k
+
+**Headless only.** One interactive web session on 2026-08-21 reached p50 69,959 and max 101,202
+prompt tokens over 19 turns, so the figures below describe the headless profile rather than the
+product's ceiling exposure; the interactive numbers live in
+[results/uat-20260821/analysis.md](results/uat-20260821/analysis.md).
 
 All 14 recorded sessions, decoded logs, 31 main-route requests + 14 titling calls:
 
@@ -162,10 +184,10 @@ Validated by `--dump-config` (81 rows) and by a **full E2 gate run under this ex
 
 | # | Item | Cost | Owner |
 |---|---|---|---|
-| 1 | **Run the UAT** — [UAT.md](UAT.md), two sittings | user's time | user |
-| 2 | **Fix the six extractor defects above**, then re-run the golden test and re-derive the backfill's timing columns | none | ours |
-| 3 | **Tighten B1.4 and B4.1** with a `check.sh <case-id>` that decodes the latest session and prints PASS/FAIL for the log-level criteria — the user chose this over deferred verification, so a recorded PASS is sound at the time it is written | none | ours |
-| 4 | Analyse the sitting and write the cycle-2 recommendation | none | ours |
+| 1 | **Fix D7** — the summarization route in a user preset, then restart web and re-run E2. Blocks session 2 | none | ours |
+| 2 | **Run UAT session 2** — B5-B7 and B3.3 | user's time | user |
+| 3 | Re-derive the backfill's timing columns with the fixed extractor, over the post-UAT session set | none | ours |
+| 4 | Analyse session 2 and write the cycle-2 recommendation | none | ours |
 | 5 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
 | 6 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
 

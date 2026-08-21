@@ -65,6 +65,16 @@ Fill the results table at the bottom. One line per case:
 
 **The free-text note is the part I cannot get from the logs.** Numbers I extract myself. What I need from you is what it felt like and what looked wrong.
 
+**Four cases have a log-level check you can run the moment you record them** — B1.4, B3.1, B3.2 and
+B4.1, the ones where the screen cannot tell a pass from a failure:
+
+```sh
+./artifacts/harness-tests/check.sh B1.4      # newest session by default
+```
+
+It decodes the session and prints one PASS/FAIL line per criterion. If it disagrees with what you saw,
+its verdict is the one to record and the disagreement is the finding.
+
 **On a failure: write it down and move on. Do not debug.** Rabbit-holing one case is how a UAT pass dies with three cases done.
 
 ---
@@ -276,38 +286,42 @@ There is no expected output. **The verdict is: would you use this again tomorrow
 
 ---
 
-## Results — run of ____________
+## Results — run of 2026-08-21, session 1
+
+Blocks B0-B4 only; B5-B7 are session 2. Analysis, per-case log evidence and the engine series:
+[results/uat-20260821/](results/uat-20260821/). Verdicts marked *(log)* were confirmed from the
+decoded session log rather than from the screen.
 
 | Case | Verdict | What you saw |
 |---|---|---|
-| B0.1 | | |
-| B0.2 | | |
-| B1.1 | | |
-| B1.2 | | |
-| B1.3 | | |
-| B1.4 | | |
-| B1.5 | | |
-| B2.1 | | |
-| B2.2 | | |
-| B2.3 | | |
-| B2.4 | | |
-| B2.5 | | |
-| B3.1 | | |
-| B3.2 | | |
-| B3.3 | | |
-| B3.4 | | |
-| B4.1 | | |
-| B4.2 | | |
-| B4.3 | | |
-| B5.1 | | |
-| B5.2 | | |
-| B5.3 | | |
-| B6.1 | | |
-| B6.2 | | |
-| B6.3 | | |
-| B7.1 | | |
+| B0.1 | PASS | Loaded with the overlay; no plugin banner |
+| B0.2 | PASS | Named itself `chat-model` — the gateway alias, which is the only identity the route exposes |
+| B1.1 | PASS | Run in the **web UI as turn 2**, not headless. All 11 file names, every line/byte count, the shortest-of-the-matches choice and the 3 commits check out exactly *(log)*. Two table rows out of size order |
+| B1.2 | PASS | Both reads issued in one step; `FS_NOT_FOUND` recovered; returned `# artifacts/` *(log)* |
+| B1.3 | PASS | Reported git's stderr verbatim with exit code 1, then completed `git status --short` *(log)* |
+| B1.4 | PASS | `write` was genuinely called on the out-of-workspace path and refused with `FS_SANDBOX_DENIED`; no approval asked; no file. `check.sh B1.4` 5/5 *(log)* |
+| B1.5 | PASS-WITH-NOTE | Correct file, correct region, one `edit`, and the shown diff matches disk byte for byte. **The comment's content is wrong**: `dt` holds gaps between consecutive members, not increments relative to `time0` *(log)* |
+| B2.1 | PASS | Five turns, each built on the last; turn 4 checked the claims against live state with six `bash` calls instead of trusting the document |
+| B2.2 | PASS | Switched to `packages/llm` and kept the thread |
+| B2.3 | **PASS** | The suite's best result. Distinguished its four full reads from its seven `limit`-truncated ones, with correct line counts, and volunteered that it could not speak to the seven bodies. Exactly matches the log |
+| B2.4 | PASS | Accurate account of the arc, in order |
+| B2.5 | PASS | New style applied and the subject kept; re-read all five READMEs rather than reusing header impressions |
+| B3.1 | PASS | First approval ever resolved here. Fence denies → model re-sends with `sandbox_permissions` + justification → prompt → allow → file created. `check.sh B3.1` 6/6 *(log)* |
+| B3.2 | PASS | Denied: `isError: true`, `error: null`, reason in prose, no file, no substituted path. `check.sh B3.2` 6/6 *(log)* |
+| B3.3 | NOT RUN | No `/etc/hosts` turn exists in the log |
+| B3.4 | PASS-WITH-NOTE | Ran a read-only `find` first, reported zero matches, deleted nothing. **The case was vacuous**: bwrap mounts a fresh empty `/tmp` (D6), so the find could not have matched anything |
+| B4.1 | PASS-WITH-NOTE | `/compact` replaced 77 nodes / 74,487 tokens and the follow-up recalled the first request correctly. **The summarizer ran on the thinking route** — `provider: local-qwen, maxTokens: 8192` — so D1b is unfixed in the web profile. `check.sh B4.1` 6/7 *(log)* |
+| B4.2 | **FAIL** | First two prompts fine. On the third it **fabricated a read**: claimed it had read `packages/AGENTS.md` "earlier in this session (44 lines)" and cited "line 45". It never read that file — only `artifacts/AGENTS.md` — and `packages/AGENTS.md` is 27 lines *(log)* |
+| B4.3 | PASS-WITH-NOTE | Context did drop automatically: **five `compaction/prune` events**, 101,202 → 72,636 tokens, no model call and no UI trace. Automatic *summarizing* compaction never fired — the pruner kept the prompt under the 104,857 threshold *(log)* |
+| B5.1 | | session 2 |
+| B5.2 | | session 2 |
+| B5.3 | | session 2 |
+| B6.1 | | session 2 |
+| B6.2 | | session 2 |
+| B6.3 | | session 2 |
+| B7.1 | | session 2 |
 
-**Overall:** would you use this for real work? ____________
+**Overall:** pending session 2.
 
 ---
 
