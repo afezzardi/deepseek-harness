@@ -34,6 +34,17 @@ The engine's own installed source is reachable and is the authority over both re
 ssh afezzardi@100.108.76.12 'docker exec kb-vllm-chat-fp8 bash -c "grep -n ... /usr/local/lib/python3.12/dist-packages/vllm/..."'
 ```
 
+## Read the inference host, do not change it
+
+**`kb-mastra-infra` has its own owner and its own agent. Read it freely — measure, grep the installed
+engine source, scrape `/metrics`, run probes against the endpoint — but do not edit its files or
+restart its services.** When a measurement implies an inference-layer change, hand over a prompt
+instead: state what is already applied and must only be verified, the exact edit, the measured
+justification with numbers, the boot and load gates that must pass, the rollback, and the traps that
+would produce a false pass. That handoff is the deliverable, not the edit.
+
+Harness-side configuration (`$DSH_HOME`, this checkout) stays ours to change directly.
+
 ## Verification discipline
 
 - **Prefer the installed artifact over any document, including these.** This session found two

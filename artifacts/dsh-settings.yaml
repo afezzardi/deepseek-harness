@@ -36,6 +36,24 @@ llm-pi-ai:
           reasoning_effort:
             $var: thinking.effort
             omitWhenOff: true
+          # Stays false, but NOT for the reason originally recorded. The old
+          # justification was that this deployment could not reuse KV cache, which
+          # made Qwen's `true` default pointless. That is now false: prefix caching
+          # is enabled on the engine and measured working (E1 result in
+          # artifacts/NEXT-SESSION.md). Two measured reasons it still stays false:
+          #  - It is a NO-OP for a single-user-turn run. chat_template.jinja:116
+          #    keeps a turn's <think> when `loop.index0 > ns.last_query_index`, and
+          #    last_query_index (lines 88-97) tracks the last REAL user message --
+          #    <tool_response> content and tool-role messages never advance it. So in
+          #    a headless run every assistant turn is after it and nothing is
+          #    stripped. Verified via /tokenize: 75 tokens either way at one user
+          #    turn, 84 (true) vs 76 (false) once a second user turn exists.
+          #  - Interactively it is a real trade, not a free win: `false` retroactively
+          #    strips thinking from turns at or before the new last user query, which
+          #    rewrites history and voids the shared prefix from there on, while
+          #    `true` keeps the prefix append-only but spends the 98,304-token usable
+          #    prompt ceiling on old reasoning and makes compaction fire sooner.
+          # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
       models:
         - id: chat-model
@@ -89,6 +107,24 @@ llm-pi-ai:
           reasoning_effort:
             $var: thinking.effort
             omitWhenOff: true
+          # Stays false, but NOT for the reason originally recorded. The old
+          # justification was that this deployment could not reuse KV cache, which
+          # made Qwen's `true` default pointless. That is now false: prefix caching
+          # is enabled on the engine and measured working (E1 result in
+          # artifacts/NEXT-SESSION.md). Two measured reasons it still stays false:
+          #  - It is a NO-OP for a single-user-turn run. chat_template.jinja:116
+          #    keeps a turn's <think> when `loop.index0 > ns.last_query_index`, and
+          #    last_query_index (lines 88-97) tracks the last REAL user message --
+          #    <tool_response> content and tool-role messages never advance it. So in
+          #    a headless run every assistant turn is after it and nothing is
+          #    stripped. Verified via /tokenize: 75 tokens either way at one user
+          #    turn, 84 (true) vs 76 (false) once a second user turn exists.
+          #  - Interactively it is a real trade, not a free win: `false` retroactively
+          #    strips thinking from turns at or before the new last user query, which
+          #    rewrites history and voids the shared prefix from there on, while
+          #    `true` keeps the prefix append-only but spends the 98,304-token usable
+          #    prompt ceiling on old reasoning and makes compaction fire sooner.
+          # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
       models:
         # The levels stay declared even though the profile pins `off`: a model

@@ -4,6 +4,10 @@ State at handoff: commit `3d9a0f5a07` on branch `fork/qwen38-deployment`. `maste
 mirror of `upstream/master` (0 ahead, 0 behind). Two defects fixed in `~/.dsh` and wire-proven; see
 `qwen38-harness-remediation.html`.
 
+**E1 is done (2026-08-20) and it changed the ranking — read §E1 result before planning anything.**
+Prefix caching is ON in the fp8 arm and measured working. Two consequences: D3's 13.3k prefill is no
+longer the dominant cost, and the shape is now known to hold 4 near-full-context sequences, not 5.
+
 Read first: the remediation report, then §6/§7 of the consolidated assessment (purge ledgers), then
 §Evaluation plan of the foundation assessment (this file operationalises its Phases 2 and 3).
 
@@ -15,65 +19,114 @@ ssh afezzardi@100.108.76.12 hostname  # NOT the ~/.ssh/config alias; that IP is 
 
 ---
 
-## E1 — Prefix caching, align mode
+## E1 result — Prefix caching, align mode: KEEP IT (measured 2026-08-20)
 
-**The only experiment that can invalidate the others. Run it first.** If it produces real hits, D3
-(the 13.3k baseline) stops being the dominant cost and most of the purge work becomes optional.
+`--enable-prefix-caching` is now in the fp8 arm's `command:` list, with the full measured record in
+the comment above the flag. The false claim that this checkpoint "cannot prefix-cache" is corrected
+in both arms' shape comments. Revert is deleting the flag; nothing else depends on it.
 
-Engine change, so it needs a restart and a shape re-verification. Fully reversible.
+**All four boot gates passed**, and the source reading was confirmed exactly:
 
-```sh
-# 1. back up, then add the flag to the ACTIVE arm only (chat-fp8; .env has COMPOSE_PROFILES=rag,fp8)
-ssh afezzardi@100.108.76.12 'cd kb-mastra-infra && cp docker-compose.yml docker-compose.yml.bak'
-#    insert `- --enable-prefix-caching` into the chat-fp8 `command:` list
-#    NOTE: the compose comment at :212-213 claiming this cannot help is wrong; fix it in the same edit
-
-# 2. recreate that one service; ~900s start_period (weight load + torch.compile + cudagraph)
-ssh afezzardi@100.108.76.12 'cd kb-mastra-infra && docker compose up -d chat-fp8'
-```
-
-**Boot gate — all four must hold before any measurement is meaningful:**
-
-```sh
-ssh afezzardi@100.108.76.12 'docker logs kb-vllm-chat-fp8 2>&1 | grep -iE \
-  "mamba cache mode|prefix caching in mamba|Maximum concurrency|enable_prefix_caching"'
-```
-
-| Check | Required |
+| Check | Result |
 |---|---|
 | mode selected | `Mamba cache mode is set to 'align' ... when prefix caching is enabled` |
-| feature on | `enable_prefix_caching=True` in the V1 engine config line |
-| shape held | `Maximum concurrency for 131,072 tokens per request: N.NNx` — **must be ≥ 5** (`CHAT_MAX_NUM_SEQS`) |
-| no preemption | `vllm:num_preemptions_total` stays `0` under load |
+| feature on | `enable_prefix_caching=True`, `enable_chunked_prefill=True` |
+| shape held | `Maximum concurrency ...: 5.27x` (was 5.45x) — still ≥ `CHAT_MAX_NUM_SEQS=5` |
+| no preemption | 0 across every hit-rate and correctness run |
 
-The shape check is not optional. Enabling caching sets `mamba_block_size` to `block_size`, which
-moves the KV allocation. Your own handoff records two occasions where an engine came up `healthy`,
-passed 30/30 on smoke, and was serving a third of the intended concurrency. **The boot line is the
-only signal.** If it drops below 5, revert or lower `CHAT_MAX_NUM_SEQS` deliberately.
+**Cost is +3.45% KV per sequence, not the 4x a per-block checkpoint would imply.**
+`MambaSpec.max_memory_usage_bytes` (`v1/kv_cache_interface.py`) returns
+`page_size_bytes * (2 + num_speculative_blocks)` for `align` against `(1 + ...)` for `none`: align
+reserves *two* mamba pages per GDN layer per sequence — the running state plus one boundary
+checkpoint — not one per block. That is +48 pages of 3.0625 MiB, and it predicts the new KV size to
+the token: `714,116 × 1392/1440 = 690,312`, measured 690,312. `max_num_blocks_per_req` returns
+`cdiv(max_len, block_size)` = 84, but that bounds the *address space*, not the reservation; a code
+comment at that site says so. Block size is not a dial here — the mamba page is padded to exactly the
+attention page, so the two effects cancel and total mamba bytes per sequence are invariant.
 
-**Measurement** — run the identical task twice and compare:
+**Reuse is real and large.**
 
-```sh
-pnpm dsh --profile headless "Read package.json and report the exact version field."
-# and again, verbatim
-ssh afezzardi@100.108.76.12 'docker logs --since 5m kb-vllm-chat-fp8 2>&1 | grep "Prefix cache hit rate"'
-```
+| Shape | Measured |
+|---|---|
+| identical 38,102-token prompt twice | 98.8% (37,632/38,102), 7.32s → 0.28s. The 470-token miss is `38,102 mod 1568` — the trailing partial block |
+| append-only chain, 31k → 62k (agent tool loop) | 0%, 76.8%, 80.8%, 83.7%, 85.9%; each step's hits equal the previous request's full-block count exactly |
+| shared prefix + long unique suffix | 0%, 43.1%, 54.6%, 54.6% |
+| real `dsh --profile headless`, same task, NEW session | 12.22s → 8.86s, 40.6% → 81.2% |
 
-Also check whether `prompt_tokens_details.cached_tokens` survives the `/engine` passthrough — capture
-with `recproxy.py` and read the response usage.
+The last row is the one that matters: the ~13.3k system+tools prefix is reused **across sessions**,
+not only within a run, so **D3 is demoted** — that prefill is now paid once and reused, and the
+tool-schema purge is an optional context-budget cleanup rather than the dominant cost lever.
 
-**Decision.** Real hits on the second step of a tool chain (where the prefix is the whole prior
-conversation) → keep it, and demote D3. Zero hits → remove the flag and record the measurement, so
-the question is closed with evidence instead of a comment. Expect the possibility of zero: there are
-open upstream reports of align mode producing no hits for hybrid agent prompt layouts.
+**But cross-session reuse is evictable, and the floor is lower than the headline.** Running the
+saturation tests below — five distinct 117k-token prompts — evicted the shared prefix, and the very
+next `dsh` run fell back to 40.6%; an immediate repeat returned to 81.2%. So 81.2% is what a warm
+cache gives, 40.6% is the guaranteed floor (the intra-run reuse of step 2 over step 1, which cannot
+be evicted mid-run), and heavy unrelated full-context traffic moves you between the two. Plan on the
+floor, not the headline.
 
-**One decision rides on the outcome.** `preserve_thinking: false` in the route was justified by this
-deployment being unable to reuse KV cache, which makes Qwen's own reason for the `true` default void.
-Real hits restore that reason, so re-decide the flag instead of inheriting it.
+**Correctness holds, tested the right way.** GDN backends are not batch-invariant, so cached and
+fresh generations are not bit-exact and a token diff is the wrong test. `probe_prefix_correctness.py`
+instead checks recall of needles embedded *inside* the reused region: 15/15 exact across 3 trials,
+including an arm that asks a different question against the same cached prefix, plus byte-identical
+tool-call arguments over repeats.
 
-**Watch for:** `align` mode is experimental in vLLM's own words. Any correctness oddity — a wrong
-answer on a repeated prompt, a tool call that doesn't match its arguments — revert immediately and
-do not debug around it.
+**Two limits worth knowing.** Granularity is the 1568-token block, so a shared prefix shorter than
+one block can never hit. And vLLM reports no `cached_tokens`: `prompt_tokens_details` is `null` even
+on a direct authenticated call to the engine, so this is **not** a gateway artifact — monitor with
+`vllm:prefix_cache_queries_total` / `vllm:prefix_cache_hits_total`.
+
+`#45238` does not describe this build. 0.27.1's `MambaManager` sets
+`supports_fine_grained_hash_lookup` and tracks `_producer_partial_tail_reqs` / `last_state_block_idx`
+with copy-on-write of the boundary state, which is why the shared-prefix shape reuses 43-55% instead
+of the 0% that issue predicts. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is **not** the mechanism —
+`envs.py` says it applies to sliding-window attention, not Mamba/linear attention.
+
+### The shape finding that came out of it: 5 is oversubscribed, 4 is right
+
+The boot concurrency line is a nominal KV figure and does **not** mean N sequences co-reside. A
+short-output concurrency test proves nothing: each request finishes before the next has prefilled, so
+`kv_cache_usage_perc` reads one request's occupancy (0.178 measured) and preemptions stay 0 while the
+sequences never overlap. Forcing long outputs (`min_tokens` + `ignore_eos`) is what creates pressure.
+
+At 117,708-token prompts + 8,000 forced output tokens each:
+
+| Concurrency | Resident | Peak KV | New preemptions | Wall | Aggregate output |
+|---|---|---|---|---|---|
+| 5 | **4** (1 always waiting) | 0.989 | **1** | 684.1s, one request starved 684s vs ~487s | 58.5 tok/s |
+| 4 | 4 | 0.901 | 0 | 377.4s, all within 1s of each other | **84.8 tok/s** |
+
+**Five concurrent is 45% slower in aggregate than four.** The compose default for this arm was
+already `CHAT_MAX_NUM_SEQS_FP8:-${CHAT_MAX_NUM_SEQS:-4}` with the comment "0.70 affords exactly 4";
+the `.env` override to `CHAT_MAX_NUM_SEQS=5` was what oversubscribed it.
+
+**Applied by the inference-layer owner, verified on the host 2026-08-20:**
+`kb-mastra-infra/.env` now has `CHAT_MAX_NUM_SEQS=4`, the running container's argv carries
+`--max-num-seqs 4`, and `--enable-prefix-caching` is on both the fp8 and nvfp4 arms so the A/B still
+measures only the checkpoint. The boot line is unchanged at **5.27x**, which is now a comfortable
+margin over 4 instead of 5.27 against 5. The nvfp4 arm's own gate (≥ 6) is still unverified and must
+be read from its boot line before that arm ever serves.
+
+Not yet attributed: whether the single preemption at 5-way is *caused* by align mode's +3.45% or
+would happen without it. Settling it needs the same saturation run with the flag removed. The
+decision does not depend on it — 4-way is clean either way, and with caching a preempted sequence
+resumes from its last cached boundary instead of token 0 — but the record should not claim it.
+
+### `preserve_thinking` re-decided: stays `false`, for a new reason
+
+The old justification is now void, so do not reason from it: it said `false` was free because this
+deployment could not reuse KV. It can. But `false` should still stay, on measured grounds:
+
+- **It is a no-op in headless mode.** `chat_template.jinja:116` keeps a turn's `<think>` when
+  `loop.index0 > ns.last_query_index`, and `last_query_index` (lines 88-97) is the last *real* user
+  message — `<tool_response>` content and `tool`-role messages never advance it. With one user turn
+  every assistant turn is after it. Confirmed via `/tokenize`: one user turn renders **75 tokens
+  either way**; add a second user turn and it becomes 84 (`true`) vs 76 (`false`).
+- **In interactive multi-turn use it is a real trade, not a free win.** `false` retroactively strips
+  thinking from turns at or before the new last user query, which rewrites history and invalidates
+  the shared prefix from the first stripped turn on. `true` keeps the prefix append-only and fully
+  reusable, but accumulates every past reasoning block against a usable prompt ceiling of 98,304,
+  making compaction fire sooner. Which wins depends on reasoning length per turn and session length;
+  that is now a well-defined measurement, not an assumption. Flip it only with that measurement.
 
 ---
 
@@ -139,8 +192,17 @@ usable context. Confirm nothing in the agent loop needs more than 16k of output.
 nproc   # 24 here, so maxConcurrentAgents resolves to min(16, 22) = 16, against 5 engine slots
 ```
 
+**E1 made this worse than "16 against 5", in two measured ways.** The engine holds 4 near-full-context
+sequences, not 5 (§E1 result), and long prefills do not run in parallel: 5 concurrent 123,598-token
+requests produced latencies 40.3 / 78.4 / 116.8 / 154.0 / 187.9s — an arithmetic ladder in ~38s steps,
+because one prefill consumes almost the whole 8,192-token `max_num_batched_tokens` budget per step.
+Worst-case TTFT is therefore `max-num-seqs × own prefill`, measured 188s against a predicted 190s.
+Sixteen agents each carrying an agentic prompt do not queue gracefully behind that; set the bound.
+
 Reproduce the hang, then bound it. Watch `vllm:num_requests_waiting` during the run — persistently
-non-zero means requests are dying of queueing, not slowness.
+non-zero means requests are dying of queueing, not slowness. Note `num_requests_running` counts
+scheduler residency, not simultaneous prefills: one request can be decoding a single token while
+another takes nearly the entire batch budget, so read it together with `kv_cache_usage_perc`.
 
 Fix, in `~/.dsh/cordis.patch.yml`:
 
@@ -184,11 +246,19 @@ the injection wholesale and you silently get thinking at `xhigh`. Confirm reason
 
 Independent of the above, both measured-not-assumed.
 
-**`--long-prefill-token-threshold`** (default `0` = disabled). Worst-case TTFT for an admitted
-request is `--max-num-seqs` × its own prefill, because one prefill takes ~8,191 of
-`max_num_batched_tokens` every step. At 4,096 a short tool-result turn stops waiting behind a 130k
-prefill, at the cost of long prefills taking roughly twice as long. This workload has both shapes,
-so it is a real fairness dial. Measure with mixed short/deep concurrent requests.
+**`--long-prefill-token-threshold`** (default `0` = disabled). **Now the highest-value engine lever
+left, and no longer hypothetical:** the serialization it addresses is measured. Five concurrent
+123,598-token requests returned in a ~38s arithmetic ladder (40.3 / 78.4 / 116.8 / 154.0 / 187.9s),
+so worst-case TTFT is `--max-num-seqs` × own prefill — 188s measured against 190s predicted — because
+one prefill consumes nearly all of the 8,192-token `max_num_batched_tokens` budget every step. At
+4,096 a short tool-result turn stops waiting behind a 130k prefill, at the cost of long prefills
+taking roughly twice as long. This workload has both shapes, so it is a real fairness dial. Measure
+with mixed short/deep concurrent requests, and record per-request queue time and TTFT separately.
+
+A cheaper comparison to run first, since it needs no new flag: repeat the same five-request workload
+with `--max-num-batched-tokens 32768`. If the ladder spacing shrinks roughly in proportion to the
+number of prefill chunks, the token-budget explanation is confirmed; if it does not, look at
+admission gating instead.
 
 **`thinking_token_budget`** — a per-request field in this build, injectable per gateway alias via
 `extra_body`. Bounds worst-case reasoning and therefore worst-case step latency. Your own note
@@ -213,6 +283,21 @@ Each of these has already cost someone time on this stack.
   Bind to `chat-model` or the raw route when the client drives effort.
 - **`smoke.sh` 30/30 does not prove the engine's shape.** Nothing in an acceptance suite drives five
   concurrent full-context requests. Read the boot concurrency line.
+- **The boot concurrency line does not prove co-residency either.** It is a nominal KV figure. A
+  concurrency test with short outputs lets each request finish before the next prefills, so nothing
+  overlaps: `kv_cache_usage_perc` reads one request's occupancy and preemptions stay 0 while proving
+  nothing. Force long outputs with `min_tokens` + `ignore_eos`, and require a single scrape showing
+  `num_requests_running == N` together with high `kv_cache_usage_perc` — peaks taken from different
+  scrapes are not a joint observation.
+- **RTK filters command output.** `curl ... | head` returned a JSON *schema* instead of values,
+  which silently corrupts any measurement read that way. Prefix measurement commands with
+  `rtk proxy`.
+- **`probes/tokenize.py` shadows the stdlib `tokenize` module.** Any Python run with
+  `artifacts/probes` as the working directory dies inside the interpreter's own imports
+  (`linecache` → `tokenize`), with a traceback that blames `LITELLM_MASTER_KEY` rather than the
+  shadowing. Run probes by path from the repo root, not from inside `probes/`.
+- **A hit rate needs a shared prefix of at least one block.** Block size here is 1568 tokens, not the
+  usual 16, so short shared prefixes never register a hit and the metric looks like "no sharing".
 - **Two independent timeouts.** Audit the client's as well as the gateway's, against
   (output budget ÷ 19.5 tok/s) + worst-case TTFT. The harness route sets
   `streamIdleTimeoutMs: 900000` and `maxRetries: 0` to match the gateway deliberately — do not

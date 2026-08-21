@@ -15,7 +15,7 @@ carries a status header saying which parts.
 |---|---|
 | `AGENTS.md` (+ `CLAUDE.md` symlink) | Scoped guidance for future sessions: the reference repos on `srvhapeda` and how to reach them, verification discipline, the live-config sync rule, and the git rule. |
 | `NEXT-SESSION.md` | **Start here.** The ranked experiment queue with exact commands, boot gates, and pass/fail criteria. Operationalises the foundation assessment's Phases 2 and 3. |
-| `qwen38-harness-remediation.html` | **Current.** Ranked remediation path: two defects fixed and wire-proven, three corrections to the bring-up report, one new concurrency defect, and the prefix-caching experiment that outranks the rest. |
+| `qwen38-harness-remediation.html` | **Current.** Ranked remediation path: two defects fixed and wire-proven, three corrections to the bring-up report, one new concurrency defect, and the prefix-caching experiment that outranks the rest. Its R1 experiment is now **resolved** — caching is enabled and measured; the result, including the shape change it exposed, is in `NEXT-SESSION.md` §E1 result, so read that for R1's outcome and for the D3 demotion it implies. |
 | `qwen38-harness-bringup.html` | Wire-level verification: 11 endpoint gates, 6 route corrections, the reasoning-field root cause. Authoritative except for §Next, C6, and its prefix-caching claim. |
 | `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the only home for the row groups, their measured package/dependency/LOC effect, and the ordering constraints. §9's route and ledger A4's titling row are superseded. |
 | `deepseek-harness-plugins-overview.md` | **The 138-row composition inventory** — id, package, intent, layer. This is how a ledger row group resolves to actual ids. No equivalent elsewhere. |
@@ -59,6 +59,10 @@ the value in `./.env` at the repo root (gitignored) or the process environment.
 | `probes/probe_engine.py` | That `/engine/v1` carries the full dsh request shape |
 | `probes/probe_toolrate.py` | Tool-call reliability per surface |
 | `probes/tokenize.py` | Exact token cost of each prompt contributor |
+| `probes/probe_prefix_cache.py` | That align-mode prefix caching produces real hits here, and that `cached_tokens` is unavailable in vLLM itself rather than stripped by the gateway |
+| `probes/probe_prefix_geometry.py` | Which prompt geometries benefit — append-only agent chains vs a shared prefix with long unique suffixes |
+| `probes/probe_prefix_correctness.py` | That a GDN state resume preserves the cached region's content, tested by needle recall rather than by token diff |
+| `probes/probe_prefix_saturation.py` | How many near-full-context sequences actually co-reside, and that the boot concurrency line overstates it |
 
 ## Reproducing
 
