@@ -1,22 +1,33 @@
 # DeepSeek Harness plugins overview
 
-> **Status (2026-08-20): roster authoritative, port sizing superseded.** Read [the consolidated assessment](deepseek-harness-consolidated-assessment.md) first.
+Date: 2026-08-20. Checkout `0.1.0-rc.8`.
+
+> **Status: reduced to the roster, which is all this document uniquely holds.** Read
+> [the consolidated assessment](deepseek-harness-consolidated-assessment.md) first.
 >
-> **Still authoritative here, with no equivalent anywhere else.** The row-by-row inventory of all 138 composition rows under "Shipped profile inventory" — id, package, intent, and label for the Base, Headless, and Web layers. Purge ledger A in §6 of the consolidated assessment names row *groups*; this inventory is how you resolve them to ids and packages. Also the 71 additional runtime-capable packages and the module-collapse table.
+> **Authoritative here, with no equivalent anywhere else:** the row-by-row inventory of all 138
+> composition rows — id, package, intent, label — for the Base, Headless, and Web layers; the 71
+> additional runtime-capable packages; and the module-collapse table. Purge ledger A names row
+> *groups*; this inventory is how they resolve to ids and packages. Unchanged at `0.1.1-rc.1`.
 >
-> **Superseded, and wrong where it counts.** The executive recommendation, the P1 dependency footprint, the dependency-reduction priorities, and the recommended staging. Six corrections apply: the minimum closure is 67 packages, not 42, because this repository declares non-optional `peerDependencies` the canonical runtime-dependency signal (C1); `shell` and `bash-local` are required, not `ALT` (C2); the profiles carry 30 id-targeted override operations beyond the 138 inserted rows, including the only source of the headless deployment persona (C3); two of the eleven "external" names are workspace members (C4); no native or npm SQLite dependency exists (C5); and a narrower POSIX subprocess provider does not remove `koffi` (C6). Do not act on the 42-package list or on the `ALT` labels for `shell` and `bash-local`.
+> **Superseded and removed 2026-08-21:** the executive recommendation, the P1 composition and its
+> dependency footprint, the dependency-reduction priorities, the recommended staging, the decision
+> checkpoints, and the source trail. Six corrections apply and are why the P1 material is gone rather
+> than annotated — the minimum closure is **67** packages, not 42, because this repository declares
+> non-optional `peerDependencies` the canonical runtime signal (C1); `shell` and `bash-local` are both
+> **required**, not `ALT` (C2); the profiles carry **30 id-targeted overrides** beyond the 138 inserted
+> rows, including the only source of the headless persona (C3); two of the eleven "external" names are
+> workspace members (C4); no native or npm SQLite dependency exists (C5); and a narrower POSIX
+> subprocess provider does not remove `koffi` (C6). **Do not act on the 42-package list, or on the
+> `ALT` labels for `shell` and `bash-local`, wherever a label below still carries them.**
 
-Date: 2026-08-20
+Scope: every plugin row mounted by the shipped Base, Headless, and Web profile layers, plus package
+roots exposing additional Cordis runtime plugins not directly mounted by those layers. Pure type
+libraries, build generators, SDK clients, and test helpers without a runtime plugin export are out of
+scope. Package descriptions come from each manifest.
 
-Scope: every plugin row mounted by the shipped Base, Headless, and Web profile layers, plus package roots that expose additional Cordis runtime plugins but are not directly mounted by those layers. Pure type libraries, build generators, SDK clients, and test helpers without a runtime plugin export are outside the inventory. Package descriptions come from each package manifest; port recommendations are specific to a text-first POSIX fork using self-hosted vLLM/Qwen.
-
-## Executive recommendation
-
-The shipped profiles contain 138 configuration rows: 78 Base rows, 3 Headless rows, and 57 Web rows. They reference 133 unique package roots. The repository also contains 71 runtime-capable package roots not directly named by those three layers; many are service definitions pulled transitively, provider alternatives, or opt-in products.
-
-Do not port this graph one package at a time. Start with the 41-row P1 composition below (40 directly named package roots). Its workspace runtime dependency closure is 42 in-repository packages, plus 11 direct external package names and 1 external Cordis plugin not represented under `packages/`. This preserves the durable session log, agent loop, tools, settings/credentials, Qwen adapter, retries, compaction, guarded POSIX execution, filesystem access, skills, and headless entry point.
-
-Use the existing pi-ai adapter for wire qualification. After the Qwen route passes multi-step tool, reasoning, retry, cancellation, and replay tests, decide whether to retain pi-ai or replace it with a narrow vLLM/Qwen adapter. A narrow adapter is the largest plausible dependency reduction that does not weaken the harness architecture; it can remove pi-ai's multi-provider transitive graph while keeping `ctx.llm` and the stream protocol intact.
+The `P1`/`P2`/`DEFER` labels below are retained because the inventory rows carry them, but the port plan
+they served is superseded; read them as a rough first-cut priority, not as a composition.
 
 ## Port labels
 
@@ -29,134 +40,6 @@ Use the existing pi-ai adapter for wire qualification. After the Qwen route pass
 | WEB | Part of the browser product plane; take the Web layer as a coherent feature, not piecemeal. |
 | DEV | Development, example, diagnostic, or replay support; preserve tests where applicable but exclude from production runtime. |
 | DEFER | Exclude from the first fork because it adds a product plane, external runtime, or unusually broad authority. |
-
-## Recommended first-port topology
-
-```mermaid
-flowchart LR
-  CLI[Headless CLI] --> Agent[Agent registry and loop]
-  Agent --> Session[Session log and JSONL persistence]
-  Agent --> Prompt[System prompt and workspace instructions]
-  Agent --> Tools[Tool registry and policies]
-  Agent --> LLM[LLM seam, retry, Qwen adapter]
-  LLM --> VLLM[vLLM Qwen3.8-27B]
-  Tools --> Exec[Subprocess, sandbox, Bash]
-  Tools --> FS[Filesystem, search, editor]
-  Tools --> Skills[Filesystem skills]
-  Session --> Compact[Token meter, compaction, pruning]
-  Session --> Spill[Oversized-output spill]
-  Config[Settings and credentials] --> LLM
-  Config --> Exec
-```
-
-### P1 composition rows
-
-| Layer | ID | Package |
-|---|---|---|
-| Base | `timer` | `cordis:timer` |
-| Base | `llm` | [llm](../packages/llm/llm/README.md) |
-| Base | `session` | [session](../packages/core/session/README.md) |
-| Base | `agent` | [agent](../packages/core/agent/README.md) |
-| Base | `agent-default-model` | [agent-default-model](../packages/core/agent-default-model/README.md) |
-| Base | `llm-retry` | [llm-retry](../packages/llm/llm-retry/README.md) |
-| Base | `settings` | [settings-file](../packages/settings/settings-file/README.md) |
-| Base | `credentials` | [credentials-local](../packages/credentials/credentials-local/README.md) |
-| Base | `llm-pi-ai` | [llm-pi-ai](../packages/llm/llm-pi-ai/README.md) |
-| Base | `session-persistence-jsonl` | [session-persistence-jsonl](../packages/session/session-persistence-jsonl/README.md) |
-| Base | `subprocess` | [subprocess-local](../packages/subprocess/subprocess-local/README.md) |
-| Base | `sandbox` | [sandbox-local](../packages/sandbox/sandbox-local/README.md) |
-| Base | `sandbox-policy` | [sandbox-policy](../packages/sandbox/sandbox-policy/README.md) |
-| Base | `bash-sandbox` | [bash-sandbox](../packages/shell/bash-sandbox/README.md) |
-| Base | `approval` | [user-approval](../packages/interaction/user-approval/README.md) |
-| Base | `permission` | [permission-presets](../packages/interaction/permission-presets/README.md) |
-| Base | `shell-env` | [shell-env](../packages/shell/shell-env/README.md) |
-| Base | `tool-bash` | [tool-bash](../packages/shell/tool-bash/README.md) |
-| Base | `fs-observation-policy` | [fs-observation-policy](../packages/fs/fs-observation-policy/README.md) |
-| Base | `tool-fs` | [tool-fs](../packages/fs/tool-fs/README.md) |
-| Base | `tool-fs-search` | [tool-fs-search](../packages/fs/tool-fs-search/README.md) |
-| Base | `agent-instructions` | [agent-instructions](../packages/context/agent-instructions/README.md) |
-| Base | `skill` | [skill](../packages/skill/skill/README.md) |
-| Base | `skill-filesystem` | [skill-filesystem](../packages/skill/skill-filesystem/README.md) |
-| Base | `tool-skill` | [tool-skill](../packages/skill/tool-skill/README.md) |
-| Base | `token-meter` | [token-meter](../packages/llm/token-meter/README.md) |
-| Base | `compaction-basic` | [compaction-basic](../packages/compaction/compaction-basic/README.md) |
-| Base | `timeout-policy` | [tool-call-timeout-policy](../packages/guard/timeout-policy/README.md) |
-| Base | `spill-local` | [spill-local](../packages/spill/spill-local/README.md) |
-| Base | `spill-policy` | [spill-policy](../packages/spill/spill-policy/README.md) |
-| Base | `session-checkpoint-policy` | [session-checkpoint-policy](../packages/session/session-checkpoint-policy/README.md) |
-| Base | `tool-result-pruner` | [compaction-tool-result-pruner](../packages/compaction/compaction-tool-result-pruner/README.md) |
-| Base | `tool-todo` | [tool-todo](../packages/todo/tool-todo/README.md) |
-| Base | `tool-str-replace-editor` | [tool-str-replace-editor](../packages/fs/tool-str-replace-editor/README.md) |
-| Base | `repeat-tool-reminder` | [repeat-tool-reminder](../packages/guard/repeat-tool-reminder/README.md) |
-| Base | `tools` | [tools](../packages/core/tools/README.md) |
-| Base | `system-prompt` | [system-prompt](../packages/core/system-prompt/README.md) |
-| Base | `agent-loop` | [agent-loop](../packages/core/agent-loop/README.md) |
-| Base | `fs-sandbox` | [fs-sandbox](../packages/fs/fs-sandbox/README.md) |
-| Headless | `headless-startup` | [headless/startup](../packages/bundle/headless/README.md) |
-| Headless | `headless-runner` | [headless](../packages/bundle/headless/README.md) |
-
-### P1 direct dependency footprint
-
-The in-repository closure contains 42 packages:
-
-- `agent`
-- `agent-default-model`
-- `agent-instructions`
-- `agent-loop`
-- `bash-sandbox`
-- `cmdline`
-- `code-runtime-worker-thread`
-- `compaction-basic`
-- `compaction-tool-result-pruner`
-- `credentials-local`
-- `fs-observation-policy`
-- `fs-sandbox`
-- `headless`
-- `llm`
-- `llm-pi-ai`
-- `llm-retry`
-- `permission-presets`
-- `repeat-tool-reminder`
-- `sandbox-local`
-- `sandbox-policy`
-- `sandbox-windows-acl`
-- `session`
-- `session-checkpoint-policy`
-- `session-persistence-jsonl`
-- `settings-file`
-- `shell-env`
-- `skill`
-- `skill-filesystem`
-- `spill-local`
-- `spill-policy`
-- `subprocess-local`
-- `system-prompt`
-- `token-meter`
-- `tool-bash`
-- `tool-call-timeout-policy`
-- `tool-fs`
-- `tool-fs-search`
-- `tool-skill`
-- `tool-str-replace-editor`
-- `tool-todo`
-- `tools`
-- `user-approval`
-
-Direct external package names visible in those manifests are:
-
-- `@deepseek-ai/node-addon-landlock-run`
-- `@deepseek-ai/schemastery`
-- `@earendil-works/pi-ai`
-- `@vscode/ripgrep`
-- `chokidar`
-- `commander`
-- `diff`
-- `koffi`
-- `node-pty`
-- `yaml`
-- `zod`
-
-The additional external Cordis plugin is `@deepseek-ai/cordis-plugin-timer`. These counts describe the current workspace manifests, not the smallest achievable fork. They exclude transitive dependencies, vendored Cordis packages, Node built-ins, and development dependencies. In particular, `sandbox-windows-acl` is present because the current cross-platform sandbox provider declares it, while `code-runtime-worker-thread` is present because the current Headless bundle declares it even when its composition row is omitted. A POSIX-only port can remove both after replacing those package-level dependencies. The application bootstrap is outside the composition rows; retain the `app-boot` behavior or equivalent startup glue.
 
 ## How to collapse the port
 
@@ -179,20 +62,6 @@ Preserve capability ownership while reducing package granularity. A lean fork ca
 | Test laboratory | Mock server, replay fixtures, real-composition harness | Keyless replay versus real-provider qualification |
 
 Do not collapse security decisions into the tool handlers. The executor, filesystem, sandbox, approval, and permission components may share a package, but the operation that enforces a decision must remain independently testable.
-
-## Dependency-reduction priorities
-
-| Priority | Change | Expected effect | Risk |
-|---|---|---|---|
-| 1 | Defer the entire Web layer | Removes React/client runtime, Host RPC, localization, static serving, UI slots, browser HMR, and their build graph. | No browser interface or visual settings editor. |
-| 2 | Defer subagents and workflows | Removes child lifecycle, worker-thread orchestration, product SDKs, ACP child transport, and multi-agent prompt/tool additions. | No delegation or Ralph/workflow tools. |
-| 3 | Qualify pi-ai, then consider a dedicated vLLM adapter | Can remove the multi-provider SDK graph while preserving the LLM service. | The fork owns SSE, tool-call, reasoning, usage, replay, and error normalization. |
-| 4 | Keep JSONL; defer SQLite query/storage | Avoids native SQLite packaging and projection/search services. | No full-text session search or relational application storage. |
-| 5 | Keep text only; defer attachments | Avoids image decoding/storage and `sharp`. | No image prompts or durable image history. |
-| 6 | Keep ordinary Bash; defer PTY terminals | Avoids the persistent-terminal service and its UI/tool lifecycle. | No interactive long-lived shell session. The current local subprocess package still brings `node-pty` and `koffi`; a narrower POSIX subprocess provider is needed to remove them. |
-| 7 | Select one Web search provider only if required | Avoids vendor-specific credential and transport code. | The model has no live web access in P1. |
-| 8 | Defer telemetry and anonymous identity | Removes OpenTelemetry export and correlation state. | No product analytics or remote feedback correlation. |
-| 9 | Defer self-modifying Cordis tools and Agent Teams | Removes the broadest runtime authority and experimental coordination state. | No model-written live plugins or peer-team orchestration. |
 
 ## Shipped profile inventory
 
@@ -622,36 +491,3 @@ These package roots expose a Cordis runtime form or bundle/client metadata but a
 | Package | Intent | Port |
 |---|---|---|
 | [workflow](../packages/workflow/workflow/README.md) | Workflow capability seam: ctx.workflowEngine service, run vocabulary, and workflow/* events | P2 |
-
-## Recommended staging
-
-### Phase 1: 41-row headless foundation
-
-Port exactly the P1 rows and their dependency closure. Keep the existing event types, stream protocol, effect disposal, model-visible logging invariant, and security enforcement points. Remove configuration rows rather than leaving dormant packages in the production dependency closure.
-
-### Phase 2: choose product capabilities
-
-Add only capabilities with a measured use case. The strongest candidates are MCP, LSP, ordinary Web fetch/search, background jobs, human questions, session titles, and in-process subagents. Each candidate must bring its service definition, provider, consumer, durable events, and replay/snapshot coverage together.
-
-### Phase 3: choose an interface plane
-
-Choose one of Headless, ACP/JSON-RPC, or Web as the primary interface. Headless is already P1. ACP/JSON-RPC is materially smaller than Web for automation. Web should remain a coherent bundle until the fork has enough tests to split its Host, client runtime, and feature roster safely.
-
-### Phase 4: specialize the provider
-
-If the experiment standardizes on one self-hosted Qwen deployment, implement a narrow adapter only after the pi-ai route defines the correct wire behavior. Preserve `LlmAdapter`, `GenerateOptions`, `StreamChunk`, replay envelopes, stable failures, cancellation, usage ordering, and exact-model metadata; remove only the generic provider implementation and unused compatibility catalog.
-
-## Decision checkpoints
-
-- P1 is successful when a clean install can run a multi-step coding task, survive a tool failure, compact a long session, restart from JSONL, and preserve tool and model provenance.
-- Add skills only from explicitly trusted roots; filesystem skill discovery is code and prompt supply-chain input.
-- Add subagents only when one-agent task completion establishes a baseline, otherwise orchestration can hide provider defects.
-- Add Web only when the experiment needs interactive session management or configuration that headless/ACP cannot provide.
-- Replace pi-ai only when a lockfile and bundle-size comparison demonstrates material savings and the narrow adapter passes the same real-provider and keyless replay suite.
-- Revisit package merging only after dependency closure and test ownership are stable; fewer directories do not automatically mean fewer runtime concepts.
-
-## Source trail
-
-The authoritative roster sources are [the Base patch](../packages/bundle/base/cordis.patch.yml), [Headless patch](../packages/bundle/headless/cordis.patch.yml), and [Web patch](../packages/bundle/web-app/cordis.patch.yml). Package intent comes from package manifests and the group-owned maps under [packages](../packages/README.md). Architecture and extension rules come from [the architecture map](../docs/architecture.md), [capability graph](../docs/capability-seams.md), [Cordis primer](../docs/cordis-primer.md), and the companion [foundation assessment](deepseek-harness-foundation-assessment.md).
-
-Inventory discovery used the repository knowledge graph first, then inspected non-code manifests and composition YAML. The knowledge graph identified 112 root `apply` functions and 49 root service classes before invariant/test exclusions; the composition manifests remain authoritative for shipped profile counts.

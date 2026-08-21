@@ -22,7 +22,7 @@ workload profile, the sandbox and approval findings, and the probes.
 | `NEXT-SESSION.md` | **Start here.** Current state, the four claims this fork retracted, the measured workload, the config we run, the ranked queue, the E2 regression gate, and the traps. |
 | `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the row groups, their measured package/dependency/LOC effect, and the ordering constraints. Re-verified against `0.1.1-rc.1`. |
 | `deepseek-harness-plugins-overview.md` | **The 138-row composition inventory** — id, package, intent, layer. How a ledger row group resolves to actual ids. Unchanged at `0.1.1-rc.1`. |
-| `deepseek-harness-foundation-assessment.md` | The benchmark matrix, the pi-ai settings-layer risk register, and the adapter-justification criteria. Its four-phase evaluation plan has since been executed. |
+| `deepseek-harness-foundation-assessment.md` | The benchmark matrix and its Pareto analysis, the pi-ai settings-layer risk register, and the adapter-justification criteria. Trimmed to those three on 2026-08-21; the four-phase evaluation plan it carried was executed and removed. |
 
 The consumer guide to the inference stack is `kb-mastra-infra/HOW-TO.md` **on the host**. Read it there;
 do not keep a copy here.
