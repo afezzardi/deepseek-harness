@@ -43,6 +43,17 @@ instead: state what is already applied and must only be verified, the exact edit
 justification with numbers, the boot and load gates that must pass, the rollback, and the traps that
 would produce a false pass. That handoff is the deliverable, not the edit.
 
+**`kb-mastra-infra/MESSAGE.md` is the two-way channel with that owner, and it is the one file there
+we write.** Protocol, set by them: answer inline on the `> REPLY:` lines leaving the question text
+intact, add your own as `> QUESTION (yours):`, and sign each round `--- round N, date, who ---`.
+Conclusions that survive the argument move into their `README.md` / `docker-compose.yml` / `.env` —
+the file itself is the argument, not the record. Round 1 (theirs) and round 2 (ours) are on the host
+as of 2026-08-21; two of our questions are open there.
+
+Editing it needs one care: each reply *begins* with the `> \`> REPLY:\`` marker, so a sequential
+find-and-replace re-matches inside text it just inserted and silently misaligns every answer. Split
+on the marker and rejoin in one pass.
+
 Harness-side configuration (`$DSH_HOME`, this checkout) stays ours to change directly.
 
 ## Verification discipline

@@ -74,6 +74,13 @@ pnpm dsh --profile headless "Read package.json and report the exact version fiel
   Then run 'git rev-parse --short HEAD' and report the commit. \
   Finally state how many entries the scripts object has."
 
+# the deployment regression gate (E2) -- read, failing read, write, command, second step.
+# Verify from the DECODED log, never stdout. Criteria and results: NEXT-SESSION.md §E2 result.
+pnpm dsh --profile headless "Read artifacts/README.md and report its first heading. \
+  Then try to read artifacts/does-not-exist.md and report exactly what happened. \
+  Then write the single line OK to /tmp/dsh-gate.txt. \
+  Finally run 'wc -l < /tmp/dsh-gate.txt' and report the number."
+
 # see the wire, including which route each call took
 UPSTREAM=http://100.108.76.12:4000 RECLOG=/tmp/rec.jsonl RECPORT=4100 \
   python3 artifacts/recproxy.py &
@@ -86,6 +93,10 @@ node --import tsx/esm artifacts/read-session-log.mts \
 
 Expected from the two-step task: version `0.1.0-rc.8`, commit `141eb6fef8`, 128 scripts — in two
 steps, the first returning `[reasoning, tool-call, tool-call]`.
+
+The gate's last step **cannot succeed on Linux**, deliberately: the bwrap dialect mounts an empty
+`--tmpfs /tmp` for the shell while the fs fence grants the real `/tmp`, so `write` creates a file no
+shell command can see (D6 in `NEXT-SESSION.md`). Stage handoff files inside the workspace instead.
 
 A source-plane run needs the Typert rows disabled (they are, in the patch above) or a completed
 `pnpm run build`; `typert-loader` resolves built `lib/typert.host.js` artifacts and boot fails

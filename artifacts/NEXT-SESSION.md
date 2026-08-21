@@ -6,7 +6,27 @@ mirror of `upstream/master` (0 ahead, 0 behind). Two defects fixed in `~/.dsh` a
 
 **E1 is done (2026-08-20) and it changed the ranking — read §E1 result before planning anything.**
 Prefix caching is ON in the fp8 arm and measured working. Two consequences: D3's 13.3k prefill is no
-longer the dominant cost, and the shape is now known to hold 4 near-full-context sequences, not 5.
+longer the dominant cost, and the shape holds 4 near-full-context sequences warm — but **not cold**,
+per the 2026-08-21 correction inside §E1 result. Read that correction; the 4-way row was warm.
+
+**E2 is done (2026-08-21): the gate passes, and it is now the deployment regression gate.** Its
+write criterion turned out untestable as written, one new defect (D6) came out of it, and the
+`test:snapshot` sub-task is settled — it **cannot** target `local-qwen` and recording one would prove
+nothing. All three in §E2 result.
+
+**Remaining queue, re-ranked after both:** the highest-value item left is inference-layer and new —
+**`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`**, read out of the installed source on 2026-08-21 and
+handed over in `MESSAGE.md` §R3. It is one env var, it is the direct dial on the retained mamba
+snapshots that caused the cold-4-way preemptions, and it preserves prefix reuse by construction. Then
+E3 (compaction under real pressure, plus R3), then E4 (fan-out, purely harness-side and needing no
+boot). `--max-num-batched-tokens 32768` is **demoted** back to what it was always for — confirming the
+prefill-serialization ladder — because it provably does not touch retention. E5 is unchanged and
+still gateway-only.
+
+**A model I published in `MESSAGE.md` §R2.4 and then retracted in §R3 the same day:** that retained
+align pages scale with scheduler steps, and therefore with `--max-num-batched-tokens`. The source
+says retention is block-driven. Do not revive it; the retraction explains why, and §R3.3 has the
+mechanism that replaced it.
 
 Read first: the remediation report, then §6/§7 of the consolidated assessment (purge ledgers), then
 §Evaluation plan of the foundation assessment (this file operationalises its Phases 2 and 3).
@@ -78,8 +98,42 @@ on a direct authenticated call to the engine, so this is **not** a gateway artif
 `#45238` does not describe this build. 0.27.1's `MambaManager` sets
 `supports_fine_grained_hash_lookup` and tracks `_producer_partial_tail_reqs` / `last_state_block_idx`
 with copy-on-write of the boundary state, which is why the shared-prefix shape reuses 43-55% instead
-of the 0% that issue predicts. `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is **not** the mechanism —
-`envs.py` says it applies to sliding-window attention, not Mamba/linear attention.
+of the 0% that issue predicts.
+
+**CORRECTED 2026-08-21 — this paragraph originally claimed `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` is
+"not the mechanism" because "`envs.py` says it applies to sliding-window attention, not Mamba/linear
+attention". That is wrong, and it was read from the env var's prose instead of the implementation.**
+It applies to **both**, and it is the direct dial on retained mamba pages:
+
+- `_validate_prefix_cache_retention_interval` (`v1/core/kv_cache_coordinator.py:30`) states
+  "Retention sparsifies sliding-window and Mamba (linear-attention) checkpoints; full-attention and
+  chunked-local groups cache densely and ignore it", and **raises** when the model has neither a
+  `SlidingWindowSpec` nor a `MambaSpec` group. This model has three `MambaSpec` groups.
+- The coordinator passes `retention_interval` to **every** manager unconditionally (lines 287, 682);
+  each manager decides, and `MambaManager.reachable_block_mask` (`single_type_kv_cache_manager.py:1359`)
+  implements it in full: `None` → **dense, every block (the default)**; `0` → only the
+  `reachable_boundaries`, i.e. the replay boundary and any detected shared-prefix junction; a positive
+  multiple of `scheduler_block_size` → one per segment plus those boundaries.
+
+Two consequences that outrank most of the queue:
+
+1. **`align` retains one mamba snapshot per block per group, densely, by default.** The estimator's
+   `page_size × (2 + num_speculative_blocks)` is a *reservation* figure, not a retained count — which
+   is the whole reason the boot line under-counts. Retention is block- and alignment-driven, never
+   step-driven: `cache_blocks` uses `num_tokens // block_size`, and `alignment_tokens` is
+   `scheduler_block_size` = `math.lcm(*group_block_sizes)` (`kv_cache_utils.py:659`), so
+   `--max-num-batched-tokens` **never enters this path**.
+2. **Dense snapshots are evictable, so `kv_cache_usage_perc` near 1.000 does not prove the live
+   working set does not fit** — its numerator counts cached-but-reclaimable blocks. The "cold 4-way
+   cannot fit, `floor(473/120) = 3`" derivation in the correction above therefore does **not** follow
+   from occupancy alone; the preemptions are real but still need attributing to a genuine live-set
+   shortfall versus reclamation lagging allocation. Do not promote N=3 to the record until then.
+
+`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0` is consequently the highest-value inference-layer experiment
+outstanding — one env var, validated at boot, and it preserves the reuse points prefix caching depends
+on by construction rather than by luck. Handed over in `MESSAGE.md` §R3, with the false-pass trap:
+occupancy *always* falls under sparse retention because evictable blocks leave the numerator, so the
+pass criteria are preemption delta, warm reuse percentage, and aggregate throughput from the same run.
 
 ### The shape finding that came out of it: 5 is oversubscribed, 4 is right
 
@@ -93,11 +147,46 @@ At 117,708-token prompts + 8,000 forced output tokens each:
 | Concurrency | Resident | Peak KV | New preemptions | Wall | Aggregate output |
 |---|---|---|---|---|---|
 | 5 | **4** (1 always waiting) | 0.989 | **1** | 684.1s, one request starved 684s vs ~487s | 58.5 tok/s |
-| 4 | 4 | 0.901 | 0 | 377.4s, all within 1s of each other | **84.8 tok/s** |
+| 4 (**warm** — see below) | 4 | 0.901 | 0 | 377.4s, all within 1s of each other | **84.8 tok/s** |
 
 **Five concurrent is 45% slower in aggregate than four.** The compose default for this arm was
 already `CHAT_MAX_NUM_SEQS_FP8:-${CHAT_MAX_NUM_SEQS:-4}` with the comment "0.70 affords exactly 4";
 the `.env` override to `CHAT_MAX_NUM_SEQS=5` was what oversubscribed it.
+
+**CORRECTION (2026-08-21): the 4-way row above is a WARM run and must not be read as a capacity
+measurement.** The inference-layer owner could not reproduce "zero preemptions at 4-way" and ran it
+three times cold: peaks 0.989 / 1.000 (pool exhausted) with **+1 and +2 preemptions**, against a
+warm repeat that read 0.755 with zero. The cause is in our probe, not in their runs:
+`probes/probe_prefix_saturation.py:49` builds each prompt as
+`" ".join(f"s{k}q{i % 983}" for i in range(n_words))` — a pure function of the worker index with
+**no seed**, so the workers are mutually distinct but *any repeat invocation reproduces
+byte-identical prompts*. The 5-way run went first, so the 4-way replayed prompts the engine had
+just prefilled. 0.901 ≈ 4×106 blocks sits between their warm 0.755 and their cold 0.989, which is
+what partial reuse gives, and it also explains the aggregate throughput gap (84.8 vs their 74.8
+tok/s): the warm run skipped part of the prefill. Sampling is *not* the explanation — the probe
+selects its peak scrape lexicographically by `(running, kv_usage)` (line 112), so 0.901 is a genuine
+joint single-scrape observation, of a warm run.
+
+**Cold 4-way therefore does NOT fit at full context, and their block model says why.** One shared
+pool of 473 usable blocks; the 64 layers group into 1 attention + 3 mamba groups of 16
+(`kv_cache_utils.py` splits to equal sizes), and the boot line sums over all four:
+`84 + 3×2 = 90` blocks/request → `474/90 = 5.27x`, which also yields `690,312` exactly. But cold
+runs retained **~12 pages per group per request**, i.e. `84 + 3×12 = 120`, and `4 × 120 = 480 > 473`.
+Observed peaks match block-exactly (`0.989 = 468/473`, `1.000 = 473/473`). So the boot line does not
+ignore mamba — **it under-counts it ~6x**, and `floor(473/120) = 3` is the only N that provably fits
+cold. Two corollaries: lowering `--max-num-seqs` does **not** free mamba pages (they are taken per
+running request from a pool whose sizing has no `max_num_seqs` term, so 5→4 bought admission
+control, not capacity), and prefix caching **buys KV headroom** because a hit shares resident blocks
+instead of allocating new ones — an independent second argument for the flag.
+
+**The setting stays 4**, decided jointly and recorded in `MESSAGE.md` Q1: preemption here is a
+latency event, not a correctness one; a preempted sequence resumes from its last cached boundary;
+warm agentic traffic is where this deployment lives and 4 is clean warm; and in the exact cold
+full-context regime where 4-way preempts, the 4th slot is already latency-bound by prefill
+serialization rather than throughput-bound. N is also the wrong instrument — the mechanism is
+retained align pages, which `--max-num-batched-tokens` addresses and N does not. Monitor
+`vllm:num_preemptions_total` delta > 0 instead; it now has a known cause and means "this workload
+left the warm regime".
 
 **Applied by the inference-layer owner, verified on the host 2026-08-20:**
 `kb-mastra-infra/.env` now has `CHAT_MAX_NUM_SEQS=4`, the running container's argv carries
@@ -132,6 +221,9 @@ deployment could not reuse KV. It can. But `false` should still stay, on measure
 
 ## E2 — The Day-1 regression gate
 
+**DONE 2026-08-21 — jump to §E2 result.** The brief below is the original specification, kept
+because the result corrects one of its criteria rather than merely satisfying it.
+
 The gap the bring-up report opened with, still unclosed. Foundation assessment Phase 2 names the
 exact coverage: read a file, **write under approval policy**, run a command, **one failing tool**,
 and a second model step. The two never exercised are the write and the failure.
@@ -155,10 +247,122 @@ Required: the failing tool produces a stable error code the model then recovers 
 abort); the write goes through the approval path rather than bypassing it; a second model step
 consumes both results.
 
-**Then turn it into a snapshot.** Unresolved sub-task: determine how `pnpm run test:snapshot` selects
-a provider, and whether it can target `local-qwen` or only `deepseek-official`. Start at
-`scripts/` and the snapshot fixtures under `examples/`. If it cannot target a local route, say so
-explicitly rather than recording a snapshot that proves nothing about this deployment.
+### E2 result — PASSES, but the gate as written cannot test its own write criterion (2026-08-21)
+
+One turn, 8 model steps, 9 tool calls, `turn/end reason: {kind: completed}`. Verified from the
+decoded log, not stdout. Route confirmed on the way past: `request/header` carries
+`provider: local-qwen, model: chat-model, maxTokens: 32768, reasoningEffort: medium`.
+
+| Criterion | Verdict |
+|---|---|
+| failing tool yields a stable error code | **PASS.** `error: {name: "FsError", code: "FS_NOT_FOUND"}`, model-visible text `Error: cannot read "…": not found`, `isError: true` |
+| model recovers rather than aborting the turn | **PASS.** Step 1 read both files in one step; the turn continued through step 8 and ended `completed` |
+| write goes through the approval path | **See below — the gate cannot test this with a `/tmp` target.** Tested separately and it passes |
+| a second model step consumes both results | **PASS.** 8 steps over 9 calls; step 2 acted on step 1's two results |
+
+**The write criterion is untestable as written, and that is a defect in the gate, not the harness.**
+The write to `/tmp/dsh-gate.txt` raised no `approval/asked` and returned `Created file` — correctly,
+because `workspace-write` grants `/tmp` **by design**: `writableRoots` (`packages/sandbox/sandbox/src/roots.ts:54`)
+returns `[workspaceRoot, '/tmp', tmpdir()]`, and the preset's own description is "Write inside the
+workspace and permitted temporary directories". A `/tmp` write can never exercise approval under this
+preset. Two follow-up runs closed the coverage properly, targeting a path outside every grant root:
+
+```sh
+pnpm dsh --profile headless "Write the single line OK to the absolute path \
+  /home/andrea/dsh-gate-approval.txt. Report exactly what happened, including any error text \
+  verbatim. Do not retry with a different path and do not attempt any sandbox escalation."
+```
+
+- **Denial is fail-closed and stably coded**: `error: {name: "FsError", code: "FS_SANDBOX_DENIED"}`,
+  model-visible `Error: [sandbox: file access denied under workspace-write mode]` plus an escalation
+  hint naming `sandbox_permissions`. No file was created. The model reported it verbatim.
+- **The full write → approval → decision chain is proven** by a second variant that permitted the
+  escalation retry. Step 1 denies as above; step 2 re-sends the identical write carrying
+  `sandbox_permissions: "danger-full-access"` and a justification, which produces
+  `approval/asked {toolName: "write", reason: "escalate sandbox to danger-full-access: …"}` →
+  `approval/decided {outcome: "unavailable"}` → `Error: sandbox escalation to "danger-full-access"
+  requires approval, but no approval channel is available`. No file was created. Headless has no
+  approval channel, so `ask` resolves `unavailable` and fails closed — the correct headless behavior,
+  and what the gate should assert. The main run reaches the same pair via a `bash` escalation at
+  step 7, so both executors are covered.
+
+**Rewrite the gate's write step** to target a path outside the workspace *and* outside `/tmp` and
+`os.tmpdir()`; assert `FS_SANDBOX_DENIED`, then an `approval/asked` / `approval/decided` pair on the
+escalation retry. A `/tmp` target asserts nothing.
+
+**One asymmetry to know when asserting on this:** the denial carries a structured
+`error: {name, code}`, but the *escalation-refusal* result carries `error: null` — the reason exists
+only as model-visible prose. Assert the `approval/decided` event, not an error code, for that step.
+
+### D6 (new) — `/tmp` is not a shared channel between the fs tools and bash on Linux
+
+The main run's final step could not succeed on this platform, for a reason unrelated to the model.
+`bash: line 1: /tmp/dsh-gate.txt: No such file or directory`, while `read` on the same path returned
+`1: OK` and `totalLines: 1`. From inside bash, `ls -la /tmp` shows an **empty** directory whose parent
+is owned `nobody nogroup`.
+
+Cause, exactly: `packages/sandbox/sandbox-local/src/profiles.ts:19` — the bwrap dialect mounts
+`--tmpfs /tmp`, a fresh empty tmpfs, while the in-process fs fence derives its allow-list from
+`writableRoots` and so grants the **real** `/tmp`. The two planes disagree about the same declared
+grant. This deployment selects bwrap (0.9.0 at `/usr/bin/bwrap`; the Landlock native addon is not
+installed) — and the Landlock dialect would *not* have this problem, since `profiles.ts:33` grants
+the real `/tmp` read-write.
+
+This is a **known and deliberate** per-runner difference, not a code/design contradiction:
+`roots.ts:5-11` says so, and even names the direction it guards ("so 'the write tool cannot write
+/tmp but bash can' asymmetries cannot arise"). What E2 hit is the **inverse** direction, which that
+guarantee does not cover, and `local.spec.ts:72` pins the bwrap argv rather than cross-runner
+observable behavior. Cost measured here: 5 wasted steps and one 60s bash timeout while the model
+diagnosed it — it got the diagnosis right and then correctly attempted an escalation, which
+fail-closed.
+
+Consequence for us: **`/tmp` is unusable as a handoff between the fs tools and bash on Linux.** Any
+task that writes a file with `write` and then processes it with a shell command must stage it inside
+the workspace. Worth an upstream issue; not worth a fork patch.
+
+Two smaller observations from the same log, both recorded rather than acted on:
+
+- **D1 is now confirmed fixed end to end**, not just by route: `session/title-llm-request` carries
+  `route: {provider: local-qwen-off, model: chat-model}` and the resulting `session/title` has
+  `source: {kind: provider, …}`. The earlier `{kind: fallback}` title is the optimistic one written
+  before the call, which is expected.
+- **A bash timeout is not flagged as an error to the model.** Step 5's `find /` returned
+  `isError: false` with only the text `[timed out after 60000ms] [killed by signal: SIGTERM]`. The
+  model handled it, but a timeout is indistinguishable from ordinary output by the `isError` flag.
+
+### The snapshot sub-task, settled: `test:snapshot` cannot target `local-qwen`, and recording one would prove nothing
+
+Resolved by reading the harness rather than by trying it. **Replay — the keyless default — never
+contacts a provider at all**, so there is no route to point anywhere:
+
+1. `resolveConfigPath` (`packages/boot/app-boot/src/index.ts:61-68`) rewrites the `cordis.yml`
+   basename to `cordis.snapshot.yml` **only** when `$DSH_SNAPSHOT === 'replay'`.
+2. Every `*.cordis.snapshot.yml` overlay disables the real adapter and inserts the replay plugin —
+   `- id: llm-deepseek … disabled: true` plus `- id: llm-replay`.
+3. `dsh-llm-replay` serves every call from the recorded session log, either as a routed adapter or,
+   with no `providers` configured, as a catch-all `ctx.on('llm/stream', …)` waterfall
+   (`packages/test-support/llm-replay/src/index.ts:748-751`).
+
+So `provider: deepseek-official` in the example's agent config is an inert label under replay. Two
+further facts make targeting the local route impossible rather than merely awkward:
+
+- **Record mode boots the LIVE `cordis.yml`**, which hardcodes the `llm-deepseek` adapter with
+  `deepseek-official` / `deepseek-v4-flash`. Pointing it at `local-qwen` means editing an upstream
+  example — a file that conflicts on every sync, and that every committed fixture was recorded from.
+- **Every snapshot runner isolates `$DSH_HOME` into a generated temp dir**
+  (`packages/test-support/acp-snapshot/src/harness.ts:255`,
+  `packages/test-support/loader-smoke/src/index.ts:185`). Our `~/.dsh/settings.yaml` — the only place
+  `local-qwen` exists — is therefore unreadable by design, in record mode as well as replay.
+
+**So: do not record a snapshot for this deployment.** Even if recorded against `local-qwen`, the
+committed fixture would only change the replayed chunk *content*; the replay run would still execute
+zero deployment code — no route resolution, no `chat_template_kwargs`, no gateway, no engine. It
+would assert that this repo's agent loop is deterministic, which `pnpm run test:snapshot` already
+asserts, while *looking* like deployment coverage. That is the trap this queue's own discipline warns
+about, and it is the reason to decline.
+
+The deployment-level regression gate is the E2 command above plus the two write variants, verified
+from the decoded session log. It belongs in `artifacts/`, run by hand, not in `test:snapshot`.
 
 ---
 
@@ -258,7 +462,16 @@ with mixed short/deep concurrent requests, and record per-request queue time and
 A cheaper comparison to run first, since it needs no new flag: repeat the same five-request workload
 with `--max-num-batched-tokens 32768`. If the ladder spacing shrinks roughly in proportion to the
 number of prefill chunks, the token-budget explanation is confirmed; if it does not, look at
-admission gating instead.
+admission gating instead. **Scope note (2026-08-21): this is a latency experiment only.** It does not
+affect retained mamba pages or KV occupancy — retention is block-driven, and
+`--max-num-batched-tokens` never enters that path (see the correction in §E1 result). Do not bundle it
+with a capacity claim.
+
+**Outranking both of these, and discovered after this section was written:
+`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`.** An env var rather than a flag, validated at boot, and the
+direct dial on the dense per-block mamba snapshotting that caused the cold-4-way preemptions.
+Mechanism, semantics table, predictions, and the false-pass trap are in the §E1 result correction and
+in `MESSAGE.md` §R3.
 
 **`thinking_token_budget`** — a per-request field in this build, injectable per gateway alias via
 `extra_body`. Bounds worst-case reasoning and therefore worst-case step latency. Your own note
@@ -298,6 +511,19 @@ Each of these has already cost someone time on this stack.
   shadowing. Run probes by path from the repo root, not from inside `probes/`.
 - **A hit rate needs a shared prefix of at least one block.** Block size here is 1568 tokens, not the
   usual 16, so short shared prefixes never register a hit and the metric looks like "no sharing".
+- **A saturation probe with no seed measures a WARM run.** `probes/probe_prefix_saturation.py` builds
+  prompts as a pure function of the worker index, so its workers are mutually distinct but every
+  repeat invocation is byte-identical to the last. That is how the E1 4-way row came to be reported as
+  a capacity measurement; see the correction in §E1 result. Vary a seed per invocation, and make the
+  varying part at least one 1568-token block or it cannot miss.
+- **Occupancy always falls under sparse retention, improvement or not.** `kv_cache_usage_perc` counts
+  cached-but-evictable blocks as not free, so removing snapshots lowers it mechanically. Judge
+  `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` on preemption delta, warm reuse percentage, and aggregate
+  throughput from one run — never on occupancy.
+- **Read the implementation, not the env var's prose.** Two claims in this file were wrong because
+  they came from documentation: that this checkpoint cannot prefix-cache, and that
+  `VLLM_PREFIX_CACHE_RETENTION_INTERVAL` does not apply to Mamba. Both died on contact with
+  `v1/core/` inside the container.
 - **Two independent timeouts.** Audit the client's as well as the gateway's, against
   (output budget ÷ 19.5 tok/s) + worst-case TTFT. The harness route sets
   `streamIdleTimeoutMs: 900000` and `maxRetries: 0` to match the gateway deliberately — do not
