@@ -325,6 +325,31 @@ decoded session log rather than from the screen.
 
 ---
 
+## Results — run of 2026-08-23, session 2 (partial)
+
+Blocks B5 and B6 only, on the `0.1.1-rc.2` rebase. B3.3, B4 re-checks and B7.1 remain unrun.
+Analysis, per-case log evidence and the engine series:
+[results/uat-20260823/](results/uat-20260823/). Verdicts marked *(log)* were confirmed from the
+decoded session log rather than from the screen.
+
+| Case | Verdict | What the run showed |
+|---|---|---|
+| B5.1 | PASS-WITH-NOTE | One child ran and reported **5 markers (4 TODO, 1 XXX, 0 FIXME)** — re-derived from the tree and **exact**. The parent used it faithfully. **Note:** the subagent runs in the background, so the parent closed turn 1 with "I'll summarise once it reports back" and answered in turn 2 when the completion spliced in; one redundant restatement followed *(log)* |
+| B5.2 | PASS-WITH-NOTE | Two children started **2 ms apart** — genuinely parallel, not serialised — and the comparison covered both. ~86 s end to end. **One factual slip:** `packages/session` was summarised as 12 packages; the README's four Titles rows make it **13**, `session-title-llm` omitted. An undercount, not an invention *(log)* |
+| B5.3 | **PASS** | Best result of the sitting. Three workflow agents started **within 25 ms**, `num_requests_running` hit **3** at the engine. Every value in the table is exact: the three largest `.ts` files, their byte counts (83,773 / 54,312 / 50,764), their order, and all three first lines. It also volunteered that the three are all test specs and named the largest source file at 44,877 B — correct *(log)* |
+| B6.1 | PASS | `turn/end reason: {kind: "aborted", reason: {kind: "user"}}` after 7 steps and 45 s. Partial output retained in full; UI stayed usable *(log)* |
+| B6.2 | PASS | Short version delivered, context intact *(log)* |
+| B6.3 | **PASS** | Run twice. A browser reload (Ctrl-R) verified client rehydration; then a **real process restart** — old PID replaced at 17:46:19, same overlay — and the conversation reopened from the sidebar, **appending to the same session file**. Turn 4 recalled the arc correctly and named the six sources it had explored before the restart; **all six match turn 1's actual tool calls** *(log)* |
+| B3.3 | NOT RUN | Still no `/etc/hosts` turn in any session log |
+| B7.1 | | not run |
+
+**Overall:** delegation, interruption and durable resume all work. 4 PASS, 2 PASS-WITH-NOTE, 0 FAIL
+across the two blocks. **10 of 25 mounted tools now exercised**, up from 7 — `subagent`, `workflow`
+and `skill` are new. Across both sittings: 25 of 26 cases attempted, **18 PASS, 5 PASS-WITH-NOTE,
+1 FAIL, 1 NOT RUN (B3.3)**; B7.1 is the last substantive gap.
+
+---
+
 ## Traps — how this suite produces a false pass
 
 Every defect found in three days returned HTTP 200 with billed tokens and no error line. These are the shapes to watch for while you run:
