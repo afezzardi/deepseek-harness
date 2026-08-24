@@ -20,9 +20,9 @@ workload profile, the sandbox and approval findings, and the probes.
 |---|---|
 | `AGENTS.md` (+ `CLAUDE.md` symlink) | Scoped guidance for future sessions: the reference repos and how to reach them, verification discipline, the live-config sync rule, the git rule. |
 | `NEXT-SESSION.md` | **Start here.** Current state, the four claims this fork retracted, the measured workload, the config we run, the ranked queue, the E2 regression gate, and the traps. |
-| `UAT.md` | The user acceptance suite and the regression suite for every future configuration change: 26 cases in seven blocks, the verdict vocabulary, the recorded results per run, and the false-pass shapes to watch for. Case ids are stable and permanent. |
-| `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the row groups, their measured package/dependency/LOC effect, and the ordering constraints. Re-verified against `0.1.1-rc.1`. |
-| `deepseek-harness-plugins-overview.md` | **The 138-row composition inventory** — id, package, intent, layer. How a ledger row group resolves to actual ids. Unchanged at `0.1.1-rc.1`. |
+| `UAT.md` | The user acceptance suite and the regression suite for every future configuration change: 31 cases in eight blocks, the verdict vocabulary, the recorded results per run, and the false-pass shapes to watch for. Case ids are stable and permanent. Three sittings are recorded; B7.1, B3.3, B3.5 and B8.4 remain open. |
+| `deepseek-harness-consolidated-assessment.md` | **Purge ledgers A and B** — the row groups, their measured package/dependency/LOC effect, and the ordering constraints. Re-verified against `0.1.1-rc.1`. **Ledger A3 is withdrawn**: the delegation rows it would remove are verified working (UAT B5, 2026-08-23), and no purge candidate replaced it. |
+| `deepseek-harness-plugins-overview.md` | **The 138-row composition inventory** — id, package, intent, layer. How a ledger row group resolves to actual ids. **Still valid at `0.1.1-rc.2`**: that release added and removed no packages, so neither the 138 rows nor the 81-row `--dump-config` moved. |
 | `deepseek-harness-foundation-assessment.md` | The benchmark matrix and its Pareto analysis, the pi-ai settings-layer risk register, and the adapter-justification criteria. Trimmed to those three on 2026-08-21; the four-phase evaluation plan it carried was executed and removed. |
 
 The consumer guide to the inference stack is `kb-mastra-infra/HOW-TO.md` **on the host**. Read it there;
@@ -89,10 +89,16 @@ number.
 | `probes/probe_prefix_correctness.py` | That a GDN state resume preserves the cached region's content, tested by needle recall rather than by token diff — GDN backends are not batch-invariant, so a token diff is the wrong test |
 | `probes/probe_prefix_saturation.py` | Co-residency of near-full-context sequences. **Has no seed**, so a repeat invocation replays byte-identical prompts and measures a warm run |
 | `probes/probe_head_composition.py` | Which messages make up the per-session prompt constant, and where the reusable prefix ends. Takes a `recproxy.py` log; persists to `results/` |
+| `probes/probe_image.py` | **That the model sees images**, on both surfaces and in thinking mode, with a no-image control and the prompt-token cost per image size. Answers what harness config cannot: dsh refuses image reads locally before any request is made |
 
 `results/` holds the persisted artifacts. `head-composition-20260821.json` and
-`e2-gate-wire-20260821.jsonl` are the current pair: the measured prompt composition, and the recorded
-wire bodies for the E2 gate run that produced it.
+`e2-gate-wire-20260821.jsonl` are the measured prompt composition and the recorded wire bodies for the
+E2 gate run that produced it. **Both were recorded on `0.1.1-rc.1`**, and rc.2 grew the `read_image`
+schema, so the 7,455-token prefix they establish is now an underestimate by roughly 64 tokens — see
+NEXT-SESSION.md. `uat-20260821/`, `uat-20260823/` and `uat-20260824/` hold the three UAT sittings' analyses and folded
+session metrics; `engine-metrics-*.jsonl` are the engine counter series, cumulative, one per sitting.
+`image-capability-20260824.txt` is the evidence that the model accepts and understands images, which
+retracted a purge recommendation built on our own config instead of on the endpoint.
 
 ## Reproducing
 

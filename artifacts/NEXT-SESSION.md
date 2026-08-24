@@ -1,8 +1,11 @@
 # Next session: state, queue, and traps
 
-State at handoff: branch `fork/qwen38-deployment`, rebased onto `upstream/master` at `528c682e06` —
-the `release/dsh-0.1.1-rc.1` merge, upstream PR #2890. `master` is a pristine mirror of
-`upstream/master` (0 ahead, 0 behind); every fork commit is inside `artifacts/`. The two
+State at handoff: branch `fork/qwen38-deployment`, rebased onto `upstream/master` at `b150a551b8` —
+the `release/dsh-0.1.1-rc.2` merge, upstream PR #2908. `master` is a pristine mirror of
+`upstream/master` (0 ahead, 0 behind); every fork commit is inside `artifacts/`. **Upstream published
+nothing newer as of 2026-08-24**: `b150a551b8` is simultaneously `refs/heads/master` and tag
+`dsh-v0.1.1-rc.2`, and `master` is the only head the remote exposes. What rc.2 changed for us is in
+[the rc.2 section](#what-upstream-011-rc2-changed-for-this-deployment) below. The two
 capped-auxiliary-call defects (session titling, compaction summarization) are fixed in `~/.dsh`, and
 both fixes are wire-proven and carried in the `dsh-cordis.patch.yml` comments.
 
@@ -22,9 +25,23 @@ engine-side is closed and stays closed — do not reopen inference tuning, and d
 measurement of that stack. Their own owner declined further work there on scope grounds, and by both
 sessions' arithmetic our traffic uses ~36 s of prefill per day.
 
-**Session 1 (blocks B0-B4) ran on 2026-08-21.** Verdicts are in UAT.md's results table; the log-level
-analysis is [results/uat-20260821/analysis.md](results/uat-20260821/analysis.md). Session 2 (B5-B7,
-plus B3.3 which never ran) is next, and **D7 below must be fixed and E2 re-run before it starts.**
+**Session 1 (blocks B0-B4) ran on 2026-08-21** — analysis in
+[results/uat-20260821/analysis.md](results/uat-20260821/analysis.md). **Session 2 ran partially on
+2026-08-23, on the rc.2 rebase**: B5 (delegation) and B6 (interruption and resume) only, analysis in
+[results/uat-20260823/analysis.md](results/uat-20260823/analysis.md). Verdicts for both sittings are
+in UAT.md's results tables.
+
+**D7 is still unfixed, and session 2 did not expose it**: no summarizing compaction fired anywhere in
+the sitting — 0 compactions across nine sessions, max prompt 45,368 against a 104,857 threshold. So
+B5 and B6 are sound as recorded, and **B4.1 is still owed a re-run once D7 is fixed**. Blocks that
+never touch compaction can run before the fix; B4 cannot.
+
+**Session 3 ran on 2026-08-24**: block B8 (vision), after enabling images — analysis in
+[results/uat-20260824/analysis.md](results/uat-20260824/analysis.md).
+
+**Outstanding: B7.1** (real work — the last substantive case), **B3.3** (never attempted in three
+sittings), **B3.5** (the rc.2 permission revert) and **B8.4**. Across three sittings: 28 of 31 cases
+attempted, **20 PASS, 7 PASS-WITH-NOTE, 1 FAIL, 2 NOT RUN**. See UAT.md.
 
 **When the user reports a sitting is done:**
 
@@ -48,6 +65,165 @@ belong in a user preset under `<dshHome>/.agent-presets`, not in the home patch.
 The same mismatch silently drops `thresholdRatio: 0.8` in web, which is harmless only because 0.8 is
 already `DEFAULT_THRESHOLD_RATIO`. **Check every other home-patch entry against
 `dsh --profile web --dump-config` for the same shape** before assuming it applies.
+
+Confirmed still unfixed at rc.2: `packages/compaction` and `packages/preset` took **version bumps
+only** across `528c682e06..b150a551b8`, so the defect stands exactly as described.
+
+#### The fix is a 252-line preset copy, which is why it is still open
+
+Read out of the mechanism on 2026-08-24, and it is more expensive than "put the fields in a user
+preset" suggests:
+
+- `web-app/cordis.patch.yml` disables host-plane `compaction-basic` and inserts `agent-presets` with
+  **`default: standard`**.
+- The shipped `standard` preset mounts `compaction-basic` with **no config** — 252 lines, and there is
+  **no include or extend mechanism** for a composition.
+- **A user preset cannot shadow a shipped id.** `agent-presets` appends the harness-home root *after*
+  every configured root and an earlier root wins a duplicate id, so a hand-written
+  `~/.dsh/.agent-presets/standard/` loses to the shipped one.
+- **The home patch cannot reach preset rows.** Preset compositions load through `Include` in
+  `agent-presets/src/mount.ts` with no `applyEntryPatches`, so `~/.dsh/cordis.patch.yml` cannot touch
+  the preset's `compaction-basic` row.
+
+So the only route is: copy all 252 lines to `~/.dsh/.agent-presets/<id>/agent.cordis.yml`, add
+`thresholdRatio: 0.8` / `summarizationProvider: local-qwen-off` / `summarizationModel: chat-model` to
+its `compaction-basic` row, and patch `agent-presets.default` to that id. **That copy silently drifts
+from the shipped preset on every upstream sync**, which is the same hazard as editing an upstream
+example.
+
+Weigh it against the exposure, which is small and measured: compaction has fired **0** times in 23
+recorded sessions, the observed maximum prompt is 45,368 against a 104,857 threshold, and the
+tool-result pruner keeps interactive sessions under it on its own (UAT B4.3: five `compaction/prune`
+events, 101,202 → 72,636 tokens, no model call). The defect is a **fail-closed throw at the worst
+moment** if a session ever does reach the threshold — real, but not yet reachable by our traffic.
+**This is a judgement call for the deployment owner, not a mechanical fix**, and it is why queue
+item 1 is a decision rather than an edit.
+
+## What upstream 0.1.1-rc.2 changed for this deployment
+
+35 commits, 431 files. **It is almost entirely one feature — the unified image/attachment request
+pipeline — plus one revert.** Nothing in it targets a defect we filed, and nothing in it breaks the
+deployment.
+
+**That feature is directly relevant to us, which is not how it first read.** The model behind
+`chat-model` is image-capable (measured; see below), so rc.2 hardened a path we should be using rather
+than one we can ignore. The things that reach us:
+
+| Change | Reaches us how | Action |
+|---|---|---|
+| Unified image request pipeline: validation, deterministic downscaling, normalized stored encoding | **Bounds the token cost of an image**, which is what makes enabling `read_image` safe at our ceiling | Enable images; run UAT B8 |
+| `read_image` description grew **+263 B** (`docs/tool-catalog.md`; args schema unchanged) | One of our 25 wire-mounted tools, so it sits in the **shared prefix** | Re-measure the head; estimate below |
+| `LlmAdapter.prepareCall()` added, overridden by pi-ai at `adapter.ts:310` | **Our route.** Binds model metadata and the stream entry point to one adapter generation | None — a robustness fix in our favour |
+| `permission/preset` event lost its `origin` field; `refreshDefaultForReuse()` removed (revert of #2608 via #2903) | Web **blank-session reuse** no longer picks up a changed default preset | New UAT case B3.5 |
+| pi-ai profile gained `requestImagePixelBudget` / `requestImageMaxBytes` | The per-request image budgets on **our adapter** | Leave at default until B8 gives a baseline |
+| `read_image` reports downscaled dimensions and a coordinate scale | Tells the model the geometry it is actually looking at | Covered by B8 |
+
+**Verified inert for us**, each by diffing the package rather than by assuming: `packages/sandbox`,
+`packages/compaction`, `packages/preset` and `packages/session` are **version bumps only** — so D6 and
+D7 both survive unchanged, `SESSION_FORMAT_VERSION` did not move, and `metrics.mts`,
+`check-case.mts` and `read-session-log.mts` need no update. The `origin` field our logs from
+2026-08-21 carry and our 2026-08-23 logs do not is read by **none** of our instruments. The three
+fixes at the head of the range (`fix(deepseek): decouple files and stream timeouts`,
+`fix(llm-deepseek): fall back when Files resolution fails`, `fix(attachment): accept opaque WebP alpha
+omission`) touch `llm-deepseek` and `attachment-local` only — **not our route**, which is pi-ai.
+
+`read_image_region` appears in the range as both added and removed; it **never existed in a release
+tag**, so our tool-set membership is unchanged at 25.
+
+### The prefix grew by about 64 tokens, and the regime did not change
+
+Priced from the recorded wire bodies in `results/e2-gate-wire-20260821.jsonl`, whose 25 schemas total
+27,324 B — identical to the head-composition artifact, which is what makes the ratio usable:
+
+| | rc.1 | rc.2 |
+|---|---|---|
+| `read_image` schema | 354 B ≈ 86 tokens | 617 B ≈ **~149 tokens** |
+| shared cross-session prefix | **7,455** | **~7,519** |
+
+**This is an estimate by byte ratio, not a tokenizer reading** — the distinction that produced four
+retractions in `TUNING.md` §6. Re-run `probes/probe_head_composition.py` against a fresh
+`recproxy.py` log and persist to `results/` before quoting either number.
+
+Two consequences, and neither is a problem. **~7,519 is still below the 7,840 stride**, so the shipped
+regime is unchanged: budget two cold requests per distinct prefix (`TUNING.md` §6 row 22). And the
+change **invalidated the cached prefix exactly once**, when the rebase landed — which has already
+happened, since the 2026-08-23 sitting ran on rc.2.
+
+### `read_image` is disabled capability, not dead weight — the model sees images
+
+**Measured 2026-08-24, `results/image-capability-20260824.txt`, via `probes/probe_image.py`.
+Qwen3.8-27B accepts and correctly understands images on `/engine/v1`, the surface both of our routes
+use.** Three solid-colour images were identified correctly (red, blue, green), and the real
+`qr-code.png` fixture was described accurately. **It works in thinking mode too** — the exact
+`enable_thinking: true` + `reasoning_effort: medium` our main `local-qwen` route sends.
+
+The no-image control is what makes this a measurement rather than a plausible caption: identical text
+with no image returns **23 prompt tokens and "I cannot see the image."**, against 89 tokens with one.
+
+| Image | prompt tokens | image cost |
+|---|---|---|
+| none (control) | 23 | — |
+| 64×64, 128×128, 256×256 | 89 | **66** |
+| 512×512 | 281 | **258** |
+| 1024×1024 | 1,049 | **1,026** |
+
+Cost is flat to 256 px and then scales with tile area, roughly 4× per doubling of the edge. Against
+the 114,688-token usable ceiling a 1024² screenshot is ~0.9% — cheap enough to ignore, and rc.2's
+downscaling is why it stops there rather than growing with the file.
+
+**So the refusal was ours, not the engine's.** Neither route declared `input`, so `read-image.ts:97`
+refused locally with `model "chat-model" does not declare image input` and never issued a request.
+Across the 23 sessions recorded before 2026-08-24 `read_image` was never invoked once — because it
+could not succeed, not because nobody wanted it.
+
+**Retracted: the purge recommendation.** An earlier version of this section called `read_image` the
+clearest purge candidate on the grounds that it "can never execute here". That was reasoned from our
+own config and never checked against the endpoint — the exact failure mode `TUNING.md` §6 exists to
+record, and the one `deepseek-harness-foundation-assessment.md` warns about in its mirror image
+("a modality declaration is never verified against the endpoint"). The ~149 tokens buy working
+capability. **Do not purge it.**
+
+### Images are now enabled, and the whole chain is proven
+
+**Applied 2026-08-24** to both routes in `dsh-settings.yaml` and the live `~/.dsh/settings.yaml`:
+
+```yaml
+models:
+  - id: chat-model
+    input: [text, image]
+```
+
+**Verified end to end through the harness, not just against the endpoint**, and then exercised as UAT
+block B8 the same day — full analysis in [results/uat-20260824/](results/uat-20260824/analysis.md).
+B8.1 passes on both surfaces, B8.2 and B8.3 pass with notes, B8.4 is unrun. That closes the one link
+`probe_image.py` could not reach: **pi-ai's `toPiContext` produces a wire format the engine accepts.**
+
+**The token cost is cross-confirmed by two independent methods**, which is why no re-measurement is
+queued. The probe priced bare images against the endpoint; the session fold prices the same images
+through the whole product, as the step-to-step prompt delta:
+
+| Image | probe (bare) | harness (incl. tool-result wrapper) |
+|---|---|---|
+| 256×256 QR | 66 | **291** and **280**, two runs |
+| 1184×1084 screenshot | ~1,250 interpolated | **1,382** |
+
+The ~215-token constant is the `<path>/<type>/<content>` wrapper plus the tool call, stable across both
+sizes. **A full screenshot is ~1.2% of the usable ceiling.** Images are cheap here.
+
+Two findings from B8, neither in the image pipeline. `read_image` now reports geometry inline
+(`256x256 px, 30477 bytes`), new at rc.2, which is why no run needed a second call for dimensions. And
+**an attached image has no path**: asking for `read_image` on a composer attachment sends the model
+guessing at `/tmp/<sha>` and costs 172 s and 1,697 output tokens before it recovers from context,
+against 4.5 s by path. Nothing tells it the attachment is already visible. Upstream's to fix; ours to
+avoid — **do not ask for `read_image` on something you attached.**
+
+**The field is `input`, not `inputModalities`.** That cost a full round trip: `inputModalities` is
+`llm-deepseek`'s catalog key, pi-ai reads `entry.input`
+(`llm-pi-ai/src/catalog.ts:874`), and **the wrong key is dropped in silence** — no load error, just
+`read_image` continuing to refuse with a message that blames the model. Worth knowing what the first
+run did with the refusal, because it is the behaviour B8.4 exists to reward: it decoded the PNG bytes
+in bash, rendered an ASCII preview, reported 256×256 correctly, and flagged that it could not decode
+the payload. Right answer, honest caveat, wrong tool.
 
 ### The extractor's timings are the projection's, and one recorded file predates that
 
@@ -108,7 +284,10 @@ prompt tokens over 19 turns, so the figures below describe the headless profile 
 product's ceiling exposure; the interactive numbers live in
 [results/uat-20260821/analysis.md](results/uat-20260821/analysis.md).
 
-All 14 recorded sessions, decoded logs, 31 main-route requests + 14 titling calls:
+All 14 sessions recorded **before the UAT**, decoded logs, 31 main-route requests + 14 titling calls.
+The three sittings added fifteen more sessions, including the first child sessions this deployment has
+produced and the first carrying images, so these figures are a headless baseline rather than the
+current population — re-deriving them over all 29 is queue item 6:
 
 | | mean | p50 | p95 | max |
 |---|---|---|---|---|
@@ -124,6 +303,9 @@ for 0.4-3.4 s at session start, where the auxiliary titling call overlaps main s
 `artifacts/results/head-composition-20260821.json`, via `probes/probe_head_composition.py`. This
 replaces the 13,253-token "head" — that figure was a **regression intercept**, so it described a
 per-session total and said nothing about what was in it or where the reusable part ended.
+
+**Measured at 0.1.1-rc.1.** rc.2 adds roughly 64 tokens to the tool schemas via `read_image`; the
+table below is not re-measured, and the estimate and its caveat are in the rc.2 section above.
 
 | Contributor | bytes | rendered tokens | |
 |---|---|---|---|
@@ -184,12 +366,24 @@ Validated by `--dump-config` (81 rows) and by a **full E2 gate run under this ex
 
 | # | Item | Cost | Owner |
 |---|---|---|---|
-| 1 | **Fix D7** — the summarization route in a user preset, then restart web and re-run E2. Blocks session 2 | none | ours |
-| 2 | **Run UAT session 2** — B5-B7 and B3.3 | user's time | user |
-| 3 | Re-derive the backfill's timing columns with the fixed extractor, over the post-UAT session set | none | ours |
-| 4 | Analyse session 2 and write the cycle-2 recommendation | none | ours |
-| 5 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
-| 6 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
+| 1 | **Run B7.1** — the real-work case. The last substantive gap, and the one that decides cycle 2 | user's time | **user** |
+| 2 | **Decide D7** — the fix is a 252-line preset copy that drifts on every upstream sync, against an exposure of 0 compactions in 29 sessions. Copy it, or accept the defect and record that. Not a mechanical edit | a decision | **user** |
+| 3 | Finish the tail of the suite — **B3.3**, **B3.5**, **B8.4** | user's time | user |
+| 4 | **Re-measure the head on rc.2** — `probes/probe_head_composition.py` against a fresh `recproxy.py` log, persisted to `results/`. Replaces the ~7,519 estimate with a tokenizer reading | none | ours |
+| 5 | Write the cycle-2 recommendation once B7.1 lands | none | ours |
+| 6 | Re-derive the backfill's timing columns with the fixed extractor, over the full post-UAT session set (29 sessions now, not 14) | none | ours |
+| 7 | **`metrics.mts` fails silently on a `.zstd` path** — prints nothing, exits 0. Its header names the decoded log as input, but silent success on wrong input is the false-pass shape this suite exists to catch. Make it report | none | ours |
+| 8 | Two upstream issues worth filing: **an attached image has no path** and nothing tells the model it is already visible (172 s of path-guessing, B8.3); and **D6**, `/tmp` not shared between the fs tools and bash | none | ours |
+| 9 | Their **Q10** fp8 re-price at our shape (p95 output 514, max 961, all below their 1,355 crossover) | 1 boot if taken | inference |
+| 10 | **E5** — instruct alias; gateway restart only. Low value while nothing of ours uses instruct mode | none | inference |
+
+Done 2026-08-24: the rc.2 delta analysis, **images enabled and verified** (`input: [text, image]`,
+both routes), UAT block B8, and the E2 gate re-run under the new declaration.
+
+Done 2026-08-23: UAT session 2 blocks B5 and B6, and the rebase onto rc.2. **Purge ledger A3 is
+withdrawn as a candidate** — B5 exercised `subagent`, `workflow` and `skill` correctly at three-way
+concurrency, so the ~1,800 tokens it would remove are working capability, not dead weight
+([why](results/uat-20260823/analysis.md)).
 
 E3 (compaction) and E4 (fan-out) are **superseded by the UAT**, which covers both from the surface a
 user actually drives: B4 exercises compaction through `/compact` rather than a synthetic 100k task, and
@@ -258,6 +452,13 @@ yielding a stable `error: {name: "FsError", code: "FS_NOT_FOUND"}` that the mode
 than aborting the turn; the out-of-workspace write denied with `FS_SANDBOX_DENIED` and **no file
 created**; and a later step consuming earlier results.
 
+**Passed on 0.1.1-rc.2 with images enabled (2026-08-24, `a755bef631`).** Run after adding
+`input: [text, image]` to both routes, to confirm the modality change altered nothing else. From the
+decoded log: `turn/end {kind: completed}`, 2 steps, the failing read yielding `FS_NOT_FOUND` and
+recovered from, the out-of-workspace write refused with `FS_SANDBOX_DENIED` and **no file created**,
+and a later step consuming earlier results. Route unchanged:
+`provider: local-qwen, model: chat-model, maxTokens: 16384, reasoningEffort: medium`.
+
 **Passed on the aligned 0.1.1-rc.1 revision, and passed again under `maxTokens: 16384` /
 `thresholdRatio: 0.8` (2026-08-21, `61ff124e62`).** All five criteria met on the second run; wire
 bodies in `results/e2-gate-wire-20260821.jsonl`. Route confirmed on the way past:
@@ -292,8 +493,9 @@ have the problem, since `profiles.ts:33` grants the real `/tmp` read-write.
 This is a **known per-runner difference, not a contradiction**: `roots.ts:5-11` says so and even names
 the direction it guards ("so 'the write tool cannot write /tmp but bash can' asymmetries cannot
 arise"). D6 is the **inverse** direction, which that guarantee does not cover, and `local.spec.ts:72`
-pins the bwrap argv rather than cross-runner observable behavior. Still present at 0.1.1-rc.1;
-upstream added only `--unshare-pid`.
+pins the bwrap argv rather than cross-runner observable behavior. **Still present at 0.1.1-rc.2** —
+`packages/sandbox` took version bumps only across the rc.1→rc.2 range, so the `--unshare-pid` addition
+noted at rc.1 remains upstream's only change here.
 
 **Consequence: `/tmp` is unusable as a handoff between the fs tools and bash on Linux.** Stage such
 files inside the workspace. Worth an upstream issue; not worth a fork patch.
@@ -360,14 +562,21 @@ direction, and what we told them in Q11.
 
 ## E4 — exercise the fan-out bound
 
-`maxConcurrentAgents` is now pinned to 4 (above). No recorded session has ever run a subagent, so the
-path is unexercised rather than known-good. Watch `vllm:num_requests_waiting` during the run:
+`maxConcurrentAgents` is pinned to 4 (above). **Exercised on 2026-08-23 and it holds**: B5 ran five
+subagent and workflow children across three cases, two children starting 2 ms apart and three within
+25 ms, with `num_requests_running` peaking at **3** — the highest concurrency this deployment has
+recorded. Zero preemptions, zero samples with anything queued, peak KV 8.0%.
+
+**The bound was never reached**, since no case asked for more than three, so nothing here justifies
+raising it and nothing contradicts it either. Watch `vllm:num_requests_waiting` if you do push it:
 persistently non-zero means requests are dying of queueing, not slowness. `num_requests_running` counts
 scheduler residency, not simultaneous prefills.
 
-Purge ledger A3 covers `subagent` ×4, `tool-subagent*` ×4, `workflow*` ×2, `tool-ralph`, and removes
-~1,800 tokens of tool schema with them. If you drop them, re-run E2 first: A3 is one of the purges the
-gate exists to protect.
+Purge ledger A3 — `subagent` ×4, `tool-subagent*` ×4, `workflow*` ×2, `tool-ralph`, ~1,800 tokens of
+tool schema — was written against a path that had never run. **It has now run, correctly, with exact
+results, so A3 is withdrawn**: dropping those rows would remove verified capability. No purge candidate
+replaced it. `read_image` briefly looked like one and is not: the model sees images, so those tokens buy
+capability we should be switching on instead.
 
 ## E5 — the instruct alias and sampler
 
@@ -389,8 +598,12 @@ remaining three are vLLM defaults that already match.
 impossible. pi-ai 0.82.1 writes exactly one sampling field — `params.temperature` at
 `openai-completions.js:540` — and its `GenerateOptions` has no `top_p`, `top_k`, `min_p`,
 `presence_penalty` or `repetition_penalty` at all. Even `temperature` has no config surface: it exists
-in `LlmCallConfig` and is forwarded at `llm-pi-ai/src/adapter.ts:347`, but neither the route profile nor
+in `LlmCallConfig` and is forwarded at `llm-pi-ai/src/adapter.ts:369`, but neither the route profile nor
 `agent-default-model` can set it.
+
+**Unchanged at rc.2**, re-checked rather than assumed: pi-ai is still pinned `^0.82.1`, and the only
+fields rc.2 added to `PiAiProviderProfile` are the two image budgets. The forwarding line moved from
+347 to 369 when `prepareCall` was introduced; the single-field behavior is identical.
 
 The gateway is the right place and already does this kind of injection. Because dsh sends **no**
 sampling fields there is nothing to clobber — unlike `chat_template_kwargs`, which dsh always sends and
@@ -442,6 +655,15 @@ Harness-side. Engine-side traps live in `TUNING.md` §4 and §6; do not copy the
   restate the whole config block or boot fails on a missing required field. `workflow-worker-thread` is
   the live example: patching `maxConcurrentAgents` without restating `provider: spawn` drops the
   bundle's provider selection.
+- **An unknown key in a pi-ai model entry is dropped in silence.** Our route's modality key is `input`;
+  `inputModalities` is `llm-deepseek`'s name for the same idea. Writing the wrong one produced no load
+  error and no warning — `read_image` simply kept refusing, and the refusal blames the *model*
+  (`model "chat-model" does not declare image input`) rather than the config that failed to apply.
+  **Confirm a settings change took effect by observing behaviour, never by re-reading the file.**
+- **A route's declared modalities are a claim about the endpoint, not a check of it**
+  (`llm-pi-ai/src/catalog.ts:548-554`). Declaring `image` against a text-only endpoint durably admits
+  an image into the session log and then strands the route. Verify with `probes/probe_image.py` before
+  declaring, and re-verify whenever the served model changes.
 - **Session logs are concatenated zstd frames.** A single-frame decode returns the header and looks
   like an empty log; use `read-session-log.mts`.
 - **Verify from the decoded log, not stdout.** Every defect found so far returned HTTP 200 with billed
@@ -474,4 +696,15 @@ git fetch upstream --no-tags && git switch master && git merge --ff-only upstrea
 ```
 
 `upstream` is `deepseek-ai/deepseek-harness` with its push URL deliberately disabled. The fork branch
-was rebased onto `0.1.1-rc.1`; the pre-rebase tip is kept as `backup/qwen38-pre-0.1.1`.
+is rebased onto **`0.1.1-rc.2`** (`b150a551b8`); the pre-0.1.1 tip is kept as
+`backup/qwen38-pre-0.1.1`.
+
+**A fork refresh is a rebase, not a merge**, and the check that it is a no-op is one command — if it
+prints nothing, upstream has nothing for us:
+
+```sh
+git fetch upstream --no-tags && git log --oneline fork/qwen38-deployment..upstream/master
+```
+
+Run it through `rtk proxy`. Plain `git fetch upstream` returned only `ok fetched` here, which is
+indistinguishable from a fetch that pulled 35 commits.

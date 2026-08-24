@@ -8,7 +8,11 @@ User acceptance test for running dsh against the self-hosted Qwen3.8-27B stack. 
 
 **Does not answer:** whether Qwen3.8 is good enough for your work. That is cycle 2, deliberately — a capability score is worthless while a mechanical defect could be corrupting it, which is exactly what the `/v1` reasoning bug did for three days.
 
-**Why this is needed.** 15 sessions exist and every one is headless and single-turn. Measured from the logs: mean prompt 15,535 tokens, max 19,403 of a 114,688 ceiling, max 8 steps, **max 1 turn**. Compaction has fired **0** times. Subagents have run **0** times. And **only 3 of 25 mounted tools have ever been invoked** — `read` (14 calls), `bash` (10), `write` (6). The other 22 are unexercised.
+**Why this was needed.** When this suite was written, 15 sessions existed and every one was headless and single-turn: mean prompt 15,535 tokens, max 19,403 of a 114,688 ceiling, max 8 steps, **max 1 turn**; compaction had fired **0** times, subagents **0** times, and **only 3 of 25 mounted tools had ever been invoked** — `read`, `bash`, `write`.
+
+**Where it stands after three sittings.** 28 of 31 cases attempted: **20 PASS, 7 PASS-WITH-NOTE, 1 FAIL, 2 NOT RUN**. Delegation, interruption, durable resume and vision all work; **11 of 25 mounted tools** are now exercised, `read_image` included. **B7.1** — real work — is the only substantive gap left.
+
+**New at `0.1.1-rc.2`, and why the suite grew.** The release is largely one feature — a unified image/attachment request pipeline — plus a revert of the permission-preset blank-reuse behaviour. **B3.5** covers the revert. **B8 is new capability, not a new edge**: Qwen3.8-27B sees images, and this deployment had never let it because neither route declared `input`. **Enabled and verified on 2026-08-24**, so B8.1 already passes and B8.2-B8.4 are what a sitting adds. Measurements and rationale: [NEXT-SESSION.md](NEXT-SESSION.md#what-upstream-011-rc2-changed-for-this-deployment).
 
 ## Before you start
 
@@ -201,6 +205,16 @@ pnpm dsh --profile headless "In artifacts/harness-tests/metrics.mts, the constan
 *Fail if:* it executes without any confirmation.
 *Record:* verdict + whether you felt in control.
 
+**Note for a re-run:** on this Linux deployment bwrap mounts a fresh empty `/tmp` (D6), so a `find` under `/tmp` matches nothing and the case is **vacuous** — it was recorded PASS-WITH-NOTE on 2026-08-21 for that reason. To make it bite, target a directory inside the workspace that really does contain files.
+
+### B3.5 — The permission preset a new session starts from *(new at rc.2)*
+*Why:* rc.2 reverted the Web blank-session reuse refresh — `refreshDefaultForReuse()` is gone, and the `permission/preset` log event no longer records where the choice came from. The question this asks is whether the preset you *think* you set is the one a new conversation actually runs under.
+*Do:* in web, note the current permission/sandbox mode in the UI. Change it (pick a different preset). Then open a **new** conversation from the sidebar without sending anything in the old one, and check which preset the new conversation shows. Then send `Write the single line OK to /home/andrea/uat-b35.txt.` and see whether the approval behaviour matches the preset shown.
+*Expect:* the new conversation shows a preset, and the write behaves consistently with it — prompt if it should prompt, refuse if it should refuse.
+*Fail if:* the displayed preset and the actual behaviour disagree — that is the defect this case exists for. A new conversation showing the *old* preset is worth recording but is expected at rc.2, not a failure.
+*Record:* verdict + the preset shown before and after, and what the write actually did.
+*Cleanup:* `rm -f /home/andrea/uat-b35.txt`
+
 ## B4 — Pressure (25 min, web)
 
 **Continue the B2 conversation** — it already has history to compact.
@@ -284,6 +298,52 @@ There is no expected output. **The verdict is: would you use this again tomorrow
 - What you had to do yourself that you expected it to do.
 - Would you use it again — yes / no / only for X.
 
+## B8 — Vision (25 min, headless then web) *(new at rc.2)*
+
+**Why this block exists.** **Qwen3.8-27B sees images, and this deployment has never let it.** Measured 2026-08-24 against the endpoint (`results/image-capability-20260824.txt`): three solid-colour images identified correctly, the `qr-code.png` fixture described accurately, and it works in thinking mode — the exact config our main route sends. A no-image control returns *"I cannot see the image."* at 23 prompt tokens, against 89 with one, so the image genuinely reaches the model.
+
+What blocked it was our own config: neither route declared `input`, so `read-image.ts:97` refused locally and never issued a request. `read_image` sat in all 25 tool schemas of every request, costing ~149 tokens, and went uninvoked across 23 sessions.
+
+**Prerequisite — already applied on 2026-08-24.** Both `chat-model` entries in `~/.dsh/settings.yaml` now carry `input: [text, image]`. The key is `input`; `inputModalities` is a different provider's name for it and is **dropped in silence**, leaving `read_image` refusing with a message that blames the model. **If any B8 case reports the model does not accept image input, the setting is not live — check that before recording a FAIL.**
+
+**What this block is really testing.** The engine is proven and so is the tool path; what is unproven is behaviour on real images and on the composer path. rc.2 rewrote that pipeline, so a failure here is most likely ours, not the model's.
+
+### B8.1 — It actually sees a real image — **PASSED 2026-08-24**
+*Do:*
+```sh
+pnpm dsh --profile headless "Use read_image to look at packages/llm/llm-pi-ai/tests/fixtures/qr-code.png and describe what it shows in one sentence. Do not use bash or any other tool for this."
+```
+*Expect:* it describes a **QR code** — black-and-white, square finder patterns in three corners — and reports **256 × 256**.
+*Result:* passed on the config change, with bash explicitly forbidden so no shell fallback could stand in. Returned *"a 256×256 black-and-white QR code … with the three large finder squares in the top-left, top-right, and bottom-left corners."* The decoded log shows one `tool/call read_image`, a `tool/result` carrying `<type>image</type>` with no error, and `turn/end {kind: completed}`.
+*Re-run it* after any route, model or engine change — it is the cheapest proof the image path still works.
+
+### B8.2 — A screenshot, which is the real use case
+*Why:* the reason anyone wants this. A 1024×1024 image costs ~1,026 prompt tokens, so this also checks the cost is what we measured.
+*Do:* take a screenshot of anything with text in it — a terminal, this file in an editor — save it inside the workspace, then:
+```sh
+pnpm dsh --profile headless "Use read_image on <your-screenshot>.png and tell me what application is shown and transcribe any text you can read."
+```
+*Expect:* it identifies the application and transcribes text that is genuinely there.
+*Fail if:* it invents text that is not in the image — the dominant failure shape of this deployment, and no less likely with vision; or the read fails on size or format.
+*Record:* verdict + whether the transcription was accurate, and anything it fabricated.
+
+### B8.3 — An image pasted into the web UI
+*Why:* B8.1 and B8.2 go through `read_image`. This goes through the **attachment composer**, a different path — `ui-attachment` and the submitted-message budgets, not the tool.
+*Do:* in web, paste or attach an image directly into the composer and ask `What is in this image?`
+*Expect:* it accepts the attachment and answers about the actual image.
+*Fail if:* the composer rejects it; the turn errors; or it answers as though no image were attached. **An image admitted but unanswerable is the specific defect to flag** — `deepseek-harness-foundation-assessment.md` warns that an over-claimed modality can durably admit an image and strand the session, so note whether the conversation still works afterwards.
+*Record:* verdict + whether the session remained usable.
+
+### B8.4 — It still degrades sanely without the tool
+*Why:* confirms the non-image path did not regress, and that it does not reach for `read_image` where a shell answer is cheaper.
+*Do:*
+```sh
+pnpm dsh --profile headless "How many bytes is packages/llm/llm-pi-ai/tests/fixtures/qr-code.png? Tell me how you found out."
+```
+*Expect:* a shell or filesystem route, not an image read.
+*Check the number:* **30,477 bytes**. Any other figure stated confidently is a fabrication, not a rounding difference.
+*Record:* verdict + which tool it used.
+
 ---
 
 ## Results — run of 2026-08-21, session 1
@@ -347,6 +407,53 @@ decoded session log rather than from the screen.
 across the two blocks. **10 of 25 mounted tools now exercised**, up from 7 — `subagent`, `workflow`
 and `skill` are new. Across both sittings: 25 of 26 cases attempted, **18 PASS, 5 PASS-WITH-NOTE,
 1 FAIL, 1 NOT RUN (B3.3)**; B7.1 is the last substantive gap.
+
+---
+
+## Results — run of 2026-08-24, block B8 (vision)
+
+First sitting with `input: [text, image]` live on both routes. Analysis, per-case log evidence and the
+folded metrics: [results/uat-20260824/](results/uat-20260824/). Verdicts marked *(log)* were confirmed
+from the decoded session log rather than from the screen.
+
+| Case | Verdict | What the run showed |
+|---|---|---|
+| B8.1 | **PASS** | Run on **both surfaces**. Headless by path: one `read_image`, `<type>image</type>`, zero tool errors, **4.5 s**, correct QR description including 256×256 — the cleanest run of the sitting. The tool result now carries geometry inline (`256x256 px, 30477 bytes`), which is new at rc.2 *(log)* |
+| B8.2 | PASS-WITH-NOTE | A 1184×1084 screenshot of the HashiCorp status page. **Eight of nine checked claims exact** — the app, "an IBM Company", both buttons, both banner lines, the date range, all five component rows, "22 components", and the yellow and red bar segments. **One character wrong**: transcribed `HCP Ingragraph` for **`HCP Infragraph`**. No fabrication, which is what this case exists to catch *(log)* |
+| B8.3 | PASS-WITH-NOTE | The composer works — the `user/message` carries the image with `attachmentId`, dimensions and bytes, and the final answer is correct. But the prompt asked for `read_image` on it, and an `attachmentId` is a content hash with **no path**, so it guessed three (`/tmp/<sha>`, `/tmp/dsh-attachments/`, `/tmp/dsh/`), took three `FS_NOT_FOUND`, then recovered from context. **172 s and 1,697 output tokens against 4.5 s by path** *(log)* |
+| B8.4 | | not run |
+
+**Overall:** vision works end to end and is cheap — a full screenshot costs ~1.2% of the usable
+ceiling, cross-confirmed by two independent methods. Two notes, neither in the image pipeline: a
+single-glyph OCR slip, and a **missing affordance** — nothing tells the model an attached image is
+already visible, and `read_image`'s description says nothing about attachments. Usage rule until
+upstream closes it: **do not ask for `read_image` on something you attached — just ask about it.**
+
+Also confirmed on the way past: **D1 still fixed** (all six sessions title on `local-qwen-off`), **E2
+passes** under the new declaration, and **0 compactions** for the third sitting running, so D7 stayed
+latent again.
+
+---
+
+## Outstanding — carried into the next sitting
+
+The suite is **31 cases in eight blocks** after the rc.2 additions. Three have never run:
+
+| Case | Why it is still open |
+|---|---|
+| **B7.1** | The real-work block. The only substantive gap left, and the one that decides cycle 2 |
+| **B3.3** | Never attempted in three sittings — no `/etc/hosts` turn exists in any session log |
+| **B3.5** | New at rc.2 — the permission-preset revert |
+| **B8.4** | Whether it still prefers a shell answer for a byte count now that vision works. The 2026-08-24 diagnostic hints yes but ran with vision *disabled*, so it does not answer this |
+
+Across three sittings: **28 of 31 cases attempted — 20 PASS, 7 PASS-WITH-NOTE, 1 FAIL, 2 NOT RUN.**
+**B7.1 is the last substantive gap.**
+
+**D7 is still unfixed** and has stayed latent through all three sittings, so a re-run of **B4.1** after
+the fix is still owed.
+
+**D7 is still unfixed**, and it stayed latent through session 2 because no summarizing compaction
+fired — so a re-run of **B4.1** after the fix is still owed.
 
 ---
 
