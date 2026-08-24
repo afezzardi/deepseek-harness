@@ -93,6 +93,35 @@ llm-pi-ai:
           # callers are unaffected (titling caps at 64, compaction summarization
           # carries its own maxTokens).
           maxTokens: 16384
+          # The model is genuinely image-capable and this declaration is what
+          # unlocks it: `read_image` refuses locally at read-image.ts:97 on the
+          # ROUTE's declared modalities and never issues a request, so an
+          # omission here reads as "the model cannot see" when it can.
+          # Verified against the endpoint on 2026-08-24, not assumed --
+          # probes/probe_image.py, results/image-capability-20260824.txt: three
+          # solid colours identified correctly, the qr-code.png fixture
+          # described accurately, and it works under this route's own
+          # enable_thinking: true + reasoning_effort: medium. A no-image control
+          # returns "I cannot see the image." at 23 prompt tokens against 89
+          # with one, which is what makes it a measurement rather than a
+          # plausible caption.
+          #
+          # COST: 66 prompt tokens flat to 256px, 258 at 512x512, 1,026 at
+          # 1024x1024 -- tile area, not file size, and bounded because 0.1.1-rc.2
+          # downscales before the request. ~0.9% of the 114,688 ceiling for a
+          # full screenshot.
+          #
+          # Declaring a modality the endpoint does NOT serve is the mirror-image
+          # hazard: an image is durably admitted into the session log and the
+          # route can then never proceed (foundation-assessment.md). Re-verify
+          # with the probe before changing the served model.
+          #
+          # The key is `input`, NOT `inputModalities` -- that name belongs to
+          # llm-deepseek's catalog (DeepSeekCatalogModel). pi-ai reads
+          # `entry.input` (llm-pi-ai/src/catalog.ts:874) and an unknown key is
+          # dropped in silence, so the wrong name leaves read_image refusing with
+          # no load error to explain why.
+          input: [ text, image ]
           reasoningEfforts:
             off:
             low: low
@@ -176,6 +205,14 @@ llm-pi-ai:
           # callers are unaffected (titling caps at 64, compaction summarization
           # carries its own maxTokens).
           maxTokens: 16384
+          # Same endpoint, same capability, declared for symmetry rather than for
+          # a current caller: the two auxiliary callers pointed here (session
+          # titling, compaction summarization) never send an image. Omitting it
+          # would make the two routes differ on a fact that is not route-specific
+          # -- the served model is identical -- and would strand any future
+          # non-thinking image call at read-image.ts:97. See the local-qwen entry
+          # for the measurement and for why the key is `input`.
+          input: [ text, image ]
           reasoningEfforts:
             off:
             low: low
@@ -185,3 +222,5 @@ llm-pi-ai:
 agent-default-model:
   provider: local-qwen
   model: chat-model
+ui-onboarding:
+  welcomeNoticeVersion: 2026-08-13.1

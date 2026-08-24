@@ -1,0 +1,13 @@
+== THINKING MODE (our main route: enable_thinking=true, effort=medium) ==
+  prompt_tokens=87 finish=stop
+  content='\n\nRed'
+  reasoning_len=208
+== IMAGE TOKEN COST BY SIZE (non-thinking, prompt_tokens minus 23-token baseline) ==
+  64x64: prompt_tokens=89  image_cost=66  b64_bytes=224
+  128x128: prompt_tokens=89  image_cost=66  b64_bytes=540
+  256x256: prompt_tokens=89  image_cost=66  b64_bytes=1136
+  512x512: prompt_tokens=281  image_cost=258  b64_bytes=2672
+  1024x1024: prompt_tokens=1049  image_cost=1026  b64_bytes=7452
+== REAL FILE: packages/llm/llm-pi-ai/tests/fixtures/qr-code.png (256x256) ==
+  prompt_tokens=86 image_cost~56
+  content='A black-and-white QR code with three square position markers in the corners and a complex pattern of modules filling the rest.'
