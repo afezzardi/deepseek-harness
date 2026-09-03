@@ -65,8 +65,32 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { decodeStorageRecord } from '../../packages/core/session/src/chunk-rows.ts'
-import { isTokenDelta } from '../../packages/llm/llm/src/message.ts'
 import type { StreamChunk } from '../../packages/llm/llm/src/types.ts'
+
+/**
+ * Whether a stream chunk carries a non-empty first-token delta.
+ *
+ * Mirrors the predicate in `packages/session/session-stats/src/projection.ts`,
+ * which stays the authority for every timing definition this fold follows.
+ * That projection keeps the predicate private and upstream's client projections
+ * carry their own copies, so this one is vendored rather than imported: an
+ * `artifacts/` import of a product export can be withdrawn upstream without any
+ * merge conflict (artifacts/AGENTS.md, "Our instruments import product source").
+ *
+ * Chunk kinds other than a text, reasoning, or tool-call delta are not first
+ * tokens; `StreamChunk` is merge-extensible, so a new kind falls through.
+ */
+function isTokenDelta(chunk: StreamChunk): boolean {
+  switch (chunk.type) {
+    case 'text-delta':
+    case 'reasoning-delta':
+      return chunk.text !== ''
+    case 'tool-call-delta':
+      return chunk.argumentsDelta !== '' || chunk.name !== undefined
+    default:
+      return false
+  }
+}
 
 /** One session event, read structurally — the log is the authority on its shape. */
 interface Event {

@@ -95,6 +95,29 @@ Two mechanics that cost a boot if forgotten:
 - A source-plane run needs the `typert` rows disabled or a completed `pnpm run build`;
   `typert-loader` resolves built `lib/typert.host.js` artifacts.
 
+## Our instruments import product source
+
+Two instruments import from `packages/` by relative path, and that coupling is invisible to upstream:
+nothing under `packages/` references `artifacts/`, so a sync can withdraw an export with **no merge
+conflict at all** and the break surfaces only when the instrument is next run. Re-check every target
+below at each upstream sync — the list is kept short on purpose.
+
+| Instrument | Product import |
+|---|---|
+| `harness-tests/metrics.mts` | `core/session/src/chunk-rows.ts` → `decodeStorageRecord`; `llm/llm/src/types.ts` → `StreamChunk` (type only) |
+| `read-session-log.mts` | `session/session-persistence-jsonl/src/zstd.ts` → `scanZstdFrames`, `decompressZstdFrame` |
+
+`harness-tests/check-case.mts` and `check.sh` import node builtins only, and the probes reach the
+endpoint over HTTP, so neither is exposed to a product refactor.
+
+**Import a service, vendor a predicate.** `decodeStorageRecord` is imported because the packed-row gap
+arithmetic and the `MIN_RUN` threshold must not be restated here. `isTokenDelta` is vendored into
+`metrics.mts` instead: `session-stats` keeps it private and upstream's own client projections each
+carry a copy, so importing it buys coupling without buying authority. `0.1.2-rc.1` carries no such
+export on `llm/llm/src/message.ts`, and an import of it would take `metrics.mts`, `check.sh` and the
+four log-level UAT cases down together. When a vendored copy mirrors a product predicate, name the
+authoritative module in its JSDoc so the two can be compared at a sync.
+
 ## Documents supersede, they do not get rewritten
 
 Each report carries a status header naming which of its parts are superseded and which remain
