@@ -1,39 +1,6 @@
-# Route: local Qwen3.8-27B behind the LiteLLM gateway.
-#
-# baseURL is the RAW `/engine/v1` passthrough, not the managed `/v1`, and this is a
-# correctness requirement rather than a preference. vLLM RFC #27755 renamed
-# `reasoning_content` to `reasoning` and newer versions dropped `reasoning_content`
-# on input entirely; both halves are live here and they bite in opposite directions:
-#   - OUTPUT: `/v1` returns reasoning under `reasoning_content` (LiteLLM normalizes
-#     back to the old name), `/engine/v1` returns it under `reasoning`.
-#   - INPUT: the chat template accepts ONLY `reasoning`. Measured with
-#     /engine/tokenize, a 180-token filler in an assistant message rendered 84 tokens
-#     under `reasoning_content` and `reasoning_text` (both discarded) against 265
-#     under `reasoning` (+181, accepted).
-# pi-ai reads all three names but echoes thinking back under the name it RECEIVED
-# (openai-completions.js:353, :367, :874). So on `/v1` the loop closes wrongly: read
-# `reasoning_content` -> echo `reasoning_content` -> vLLM discards it, and inside a
-# tool-call chain the model never sees its own prior reasoning. The template renders
-# an empty <think></think>, with no error and no log line. On `/engine/v1` the
-# signature becomes `reasoning` and the echo is accepted; verified end to end on a
-# proxied run, where step 2 of a tool chain carried `reasoning: len=105` back.
-#
-# The cost of this choice: `extra_body` injection is a managed-`/v1` feature, so a
-# gateway alias that injects a sampler (see NEXT-SESSION.md E5) cannot live on this
-# surface. They do not conflict in practice, because instruct mode produces no
-# reasoning to round-trip -- one route per surface, each correct for its mode.
-#
-# Model id is `chat-model` on purpose: the gateway's `chat-model-<effort>` ids are
-# presets that inject a fixed chat_template_kwargs dict, and a client-supplied dict
-# REPLACES it wholesale. `chat-model` injects nothing, so effort stays under harness
-# control on every request.
-#
-# thinkingFormat is `chat-template`, not `qwen-chat-template`: the latter ignores the
-# configured chatTemplateKwargs entirely and hardcodes {enable_thinking, preserve_thinking},
-# sending no effort at all.
-#
-# Only off/low/medium/xhigh are declared. The Qwen3.8 chat template raises on any other
-# value, which surfaces as HTTP 400; undeclared levels are pinned unsupported.
+# Local Qwen routes. Credentials resolve from LITELLM_MASTER_KEY.
+# Use /engine/v1 for the configured chat-template reasoning exchange.
+# local-qwen-off supplies non-thinking auxiliary calls.
 llm-pi-ai:
   providers:
     local-qwen:
@@ -59,68 +26,12 @@ llm-pi-ai:
           reasoning_effort:
             $var: thinking.effort
             omitWhenOff: true
-          # Stays false, but NOT for the reason originally recorded. The old
-          # justification was that this deployment could not reuse KV cache, which
-          # made Qwen's `true` default pointless. That is now false: prefix caching
-          # is enabled on the engine and measured working (E1 result in
-          # artifacts/NEXT-SESSION.md). Two measured reasons it still stays false:
-          #  - It is a NO-OP for a single-user-turn run. chat_template.jinja:116
-          #    keeps a turn's <think> when `loop.index0 > ns.last_query_index`, and
-          #    last_query_index (lines 88-97) tracks the last REAL user message --
-          #    <tool_response> content and tool-role messages never advance it. So in
-          #    a headless run every assistant turn is after it and nothing is
-          #    stripped. Verified via /tokenize: 75 tokens either way at one user
-          #    turn, 84 (true) vs 76 (false) once a second user turn exists. Measured
-          #    consequence: across 14 recorded sessions the per-step prompt grows
-          #    strictly monotonically, so headless traffic is append-only on the wire.
-          #  - Interactively it is a real trade, not a free win: `false` retroactively
-          #    strips thinking from turns at or before the new last user query, which
-          #    rewrites history and voids the shared prefix from there on, while
-          #    `true` keeps the prefix append-only but spends the 114,688-token usable
-          #    prompt ceiling on old reasoning and makes compaction fire sooner.
-          # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
       models:
         - id: chat-model
           name: Qwen3.8-27B
           contextWindow: 131072
-          # 16384, not the engine's full 32768 headroom. vLLM admission enforces
-          # prompt + max_tokens <= max_model_len, so this value is subtracted from
-          # usable prompt: 32768 caps the prompt at 98,304, 16384 raises it to
-          # 114,688 -- confirmed by the inference owner in MESSAGE.md Q6. It costs
-          # nothing measurable: across 31 recorded main-route requests the largest
-          # output was 961 tokens, so 16384 is ~17x the observed maximum. Auxiliary
-          # callers are unaffected (titling caps at 64, compaction summarization
-          # carries its own maxTokens).
           maxTokens: 16384
-          # The model is genuinely image-capable and this declaration is what
-          # unlocks it: `read_image` refuses locally at read-image.ts:97 on the
-          # ROUTE's declared modalities and never issues a request, so an
-          # omission here reads as "the model cannot see" when it can.
-          # Verified against the endpoint on 2026-08-24, not assumed --
-          # probes/probe_image.py, results/image-capability-20260824.txt: three
-          # solid colours identified correctly, the qr-code.png fixture
-          # described accurately, and it works under this route's own
-          # enable_thinking: true + reasoning_effort: medium. A no-image control
-          # returns "I cannot see the image." at 23 prompt tokens against 89
-          # with one, which is what makes it a measurement rather than a
-          # plausible caption.
-          #
-          # COST: 66 prompt tokens flat to 256px, 258 at 512x512, 1,026 at
-          # 1024x1024 -- tile area, not file size, and bounded because 0.1.1-rc.2
-          # downscales before the request. ~0.9% of the 114,688 ceiling for a
-          # full screenshot.
-          #
-          # Declaring a modality the endpoint does NOT serve is the mirror-image
-          # hazard: an image is durably admitted into the session log and the
-          # route can then never proceed (foundation-assessment.md). Re-verify
-          # with the probe before changing the served model.
-          #
-          # The key is `input`, NOT `inputModalities` -- that name belongs to
-          # llm-deepseek's catalog (DeepSeekCatalogModel). pi-ai reads
-          # `entry.input` (llm-pi-ai/src/catalog.ts:874) and an unknown key is
-          # dropped in silence, so the wrong name leaves read_image refusing with
-          # no load error to explain why.
           input: [ text, image ]
           reasoningEfforts:
             off:
@@ -128,24 +39,6 @@ llm-pi-ai:
             medium: medium
             xhigh: xhigh
 
-    # Non-thinking companion to `local-qwen`, for the harness's CAPPED auxiliary
-    # calls (session titling, compaction summarization). Same engine, same raw
-    # surface, same credential; the only difference is `reasoning: off`.
-    #
-    # WHY A SECOND PROVIDER AND NOT A PER-CALL EFFORT: neither auxiliary caller
-    # sets GenerateOptions.reasoningEffort, and the adapter resolves
-    # `options.reasoningEffort ?? profile.reasoning`
-    # (llm-pi-ai/src/adapter.ts:319). The profile default is the only lever, so
-    # the route IS the switch.
-    #
-    # DO NOT "SIMPLIFY" THIS TO `reasoningEfforts: false`. On this raw surface
-    # that inverts the intent: pi-ai's chat-template branch is guarded by
-    # `model.reasoning` (openai-completions.js:580), so a non-reasoning model
-    # sends NO chat_template_kwargs at all -- and the Qwen3.8 template then
-    # takes `enable_thinking is undefined` as TRUE with
-    # `reasoning_effort|default('xhigh')` (chat_template.jinja:46-47). Thinking
-    # would come back ON at MAXIMUM effort, silently. `reasoningEfforts: false`
-    # is only safe against a gateway alias that injects enable_thinking: false.
     local-qwen-off:
       displayName: Local Qwen3.8-27B (no thinking)
       apiKeyEnv: LITELLM_MASTER_KEY
@@ -169,49 +62,12 @@ llm-pi-ai:
           reasoning_effort:
             $var: thinking.effort
             omitWhenOff: true
-          # Stays false, but NOT for the reason originally recorded. The old
-          # justification was that this deployment could not reuse KV cache, which
-          # made Qwen's `true` default pointless. That is now false: prefix caching
-          # is enabled on the engine and measured working (E1 result in
-          # artifacts/NEXT-SESSION.md). Two measured reasons it still stays false:
-          #  - It is a NO-OP for a single-user-turn run. chat_template.jinja:116
-          #    keeps a turn's <think> when `loop.index0 > ns.last_query_index`, and
-          #    last_query_index (lines 88-97) tracks the last REAL user message --
-          #    <tool_response> content and tool-role messages never advance it. So in
-          #    a headless run every assistant turn is after it and nothing is
-          #    stripped. Verified via /tokenize: 75 tokens either way at one user
-          #    turn, 84 (true) vs 76 (false) once a second user turn exists. Measured
-          #    consequence: across 14 recorded sessions the per-step prompt grows
-          #    strictly monotonically, so headless traffic is append-only on the wire.
-          #  - Interactively it is a real trade, not a free win: `false` retroactively
-          #    strips thinking from turns at or before the new last user query, which
-          #    rewrites history and voids the shared prefix from there on, while
-          #    `true` keeps the prefix append-only but spends the 114,688-token usable
-          #    prompt ceiling on old reasoning and makes compaction fire sooner.
-          # Flip it only with that trade measured, not on the old rationale.
           preserve_thinking: false
       models:
-        # The levels stay declared even though the profile pins `off`: a model
-        # offering nothing beyond `off` is rejected at load (catalog.ts:688).
         - id: chat-model
           name: Qwen3.8-27B (no thinking)
           contextWindow: 131072
-          # 16384, not the engine's full 32768 headroom. vLLM admission enforces
-          # prompt + max_tokens <= max_model_len, so this value is subtracted from
-          # usable prompt: 32768 caps the prompt at 98,304, 16384 raises it to
-          # 114,688 -- confirmed by the inference owner in MESSAGE.md Q6. It costs
-          # nothing measurable: across 31 recorded main-route requests the largest
-          # output was 961 tokens, so 16384 is ~17x the observed maximum. Auxiliary
-          # callers are unaffected (titling caps at 64, compaction summarization
-          # carries its own maxTokens).
           maxTokens: 16384
-          # Same endpoint, same capability, declared for symmetry rather than for
-          # a current caller: the two auxiliary callers pointed here (session
-          # titling, compaction summarization) never send an image. Omitting it
-          # would make the two routes differ on a fact that is not route-specific
-          # -- the served model is identical -- and would strand any future
-          # non-thinking image call at read-image.ts:97. See the local-qwen entry
-          # for the measurement and for why the key is `input`.
           input: [ text, image ]
           reasoningEfforts:
             off:

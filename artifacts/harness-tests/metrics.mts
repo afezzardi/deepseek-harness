@@ -1,85 +1,17 @@
 /**
- * Offline metric extractor over a decoded session log.
- *
- * Follows the fold documented in `packages/session/session-stats/README.md`
- * (`steps`, `turns`, `llmMs`, `ttftMs`, `decodeMs`, `decodeTokens`, `toolMs`) plus
- * per-step token usage, because `session-stats` is mounted only in the web-app
- * bundle and serves a client projection rather than anything a headless run can
- * read back. Everything comes from events the log already carries, so it works
- * retroactively on every session ever recorded and needs no instrumentation.
- *
- * Usage:
- *   node --import tsx/esm artifacts/harness-tests/metrics.mts <decoded.jsonl> [...]
- *   node --import tsx/esm artifacts/harness-tests/metrics.mts --all   # every ~/.dsh session
- *
- * Input is the DECODED log (see `artifacts/read-session-log.mts`; the on-disk file
- * is concatenated zstd frames and a single-frame decode returns only the header).
- * Prints one JSON object per session to stdout, plus a `{file, decodeError}`
- * record for any session `--all` could not decode.
- *
- * **The timing definitions are the projection's, not approximations of it.**
- * `sessionStats` is the authority (`packages/session/session-stats/src/projection.ts`):
- * model time is `step/start` → `assistant/message`, first token is the first
- * **non-empty** delta chunk, and decode spans **first token → the assembled
- * message** on steps that also report output tokens. Every duration is clamped at
- * zero, because a packed row's gap encoding permits clock reversal and a real
- * `dt: -60` exists in a recorded log.
- *
- * Three log-format facts this fold depends on, each verified against a real log
- * because assuming any of them produces plausible wrong numbers:
- *
- * - **Delta chunks are stored two ways.** A run of at least `MIN_RUN` = 3
- *   consecutive compatible deltas packs into one `reasoning-chunks` /
- *   `text-chunks` / `tool-call-chunks` row carrying `seq0`/`time0` and
- *   member-to-member gaps in `data.dt`; anything shorter stays as ordinary
- *   `assistant/chunk` events. A fold that reads only packed rows reports TTFT and
- *   decode as **zero** for every short response, and one that reads only
- *   `assistant/chunk` finds `block-start` and reports a TTFT near the whole model
- *   time. This module expands rows through the product's own
- *   `decodeStorageRecord`, so both layouts fold identically and neither the gap
- *   arithmetic nor the `MIN_RUN` threshold is restated here.
- * - **The session header has no `time`** — it carries `createdAt`, and its `id`
- *   sits at the top level rather than under `data`.
- * - **`tool/call` is flat** (`data.callId`, `data.name`), while `tool/result`
- *   nests its id under `data.message.source.callId`.
- *
- * One honesty limit, measured rather than suspected, and it is not a defect in the
- * log: `recproxy.py` forwards 4 KiB reads rather than SSE events, so it buffers the
- * response and collapses every gap to 0-1 ms. The same E2 gate task run both ways
- * on the same revision and route, **n=1 per arm** — enough to establish that the
- * proxy destroys the split, not enough to publish a decode rate:
- *
- * | | TTFT | decode |
- * |---|---|---|
- * | through `recproxy.py` | 20,897 ms | 160 ms / 779 tok (impossible) |
- * | direct to the gateway | 514-1,038 ms | 15,036 ms / 738 tok |
- *
- * So the TTFT/decode split is only valid on a run that did NOT go through the
- * recording proxy. `llmMs`, token counts and every non-timing field stay valid
- * either way, because they do not depend on when deltas arrived.
+ * Offline v2-only session metrics. Run with JSONL/.zstd paths or --all.
+ * Timing follows session-stats: step start to first non-empty embedded delta,
+ * and first delta to assembled message. Recording proxies can distort timing.
  */
 
-import { execFileSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, readdirSync, statSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { dirname, join } from 'node:path'
+import { readdirSync, statSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { decodeStorageRecord } from '../../packages/core/session/src/chunk-rows.ts'
+import { expandAssistantStream, type AssistantStreamRecord } from '../../packages/llm/llm/src/assistant-stream.ts'
+import { readV2Log } from './v2-log.mts'
 import type { StreamChunk } from '../../packages/llm/llm/src/types.ts'
 
-/**
- * Whether a stream chunk carries a non-empty first-token delta.
- *
- * Mirrors the predicate in `packages/session/session-stats/src/projection.ts`,
- * which stays the authority for every timing definition this fold follows.
- * That projection keeps the predicate private and upstream's client projections
- * carry their own copies, so this one is vendored rather than imported: an
- * `artifacts/` import of a product export can be withdrawn upstream without any
- * merge conflict (artifacts/AGENTS.md, "Our instruments import product source").
- *
- * Chunk kinds other than a text, reasoning, or tool-call delta are not first
- * tokens; `StreamChunk` is merge-extensible, so a new kind falls through.
- */
+/** First-token predicate shared semantically with session-stats/projection.ts. */
 function isTokenDelta(chunk: StreamChunk): boolean {
   switch (chunk.type) {
     case 'text-delta':
@@ -90,16 +22,6 @@ function isTokenDelta(chunk: StreamChunk): boolean {
     default:
       return false
   }
-}
-
-/** One session event, read structurally — the log is the authority on its shape. */
-interface Event {
-  type: string
-  seq?: number
-  time?: number
-  id?: string
-  createdAt?: number
-  data?: Record<string, unknown>
 }
 
 /** Per-step figures. A step is one model request plus the tool calls it produced. */
@@ -127,20 +49,6 @@ interface Compaction {
   maxTokens?: number
   /** `compaction/end`'s error text, when the attempt failed. */
   error?: string
-}
-
-/**
- * Lines the fold could not use. Non-zero values mean the figures below cover
- * less than the session, so they are reported rather than dropped: a silent
- * skip is indistinguishable from a clean log.
- */
-interface Losses {
-  /** Unparseable lines before the last one — a writer defect, not a torn tail. */
-  interiorParseErrors: number
-  /** An unparseable final line, which is the ordinary shape of a killed writer. */
-  trailingParseError: boolean
-  /** Packed rows the product decoder rejected as corrupt. */
-  malformedRows: number
 }
 
 /** Whole-session figures plus the per-step detail behind them. */
@@ -172,7 +80,6 @@ interface SessionMetrics {
   compactionDetail: Compaction[]
   approvals: { event: string; outcome?: string }[]
   auxCalls: { kind: string; provider?: string }[]
-  losses: Losses
   perStep: Step[]
 }
 
@@ -193,46 +100,12 @@ function elapsed(from: number, to: number): number {
 }
 
 /**
- * Read a decoded log into session events, expanding packed chunk rows through
- * the product's own decoder so both storage layouts fold identically.
- * @param file Path to the decoded JSONL.
- * @returns The events in log order, and what could not be read.
- */
-function readEvents(file: string): { events: Event[]; losses: Losses } {
-  const lines = readFileSync(file, 'utf8').split('\n')
-  const events: Event[] = []
-  const losses: Losses = { interiorParseErrors: 0, trailingParseError: false, malformedRows: 0 }
-  for (const [i, line] of lines.entries()) {
-    if (line.trim() === '') continue
-    let value: unknown
-    try {
-      value = JSON.parse(line)
-    } catch {
-      // A truncated FINAL line means the writer died mid-append and earlier
-      // events stay valid; an interior one is a defect that hides events.
-      if (i === lines.length - 1) losses.trailingParseError = true
-      else losses.interiorParseErrors += 1
-      continue
-    }
-    try {
-      events.push(...decodeStorageRecord(value) as unknown as Event[])
-    } catch {
-      // decodeStorageRecord fails loud on a corrupt packed row rather than
-      // silently dropping the run it stores. Counted, so the loss is visible.
-      losses.malformedRows += 1
-    }
-  }
-  return { events, losses }
-}
-
-/**
  * Fold one decoded session log into its metrics.
  * @param file Path to the decoded JSONL.
- * @returns The session's figures, or undefined when the file holds no events.
+ * @returns The session's figures; invalid or non-v2 input throws.
  */
-export function foldSession(file: string): SessionMetrics | undefined {
-  const { events, losses } = readEvents(file)
-  if (events.length === 0) return undefined
+export function foldSession(file: string): SessionMetrics {
+  const events = readV2Log(file)
 
   const times = events.map(e => e.time).filter((t): t is number => t !== undefined)
   const m: SessionMetrics = {
@@ -256,7 +129,6 @@ export function foldSession(file: string): SessionMetrics | undefined {
     compactionDetail: [],
     approvals: [],
     auxCalls: [],
-    losses,
     perStep: [],
   }
 
@@ -308,34 +180,31 @@ export function foldSession(file: string): SessionMetrics | undefined {
         // Counted here rather than from assembled messages: the loop appends
         // exactly one per entered step in a `finally`, so failed, cancelled and
         // max-tokens steps all count.
+        startedAt.delete(stepKey(d['turn'], d['step']))
+        firstTokenAt.delete(stepKey(d['turn'], d['step']))
         m.steps += 1
         const turn = Number(d['turn'])
         if (!Number.isNaN(turn)) countedTurns.add(turn)
         break
       }
-      case 'assistant/chunk': {
-        const chunk = d['chunk'] as Record<string, unknown> | undefined
-        if (chunk === undefined) break
+      case 'assistant/attempt': {
         const k = stepKey(d['turn'], d['step'])
-        if (String(chunk['type']) === 'usage') {
-          const usage = chunk['usage'] as { inputTokens?: number; outputTokens?: number } | undefined
-          const s = step(d['turn'], d['step'])
-          s.inputTokens = usage?.inputTokens
-          s.outputTokens = usage?.outputTokens
-          break
-        }
-        // The projection's first-token rule: the first delta carrying content.
-        // A tool-call run commonly begins `args: [""]`, and an empty member is
-        // not a token — taking it would understate TTFT by the whole first gap.
-        if (e.time !== undefined && !firstTokenAt.has(k) && isTokenDelta(chunk as unknown as StreamChunk)) {
-          firstTokenAt.set(k, e.time)
-        }
+        const first = expandAssistantStream(d['stream'] as AssistantStreamRecord[]).find(x => isTokenDelta(x.chunk))
+        if (first !== undefined && !firstTokenAt.has(k)) firstTokenAt.set(k, first.time)
         break
       }
       case 'assistant/message': {
         const k = stepKey(d['turn'], d['step'])
         const s = step(d['turn'], d['step'])
+        const stream = expandAssistantStream(d['stream'] as AssistantStreamRecord[])
+        const token = stream.find(x => isTokenDelta(x.chunk))
+        if (token !== undefined && !firstTokenAt.has(k)) firstTokenAt.set(k, token.time)
+        const usage = d['usage'] as { inputTokens?: number; outputTokens?: number } | undefined
+        s.inputTokens = usage?.inputTokens
+        s.outputTokens = usage?.outputTokens
         const start = startedAt.get(k)
+        if (start === undefined) break
+        startedAt.delete(k)
         if (start !== undefined && e.time !== undefined) {
           s.llmMs = elapsed(start, e.time)
           m.llmMs += s.llmMs
@@ -386,6 +255,7 @@ export function foldSession(file: string): SessionMetrics | undefined {
         break
       }
       case 'turn/end': {
+        toolCallAt.clear()
         const reason = d['reason'] as { kind?: string } | undefined
         m.turnEndReasons.push(String(reason?.kind))
         break
@@ -437,7 +307,7 @@ export function foldSession(file: string): SessionMetrics | undefined {
 }
 
 /**
- * Decode every session under `$DSH_HOME/sessions` into a temp dir and fold it.
+ * Fold only v2 logs under `$DSH_HOME/sessions` without counting old generations.
  * @returns One record per session, oldest first; a decode failure reports itself.
  */
 function foldAll(): (SessionMetrics | SessionDecodeFailure)[] {
@@ -447,17 +317,15 @@ function foldAll(): (SessionMetrics | SessionDecodeFailure)[] {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       const path = join(dir, entry.name)
       if (entry.isDirectory()) walk(path)
-      else if (entry.name.endsWith('.jsonl.zstd')) logs.push(path)
+      else if (entry.name === 'session.v2.jsonl.zstd' || entry.name === 'session.v2.jsonl') logs.push(path)
     }
   }
   walk(join(home, 'sessions'))
-  const out = mkdtempSync(join(tmpdir(), 'dsh-metrics-'))
-  const decoder = join(dirname(fileURLToPath(import.meta.url)), '..', 'read-session-log.mts')
   const results: (SessionMetrics | SessionDecodeFailure)[] = []
-  for (const [i, log] of logs.sort((a, b) => statSync(a).mtimeMs - statSync(b).mtimeMs).entries()) {
-    const target = join(out, `s${i}.jsonl`)
+  for (const log of logs.sort((a, b) => statSync(a).mtimeMs - statSync(b).mtimeMs)) {
     try {
-      execFileSync(process.execPath, ['--import', 'tsx/esm', decoder, log, target], { stdio: 'pipe' })
+      const folded = foldSession(log)
+      results.push({ ...folded, file: log })
     } catch (error) {
       // An omitted session is selection bias: a log fails to decode for
       // reasons (a torn frame on a live session) that correlate with what is
@@ -465,23 +333,27 @@ function foldAll(): (SessionMetrics | SessionDecodeFailure)[] {
       results.push({ file: log, decodeError: String((error as { message?: string }).message ?? error).slice(0, 300) })
       continue
     }
-    const folded = foldSession(target)
-    results.push(folded === undefined ? { file: log, decodeError: 'decoded to zero events' } : { ...folded, file: log })
   }
   return results
 }
 
-const args = process.argv.slice(2)
-if (args.length === 0) {
-  process.stderr.write('usage: metrics.mts <decoded.jsonl>... | --all\n')
-  process.exit(2)
-}
-const records: (SessionMetrics | SessionDecodeFailure)[] = args[0] === '--all'
-  ? foldAll()
-  : args.map(foldSession).filter((r): r is SessionMetrics => r !== undefined)
-for (const record of records) process.stdout.write(`${JSON.stringify(record)}\n`)
-const failures = records.filter((r): r is SessionDecodeFailure => 'decodeError' in r).length
-const lossy = records.filter(r => 'losses' in r && (r.losses.interiorParseErrors > 0 || r.losses.malformedRows > 0)).length
-if (failures > 0 || lossy > 0) {
-  process.stderr.write(`metrics: ${failures} session(s) failed to decode, ${lossy} folded with losses\n`)
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const args = process.argv.slice(2)
+  if (args.length === 0) {
+    process.stderr.write('usage: metrics.mts <session.v2.jsonl[.zstd]>... | --all\n')
+    process.exit(2)
+  }
+  const records: (SessionMetrics | SessionDecodeFailure)[] = args[0] === '--all'
+    ? foldAll()
+    : args.map(foldSession)
+  for (const record of records) process.stdout.write(`${JSON.stringify(record)}\n`)
+  const failures = records.filter((r): r is SessionDecodeFailure => 'decodeError' in r).length
+  if (failures > 0) {
+    process.stderr.write(`metrics: ${failures} session(s) failed to decode\n`)
+    process.exitCode = 1
+  }
+  if (records.length === 0) {
+    process.stderr.write('metrics: no v2 sessions found; run the fresh UAT first\n')
+    process.exitCode = 1
+  }
 }

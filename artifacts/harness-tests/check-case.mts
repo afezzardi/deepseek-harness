@@ -22,8 +22,9 @@
  * from the repo root. Exit status is 0 when every criterion passed, 1 otherwise.
  */
 
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { isAbsolute, relative, resolve } from 'node:path'
+import { readV2Log } from './v2-log.mts'
 
 /** One session event, read structurally — the log is the authority on its shape. */
 interface Event {
@@ -62,21 +63,12 @@ interface Call {
 }
 
 /**
- * Parse a decoded log into events, reporting rather than hiding a bad line.
+ * Validate a decoded v2 log before applying acceptance criteria.
  * @param file Path to the decoded JSONL.
- * @returns The parseable events, in log order.
+ * @returns The validated events, in log order; invalid input throws.
  */
 function readEvents(file: string): Event[] {
-  const events: Event[] = []
-  for (const [i, line] of readFileSync(file, 'utf8').split('\n').entries()) {
-    if (line.trim() === '') continue
-    try {
-      events.push(JSON.parse(line) as Event)
-    } catch {
-      process.stderr.write(`check-case: unparseable line ${i + 1} skipped\n`)
-    }
-  }
-  return events
+  return readV2Log(file)
 }
 
 /**

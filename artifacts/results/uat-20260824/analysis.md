@@ -1,8 +1,6 @@
 # UAT run of 2026-08-24, block B8 (vision) — analysis
 
-Block B8 of [UAT.md](../../UAT.md), run on `0.1.1-rc.2` **after enabling `input: [text, image]`** on
-both routes. Verdicts live in that file's results table and are not restated here; this document holds
-what the logs say that the screen could not.
+Historical evidence from `0.1.1-rc.2` and its retired B8 suite, with `input: [text, image]` enabled on both routes. These observations do not establish behavior or acceptance on Session v2. Use the current [UAT](../../UAT.md) for a fresh run; case references below describe this dated sitting only.
 
 Six sessions, all single-turn, recorded between 20:56 and 21:18. Five are headless and one is web.
 
@@ -22,8 +20,7 @@ Six sessions, all single-turn, recorded between 20:56 and 21:18. Five are headle
 
 ## Vision works, and the harness path is what needed proving
 
-The endpoint was already established by `probes/probe_image.py`. What these sessions add is the part
-the probe could not reach: `read_image` → attachment store → pi-ai's `toPiContext` → the wire.
+The dated [endpoint result](../image-capability-20260824.txt) precedes this sitting. These sessions additionally exercised `read_image` → attachment store → pi-ai's `toPiContext` → the wire.
 
 Sessions 2, 5 and 6 each carry a `tool/result` with `<type>image</type>` and **zero tool errors**, and
 all three answers are accurate. Session 5, the user's own B8.1, is the cleanest run of the sitting:
@@ -63,8 +60,7 @@ decoded the PNG bytes in bash, rendered an ASCII preview, reported 256×256 corr
 that it could not decode the payload without `zbarimg` or `cv2`. Right answer, honest caveat, wrong
 tool — 5 steps and 41 s to get there.
 
-pi-ai reads `entry.input` (`llm-pi-ai/src/catalog.ts:874`). The lesson is in NEXT-SESSION.md's trap
-list: **confirm a settings change by observing behaviour, never by re-reading the file.**
+At this revision, pi-ai reads `entry.input` (`llm-pi-ai/src/catalog.ts:874`). Confirm a settings change by observing behavior as well as checking the file.
 
 ## B8.2 — the transcription is accurate, with one character wrong
 

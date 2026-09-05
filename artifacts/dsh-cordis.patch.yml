@@ -1,10 +1,6 @@
-# Home patch layer (applies under every profile).
-#
-# Purge ledger A1: the Typert RPC gateway and its registry/loader. Nothing in a
-# headless run uses them — the api-gateway imports client-connection type-only —
-# and the loader resolves built `lib/typert.host.js` artifacts, so a source-plane
-# run fails at boot without them. Removing the three rows drops ~19 packages
-# (ws, fflate, js-yaml) from the composition.
+# Home patch for the local Qwen deployment.
+# Web requires harness-tests/patches/web-typert.yml to enable its RPC services.
+# Config patches replace the entire config object; retain every required field.
 - id: typert
   disabled: true
 - id: typert-loader
@@ -12,48 +8,12 @@
 - id: typert-gateway
   disabled: true
 
-# Compaction must fire below the engine's true admission ceiling, not below the
-# nominal context window. vLLM enforces prompt + max_tokens <= max_model_len, so
-# the ceiling is 131072 - maxTokens, and the route now declares maxTokens 16384
-# (see artifacts/dsh-settings.yaml): ceiling 114,688. thresholdRatio 0.8 puts
-# pressure compaction at 104,857, leaving 9,831 of margin for the token meter's
-# estimate -- strictly better than the previous 0.7-over-a-98,304-ceiling pairing,
-# which fired at 91,750 with only 6,554 of margin. contextWindow stays honest at
-# 131072, and retainTokens resolves to floor(131072 * 0.16) = 20,971, which the
-# loader requires to be below thresholdTokens (compaction-basic/src/config.ts:148).
 - id: compaction-basic
   config:
     thresholdRatio: 0.8
-    # The same capped-auxiliary-call trap as session-title-llm above, with a far
-    # worse consequence. summarizeWithLlm caps output at maxTokens (default 8192)
-    # and is FAIL-CLOSED: a max-tokens finish throws "summarization truncated at
-    # the token cap (incomplete checkpoint)". With summarizationProvider unset it
-    # resolves `configured ?? latest ?? agentTarget` and inherits the agent's
-    # THINKING route, so the reasoning block competes with the summary for the cap
-    # at exactly the moment the session is at its context ceiling and compaction
-    # is the only way forward.
     summarizationProvider: local-qwen-off
     summarizationModel: chat-model
 
-# D1: session titling is a CAPPED auxiliary call -- maxOutputTokens 64 -- and it
-# inherits the agent's route, so on a thinking route the reasoning block consumes
-# the whole budget. finishError maps that max-tokens finish to a throw
-# (session-title-llm/src/index.ts finishError), the title falls back, and the run
-# reports HTTP 200 with tokens billed and no error line. Cost is a full ~13k
-# prefill per session for a discarded result.
-#
-# The whole config block is restated on purpose: applyEntryPatches assigns
-# per top-level key (`target[key] = value`, vendor/include/src/index.ts), so a
-# `config` patch REPLACES the bundle's config rather than merging into it.
-# Omitting targetWords here would fail resolveSessionTitleLlmConfig at load.
-# D4: maxConcurrentAgents 0 derives min(16, availableParallelism() - 2) = 16 here
-# (workflow-worker-thread/src/index.ts:151-153). Prefill is serialized, so the
-# surplus becomes a worst-case TTFT of N x one prefill. 4 is our own ceiling, not
-# a mirror of engine admission -- MESSAGE.md Q17 unpinned it. Above 4 needs an
-# observed vllm:num_requests_waiting, not arithmetic.
-#
-# `provider: spawn` is restated because a `config` patch replaces rather than
-# merges; omitting it drops the bundle's subagent provider selection.
 - id: workflow-worker-thread
   config:
     provider: spawn

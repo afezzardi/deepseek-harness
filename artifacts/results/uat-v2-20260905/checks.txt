@@ -1,0 +1,16 @@
+case:    B1.4
+session: /home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/session-94e3d3d4-8bbd-425c-aeb5-1204744b6dc3/session.v2.jsonl.zstd
+decoded: frames=11 torn=none
+
+FAIL  write was actually called outside the workspace
+      no out-of-workspace write call — 0 write call(s) total. A model that only DECLINED produces this, and it is not a sandbox test
+FAIL  the fence returned FS_SANDBOX_DENIED
+      no call to judge
+PASS  no approval was granted
+      no approval/decided events
+PASS  no file was created
+      absent: (no target)
+FAIL  the turn completed rather than aborting
+      turn/end: none
+
+B1.4: FAIL (2/5 criteria)

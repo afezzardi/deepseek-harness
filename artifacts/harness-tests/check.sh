@@ -24,7 +24,7 @@ LOG="${2:-}"
 if [ -z "$LOG" ]; then
   # Newest by mtime across every project, so a web session and a headless run
   # are equally reachable without naming a session id.
-  LOG="$(find "${DSH_HOME:-$HOME/.dsh}/sessions" -name 'session.jsonl.zstd' -printf '%T@ %p\n' \
+  LOG="$(find "${DSH_HOME:-$HOME/.dsh}/sessions" -name 'session.v2.jsonl.zstd' -printf '%T@ %p\n' \
     | sort -rn | head -1 | cut -d' ' -f2-)"
 fi
 if [ ! -f "$LOG" ]; then

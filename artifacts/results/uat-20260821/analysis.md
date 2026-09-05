@@ -1,7 +1,6 @@
 # UAT run of 2026-08-21, session 1 — analysis
 
-Blocks B0-B4 of [UAT.md](../../UAT.md). Verdicts live in that file's results table and are not
-restated here; this document holds what the logs say that the screen could not.
+Historical evidence from the August deployment and its retired B0–B4 suite. These observations do not establish behavior or acceptance on Session v2. Use the current [UAT](../../UAT.md) for a fresh run; case references below describe this dated sitting only.
 
 Six sessions, 25 turns, 84 steps, 100 tool calls. Nineteen cases recorded: 14 PASS, 3
 PASS-WITH-NOTE, 1 FAIL, 1 NOT RUN (B3.3 — no `/etc/hosts` turn exists in the log).

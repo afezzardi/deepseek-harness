@@ -1,18 +1,5 @@
-# Web-only overlay: re-enable the three Typert rows the home patch disables.
-#
-# The home patch disables them under purge ledger A1, which is right for headless
-# -- nothing there uses the RPC gateway, and the rows cost ~19 packages. The web
-# client cannot boot without them: dsh-client-runtime injects `typert` and is what
-# provides `remote` and `slots`, so every client UI row cascades into `pending`
-# behind it. Observed as "Failed to load plugins / 37 entries did not activate",
-# with client-runtime reporting `waiting for services: typert, remote,
-# remote.commands`. Cordis `inject` waits rather than failing, so the server still
-# answers HTTP 200 with a broken client tree.
-#
-# Overlays apply after $DSH_HOME/cordis.patch.yml, so this re-enables the rows for
-# a web run without editing the deployed config; headless keeps the purge.
-#
-# Requires built `lib/typert.host.js` artifacts, which typert-loader resolves.
+# Web overlay: enable the RPC services disabled by the home patch.
+# Requires a completed build for the Typert artifacts.
 - id: typert
   disabled: false
 - id: typert-loader

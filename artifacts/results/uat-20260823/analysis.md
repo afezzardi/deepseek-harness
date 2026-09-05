@@ -1,8 +1,6 @@
 # UAT run of 2026-08-23, session 2 (partial) — analysis
 
-Blocks B5 and B6 of [UAT.md](../../UAT.md), run on the `0.1.1-rc.2` rebase. Verdicts live in that
-file's results table and are not restated here; this document holds what the logs say that the screen
-could not.
+Historical evidence from `0.1.1-rc.2` and its retired B5–B6 suite. These observations do not establish behavior or acceptance on Session v2. Use the current [UAT](../../UAT.md) for a fresh run; case references below describe this dated sitting only.
 
 Nine sessions, 14 turns, 33 steps, 33 tool calls, recorded between 17:18 and 17:47. Four are
 top-level conversations and **five are subagent or workflow children** — the first child sessions this
