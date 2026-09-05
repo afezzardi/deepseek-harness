@@ -6,7 +6,7 @@ The selected upstream revision is `d347e703908d0406b7a7ef80e3a0e594d86b2215`, ta
 
 Use fresh Session format v2 sessions. The instruments read `session.v2.jsonl.zstd` or decoded v2 JSONL and reject other versions. Do not use August UAT results as acceptance evidence for this checkout; follow [UAT.md](UAT.md) and record the exact session path, revision, and result.
 
-The required simple session reads a real file, handles a missing file, attempts an out-of-workspace write without escalation, and runs a read-only Git command. Optional Web checks cover approval decline/acceptance and explicit compaction.
+Required acceptance covers tools and sandbox refusal, then one nine-agent workflow with verified child overlap and result collection. Optional Web checks cover approvals, compaction, resume, and cancellation; [UAT.md](UAT.md) owns the criteria.
 
 ## Before running
 
@@ -20,4 +20,4 @@ The inference endpoint is external to this checkout. A successful offline instru
 
 Persist the v2 session metrics and acceptance-check output under a new dated directory in [results/](results/). Record the model route and exact source revision alongside the results. Keep GUI observations separate from log assertions, and identify checks that were not run.
 
-Current validation results belong in the [update audit](results/upstream-audit-20260905.md). Follow the upstream [plugin tutorials](../docs/user/develop/basic/index.md) when adding behavior; keep local plugin sources and overlays under `artifacts/plugins/`.
+The [NVFP4 v2 result](results/uat-nvfp4-v2-20260905/RESULT.md) records passing headless acceptance and pending interactive checks. The [update audit](results/upstream-audit-20260905.md) records upstream-sync validation. Follow the upstream [plugin tutorials](../docs/user/develop/basic/index.md) when adding behavior; keep local plugin sources and overlays under `artifacts/plugins/`.

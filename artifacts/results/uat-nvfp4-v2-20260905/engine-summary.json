@@ -1,0 +1,14 @@
+{
+  "start": 1788617912399,
+  "end": 1788617964718,
+  "sampleCount": 6,
+  "sampledRunningPeak": 9.0,
+  "sampledWaitingPeak": 0.0,
+  "deltas": {
+    "num_preemptions_total": 0.0,
+    "generation_tokens_total": 2546.0,
+    "prompt_tokens_total": 295327.0,
+    "prefix_cache_hits_total": 205408.0,
+    "prefix_cache_queries_total": 295327.0
+  }
+}

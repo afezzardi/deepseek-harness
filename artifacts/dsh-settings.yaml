@@ -4,7 +4,7 @@
 llm-pi-ai:
   providers:
     local-qwen:
-      displayName: Local Qwen3.8-27B
+      displayName: Local Qwen3.8-27B NVFP4
       apiKeyEnv: LITELLM_MASTER_KEY
       api: openai-completions
       reasoning: medium
@@ -29,7 +29,7 @@ llm-pi-ai:
           preserve_thinking: false
       models:
         - id: chat-model
-          name: Qwen3.8-27B
+          name: Qwen3.8-27B NVFP4
           contextWindow: 131072
           maxTokens: 16384
           input: [ text, image ]
@@ -40,7 +40,7 @@ llm-pi-ai:
             xhigh: xhigh
 
     local-qwen-off:
-      displayName: Local Qwen3.8-27B (no thinking)
+      displayName: Local Qwen3.8-27B NVFP4 (no thinking)
       apiKeyEnv: LITELLM_MASTER_KEY
       api: openai-completions
       reasoning: off
@@ -65,7 +65,7 @@ llm-pi-ai:
           preserve_thinking: false
       models:
         - id: chat-model
-          name: Qwen3.8-27B (no thinking)
+          name: Qwen3.8-27B NVFP4 (no thinking)
           contextWindow: 131072
           maxTokens: 16384
           input: [ text, image ]

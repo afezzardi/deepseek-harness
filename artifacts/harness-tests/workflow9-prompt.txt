@@ -1,0 +1,6 @@
+Run one workflow using the workflow tool. This is an explicitly requested nine-agent workflow acceptance test. Submit the following meta and script exactly. Do not use plain subagent calls, add children, retry failed children, or modify files. After the workflow completes, report all nine results and any failures in under 200 words.
+
+meta: {"name":"uat-nine-readers","description":"Nine concurrent read-only agents and an ordered join"}
+
+script:
+return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));

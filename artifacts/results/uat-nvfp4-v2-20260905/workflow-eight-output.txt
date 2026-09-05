@@ -1,0 +1,29 @@
+$ node --import tsx/esm apps/cli/src/bin.ts --profile headless 'Run one workflow using the workflow tool. This is an explicitly requested nine-agent workflow acceptance test. Submit the following meta and script exactly. Do not use plain subagent calls, add children, retry failed children, or modify files. After the workflow completes, report all nine results and any failures in under 200 words.
+
+meta: {"name":"uat-nine-readers","description":"Nine concurrent read-only agents and an ordered join"}
+
+script:
+return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));'
+dsh: reasoning:
+The user wants me to run a workflow using the workflow tool, with the exact meta and script specified. First, let me check if artifacts/README.md exists. That way, I'll know whether the reader will succeed.
+dsh: reasoning:
+All 9 completed. Reporting the results concisely.
+
+
+Workflow `uat-nine-readers` completed: all 9 agents succeeded, no failures.
+
+**Results (reader-1 … reader-9):**
+
+| # | Returned |
+|---|----------|
+| 1 | `1` + `# artifacts/` |
+| 2 | `2 — # artifacts/` |
+| 3 | `3 — # artifacts/` |
+| 4 | `4` + `# artifacts/` |
+| 5 | `5 — # artifacts/` |
+| 6 | `6` + `# artifacts/` |
+| 7 | `7` + `# artifacts/` |
+| 8 | `8` + `# artifacts/` |
+| 9 | `9` + `# artifacts/` |
+
+Every agent correctly read `artifacts/README.md` via the read tool, returned its assigned number 1–9 in the ordered position, and reported the file's first Markdown heading `# artifacts/`. Minor formatting differences (extra blank lines, em-dash separators, backtick-wrapped headings on agents 3, 5, 8) are cosmetic only — no missing numbers, no out-of-order join, no failures, no file modifications. Acceptance test passed.

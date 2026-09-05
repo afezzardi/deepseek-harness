@@ -17,7 +17,7 @@
 - id: workflow-worker-thread
   config:
     provider: spawn
-    maxConcurrentAgents: 4
+    maxConcurrentAgents: 8
 
 - id: session-title-llm
   config:
