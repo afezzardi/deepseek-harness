@@ -1,0 +1,26 @@
+ok: universal ids are off/low/medium/high/max
+ok: max level is named Ultracode
+ok: default effort off
+ok: effort dialect: verbatim levels + supportsReasoningEffort
+ok: effort dialect: no compat on non-openai-completions
+ok: deepseek dialect compat
+ok: openrouter off maps to none
+ok: qwen dialect compat
+ok: 8 dialects
+ok: models branch emits ONE whole-array set op (path has no array index)
+ok: whole-array value keeps all 3 entries
+ok: m1 got reasoningEfforts injected
+ok: m1 got compat on openai-completions
+ok: m2 (user false) kept untouched
+ok: m3 (user dict) kept untouched
+ok: catalog model a overridden
+ok: catalog model b (native reasoning) skipped
+ok: override compat deepseek
+ok: already-provisioned entry yields no ops
+ok: dialect change writes one whole-array op (wire map identical, compat differs)
+ok: whole-array op targets models
+ok: compat updated to deepseek
+ok: recognizes own injection
+ok: user dict not ours
+ok: false/undefined not ours
+ALL HOST SPECS PASSED

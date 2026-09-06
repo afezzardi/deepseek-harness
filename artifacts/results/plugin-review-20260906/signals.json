@@ -1,0 +1,987 @@
+[
+  {
+    "repo": "1624318455/dsh-plugin-tavily",
+    "contributors": [
+      {
+        "login": "1624318455",
+        "contributions": 28
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.6.2",
+        "published_at": "2026-08-25T17:37:33Z"
+      },
+      {
+        "tag": "v0.6.1",
+        "published_at": "2026-08-25T17:24:32Z"
+      }
+    ],
+    "issues": [
+      {
+        "number": 1,
+        "title": "ettings.plugin.item` is a list slot: registration must use `id`, not `key",
+        "state": "closed",
+        "author": "lymfqxy",
+        "pr": false,
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/issues/1"
+      }
+    ],
+    "runs": [
+      {
+        "name": "Release",
+        "conclusion": "failure",
+        "sha": "d5c52f87ecd7e688390f2a45444bd1b0a4d3a160",
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/actions/runs/32964181560"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "d5c52f87ecd7e688390f2a45444bd1b0a4d3a160",
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/actions/runs/32964181555"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "963417f695a28d19042d2dba1314ca9eed5ccce0",
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/actions/runs/32878850730"
+      },
+      {
+        "name": "Release",
+        "conclusion": "success",
+        "sha": "963417f695a28d19042d2dba1314ca9eed5ccce0",
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/actions/runs/32878850667"
+      },
+      {
+        "name": "Release",
+        "conclusion": "failure",
+        "sha": "b8bbfde7ede580dd555b5cf12243713e0b2c2e7e",
+        "url": "https://github.com/1624318455/dsh-plugin-tavily/actions/runs/32878604932"
+      }
+    ],
+    "npm_package": "@dsh-external/dsh-plugin-tavily",
+    "npm_downloads": {
+      "error": "HTTP Error 404: Not Found"
+    }
+  },
+  {
+    "repo": "zmh2000829/dsh-web-search-multi",
+    "contributors": [
+      {
+        "login": "zmh2000829",
+        "contributions": 10
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.2.0",
+        "published_at": "2026-08-24T09:24:30Z"
+      }
+    ],
+    "issues": [],
+    "runs": [
+      {
+        "name": "Publish",
+        "conclusion": "failure",
+        "sha": "c4dce6e14283be7b5c10c5f4b8ab353f307f649d",
+        "url": "https://github.com/zmh2000829/dsh-web-search-multi/actions/runs/32711370919"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "c4dce6e14283be7b5c10c5f4b8ab353f307f649d",
+        "url": "https://github.com/zmh2000829/dsh-web-search-multi/actions/runs/32710829163"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "e985e3885383e18f3f15cd2f3bb9289872481458",
+        "url": "https://github.com/zmh2000829/dsh-web-search-multi/actions/runs/32211544432"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "558e750555a8da5e54b9660f62079ff9fa3142a5",
+        "url": "https://github.com/zmh2000829/dsh-web-search-multi/actions/runs/32208909843"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "c7d4dc7fcbd95299252760516504f8d3b0aa4adc",
+        "url": "https://github.com/zmh2000829/dsh-web-search-multi/actions/runs/32207862864"
+      }
+    ],
+    "npm_package": "dsh-web-search-multi",
+    "npm_downloads": {
+      "downloads": 70,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "dsh-web-search-multi"
+    }
+  },
+  {
+    "repo": "chendefine/dsh-web-fetch-playwright",
+    "contributors": [
+      {
+        "login": "chendefine",
+        "contributions": 19
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.2.5",
+        "published_at": "2026-08-27T12:11:32Z"
+      },
+      {
+        "tag": "v0.2.4",
+        "published_at": "2026-08-24T18:33:12Z"
+      }
+    ],
+    "issues": [
+      {
+        "number": 3,
+        "title": "[Bug]:deepseek-harness v0.1.2-alpha.5 version cannot be launched.",
+        "state": "open",
+        "author": "Rod-fish",
+        "pr": false,
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/issues/3"
+      },
+      {
+        "number": 2,
+        "title": "[Feature]: \u5efa\u8bae\u589e\u5f3a\uff1a\u4e3a\u4e25\u683c Cloudflare \u9632\u62a4\u7ad9\u70b9\u589e\u52a0\u6709\u8fb9\u754c\u7684\u81ea\u7136\u9a8c\u8bc1\u7b49\u5f85",
+        "state": "closed",
+        "author": "rohlinsander",
+        "pr": false,
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/issues/2"
+      },
+      {
+        "number": 1,
+        "title": "Suggestion: SSRF guard, virtual-scroll rendering, stealth, Windows fixes",
+        "state": "open",
+        "author": "jilian-dsh",
+        "pr": false,
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/issues/1"
+      }
+    ],
+    "runs": [
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "e32f205e01f434626afb2cf2388951e3f7ccedaf",
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/actions/runs/33088708919"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "cc7fac60333bb2453df656e5f989d57c20739e7b",
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/actions/runs/33088354468"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "43468ee47c221e14fb4c4027a55e07a6c89c7c1e",
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/actions/runs/33070650885"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "18c30007dce9463c1972aeff304a37363204a74c",
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/actions/runs/32763028867"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "e31d2b292442f23f0ecf28f3146acdf7f62838be",
+        "url": "https://github.com/chendefine/dsh-web-fetch-playwright/actions/runs/32686342186"
+      }
+    ],
+    "npm_package": "dsh-web-fetch-playwright",
+    "npm_downloads": {
+      "downloads": 190,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "dsh-web-fetch-playwright"
+    }
+  },
+  {
+    "repo": "0xsline/dsh-spotlight",
+    "contributors": [
+      {
+        "login": "0xsline",
+        "contributions": 12
+      },
+      {
+        "login": "inschrift-spruch-raum",
+        "contributions": 6
+      },
+      {
+        "login": "HuanLinOTO",
+        "contributions": 1
+      }
+    ],
+    "releases": [],
+    "issues": [
+      {
+        "number": 12,
+        "title": "feat: add direct shortcuts for visible results",
+        "state": "open",
+        "author": "BoWuGit",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/12"
+      },
+      {
+        "number": 11,
+        "title": "fix: match the native modal surface in dark mode",
+        "state": "open",
+        "author": "BoWuGit",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/11"
+      },
+      {
+        "number": 10,
+        "title": "fix: let IME Enter commit text before executing a result",
+        "state": "open",
+        "author": "BoWuGit",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/10"
+      },
+      {
+        "number": 9,
+        "title": "feat: add Control-N/P and Control-J/K result navigation",
+        "state": "open",
+        "author": "BoWuGit",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/9"
+      },
+      {
+        "number": 8,
+        "title": "fix: show the keyboard-active result highlight",
+        "state": "open",
+        "author": "BoWuGit",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/8"
+      },
+      {
+        "number": 7,
+        "title": "docs: define prepare lifecycle contract",
+        "state": "closed",
+        "author": "0xsline",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/7"
+      },
+      {
+        "number": 6,
+        "title": "fix: import schemastery from @deepseek-ai scope for profile resolution",
+        "state": "closed",
+        "author": "HuanLinOTO",
+        "pr": true,
+        "url": "https://github.com/0xsline/dsh-spotlight/pull/6"
+      },
+      {
+        "number": 5,
+        "title": "Published dsh-spotlight@0.0.2 runs a prepare script during installation",
+        "state": "closed",
+        "author": "MicroMilo",
+        "pr": false,
+        "url": "https://github.com/0xsline/dsh-spotlight/issues/5"
+      },
+      {
+        "number": 4,
+        "title": "Design partner: @0xsline/dsh-spotlight lifecycle compatibility check",
+        "state": "closed",
+        "author": "iiwish",
+        "pr": false,
+        "url": "https://github.com/0xsline/dsh-spotlight/issues/4"
+      },
+      {
+        "number": 3,
+        "title": "List dsh-spotlight on DSH Directory?",
+        "state": "closed",
+        "author": "alexchenzl",
+        "pr": false,
+        "url": "https://github.com/0xsline/dsh-spotlight/issues/3"
+      }
+    ],
+    "runs": [],
+    "npm_package": "@0xsline/dsh-spotlight",
+    "npm_downloads": {
+      "downloads": 185,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "@0xsline/dsh-spotlight"
+    }
+  },
+  {
+    "repo": "antnesswcm/dsh-shell-card-plus",
+    "contributors": [
+      {
+        "login": "antnesswcm",
+        "contributions": 12
+      }
+    ],
+    "releases": [],
+    "issues": [],
+    "runs": [],
+    "npm_package": "dsh-shell-card-plus",
+    "npm_downloads": {
+      "downloads": 292,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "dsh-shell-card-plus"
+    }
+  },
+  {
+    "repo": "highland0971/dsh-native-memory",
+    "contributors": [
+      {
+        "login": "highland0971",
+        "contributions": 20
+      }
+    ],
+    "releases": [],
+    "issues": [
+      {
+        "number": 38,
+        "title": "test: user/message mock fidelity \u2014 data.content per real session-event shape (Closes #19)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/38"
+      },
+      {
+        "number": 37,
+        "title": "chore: review residuals \u2014 per-workspace caps, anchor masking, config refine, design sync (Closes #31)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/37"
+      },
+      {
+        "number": 36,
+        "title": "feat: memory_export \u2014 git-friendly masked Markdown mirror (Closes #26)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/36"
+      },
+      {
+        "number": 35,
+        "title": "feat: compaction drift guard (Closes #25)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/35"
+      },
+      {
+        "number": 34,
+        "title": "feat: opt-in session-end memory proposals (Closes #24)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/34"
+      },
+      {
+        "number": 33,
+        "title": "feat: read-only memory browser page (Closes #23)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/33"
+      },
+      {
+        "number": 32,
+        "title": "feat: secret redaction \u2014 write-time policy + always-on injection masking (Closes #22)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/32"
+      },
+      {
+        "number": 31,
+        "title": "chore: \u6536\u655b #21 \u5ba1\u67e5\u9057\u7559(design.md \u00a73/\u00a711 \u6f02\u79fb + config \u8de8\u5b57\u6bb5 refine)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": false,
+        "url": "https://github.com/highland0971/dsh-native-memory/issues/31"
+      },
+      {
+        "number": 30,
+        "title": "feat: recall freshness decay + access-frequency tie-breaks (Closes #21)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/30"
+      },
+      {
+        "number": 29,
+        "title": "feat: memory_expand \u2014 expand a fact citation to the original log excerpt (Closes #20)",
+        "state": "closed",
+        "author": "highland0971",
+        "pr": true,
+        "url": "https://github.com/highland0971/dsh-native-memory/pull/29"
+      }
+    ],
+    "runs": [
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "9acd2ca676fc58a8c8d7a17e59f2d39fcb4c9b58",
+        "url": "https://github.com/highland0971/dsh-native-memory/actions/runs/31917536390"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "b8e5259b27c0ef817a7a02f091f7ab635ec36ee9",
+        "url": "https://github.com/highland0971/dsh-native-memory/actions/runs/31917478205"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "fea29c0137b3538481cce0e2e7df83774fafd09d",
+        "url": "https://github.com/highland0971/dsh-native-memory/actions/runs/31917432118"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "69ab0c2e76f5163318bf0a6216f548cf56c8b068",
+        "url": "https://github.com/highland0971/dsh-native-memory/actions/runs/31917402748"
+      },
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "sha": "add3ca3490a5c77dbb88cce3454aca30596c182d",
+        "url": "https://github.com/highland0971/dsh-native-memory/actions/runs/31917122117"
+      }
+    ],
+    "npm_package": "dsh-native-memory",
+    "npm_downloads": {
+      "downloads": 172,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "dsh-native-memory"
+    }
+  },
+  {
+    "repo": "00080000/dsh-project-memory",
+    "contributors": [
+      {
+        "login": "00080000",
+        "contributions": 110
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.4.3",
+        "published_at": "2026-09-04T13:56:57Z"
+      },
+      {
+        "tag": "v0.4.1",
+        "published_at": "2026-09-03T16:41:27Z"
+      },
+      {
+        "tag": "v0.4.0",
+        "published_at": "2026-09-02T16:46:07Z"
+      },
+      {
+        "tag": "v0.3.4",
+        "published_at": "2026-09-02T05:47:38Z"
+      },
+      {
+        "tag": "v0.3.3",
+        "published_at": "2026-08-31T14:03:11Z"
+      }
+    ],
+    "issues": [
+      {
+        "number": 3,
+        "title": "Cannot compress the context window.",
+        "state": "closed",
+        "author": "Smalldream233",
+        "pr": false,
+        "url": "https://github.com/00080000/dsh-project-memory/issues/3"
+      },
+      {
+        "number": 1,
+        "title": "rc8\u5b89\u88c5\u5931\u8d25",
+        "state": "closed",
+        "author": "lfglfg11",
+        "pr": false,
+        "url": "https://github.com/00080000/dsh-project-memory/issues/1"
+      }
+    ],
+    "runs": [
+      {
+        "name": "ci",
+        "conclusion": "success",
+        "sha": "8bbe237c631b172de1491a744cca92ce250fb512",
+        "url": "https://github.com/00080000/dsh-project-memory/actions/runs/33894236341"
+      },
+      {
+        "name": "ci",
+        "conclusion": "success",
+        "sha": "0d8ebb9450e651db07eb6bdddba82885bbef7a67",
+        "url": "https://github.com/00080000/dsh-project-memory/actions/runs/33880446006"
+      },
+      {
+        "name": "ci",
+        "conclusion": "success",
+        "sha": "3b564314d6c12b9ba0508f9e8146d7bdaf052b89",
+        "url": "https://github.com/00080000/dsh-project-memory/actions/runs/33880095963"
+      },
+      {
+        "name": "ci",
+        "conclusion": "failure",
+        "sha": "f73d6ca7f4cc1f004b0bdd36ec6aebfac988e1ca",
+        "url": "https://github.com/00080000/dsh-project-memory/actions/runs/33879248053"
+      },
+      {
+        "name": "ci",
+        "conclusion": "success",
+        "sha": "7ab0759b2ba55b046ffe6194980b7d509d556452",
+        "url": "https://github.com/00080000/dsh-project-memory/actions/runs/33779568550"
+      }
+    ],
+    "npm_package": "@yolk_vat-y/dsh-project-memory",
+    "npm_downloads": {
+      "downloads": 572,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "@yolk_vat-y/dsh-project-memory"
+    }
+  },
+  {
+    "repo": "zilliztech/dsh-milvus",
+    "contributors": [
+      {
+        "login": "zc277584121",
+        "contributions": 11
+      }
+    ],
+    "releases": [],
+    "issues": [
+      {
+        "number": 10,
+        "title": "ci: add npm trusted publishing",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/10"
+      },
+      {
+        "number": 9,
+        "title": "chore: prepare 0.1.3 release",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/9"
+      },
+      {
+        "number": 8,
+        "title": "feat: expand managed embedding provider catalog",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/8"
+      },
+      {
+        "number": 7,
+        "title": "feat: redesign Milvus settings around collections",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/7"
+      },
+      {
+        "number": 6,
+        "title": "chore: prepare 0.1.2 release",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/6"
+      },
+      {
+        "number": 5,
+        "title": "feat: add schema-aware dense and hybrid retrieval",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/5"
+      },
+      {
+        "number": 4,
+        "title": "Fix published client loading and refresh documentation",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/4"
+      },
+      {
+        "number": 3,
+        "title": "chore: prepare package for public publication",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/3"
+      },
+      {
+        "number": 2,
+        "title": "fix: accept Milvus scalar functions in filters, dedupe sdk database logic",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/2"
+      },
+      {
+        "number": 1,
+        "title": "Add Milvus for DSH plugin",
+        "state": "closed",
+        "author": "zc277584121",
+        "pr": true,
+        "url": "https://github.com/zilliztech/dsh-milvus/pull/1"
+      }
+    ],
+    "runs": [],
+    "npm_package": "@zilliz/dsh-milvus",
+    "npm_downloads": {
+      "downloads": 17,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "@zilliz/dsh-milvus"
+    }
+  },
+  {
+    "repo": "agentscope-ai/ReMe",
+    "contributors": [
+      {
+        "login": "jinliyl",
+        "contributions": 728
+      },
+      {
+        "login": "zouyingcao",
+        "contributions": 68
+      },
+      {
+        "login": "Dengjiaji",
+        "contributions": 54
+      },
+      {
+        "login": "nitwtog",
+        "contributions": 34
+      },
+      {
+        "login": "ployts",
+        "contributions": 30
+      },
+      {
+        "login": "xyf2020",
+        "contributions": 10
+      },
+      {
+        "login": "imrewce",
+        "contributions": 9
+      },
+      {
+        "login": "RerankerGuo",
+        "contributions": 5
+      },
+      {
+        "login": "binary-husky",
+        "contributions": 4
+      },
+      {
+        "login": "chinaux",
+        "contributions": 3
+      },
+      {
+        "login": "ZhaoyangLiu-Leo",
+        "contributions": 2
+      },
+      {
+        "login": "WangCan1178",
+        "contributions": 2
+      },
+      {
+        "login": "fancyboi999",
+        "contributions": 2
+      },
+      {
+        "login": "yangtiancheng-ali",
+        "contributions": 1
+      },
+      {
+        "login": "04cb",
+        "contributions": 1
+      },
+      {
+        "login": "hyp-001",
+        "contributions": 1
+      },
+      {
+        "login": "dongxiaolong",
+        "contributions": 1
+      },
+      {
+        "login": "dengfuping",
+        "contributions": 1
+      },
+      {
+        "login": "aquamarine-bot",
+        "contributions": 1
+      },
+      {
+        "login": "salmanmkc",
+        "contributions": 1
+      },
+      {
+        "login": "pengwork",
+        "contributions": 1
+      },
+      {
+        "login": "Joshuaakaspace",
+        "contributions": 1
+      },
+      {
+        "login": "iluv7",
+        "contributions": 1
+      },
+      {
+        "login": "PsiACE",
+        "contributions": 1
+      },
+      {
+        "login": "aqilaziz",
+        "contributions": 1
+      },
+      {
+        "login": "AmirF194",
+        "contributions": 1
+      },
+      {
+        "login": "FUYOH666",
+        "contributions": 1
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.4.1.11",
+        "published_at": "2026-09-01T06:43:51Z"
+      },
+      {
+        "tag": "v0.4.1.9",
+        "published_at": "2026-08-28T08:16:47Z"
+      },
+      {
+        "tag": "v0.4.1.10",
+        "published_at": "2026-08-31T04:22:22Z"
+      },
+      {
+        "tag": "v0.4.1.8",
+        "published_at": "2026-08-27T06:06:17Z"
+      },
+      {
+        "tag": "v0.4.1.7",
+        "published_at": "2026-08-13T09:22:54Z"
+      }
+    ],
+    "issues": [
+      {
+        "number": 524,
+        "title": "[Bug]: Persisted chunk store is not invalidated when the chunker changes \u2014 stale \"full-outline\" chunks survive upgrades and are never re-chunked",
+        "state": "open",
+        "author": "xiaoka76",
+        "pr": false,
+        "url": "https://github.com/agentscope-ai/ReMe/issues/524"
+      },
+      {
+        "number": 523,
+        "title": "[Bug]: Embedding backfill/rebuild dies instantly on 429 rate-limit (no retry/backoff) and leaves vector search permanently disabled after failure",
+        "state": "open",
+        "author": "xiaoka76",
+        "pr": false,
+        "url": "https://github.com/agentscope-ai/ReMe/issues/523"
+      },
+      {
+        "number": 522,
+        "title": "feat(docs): redesign homepage and add traffic dashboard",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/522"
+      },
+      {
+        "number": 521,
+        "title": "fix(docs): use uncached navigation icon",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/521"
+      },
+      {
+        "number": 520,
+        "title": "docs: refresh ReMe homepage branding",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/520"
+      },
+      {
+        "number": 519,
+        "title": "feat(typescript): update DSH adapter and publish integration guides",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/519"
+      },
+      {
+        "number": 518,
+        "title": "docs: rebuild documentation site with VitePress",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/518"
+      },
+      {
+        "number": 517,
+        "title": "feat(Tag filter): Add an optional rebuildable tag index for file frontmatter",
+        "state": "open",
+        "author": "xyf2020",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/517"
+      },
+      {
+        "number": 516,
+        "title": "fix(plugin): Make plugin job and component config overrides atomic",
+        "state": "open",
+        "author": "xyf2020",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/516"
+      },
+      {
+        "number": 515,
+        "title": "fix: pin ClawHub source ref to publish SHA",
+        "state": "closed",
+        "author": "jinliyl",
+        "pr": true,
+        "url": "https://github.com/agentscope-ai/ReMe/pull/515"
+      }
+    ],
+    "runs": [
+      {
+        "name": "Policy / PR title",
+        "conclusion": "action_required",
+        "sha": "976c2c6cc2ee8569219306e3ed4d52081cd4d8a4",
+        "url": "https://github.com/agentscope-ai/ReMe/actions/runs/34017268064"
+      },
+      {
+        "name": "CI / Documentation",
+        "conclusion": "action_required",
+        "sha": "976c2c6cc2ee8569219306e3ed4d52081cd4d8a4",
+        "url": "https://github.com/agentscope-ai/ReMe/actions/runs/34015999330"
+      },
+      {
+        "name": "CI / Python packages",
+        "conclusion": "action_required",
+        "sha": "976c2c6cc2ee8569219306e3ed4d52081cd4d8a4",
+        "url": "https://github.com/agentscope-ai/ReMe/actions/runs/34015999303"
+      },
+      {
+        "name": "CI / Python tests",
+        "conclusion": "action_required",
+        "sha": "976c2c6cc2ee8569219306e3ed4d52081cd4d8a4",
+        "url": "https://github.com/agentscope-ai/ReMe/actions/runs/34015999222"
+      },
+      {
+        "name": "Security / CodeQL",
+        "conclusion": "action_required",
+        "sha": "976c2c6cc2ee8569219306e3ed4d52081cd4d8a4",
+        "url": "https://github.com/agentscope-ai/ReMe/actions/runs/34015999204"
+      }
+    ],
+    "npm_package": "@agentscope-ai/reme",
+    "npm_downloads": {
+      "downloads": 579,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "@agentscope-ai/reme"
+    }
+  },
+  {
+    "repo": "vectorize-io/hindsight"
+  },
+  {
+    "repo": "awesome-dsh-plugin/awesome-dsh-plugin"
+  },
+  {
+    "repo": "a735624258/dsh-skill-picker",
+    "contributors": [
+      {
+        "login": "a735624258",
+        "contributions": 35
+      }
+    ],
+    "releases": [
+      {
+        "tag": "v0.4.0",
+        "published_at": "2026-09-03T06:00:56Z"
+      },
+      {
+        "tag": "v0.3.4",
+        "published_at": "2026-09-03T05:25:32Z"
+      },
+      {
+        "tag": "v0.3.3",
+        "published_at": "2026-09-03T02:04:19Z"
+      },
+      {
+        "tag": "v0.3.2",
+        "published_at": "2026-09-02T14:53:48Z"
+      },
+      {
+        "tag": "v0.3.1",
+        "published_at": "2026-09-02T14:43:52Z"
+      }
+    ],
+    "issues": [
+      {
+        "number": 5,
+        "title": "[Bug] \u26a1 \u6280\u80fd\u9009\u62e9\u5668\u6ca1\u6709\u52a0\u8f7d\u4e3b\u76ee\u5f55 ~/.agents/skills \u4e0b\u5b58\u653e\u7684\u5168\u5c40\u6280\u80fd\uff08\u515c\u5e95\u8def\u7531\u6f0f\u626b\u8be5\u76ee\u5f55\uff09",
+        "state": "closed",
+        "author": "Ztyss",
+        "pr": false,
+        "url": "https://github.com/a735624258/dsh-skill-picker/issues/5"
+      },
+      {
+        "number": 4,
+        "title": "[UI] \u95ea\u7535\u56fe\u6807\u5efa\u8bae\u7f29\u4e00\u53f7\uff0820px\u219216px\uff09\uff0c\u4e0e\u5de5\u5177\u884c\u6587\u5b57\u63a7\u4ef6\u89c6\u89c9\u5bf9\u9f50",
+        "state": "closed",
+        "author": "Ztyss",
+        "pr": false,
+        "url": "https://github.com/a735624258/dsh-skill-picker/issues/4"
+      },
+      {
+        "number": 2,
+        "title": "List dsh-skill-picker on DSH Directory?",
+        "state": "open",
+        "author": "alexchenzl",
+        "pr": false,
+        "url": "https://github.com/a735624258/dsh-skill-picker/issues/2"
+      },
+      {
+        "number": 1,
+        "title": "\u53ef\u5426\u652f\u6301\u4e0b\u4ee3\u66ff\u6389\u5b98\u65b9\u7684 / \u68c0\u7d22\u529f\u80fd",
+        "state": "closed",
+        "author": "apandan",
+        "pr": false,
+        "url": "https://github.com/a735624258/dsh-skill-picker/issues/1"
+      }
+    ],
+    "runs": [],
+    "npm_package": "dsh-skill-picker",
+    "npm_downloads": {
+      "downloads": 779,
+      "start": "2026-08-30",
+      "end": "2026-09-05",
+      "package": "dsh-skill-picker"
+    }
+  }
+]

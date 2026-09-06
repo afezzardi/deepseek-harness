@@ -1,0 +1,102 @@
+[
+  {
+    "package": "@dsh-external/dsh-plugin-tavily",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "package": "dsh-web-search-multi",
+    "latest": "0.2.0",
+    "published": "2026-08-24T09:23:48.018Z",
+    "gitHead": "c4dce6e14283be7b5c10c5f4b8ab353f307f649d",
+    "attestations": null,
+    "engines": {
+      "node": "^22.19 || >=24"
+    }
+  },
+  {
+    "package": "dsh-web-fetch-playwright",
+    "latest": "0.2.6",
+    "published": "2026-08-27T15:32:33.298Z",
+    "gitHead": "cc7fac60333bb2453df656e5f989d57c20739e7b",
+    "attestations": null,
+    "engines": {
+      "node": ">=20"
+    }
+  },
+  {
+    "package": "@0xsline/dsh-spotlight",
+    "latest": "0.0.2",
+    "published": "2026-08-14T10:40:32.291Z",
+    "gitHead": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+    "attestations": null,
+    "engines": {
+      "node": "^22.19.0 || >=24.0.0"
+    }
+  },
+  {
+    "package": "dsh-shell-card-plus",
+    "latest": "0.3.2",
+    "published": "2026-09-02T03:04:40.315Z",
+    "gitHead": "03d9a19fea94b33d405cefa8deababb32a66ea12",
+    "attestations": null,
+    "engines": {
+      "node": ">=22.19.0",
+      "dsh": ">=0.1.0-rc.5"
+    }
+  },
+  {
+    "package": "dsh-native-memory",
+    "latest": "0.2.0",
+    "published": "2026-08-15T15:28:31.080Z",
+    "gitHead": "0d46384c730d0a7dd7f9c9396b8cbb6ca8e99bfd",
+    "attestations": null,
+    "engines": {
+      "node": ">=22.19.0"
+    }
+  },
+  {
+    "package": "@yolk_vat-y/dsh-project-memory",
+    "latest": "0.4.3",
+    "published": "2026-09-04T13:56:58.932Z",
+    "gitHead": "0d8ebb9450e651db07eb6bdddba82885bbef7a67",
+    "attestations": null,
+    "engines": {
+      "node": ">=18"
+    }
+  },
+  {
+    "package": "@zilliz/dsh-milvus",
+    "latest": "0.1.3",
+    "published": "2026-08-23T04:51:35.017Z",
+    "gitHead": "bd7b60dc8ebe6488c0e48e628b26d1dfcd604fcf",
+    "attestations": null,
+    "engines": {
+      "node": ">=22.19.0"
+    }
+  },
+  {
+    "package": "@agentscope-ai/reme",
+    "latest": "0.1.2",
+    "published": "2026-09-01T12:33:58.408Z",
+    "gitHead": null,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@agentscope-ai%2freme@0.1.2",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "engines": {
+      "node": "^22.22.3 || ^24.15.0 || >=25.9.0"
+    }
+  },
+  {
+    "package": "dsh-skill-picker",
+    "latest": "0.5.6",
+    "published": "2026-09-05T08:43:46.057Z",
+    "gitHead": "55dc8ccdff70b08f6419fe2c9d55fef593ba1387",
+    "attestations": null,
+    "engines": {
+      "node": ">=22"
+    }
+  }
+]

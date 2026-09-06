@@ -1,0 +1,33 @@
+[
+  {
+    "path": "/engine/v1/chat/completions",
+    "status": 200,
+    "model": "chat-model",
+    "topLevelReasoningEffortPresent": false,
+    "chat_template_kwargs": {
+      "enable_thinking": false,
+      "preserve_thinking": false
+    }
+  },
+  {
+    "path": "/engine/v1/chat/completions",
+    "status": 200,
+    "model": "chat-model",
+    "topLevelReasoningEffortPresent": false,
+    "chat_template_kwargs": {
+      "enable_thinking": false,
+      "preserve_thinking": false
+    }
+  },
+  {
+    "path": "/engine/v1/chat/completions",
+    "status": 200,
+    "model": "chat-model",
+    "topLevelReasoningEffortPresent": false,
+    "chat_template_kwargs": {
+      "enable_thinking": true,
+      "reasoning_effort": "medium",
+      "preserve_thinking": false
+    }
+  }
+]

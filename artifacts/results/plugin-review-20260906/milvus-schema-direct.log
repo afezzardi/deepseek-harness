@@ -1,0 +1,11 @@
+✔ normalizes a Milvus BM25 Function into one schema-proven text route (10.788281ms)
+✔ does not infer raw-text search from a sparse field without every BM25 schema guarantee (0.6735ms)
+✔ schema fingerprints are stable across response ordering and change with retrieval facts (1.246461ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20.322002
