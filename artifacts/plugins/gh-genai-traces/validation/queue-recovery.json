@@ -1,0 +1,7 @@
+{
+  "project": "gh-queue-validation-76e9edd45d2744aabf975992ac0f51b0",
+  "trace_id": "f34a27b539f3481cb74f791ee39e4083",
+  "otlp_status": 200,
+  "stored_after_collector_restart": 1,
+  "span_name": "persistent-queue-recovery"
+}

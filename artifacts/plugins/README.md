@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-These plugins live outside the pnpm workspace. The effort slider is built locally; it is enabled only when you launch Web with its overlay.
+These plugins live outside the pnpm workspace. Each plugin is built locally and enabled through its explicit profile overlay.
 
 ## Try the effort slider
 
@@ -30,6 +30,7 @@ The first overlay enables this fork's Web RPC services; the second loads the sli
 
 | Plugin | Purpose | Development reference |
 |---|---|---|
+| [gh-genai-traces](gh-genai-traces/README.md) | Inspect execution traces and evaluated examples in self-hosted Phoenix | Live capture, canonical replay, and a local Compose stack |
 | [Effort slider](effort-slider/README.md) | Select provider-declared reasoning effort from the Web composer | Client modules, typed slots, shared session state, effect disposal, and browser verification |
 
 Start with the plugin's README. The [community review](../results/plugin-review-20260906/REVIEW.md) records the inspected external implementations; popularity figures there are dated observations.

@@ -6,7 +6,7 @@ Keep this fork's configuration, instruments, plugins, and documentation under `a
 
 Work on `fork/qwen38-deployment`; keep `master` as the upstream mirror. Verify the fork-only diff before an update. A conflict-free sync does not prove that instruments still understand product events: inspect their current imports and run focused checks against the selected revision.
 
-Local session instruments accept v2 only. Use a fresh session for acceptance testing; historical-log compatibility is not a requirement. Do not modify stored Session generations to make them appear current. The product's migration rules still govern product-owned data.
+Use upstream session-query and format services for session reads. The gh-genai-traces plugin supplies current tracing and replay; historical V2-only scripts are available in Git history. Use a fresh session for deployment acceptance testing. Do not modify stored Session generations to make them appear current. The product's migration rules still govern product-owned data.
 
 ## Configuration
 
@@ -15,7 +15,7 @@ Local session instruments accept v2 only. Use a fresh session for acceptance tes
 ## Verification
 
 - Verify model and tool behavior from the decoded session log as well as the final answer. Record failures, partial results, and skipped checks explicitly.
-- Decode compressed logs with [read-session-log.mts](read-session-log.mts); a single-frame decoder can miss later records.
+- Read sessions through upstream services; do not reimplement compression or released format decoding in local plugins.
 - Use [recproxy.py](recproxy.py) when verification needs actual request sampling or reasoning fields.
 - Persist probe output before publishing numbers. Distinguish current measurements from hypotheses and dated evidence.
 - Keep current docs concise and correct. Remove superseded instructions and misleading assets; check inbound references when deleting a file. Historical results describe their own run, not current deployment guarantees.

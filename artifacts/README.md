@@ -4,7 +4,7 @@ English | [中文](README.zh.md)
 
 Fork-local configuration, instruments, and acceptance checks for DeepSeek Harness with the self-hosted Qwen3.8-27B endpoint. Keep all deployment customizations here so the product tree can sync from upstream.
 
-Start with [NEXT-SESSION.md](NEXT-SESSION.md) for the selected revision and operational status, then use [UAT.md](UAT.md). The local instruments support Session format v2 only; old logs and old UAT results are not compatibility requirements or evidence that this revision passes.
+Start with [NEXT-SESSION.md](NEXT-SESSION.md) for the selected revision and operational status, then use [UAT.md](UAT.md). Current tracing and replay use upstream session services through [gh-genai-traces](plugins/gh-genai-traces/README.md). Dated UAT results remain historical evidence for their recorded revisions.
 
 ## Configuration and guidance
 
@@ -21,12 +21,7 @@ The YAML files are the versioned deployment configuration. Runtime copies live u
 
 | File | Purpose |
 |---|---|
-| [read-session-log.mts](read-session-log.mts) | Decode concatenated zstd frames in a v2 session log |
-| [metrics.mts](harness-tests/metrics.mts) | Measure tokens, model/tool timing, outcomes, approvals, and compactions from v2 events |
-| [v2-log.mts](harness-tests/v2-log.mts) | Validate physical v2 JSONL with the upstream codec |
-| [v2-regression.mts](harness-tests/v2-regression.mts) | Check timing against the product projection and reject invalid inputs |
-| [check.sh](harness-tests/check.sh) | Run the named log-level acceptance checks in [UAT.md](UAT.md) |
-| [check-case.mts](harness-tests/check-case.mts) | Implement those acceptance criteria |
+| [gh-genai-traces](plugins/gh-genai-traces/README.md) | Live GenAI tracing, validated session replay, local Phoenix stack, and an evaluated dataset example |
 | [recproxy.py](recproxy.py) | Record request bodies when checking actual sampling and reasoning fields |
 | [sample-engine-metrics.sh](harness-tests/sample-engine-metrics.sh) | Sample cumulative engine counters; use bracketing samples for scenario deltas |
 | [results/](results/) | Dated evidence, including the [upstream update audit](results/upstream-audit-20260905.md) |

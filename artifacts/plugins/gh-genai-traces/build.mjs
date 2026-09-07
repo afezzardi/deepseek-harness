@@ -1,0 +1,23 @@
+/** Bundle plugin-owned libraries while retaining the host's DSH service identities. */
+import { readFile, mkdir, writeFile } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import { build } from 'tsdown'
+const root = fileURLToPath(new URL('./', import.meta.url))
+await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../../tsconfig.base.json', import.meta.url)), entry: { index: 'src/index.ts', evaluation: 'examples/evaluation.ts' }, outDir: 'lib', clean: true,
+  platform: 'node', target: 'es2024', format: 'esm', fixedExtension: false, dts: false,
+  deps: { neverBundle: [/^@deepseek-ai\/(?!dsh-token-meter\/src\/turn-usage\.ts$)/], alwaysBundle: [/^@deepseek-ai\/dsh-token-meter\/src\/turn-usage\.ts$/, /^@opentelemetry\//, /^zod(?:\/|$)/] },
+})
+await mkdir(new URL('./lib/', import.meta.url), { recursive: true })
+await writeFile(new URL('./lib/overlay.yml', import.meta.url),
+  `- id: session-telemetry-otel\n  disabled: true\n- insert:\n    - id: gh-genai-traces\n      name: ${JSON.stringify(fileURLToPath(new URL('./lib/index.js', import.meta.url)))}\n      config:\n        content: rich-redacted\n        endpoint: !!js process.env.GH_GENAI_OTLP_ENDPOINT ?? 'http://127.0.0.1:4318/v1/traces'\n        project: !!js process.env.GH_GENAI_PROJECT ?? 'gh-genai-traces'\n        replaySessionIds: !!js (process.env.GH_GENAI_REPLAY_SESSIONS ?? '').split(',').filter(Boolean)\n`)
+// Dedicated source facade keeps local development outside root workspace lists.
+const base = await readFile(new URL('../../../tsconfig.base.json', import.meta.url), 'utf8')
+const ts = await import('typescript')
+const parsed = ts.parseConfigFileTextToJson('tsconfig.base.json', base).config
+const paths = Object.fromEntries(Object.entries(parsed.compilerOptions.paths).map(([name, values]) => [name, values.map(value => `../../../${value}`)]))
+paths['@deepseek-ai/dsh-token-meter/src/turn-usage.ts'] = ['../../../packages/llm/token-meter/src/turn-usage.ts']
+await writeFile(new URL('./lib/tsconfig.paths.json', import.meta.url), JSON.stringify({ compilerOptions: { paths: Object.fromEntries(Object.entries(paths).map(([name, values]) => [name, values.map(value => `../${value}`)])) } }, null, 2) + '\n')
+
+const host = ts.parseConfigFileTextToJson('tsconfig.host.json', await readFile(new URL('../../../tsconfig.host.json', import.meta.url), 'utf8')).config
+const check = { extends: ['../../../../tsconfig.base.json', './tsconfig.paths.json'], compilerOptions: { noEmit: true, composite: false, incremental: false }, include: ['../src/**/*.ts', '../tests/**/*.ts', '../examples/**/*.ts'], references: host.references.map(ref => ({ path: `../../../../${ref.path}` })) }
+await writeFile(new URL('./lib/tsconfig.check.json', import.meta.url), JSON.stringify(check, null, 2) + '\n')

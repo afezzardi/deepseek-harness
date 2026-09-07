@@ -1,23 +1,15 @@
 # Deployment runbook
 
-The selected upstream revision is `d347e703908d0406b7a7ef80e3a0e594d86b2215`, tagged `dsh-v0.1.3-alpha.1`. The fork is rebased onto that revision. Local adaptations belong under `artifacts/`; the [update audit](results/upstream-audit-20260905.md) records metric-patch findings and verification status.
+The fork includes upstream revision `c389f96bf3a9b6807cb71ed6bdad5849be0df6d8` through merge `836e963caba622ae214de2344ed0d26b4794469e`. All fork-only product customizations remain under `artifacts/`. A fresh upstream fetch at the merge confirmed that revision as `upstream/master`.
 
-## Session format and acceptance
+## Current validation
 
-Use fresh Session format v2 sessions. The instruments read `session.v2.jsonl.zstd` or decoded v2 JSONL and reject other versions. Do not use August UAT results as acceptance evidence for this checkout; follow [UAT.md](UAT.md) and record the exact session path, revision, and result.
+[gh-genai-traces](plugins/gh-genai-traces/README.md) owns live tracing, recorded-session replay, the local Phoenix stack, and its evaluation example. Its [validation report](plugins/gh-genai-traces/VALIDATION.md) separates source tests, the built headless smoke, native Phoenix ingestion, and deployment blockers. Dated [results](results/) describe their own revisions and are not current deployment acceptance.
 
-Required acceptance covers tools and sandbox refusal, then one nine-agent workflow with verified child overlap and result collection. Optional Web checks cover approvals, compaction, resume, and cancellation; [UAT.md](UAT.md) owns the criteria.
+The user reports that the self-hosted inference endpoint is offline. Keyless validation does not establish model behavior. Fireworks AI is an available alternative for a bounded live smoke when credentials are supplied; no Fireworks calls are required by the offline tests.
 
-## Before running
+## Configuration and acceptance
 
-Use the repository's [development setup](../docs/development.md) for dependencies and build prerequisites. Review [dsh-settings.yaml](dsh-settings.yaml) and [dsh-cordis.patch.yml](dsh-cordis.patch.yml), compare them with the active `$DSH_HOME` files, and supply `LITELLM_MASTER_KEY` through the environment or the ignored root `.env`. Do not print the credential.
+Keep [settings](dsh-settings.yaml) and the [home patch](dsh-cordis.patch.yml) aligned with runtime copies only when deploying. The tracing overlay is an explicit launch option; it does not install itself into the user's profiles. Web retains the [Typert overlay](harness-tests/patches/web-typert.yml) and [effort slider](plugins/effort-slider/README.md).
 
-Web runs need the [Typert overlay](harness-tests/patches/web-typert.yml) while the home patch disables those rows. Verify browser activation and a real model turn; an HTTP response alone does not prove the client plugins work.
-
-The inference endpoint is external to this checkout. A successful offline instrument test does not verify endpoint availability, sampler behavior, or model quality. Record a blocked real-model run as blocked, with its actual error.
-
-## After running
-
-Persist the v2 session metrics and acceptance-check output under a new dated directory in [results/](results/). Record the model route and exact source revision alongside the results. Keep GUI observations separate from log assertions, and identify checks that were not run.
-
-The [NVFP4 v2 result](results/uat-nvfp4-v2-20260905/RESULT.md) records passing headless acceptance and pending interactive checks. The [update audit](results/upstream-audit-20260905.md) records upstream-sync validation. Follow the upstream [plugin tutorials](../docs/user/develop/basic/index.md) when adding behavior; keep local plugin sources and overlays under `artifacts/plugins/`.
+[UAT.md](UAT.md) owns live deployment acceptance. Preserve the inference host's ownership: do not change its configuration or restart its services. Record revision, route, session identities, commands, observed outcomes, and skipped checks with each deployment probe.

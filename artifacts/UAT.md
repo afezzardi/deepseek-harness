@@ -1,6 +1,6 @@
-# Fresh v2 acceptance
+# Fresh deployment acceptance
 
-Accept this deployment only from fresh Session v2 logs. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. [Latest execution](results/uat-nvfp4-v2-20260905/RESULT.md).
+Accept this deployment only from fresh sessions produced by the selected upstream revision. Live inference is currently offline; leave model-dependent cases BLOCKED until a route is available. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. [Latest execution](results/uat-nvfp4-v2-20260905/RESULT.md).
 
 ## 1. Prepare
 
@@ -11,10 +11,10 @@ cmp artifacts/dsh-settings.yaml "${DSH_HOME:-$HOME/.dsh}/settings.yaml"
 cmp artifacts/dsh-cordis.patch.yml "${DSH_HOME:-$HOME/.dsh}/cordis.patch.yml"
 git rev-parse HEAD
 pnpm dsh --profile headless --dump-config
-node --import tsx/esm artifacts/harness-tests/v2-regression.mts
+pnpm exec vitest run --config artifacts/plugins/gh-genai-traces/vitest.config.ts
 ```
 
-Require matching configuration, `maxConcurrentAgents: 8`, and a passing regression. Record revision and configuration hashes. The route is `local-qwen/chat-model`; the display name identifies NVFP4. [Inference ownership](AGENTS.md#inference-host-ownership) governs live build verification.
+Require matching configuration, `maxConcurrentAgents: 8`, and a passing regression. Record revision and configuration hashes. The configured local route is `local-qwen/chat-model`; record any alternative route explicitly. [Inference ownership](AGENTS.md#inference-host-ownership) governs live build verification.
 
 ## 2. Run required cases
 
@@ -46,15 +46,14 @@ Count open members from paired `tool-workflow/agent-start` / `agent-end` records
 
 ## 3. Verify and record
 
-Substitute the exact completed session path and a unique output path:
+Substitute the exact completed session ID; replay uses the configured DSH persistence store:
 
 ```sh
-node --import tsx/esm artifacts/read-session-log.mts /absolute/path/to/session.v2.jsonl.zstd /tmp/dsh-v2-uat.jsonl
-node --import tsx/esm artifacts/harness-tests/metrics.mts /absolute/path/to/session.v2.jsonl.zstd
-bash artifacts/harness-tests/check.sh B1.4 /absolute/path/to/e2/session.v2.jsonl.zstd
+export GH_GENAI_REPLAY_SESSIONS='session-id'
+# Apply the telemetry overlay on the next normal profile launch.
 ```
 
-Require complete decoding, terminal outcomes, and positive token usage. Save metrics and checker output. The regression checks product timing parity. Count workflow tokens across parent **and all children**; summed model time is not elapsed time. Historical performance is not a pass threshold.
+Read canonical events through upstream session-query and verify terminal outcomes and available provider usage. Save trace exports and explicit criterion-by-criterion observations; the tracing tests do not replace these deployment checks. Count workflow tokens across parent **and all children**; summed model time is not elapsed time. Historical performance is not a pass threshold.
 
 Optionally run [engine sampling](harness-tests/sample-engine-metrics.sh) around W9. Report counter deltas and sampled running/waiting peaks separately from child overlap; missing counters are unknown, and sampled peaks are lower bounds. Sharing results with the inference owner requires authorization.
 
@@ -74,4 +73,4 @@ pnpm dsh --profile web --patch artifacts/harness-tests/patches/web-typert.yml
 | Resume | Close and reopen the completed conversation; ask for an earlier fact | Same session, persisted history, correct recall |
 | Cancel | Stop an active W9 workflow; then send a simple message | Cancelled run, all started members settled, no continuing child work, next turn completes |
 
-Run `check.sh` for each B3/B4 case with its exact log; a third argument overrides B3’s target. Verify targets are absent before writes; inspect and remove only files this UAT created. Insufficient history cannot pass compaction. Resume checks conversation persistence; workflows cannot resume across process restarts.
+Read each B3/B4 session through upstream session-query and check the criteria against its canonical events; record the exact target path. Verify targets are absent before writes; inspect and remove only files this UAT created. Insufficient history cannot pass compaction. Resume checks conversation persistence; workflows cannot resume across process restarts.

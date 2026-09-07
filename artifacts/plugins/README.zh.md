@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-这些插件位于 pnpm 工作区之外。推理强度滑块已在本地构建；只有在启动 Web 时指定其覆盖层才会启用。
+这些插件位于 pnpm 工作区之外。每个插件均在本地构建，并通过显式配置的 profile 覆盖层启用。
 
 ## 试用推理强度滑块
 
@@ -30,6 +30,7 @@ pnpm dsh --profile web \
 
 | 插件 | 用途 | 开发参考 |
 |---|---|---|
+| [gh-genai-traces](gh-genai-traces/README.zh.md) | 在自托管 Phoenix 中检查执行轨迹与经过评估的样例 | 实时采集、规范会话回放以及本地 Compose 栈 |
 | [推理强度滑块](effort-slider/README.zh.md) | 在 Web 输入区选择提供者声明的推理强度 | 客户端模块、类型化插槽、共享会话状态、效果清理和浏览器验证 |
 
 从插件的 README 开始。[社区评审](../results/plugin-review-20260906/REVIEW.md) 记录了已检查的外部实现；其中的受欢迎程度数据是注明日期的观测结果。

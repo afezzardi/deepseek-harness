@@ -1,0 +1,27 @@
+- id: session-telemetry-otel
+  disabled: true
+- id: headless-startup
+  disabled: true
+- id: headless-runner
+  disabled: true
+- id: agent-loop
+  config:
+    agents:
+      - id: main
+        provider: cli-mock
+        model: cli-mock
+        cwd: !!js process.cwd()
+- id: session-persistence-jsonl
+  config:
+    root: './.sessions'
+    compression: none
+- insert:
+    - id: cli-mock-llm
+      name: '../../../../../packages/test-support/loader-smoke/tests/fixtures/cli-mock-llm.ts'
+    - id: gh-genai-traces
+      name: '../../lib/index.js'
+      config:
+        endpoint: !!js process.env.GH_GENAI_OTLP_ENDPOINT
+        content: rich-redacted
+        maxContentBytes: 1048576
+        secretEnv: [GH_GENAI_FIXTURE_SECRET]
