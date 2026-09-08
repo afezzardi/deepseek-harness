@@ -1,5 +1,6 @@
 /** Bundle plugin-owned libraries while retaining the host's DSH service identities. */
-import { readFile, mkdir, writeFile } from 'node:fs/promises'
+import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { build } from 'tsdown'
 const root = fileURLToPath(new URL('./', import.meta.url))
@@ -8,6 +9,9 @@ await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../.
   deps: { neverBundle: [/^@deepseek-ai\/(?!(?:dsh-token-meter\/src\/turn-usage\.ts|dsh-session\/src\/surface\.ts)$)/], alwaysBundle: [/^@deepseek-ai\/(?:dsh-token-meter\/src\/turn-usage\.ts|dsh-session\/src\/surface\.ts)$/, /^@opentelemetry\//, /^zod(?:\/|$)/] },
 })
 await mkdir(new URL('./lib/', import.meta.url), { recursive: true })
+const auditSources = ['experiments/audit-profile.ts', ...(await readdir(new URL('./src/', import.meta.url), { recursive: true })).filter(name => name.endsWith('.ts')).map(name => `src/${name}`)].sort()
+const auditHashes = await Promise.all(auditSources.map(async name => [name, createHash('sha256').update(await readFile(new URL(name, import.meta.url))).digest('hex')]))
+await writeFile(new URL('./lib/audit-code-identity.json', import.meta.url), JSON.stringify({ version: 1, files: Object.fromEntries(auditHashes) }) + '\n')
 await writeFile(new URL('./lib/overlay.yml', import.meta.url),
   `- id: session-telemetry-otel\n  disabled: true\n- insert:\n    - id: gh-genai-traces\n      name: ${JSON.stringify(fileURLToPath(new URL('./lib/index.js', import.meta.url)))}\n      config:\n        content: rich-redacted\n        endpoint: !!js process.env.GH_GENAI_OTLP_ENDPOINT ?? 'http://127.0.0.1:4318/v1/traces'\n        project: !!js process.env.GH_GENAI_PROJECT ?? 'gh-genai-traces'\n        replaySessionIds: !!js (process.env.GH_GENAI_REPLAY_SESSIONS ?? '').split(',').filter(Boolean)\n`)
 // Dedicated source facade keeps local development outside root workspace lists.

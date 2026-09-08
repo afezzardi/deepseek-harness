@@ -1,0 +1,19 @@
+{
+  "graderVersion": "deterministic-v5",
+  "graded": 144,
+  "eligibleTargets": 126,
+  "samePublishedTargetIdentities": true,
+  "publishedVersion": "RGF0YXNldFZlcnNpb246MjE=",
+  "consideredToolEvents": 295,
+  "selectedToolEvents": 69,
+  "rejectedToolEvents": 226,
+  "rejectionReasons": {
+    "Error: Root trajectory has no eligible final-answer candidate": 212,
+    "Error: Mixed tool/text target is unsupported": 2,
+    "Error: Tool-decision selection is limited to the terminal completed turn": 12
+  },
+  "duplicateToolEvidence": [],
+  "canonicalFilesUnchanged": 412,
+  "nativePublicationPerformed": false,
+  "inferencePerformed": false
+}

@@ -1,5 +1,7 @@
 # Trace pipeline v3 — 2026-09-08 checkpoint
 
+This is the preserved pre-restoration checkpoint. See the [continuation report](CONTINUATION.md) for the completed baseline and subsequent validation.
+
 ## Status
 
 This is a viable implementation checkpoint, not completion of the full dataset plan. The user confirmed the inference VPN is down and requested a commit and fresh-context handoff. No new baseline inference, training job, inference-host change, or push was performed. No candidate is training-ready.

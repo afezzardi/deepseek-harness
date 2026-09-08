@@ -14,6 +14,30 @@ def digest(value):
     return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
+def encode_field(value):
+    """Keep JSONB-incompatible canonical strings lossless inside a JSON-text envelope."""
+    def needs_envelope(member):
+        if isinstance(member, str):
+            return any(c == '\0' or 0xD800 <= ord(c) <= 0xDFFF for c in member)
+        if isinstance(member, dict):
+            return any(needs_envelope(k) or needs_envelope(v) for k, v in member.items())
+        return isinstance(member, list) and any(needs_envelope(v) for v in member)
+    if needs_envelope(value) or isinstance(value, dict) and value.get('ghEncoding') == 'json-text-v1':
+        return {'ghEncoding': 'json-text-v1', 'ghJson': json.dumps(value, ensure_ascii=True, separators=(',', ':'))}
+    return value
+
+
+def decode_field(value):
+    if isinstance(value, dict) and value.get('ghEncoding') == 'json-text-v1':
+        if set(value) - {'ghEncoding', 'ghJson', 'annotations'}:
+            raise ValueError('Unexpected encoded Phoenix fields')
+        decoded = json.loads(value['ghJson'])
+        if value.get('annotations'):
+            decoded['annotations'] = value['annotations']
+        return decoded
+    return value
+
+
 def atomic(file, value):
     file = Path(file)
     file.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -35,6 +59,67 @@ def row_digest(example):
     if metadata.get('annotations') == {}:
         del metadata['annotations']
     return digest({'input': example['input'], 'output': example['output'], 'metadata': metadata})
+
+
+def validate_content(candidate):
+    """Verify the neutral file's content identity before publication or reference rendering."""
+    if candidate['version'] != 2 or candidate['trainingReady'] is not False:
+        raise ValueError('Expected an explicitly non-training-ready v2 candidate')
+    provenance, target = candidate['provenance'], candidate['target']
+    checks = {'requestHash': digest(candidate['request']), 'toolsHash': digest(candidate['request'].get('tools')),
+              'configHash': digest(candidate['request']['config']), 'outputHash': digest(candidate['response']['content']),
+              'rowHash': digest({'request': candidate['request'], 'response': candidate['response'], 'target': {**target, 'event': None}}),
+              'transformationHash': digest({'version': 2, 'reconstruction': 'upstream-surface', 'objective': target['policy'], 'reasoning': 'retain-source-omit-target'})}
+    if any(provenance[key] != value for key, value in checks.items()):
+        raise ValueError('Curated candidate content hash mismatch')
+    if candidate['response']['role'] != 'assistant' or candidate['response']['source']['kind'] != 'model' or provenance['sourceEvent'] != target['event'] or target['event'] < provenance['inheritedEventCount']:
+        raise ValueError('Candidate target ownership mismatch')
+    if target['policy'] not in ('final-answer', 'tool-decision') or target['reasoning'] != 'omit':
+        raise ValueError('Unsupported candidate target')
+    blocks = candidate['response']['content']
+    if any(b['type'] not in ('text', 'reasoning', 'tool-call', 'tool-result') for m in candidate['request']['messages'] + [candidate['response']] for b in m['content']):
+        raise ValueError('Unsupported candidate content block')
+    if target['policy'] == 'final-answer':
+        if any(b['type'] not in ('text', 'reasoning') for b in blocks):
+            raise ValueError('Unsupported final-answer content')
+        selected = [i for i, b in enumerate(blocks) if b['type'] == 'text' and b['text'].strip()]
+    else:
+        if any(b['type'] not in ('tool-call', 'reasoning') for b in blocks):
+            raise ValueError('Unsupported tool-decision content')
+        selected = [i for i, b in enumerate(blocks) if b['type'] == 'tool-call']
+    if not selected or selected != target['blocks']:
+        raise ValueError('Candidate target blocks mismatch')
+
+
+def validate_curated(example, required=False):
+    """Check candidate-file consistency; a review hash is not reviewer authentication."""
+    candidate = example['metadata'].get('candidate')
+    if candidate is None:
+        if required:
+            raise ValueError('Curated publication requires a candidate on every example')
+        return
+    validate_content(candidate)
+    if candidate['sftEligible'] is not True or example['id'] != candidate['provenance']['rowHash']:
+        raise ValueError('Curated publication requires admitted candidates with stable identities')
+    provenance, target, grade = candidate['provenance'], candidate['target'], candidate['grade']
+    if target['policy'] == 'tool-decision':
+        decisions = grade.get('decisions', [])
+        if len({d['call'] for d in decisions}) != len(decisions) or sum(d['status'] == 'pass' and d['call'] > target['event'] for d in decisions) < len(target['blocks']):
+            raise ValueError('Curated tool target lacks distinct passing decisions')
+    review = provenance['review']
+    if not review or review['contentHash'] != provenance['sourceHash'] or review['transformationHash'] != provenance['transformationHash']:
+        raise ValueError('Curated candidate review mismatch')
+    if not grade['required'] or any(grade['observations'][key]['status'] != 'pass' for key in grade['required']):
+        raise ValueError('Curated candidate has unpassed required observations')
+    if candidate['sourceEvidence']['approvals'] or candidate.get('conflictVersions') or candidate['split'] != example['split']:
+        raise ValueError('Curated candidate admission conflicts with approval or split evidence')
+    if example['input'] != {'request': candidate['request']} or example['output'] != {'response': candidate['response'], 'target': target}:
+        raise ValueError('Publication differs from validated candidate')
+    fidelity = example['metadata'].get('fidelity') or {}
+    if fidelity.get('status') != 'byte-exact' or fidelity.get('canonicalRequestHash') != provenance['requestHash'] or fidelity.get('canonicalSourceHash') != provenance['sourceHash']:
+        raise ValueError('Curated publication requires exact source-bound provider fidelity')
+    if fidelity.get('session') != provenance['session'] or fidelity.get('event') != target['event'] or fidelity.get('recordedHash') != fidelity.get('reconstructedHash'):
+        raise ValueError('Curated provider fidelity identifies a different request')
 
 
 class Phoenix:
@@ -66,12 +151,17 @@ class Phoenix:
                 return result
 
     def examples(self, dataset, version):
-        return self.request('/v1/datasets/' + urllib.parse.quote(dataset, safe='') + '/examples?' + urllib.parse.urlencode({'version_id': version}))['data']['examples']
+        rows = self.request('/v1/datasets/' + urllib.parse.quote(dataset, safe='') + '/examples?' + urllib.parse.urlencode({'version_id': version}))['data']['examples']
+        return [{**row, **{key: decode_field(row[key]) for key in ['input', 'output', 'metadata']}} for row in rows]
 
-    def publish(self, name, examples, receipt_file, source_inventory=None):
+    def publish(self, name, examples, receipt_file, source_inventory=None, previous=None, require_curated=False):
         """Publish immutable content; retries reconcile the export identity in Phoenix."""
         if not examples or len({e['id'] for e in examples}) != len(examples):
             raise ValueError('Publication needs nonempty, unique stable example identities')
+        for example in examples:
+            if example['split'] not in ('train', 'validation', 'test') or not example['metadata'].get('groupKeys'):
+                raise ValueError('Every example requires a frozen split and nonempty group keys')
+            validate_curated(example, required=require_curated or 'graderVersion' in (source_inventory or {}))
         export_id = digest({'version': 2, 'name': name, 'examples': examples, 'sources': source_inventory})
         datasets = self.pages('/v1/datasets')
         dataset = next((d for d in datasets if d['name'] == name), None)
@@ -84,10 +174,37 @@ class Phoenix:
                     'rowHashes': {e['id']: row_digest(e) for e in examples},
                     'splitSnapshot': {e['id']: e['split'] for e in examples}, 'schemaVersion': 2}
         if existing is None:
-            self.graphql('mutation($input: AddExamplesToDatasetInput!) { addExamplesToDataset(input:$input) { dataset { id } } }', {'input': {
+            staged = next((v for v in versions if v['metadata'].get('pendingExportIdentity') == export_id), None)
+            if staged and versions[0]['version_id'] != staged['version_id']:
+                raise RuntimeError('Phoenix head moved after staged publication')
+            if versions and staged is None:
+                if previous is None or previous['datasetId'] != dataset['id']:
+                    raise ValueError('Changed exports require the previous pinned receipt')
+                self.verify(previous)
+                if versions[0]['version_id'] != previous['datasetVersion']:
+                    raise RuntimeError('Phoenix head moved; reconcile before publication')
+            current = self.examples(dataset['id'], versions[0]['version_id']) if versions else []
+            by_external = {e['id']: e for e in current}
+            frozen = {}
+            for version in reversed(versions):
+                for key, split in version['metadata'].get('splitSnapshot', {}).items():
+                    if key in frozen and frozen[key] != split:
+                        raise RuntimeError('Conflicting historical split snapshots')
+                    frozen[key] = split
+            if any(e['id'] in frozen and frozen[e['id']] != e['split'] for e in examples):
+                raise RuntimeError('Published split cannot change')
+            self.check_groups(examples)
+            additions = [e for e in examples if e['id'] not in by_external]
+            updates = [e for e in examples if e['id'] in by_external]
+            if additions:
+                self.graphql('mutation($input: AddExamplesToDatasetInput!) { addExamplesToDataset(input:$input) { dataset { id } } }', {'input': {
                 'datasetId': dataset['id'], 'datasetVersionDescription': 'Published export ' + export_id,
-                'datasetVersionMetadata': metadata,
-                'examples': [{'externalId': e['id'], 'input': e['input'], 'output': e['output'], 'metadata': e['metadata']} for e in examples]}})
+                'datasetVersionMetadata': metadata if not updates else {'pendingExportIdentity': export_id},
+                'examples': [{'externalId': e['id'], **{key: encode_field(e[key]) for key in ['input', 'output', 'metadata']}} for e in additions]}})
+            if updates:
+                self.graphql('mutation($input: PatchDatasetExamplesInput!) { patchDatasetExamples(input:$input) { dataset { id } } }', {'input': {
+                    'datasetId': dataset['id'], 'versionDescription': 'Published export ' + export_id, 'versionMetadata': metadata,
+                    'patches': [{'exampleId': by_external[e['id']]['node_id'], **{key: encode_field(e[key]) for key in ['input', 'output', 'metadata']}} for e in updates]}})
             versions = self.pages('/v1/datasets/' + dataset['id'] + '/versions')
             existing = next(v for v in versions if v['metadata'].get('exportIdentity') == export_id)
         version = existing['version_id']
@@ -124,7 +241,37 @@ class Phoenix:
         atomic(receipt_file, receipt)
         return receipt
 
+    def check_groups(self, examples):
+        """Reject cross-campaign connected split conflicts before any example mutation."""
+        assignments = [(e['metadata']['groupKeys'], e['split']) for e in examples]
+        for dataset in self.pages('/v1/datasets'):
+            for version in self.pages('/v1/datasets/' + dataset['id'] + '/versions'):
+                splits = version['metadata'].get('splitSnapshot')
+                if not splits:
+                    continue
+                assignments.extend((e['metadata']['groupKeys'], splits[e['id']]) for e in self.examples(dataset['id'], version['version_id'])
+                                   if e['id'] in splits and e['metadata'].get('groupKeys'))
+        parent, memberships = {}, {}
+        def find(key):
+            parent.setdefault(key, key)
+            if parent[key] != key:
+                parent[key] = find(parent[key])
+            return parent[key]
+        for keys, _ in assignments:
+            for key in keys[1:]:
+                parent[find(key)] = find(keys[0])
+        for keys, split in assignments:
+            memberships.setdefault(find(keys[0]), set()).add(split)
+        if any(len(memberships[find(e['metadata']['groupKeys'][0])]) > 1 for e in examples):
+            raise RuntimeError('Cross-campaign split group conflict; publication quarantined')
+
     def verify(self, receipt):
+        if receipt['count'] != len(receipt['rowHashes']) or not receipt['rowHashes']:
+            raise ValueError('Receipt row count mismatch')
+        versions = self.pages('/v1/datasets/' + receipt['datasetId'] + '/versions')
+        version = next(v for v in versions if v['version_id'] == receipt['datasetVersion'])
+        if version['metadata'].get('exportIdentity') != receipt['exportIdentity'] or version['metadata'].get('rowHashes') != receipt['rowHashes']:
+            raise RuntimeError('Receipt differs from authoritative Phoenix version metadata')
         rows = self.examples(receipt['datasetId'], receipt['datasetVersion'])
         hashes = {e['id']: row_digest(e) for e in rows}
         if any(hashes.get(key) != value for key, value in receipt['rowHashes'].items()):
@@ -161,12 +308,21 @@ if __name__ == '__main__':
     parser.add_argument('input')
     parser.add_argument('--name')
     parser.add_argument('--receipt')
+    parser.add_argument('--previous', help='Pinned predecessor receipt for an explicitly reconciled changed export')
+    parser.add_argument('--fidelity', help='Installed-adapter report required for curated candidate publication')
     parser.add_argument('--base', default='http://127.0.0.1:6006')
     args = parser.parse_args()
     client = Phoenix(args.base)
     data = None if args.operation == 'protect' else json.loads(Path(args.input).read_text())
     if args.operation == 'publish':
-        result = client.publish(args.name, data['examples'], args.receipt, data.get('sourceInventory'))
+        if args.fidelity:
+            fidelity = json.loads(Path(args.fidelity).read_text())
+            by_source = {(r['session'], r['event']): r for r in fidelity['rows']}
+            for example in data['examples']:
+                candidate = example['metadata'].get('candidate')
+                if candidate:
+                    example['metadata']['fidelity'] = by_source.get((candidate['provenance']['session'], candidate['target']['event']))
+        result = client.publish(args.name, data['examples'], args.receipt, data.get('sourceInventory'), json.loads(Path(args.previous).read_text()) if args.previous else None, require_curated=bool(args.fidelity))
     elif args.operation == 'verify':
         result = client.verify(data)
     elif args.operation == 'assignments':

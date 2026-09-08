@@ -1,0 +1,1 @@
+PASS: missing cwd rejected; explicit evidenced cwd retained in derived manifest; original trial unchanged

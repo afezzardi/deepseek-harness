@@ -39,4 +39,4 @@ All model output in these checks is synthetic or recorded. Local inference remai
 
 ## Version-3 checkpoint
 
-The [2026-09-08 checkpoint report](../../results/trace-pipeline-v3/REPORT.md) records the version-3 mapping, candidate-v2 checks, native Phoenix sessions, tokenizer-reference masks, browser recording, and PostgreSQL/source restoration. Earlier sections retain their dated measurements. The balanced baseline, deployed renderer parity, provider fidelity, curated publication, and Fireworks approval remain unfinished.
+The [2026-09-08 checkpoint report](../../results/trace-pipeline-v3/REPORT.md) records the version-3 mapping, candidate-v2 checks, native Phoenix sessions, tokenizer-reference masks, browser recording, and PostgreSQL/source restoration. Earlier sections retain their dated measurements. The checkpoint predates restored connectivity. The [continuation report](../../results/trace-pipeline-v3/CONTINUATION.md) records the subsequent balanced baseline, provider fidelity, native curated publication, recorded experiment, and one observed request-token parity check. Fireworks renderer approval and training readiness remain unverified.

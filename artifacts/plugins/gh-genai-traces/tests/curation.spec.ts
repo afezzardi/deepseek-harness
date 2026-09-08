@@ -1,10 +1,10 @@
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
 import { exportFireworksSft } from '../src/fireworks.ts'
 import { TRANSFORMATION, type Grade } from '../src/curation.ts'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
+import { Session, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
 import { ApprovalRequestId } from '@deepseek-ai/dsh-user-approval/types'
 import { describe, expect, it } from 'vitest'
-import { curateSession, digest, partitionCandidates, preferencePair, validateTrainingRow, type Provenance } from '../src/curation.ts'
+import { curateSession, digest, partitionCandidates, preferencePair, validateTrainingRow, validateCandidate, selectToolDecisions, type Provenance } from '../src/curation.ts'
 import { ContentPolicy } from '../src/content.ts'
 import { resolveConfig } from '../src/config.ts'
 import { fixture } from './fixture.ts'
@@ -13,7 +13,55 @@ const policy = new ContentPolicy(resolveConfig({ content: 'rich-redacted' }), {}
 const sourceFixture = fixture()
 const provenance: Provenance = { family: 'read', task: 'read-42', trial: 'read-1', rootSession: 'fixture', revision: 'fixture', configurationHash: 'a'.repeat(64), review: { kind: 'synthetic-fixture', reviewer: 'test', evidence: 'fixture.ts', contentHash: digest(sourceFixture), transformationHash: digest(TRANSFORMATION) } }
 const grade: Grade = { version: 'deterministic-v2', required: ['syntax', 'semantics', 'tools', 'environment'], execution: { exitCode: 0, timedOut: false }, observations: { syntax: { status: 'pass', evidence: ['fixture'] }, semantics: { status: 'pass', evidence: ['fixture'] }, tools: { status: 'pass', evidence: ['fixture'] }, environment: { status: 'pass', evidence: ['fixture'] } } }
-const candidate = () => curateSession(structuredClone(sourceFixture), provenance, grade, policy)
+const candidate = () => curateSession(structuredClone(sourceFixture), structuredClone(provenance), structuredClone(grade), policy)
+
+it('rejects altered file hashes, stale review, invented readiness and contradictory admission', () => {
+  expect(validateCandidate(JSON.parse(JSON.stringify(candidate()))).provenance.rowHash).toBe(candidate().provenance.rowHash)
+  const mutations = [
+    (c: ReturnType<typeof candidate>) => { c.provenance.rowHash = '0'.repeat(64) },
+    (c: ReturnType<typeof candidate>) => { c.provenance.review!.contentHash = '0'.repeat(64) },
+    (c: ReturnType<typeof candidate>) => { c.grade.observations.tools.status = 'unknown' },
+    (c: ReturnType<typeof candidate>) => { c.target.blocks = [999] },
+  ]
+  for (const mutate of mutations) { const c = candidate(); mutate(c); expect(() => validateCandidate(c)).toThrow() }
+  expect(() => validateCandidate({ ...candidate(), trainingReady: true })).toThrow()
+  expect(() => validateCandidate({ ...candidate(), version: 1 })).toThrow()
+})
+
+it('selects only independently assessed tool calls and keeps ungraded reasoning unsupervised', () => {
+  const event = sourceFixture.events.find(e => e.type === 'assistant/message')!
+  const call = sourceFixture.events.find(e => e.type === 'tool/call')!
+  const p = { ...provenance, review: { ...provenance.review!, transformationHash: digest({ ...TRANSFORMATION, objective: 'tool-decision' }) } }
+  expect(() => curateSession(sourceFixture, p, grade, policy, event.seq)).toThrow('independent')
+  const c = curateSession(sourceFixture, p, { ...grade, decisions: [{ call: call.seq, status: 'pass', evidence: ['independent argument and observation check'] }] }, policy, event.seq)
+  expect(c.target).toMatchObject({ policy: 'tool-decision', blocks: [0], reasoning: 'omit' })
+  expect(c.request.messages).toHaveLength(1)
+  expect(validateCandidate(c).target.policy).toBe('tool-decision')
+  for (const status of ['fail', 'unknown'] as const) {
+    const changed = structuredClone(c)
+    changed.grade.decisions![0]!.status = status
+    expect(() => validateCandidate(changed)).toThrow('distinct passing decisions')
+  }
+  expect(() => validateCandidate({ ...c, grade: { ...c.grade, decisions: [] } })).toThrow('distinct passing decisions')
+  expect(() => validateCandidate({ ...c, grade: { ...c.grade, decisions: [c.grade.decisions![0], c.grade.decisions![0]] } })).toThrow('distinct passing decisions')
+  expect(() => exportFireworksSft(c)).toThrow('loss mask')
+})
+
+it('accounts for rejected tool targets including unexpected selection errors', () => {
+  const c = candidate(), call = sourceFixture.events.find(e => e.type === 'tool/call')!
+  const rejected = selectToolDecisions(sourceFixture, c, policy)
+  expect(rejected.considered).toBe(1)
+  expect(rejected.targets).toHaveLength(0)
+  expect(rejected.rejections).toHaveLength(1)
+  expect(rejected.rejections[0]?.reason).toContain('independent passing grade')
+  c.grade.decisions = [{ call: call.seq, status: 'pass', evidence: ['independent tool evidence'] }]
+  expect(selectToolDecisions(sourceFixture, c, policy).targets).toHaveLength(1)
+  const broken = new ContentPolicy(resolveConfig({ content: 'rich-redacted' }), {})
+  broken.attributes = () => { throw new TypeError('selection implementation failed') }
+  expect(selectToolDecisions(sourceFixture, c, broken).rejections).toEqual([{ session: sourceFixture.session.id,
+    event: sourceFixture.events.find(e => e.type === 'assistant/message')!.seq, reason: 'TypeError: selection implementation failed' }])
+  expect(selectToolDecisions(sourceFixture, undefined, policy).rejections[0]?.reason).toContain('no eligible')
+})
 
 describe('canonical curation', () => {
   it('retains tool pairing and masks every earlier assistant message', () => {
@@ -107,4 +155,29 @@ it('retains approval evidence and excludes human-assisted trajectories from prom
   expect(c.sourceEvidence.approvals).toHaveLength(2)
   expect(c.sourceEvidence.approvalPolicy).toBe('exclude-human-intervention')
   expect(c.sftEligible).toBe(false)
+})
+
+it('reconstructs a compacted request from the upstream replacement while retaining original evidence', () => {
+  const source = structuredClone(sourceFixture), original = JSON.stringify(source.events)
+  const session = Session.create(source.session.id, source.events, source.session)
+  session.append('turn/start', { turn: 2 })
+  session.append('user/message', createUserMessage({ content: [{ type: 'text', text: 'Compacted context: the observed value is 42.' }], source: { kind: 'plugin', plugin: 'fixture-compaction' } }),
+    { surfaceOp: { op: 'replace', start: SessionSeq(1), end: SessionSeq(9) }, sourceEventSeqs: [1, 4, 6, 9].map(SessionSeq) })
+  session.append('step/start', { turn: 2, step: 1 })
+  const block = { type: 'text' as const, text: '42' }
+  session.append('assistant/message', { turn: 2, step: 1, message: createAssistantMessage({ content: [block], source: { provider: 'fixture', model: 'fixture' } }), stream: [
+    { type: 'chunk', time: 2000, chunk: { type: 'block-end', index: 0, block } },
+    { type: 'chunk', time: 2001, chunk: { type: 'finish', reason: { kind: 'stop' } } },
+  ] }, { surfaceOp: 'append' })
+  session.append('step/end', { turn: 2, step: 1 })
+  session.append('turn/end', { turn: 2, reason: { kind: 'completed' } })
+  const compacted = { ...source, events: [...session.snapshotEvents()] }
+  const c = curateSession(compacted, { ...provenance, review: { ...provenance.review!, contentHash: digest(compacted) } }, grade, policy)
+  expect(c.request.messages).toHaveLength(1)
+  expect(c.request.messages[0]!.content).toEqual([{ type: 'text', text: 'Compacted context: the observed value is 42.' }])
+  expect(JSON.stringify(source.events)).toBe(original)
+  const corrupt = structuredClone(compacted)
+  const replacement = corrupt.events.filter(e => e.type === 'user/message').find(e => typeof e.surfaceOp === 'object')!
+  replacement.sourceEventSeqs = [SessionSeq(1)]
+  expect(() => curateSession(corrupt, provenance, grade, policy)).toThrow()
 })

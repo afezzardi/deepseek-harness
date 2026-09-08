@@ -57,6 +57,8 @@ class RendererTests(unittest.TestCase):
             if case == 'long-context':
                 candidate['request']['messages'][0]['content'][0]['text'] += '\n' + 'Unchanged historical entry.\n' * 6000
             candidate['provenance']['requestHash'] = digest(candidate['request'])
+            candidate['provenance']['toolsHash'] = digest(candidate['request'].get('tools'))
+            candidate['provenance']['outputHash'] = digest(candidate['response']['content'])
             candidate['provenance']['rowHash'] = digest({'request': candidate['request'], 'response': candidate['response'], 'target': {**candidate['target'], 'event': None}})
             result = render(candidate, self.tokenizer, {'enable_thinking': True})
             self.assertEqual(len(result['lossMask']), len(result['inputIds']))
@@ -79,6 +81,12 @@ class RendererTests(unittest.TestCase):
             candidate['target'][field] = value
             with self.assertRaises(ValueError):
                 render(candidate, self.tokenizer, {})
+
+    def test_stale_content_hash_fails_before_rendering(self):
+        candidate = copy.deepcopy(self.source)
+        candidate['request']['system'] = 'Changed after content validation'
+        with self.assertRaisesRegex(ValueError, 'content hash mismatch'):
+            render(candidate, self.tokenizer, {})
 
 
 if __name__ == '__main__':

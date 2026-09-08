@@ -30,7 +30,7 @@ def execute(task, repetition, output, template, proxy):
     if 'http://100.108.76.12:4000/engine/v1' not in template_settings:
         raise ValueError('Expected the declared Qwen inference route in the settings template')
     settings = template_settings.replace('http://100.108.76.12:4000/engine/v1', proxy + '/engine/v1')
-    identity = digest({'task': task, 'repetition': repetition, 'settings': template_settings, 'runner': 3})
+    identity = digest({'task': task, 'repetition': repetition, 'settings': template_settings, 'cwd': str(ROOT), 'runner': 4})
     result_file = directory / 'result.json'
     if result_file.exists():
         prior = json.loads(result_file.read_text())
@@ -50,7 +50,7 @@ def execute(task, repetition, output, template, proxy):
     (home / 'cordis.patch.yml').write_bytes((template / 'cordis.patch.yml').read_bytes())
     prompt = task['prompt'].replace('{workspace}', str(workspace.relative_to(ROOT)))
     manifest = {**task, 'trial': trial, 'repetition': repetition, 'directory': str(directory), 'workspace': str(workspace),
-                'prompt': prompt, 'before': inventory(workspace), 'run_identity': identity}
+                'prompt': prompt, 'before': inventory(workspace), 'run_identity': identity, 'cwd': str(ROOT)}
     manifest['review'] = {'reviewer': 'artifact-synthetic-fixture-policy-v2', 'evidence': 'pinned Phoenix task ' + task['task_id'],
                           'taskHash': digest({k: manifest[k] for k in ['prompt', 'before', 'outputs', 'expected']})}
     atomic(directory / 'task.json', manifest)

@@ -3,9 +3,11 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 import urllib.request
-from phoenix_dataset import atomic, digest
+import urllib.error
+from phoenix_dataset import atomic, digest, validate_content
 
 
 def messages(candidate):
@@ -34,6 +36,7 @@ def messages(candidate):
 
 
 def render(candidate, tokenizer, template_kwargs):
+    validate_content(candidate)
     if candidate['version'] != 2 or candidate['target']['policy'] != 'final-answer' or candidate['target']['reasoning'] != 'omit':
         raise ValueError('Unsupported Qwen loss policy')
     blocks = candidate['response']['content']
@@ -74,13 +77,20 @@ def check_engine(result, route):
     for key in ['checkpoint', 'tokenizer', 'templateHash', 'modelAlias', 'inspectionEvidence']:
         if not route.get(key):
             raise ValueError('Unobserved route identity: ' + key)
-    body = {'model': route['modelAlias'], 'messages': result['requestMessages'],
+    wire_messages = copy.deepcopy(result['requestMessages'])
+    for message in wire_messages:
+        for call in message.get('tool_calls', []):
+            call['function']['arguments'] = json.dumps(call['function']['arguments'], ensure_ascii=False, separators=(',', ':'))
+    body = {'model': route['modelAlias'], 'messages': wire_messages,
             'add_generation_prompt': True, 'chat_template_kwargs': result['templateKwargs']}
     if result['tools']:
         body['tools'] = result['tools']
-    request = urllib.request.Request(route['tokenizeEndpoint'], data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
-    with urllib.request.urlopen(request, timeout=30) as response:
-        observed = json.load(response)
+    request = urllib.request.Request(route['tokenizeEndpoint'], data=json.dumps(body).encode(), headers={'Content-Type': 'application/json', **({'Authorization': 'Bearer ' + os.environ[route['apiKeyEnv']]} if route.get('apiKeyEnv') and os.environ.get(route['apiKeyEnv']) else {})})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            observed = json.load(response)
+    except urllib.error.HTTPError as error:
+        raise ValueError(f"Engine tokenize HTTP {error.code}: {error.read().decode()}") from error
     return {'request': body, 'response': observed}
 
 
@@ -105,11 +115,14 @@ if __name__ == '__main__':
             raise ValueError('Observed template differs from local tokenizer')
         wire = check_engine(result, route)
         local = tokenizer.apply_chat_template(result['requestMessages'], tools=result['tools'] or None,
-                                               tokenize=True, add_generation_prompt=True, **result['templateKwargs'])
-        if wire['response'].get('tokens') != local:
-            raise ValueError('Engine tokenize differs from reconstructed request tokens')
+                                               tokenize=True, return_dict=False, add_generation_prompt=True, **result['templateKwargs'])
         result['engineEvidence'] = wire
+        result['localRequestTokenIds'] = local
         result['route'] = route
+        if wire['response'].get('tokens') != local:
+            result['readiness'] = 'request-token-mismatch; training renderer approval pending'
+            atomic(args.output, result)
+            raise ValueError('Engine tokenize differs from reconstructed request tokens')
         result['readiness'] = 'request-token-parity; training renderer approval pending'
     atomic(args.output, result)
     print(json.dumps({'tokens': len(result['inputIds']), 'lossTokens': sum(result['lossMask']), 'readiness': result['readiness']}))

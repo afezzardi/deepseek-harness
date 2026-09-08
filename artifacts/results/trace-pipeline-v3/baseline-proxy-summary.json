@@ -1,0 +1,18 @@
+{
+  "admitted": 747,
+  "responses": 745,
+  "released": 745,
+  "maxActive": 4,
+  "reasoningEfforts": {
+    "absent": 144,
+    "medium": 601
+  },
+  "admittedWithoutResponse": [
+    "7df764c2b25448f1a2b34055f18d0491",
+    "f29786922a51471bae1697bbb9beab40"
+  ],
+  "thinkingFlags": {
+    "False": 144,
+    "True": 601
+  }
+}

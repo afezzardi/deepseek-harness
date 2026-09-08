@@ -18,6 +18,32 @@ function pipeline(origin: 'live' | 'replay' = 'replay', project = 'gh-test') {
   return { settings, stats, exporter, provider, mapper }
 }
 
+it('gives an auxiliary child call before its first turn the recorded root presentation session', async () => {
+  const p = pipeline('live')
+  try {
+    const parent = fixture('early-parent'), child = fixture('early-child')
+    const header = { ...child.session, parentSession: parent.session.id }
+    p.mapper.startCall('early-title', { provider: 'fixture', model: 'fixture', messages: [], sessionId: child.session.id, purpose: 'session-title' }, 990, undefined, header)
+    p.mapper.endCall('early-title', { ended: 999, blocks: [], finish: 'stop', truncated: false })
+    for (const event of child.events) p.mapper.event(header, 0, event)
+    expect(p.exporter.getFinishedSpans()).toHaveLength(0)
+    const session = Session.create(parent.session.id, parent.events, parent.session)
+    session.append('turn/start', { turn: 2 })
+    const runId = 'early-run' as import('@deepseek-ai/dsh-tool-workflow/types').ToolWorkflowRunStartData['runId']
+    session.append('tool-workflow/run-start', { runId, name: 'early' })
+    session.append('tool-workflow/agent-start', { runId, seq: 1, label: 'child', childId: child.session.id })
+    for (const event of session.snapshotEvents()) p.mapper.event(session.header, 0, event)
+    p.mapper.shutdown()
+    await p.provider.forceFlush()
+    const spans = p.exporter.getFinishedSpans()
+    const owner = spans.find(s => s.attributes['gh.workflow.run_id'] === runId)!
+    const childSpans = spans.filter(s => s.attributes['gh.session.canonical_id'] === child.session.id)
+    expect(childSpans.some(s => s.attributes['gh.call.purpose'] === 'session-title')).toBe(true)
+    expect(new Set(childSpans.map(s => s.attributes['session.id']))).toEqual(new Set([owner.attributes['session.id']]))
+    expect(p.stats.recordsDropped).toBe(0)
+  } finally { p.mapper.shutdown(); await p.provider.shutdown() }
+})
+
 describe('canonical replay', () => {
   it('exports a tool trajectory with sibling model/tool spans and request-time context', async () => {
     const p = pipeline()

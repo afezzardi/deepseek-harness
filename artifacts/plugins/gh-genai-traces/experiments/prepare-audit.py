@@ -14,7 +14,11 @@ parser.add_argument('campaign')
 mode = parser.add_mutually_exclusive_group(required=True)
 mode.add_argument('--receipt', help='Pinned Phoenix task or previous promoted dataset receipt')
 mode.add_argument('--audit-only', action='store_true', help='Reconstruct and grade without promotion')
+parser.add_argument('--legacy-cwd', help='Explicit absolute cwd for historical trials that did not record it')
+parser.add_argument('--legacy-cwd-evidence', help='Recorded runner or launch evidence establishing the historical cwd')
 args = parser.parse_args()
+if bool(args.legacy_cwd) != bool(args.legacy_cwd_evidence) or args.legacy_cwd and not Path(args.legacy_cwd).is_absolute():
+    raise ValueError('Historical cwd requires an absolute --legacy-cwd and --legacy-cwd-evidence')
 os.umask(0o077)
 campaign = Path(args.campaign).resolve()
 receipt = json.loads(Path(args.receipt).read_text()) if args.receipt else None
@@ -25,6 +29,12 @@ trials = json.loads((campaign/'trials.json').read_text())
 ids = set()
 files = {}
 for trial in trials:
+    if not trial.get('cwd'):
+        if not args.legacy_cwd:
+            raise ValueError('Trial cwd missing; supply --legacy-cwd with --legacy-cwd-evidence')
+        trial['cwd'] = args.legacy_cwd
+    if not Path(trial['cwd']).is_absolute():
+        raise ValueError('Recorded trial cwd must be absolute')
     directory = Path(trial.get('directory') or trial['argv'][-2]).resolve()
     if directory.suffix == '.yml':
         directory = directory.parent
@@ -43,6 +53,8 @@ output = campaign/'audit'
 output.mkdir(exist_ok=True, mode=0o700)
 output.chmod(0o700)
 manifest = dict(assignments=assignments, dataset=receipt, output=str(output),sessionIds=sorted(ids),trials=trials,replay=True,revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip())
+if args.legacy_cwd:
+    manifest['historicalCwdEvidence'] = {'cwd': args.legacy_cwd, 'evidence': args.legacy_cwd_evidence}
 atomic(campaign/'audit-manifest.json', manifest)
 atomic(campaign/'source-hashes-before.json', files)
 # Multiple per-trial stores share one parent; the upstream provider accepts its root.

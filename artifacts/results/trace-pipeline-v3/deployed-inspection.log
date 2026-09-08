@@ -1,0 +1,1465 @@
+# kb-mastra-infra — handoff
+
+Updated: 2026-09-05 (sixth pass: the shipped shape moved to util 0.64 / 8 seats to fund a second consumer's GPU reservation; `master` merged at `2a5887a`).
+
+## What this is
+
+One GPU host serving three models behind a single LAN endpoint, merged from two salvaged and
+non-functional compose files (`eda-mastra-platform/docker-compose.rag.yml` truncated copy, and
+`inference-realworld/docker-compose.vllm-nvfp4.yaml` investigation variant). `README.md` is the
+reference; this file is only the resume point.
+
+```
+LAN ──▶ 0.0.0.0:4000 (kb-litellm) ──┬─▶ vllm-chat        chat-model  (+ -off -low -medium -xhigh)
+                                    ├─▶ vllm-embedding   embedding-model   2560-dim
+                                    └─▶ vllm-reranker    reranker-model
+```
+
+The three engines publish **no host port**. The gateway is the only way in.
+
+## Status
+
+**CURRENT — 2026-09-05: the shipped arm is `qwen38-nvfp4`, at util 0.64 and 8 seats, and this stack
+now has TWO consumers.** Run `./scripts/shape.sh` before believing any of this; it reads the running
+engine and beats every document including this one.
+
+| | was (2026-08-21) | now |
+|---|---|---|
+| `COMPOSE_PROFILES` | `rag,fp8` | **`rag,nvfp4`** |
+| chat checkpoint | `Qwen/Qwen3.8-27B-FP8` | **`unsloth/Qwen3.8-27B-NVFP4`** @`7d6f8d4d` |
+| `CHAT_GPU_MEM_UTIL` | 0.57 | **0.64** (was 0.70 earlier the same day) |
+| seats | 4 | **8** (was 9 earlier the same day) |
+| KV pool | 690,312 tokens | **1,111,199** |
+| boot concurrency | 5.27x | **8.48x** |
+| card free | — | **13,206 MiB**, reserved for a second consumer's GPU sidecars |
+| single-stream decode | 46.75 tok/s | **60.5 tok/s (1.29x)**, ~2.0 s off a median turn |
+
+**Why it went 9 → 8 within one day, because that looks like a regression and is not.** A second
+consumer arrived: `eda-mastra-platform` is retiring its own chat engine and 4B pooling pair onto this
+gateway and needs a standing 8-10 GiB for docling OCR and faster-whisper. The 9th seat was never
+reachable by demand — the harness's own limit is 8 and its real 8-way fan-out ran the KV pool **9.8%
+full**. Keeping 9 *and* funding the reservation was checked and does not fit. **`docs/TUNING.md` §2d is
+the authority; §2c has the fan-out evidence.**
+
+Retrieval is **unchanged** — the 4B pair, 2560-dim, still up. `chat-model` still answers at 131,072,
+so every consumer contract holds. `smoke.sh` 30/30 on this shape.
+
+**Do not size a co-resident service against a free-card reading.** This block used to say "card free
+7,356 MiB, which is the docling reservation the operator named". That figure was read at boot and is
+not a floor: re-read on the *same* boot after only `smoke.sh` and a few contract probes, the card gave
+**5,516 MiB free**, 1,840 MiB less. The cause is unmeasured and no file asserts one. `docs/TUNING.md`
+§6 row 44 carries the withdrawal and the rule that replaces it — a reservation is enforced by capping
+`CHAT_GPU_MEM_UTIL`, never by subtraction from `nvidia-smi`.
+
+**Why 9 and not 13.** 13 seats are measured and work, but need the 0.6B retrieval pair, which emits
+1024-dim embeddings against the shipped 2560 — a consumer contract, not a tuning knob. It sits
+commented-out in `.env` behind `COMPOSE_PROFILES=qwen38-nvfp4-lite`. A 14-seat checkpoint exists
+(`gittensor-…-RTX5090`) and is blocked harder: **unqualified for accuracy**, because it quantizes
+`lm_head` and `results/eval/comparison.md` qualifies `unsloth` and nothing else. `eval-grid.sh` must
+re-run before it ships. **Loading is not qualifying.**
+
+**Read `docs/TUNING.md` §2b for the ladder and `results/nvfp4-seats-20260905/RESULT.md` for the
+evidence** — 36 files, every boot log and both saturation runs. §6 rows **41-43** carry what this
+session got wrong: a seat derivation that was right by luck, a false loader constraint, and a probe
+that reported a co-residency FAIL against an engine it never observed.
+
+**The one thing still open on this arm:** a cold **full-context** N-way run at 9 seats has never been
+done. The 9-way proof used the consumer's real ~19.6k prompts. §3 records that even the fp8 arm at 4
+seats preempts on cold distinct full-context traffic, so do not assume 9 is immune.
+
+<details><summary>Superseded — the 2026-08-21 fp8 shape, kept because its mechanism section is still the reference</summary>
+
+**2026-08-21: 131,072-token / fp8-KV / 4-session shape, WITH PREFIX CACHING.** Two
+changes landed on top of the 2026-08-20 record below, and three of its figures moved:
+
+| | 2026-08-20 | now |
+|---|---|---|
+| `CHAT_MAX_NUM_SEQS` | 5 | **4** |
+| prefix caching | off (believed impossible) | **on, both 27B chat arms** (`align` mode) |
+| KV pool | 714,116 tokens | **690,312** (align costs +3.45% per sequence) |
+| boot concurrency | 5.45x | **5.27x** (gate is ≥ 4, passes) |
+| preemptions | "zero across every measurement" | **not true at full context** — see below |
+
+`--max-num-seqs` is 4 because 5 never held five sequences resident and cost 45% of aggregate
+throughput. And "zero preemptions" no longer holds. Three runs of 4 concurrent ~117.5-117.9k-token
+distinct prompts with 8,000 forced output tokens each: **cold 0.989 peak / +1 preemption**, **cold
+1.000 peak (pool exhausted) / +2**, and **warm at 88.1% reuse, 0.755 peak / zero**. Cold 4-way
+preempts reproducibly; prefix caching buys KV headroom, not just latency. No run starved anything
+(all four within 1.3 s), which is the difference from 5.
+
+**What is established, and what is NOT.** One shared 474-block pool (473 usable);
+`kv_cache_usage_perc = ((num_gpu_blocks-1) - free_blocks)/(num_gpu_blocks-1)`, i.e. **block
+occupancy, not attention tokens**. The 48 `linear_attention` + 16 `full_attention` layers group into
+1 attention + 3 mamba groups, and the boot line sums all four at `84 + 3x2 = 90` blocks/request —
+`474/90 = 5.27x`, and `int(5.2667 x 131,072) = 690,312`, reproducing both engine numbers exactly.
+That is the *intended timely-reclamation residency*, NOT an enforced ceiling, so "4 x 90 = 360 fits"
+does **not** on its own explain away the measured preemptions.
+
+Established: a preemption is a **genuine instantaneous shortage of allocatable blocks** —
+`allocate_slots` returns `None` when required > available and the scheduler then preempts; and
+eviction reclaims only `ref_cnt == 0` blocks, because for `ref_cnt > 0` it evicts hash metadata and
+never pool ownership, which makes pinned blocks structurally non-evictable. Also established: this is
+not driven by output length — 8,000 → 2,000 forced output tokens left the peak at 1.000 and still
+preempted once.
+
+**NOT established — do not assert a mechanism.** *Why* the pool runs short is open. Two candidate
+stories are each partly refuted: "dense retention allocates ~225 blocks/request" is wrong (align
+null-pads and allocates at most ONE physical mamba block per call), and the `--async-scheduling`
+reclaim-lag story does not apply (that flag is **not** enabled here — verified against the container
+command, rendered compose, env and boot log). See `## NEXT SESSION`.
+
+**`--max-num-seqs` stays 4.** It is not the lever: mamba pages are taken per running request from the
+shared pool, whose sizing has no `max_num_seqs` term, so N buys admission control rather than
+capacity. *An earlier version of this section claimed 120 blocks/request were required and that N=3
+was the ceiling — that was wrong, and is corrected here.*
+
+`README.md` "The shipped shape" and `.env` carry the full tables and the source references; the probe
+is `artifacts/probes/probe_prefix_saturation.py`, logs under `results/prefix-saturation/`.
+
+---
+
+**Prior record — BOOTED AND VERIFIED at the 131,072-token / fp8-KV / 5-session shape, 2026-08-20.**
+Superseded above; the fp8-KV and freed-card results still stand. Driver
+580.173.02 / kernel 7.0.0-29; all four containers `healthy` (`kb-vllm-embedding` at
+`RestartCount=1` from one clean `exit=0` restart during the staged bring-up, the other three at 0);
+`./scripts/smoke.sh` **30/30** re-run after the restage; zero preemptions across every measurement taken. The gate that
+matters: `Maximum concurrency for 131,072 tokens per request: 5.45x` against `--max-num-seqs 5`.
+KV came to 22.7 GiB / **714,116 tokens** at `CHAT_GPU_MEM_UTIL=0.57` with
+`KV_CACHE_DTYPE_FP8=fp8` — 31,459 tok/GiB measured against 29,534 predicted, so the prediction
+erred low as designed. FlashInfer confirms the cache is really fp8
+(`kv_cache_dtype=torch.float8_e4m3fn`). Co-resident **79,130 / 97,887 MiB (80.8%)** under a 5-way
+full-context load, leaving **18.3 GiB deliberately free on the card**.
+
+That free memory is not slack to be reclaimed by raising `CHAT_GPU_MEM_UTIL` — it is half of what
+the validated fp8-KV win was spent on, by operator decision, and it is there for a co-resident
+service. The other half was the 4 → 5 session increase. See README, "Forcing fp8 KV on the FP8 arm".
+
+The shape this replaced, for comparison: `0.70 / 4` on bf16 KV, 35.76 GiB / 572,577 tokens,
+**4.37x**, 89,826 / 97,887 MiB (91.8%) with 7.87 GiB free. `measure-footprint.sh` verdict on the
+pooling pair is unchanged and still governs: **HOLD** — 22.4 GiB genuinely resident, no surplus to
+reclaim there.
+
+**DRIVER / KERNEL SUBSTRATE CHANGE — RESOLVED AND RE-VERIFIED 2026-08-20.** An unattended upgrade
+at 06:40 replaced the NVIDIA driver userspace (580.159.03 → 580.173.02) while the old kernel module
+was still loaded, so `nvidia-smi` failed with `Driver/library version mismatch` and no container
+could reach the GPU. The reboot is done: **driver 580.173.02 / kernel 7.0.0-29-generic**, userspace
+and module agree, `/var/run/reboot-required` clear. A later manual `apt upgrade -y` at 15:37 found
+the NVIDIA userspace already at 580.173.02 and introduced no new mismatch.
+
+The recurrence guard is **in place and verified on the host**: the blacklist lives in the drop-in
+`/etc/apt/apt.conf.d/52-nvidia-no-unattended` (`"nvidia-";` / `"libnvidia-";`), not in
+`50unattended-upgrades` — grep the drop-in, not the base file, when checking it. `apt-mark showhold`
+is still empty by design; the blacklist, not a hold, is the mechanism.
+
+Because a driver *and* kernel change is a substrate change, the KV constants were re-read from the
+boot log rather than trusted. **They came back identical to the pre-change shipped shape** — 22.7 GiB
+/ 714,116 tokens / **5.45x** — so the substrate change moved nothing and every figure below still
+stands.
+
+**A RESTART TRAP THAT COST A BOOT, WRITE THIS ONE DOWN.** After the reboot the stack was brought up
+with all engines at once instead of staged. chat-fp8 spends ~128 s in `torch.compile` + FlashInfer
+autotuning between loading weights and sizing its KV pool, and the pooling engines loaded their
+weights *inside* that window (chat weights 13:40:31, embedding 13:40:50, reranker 13:41:37, chat KV
+sized 13:42:35). vLLM charged their ~15.5 GiB to chat's own budget — `consumed memory (weights +
+non-torch)` read **43.95 GiB against real weights of 28.43 GiB** — and chat got **7.49 GiB /
+235,025 tokens / 1.79x**, silently failing the `>= 5` gate while all four containers reported
+`healthy` and every model answered correctly. Recreating **chat-fp8 alone**, with the pooling pair
+already resident and settled, restored 28.74 GiB consumed / 22.7 GiB KV / 714,116 tokens / 5.45x
+with no config change.
+
+The lesson is that container health does NOT prove the shape: an engine that under-profiled its KV
+reports `healthy` and returns correct answers on every functional probe (chat, embedding dims,
+rerank ordering all passed by hand at 1.79x) while serving a third of the intended concurrency.
+`smoke.sh` was NOT run in the degraded state, so whether it would have caught this is untested —
+it asserts behaviour, not the KV shape, so assume it would have passed. **Always re-check
+`Maximum concurrency for 131,072` after any restart**, and stage the boot — biggest allocator last.
+
+**Configuration: BOOTED AND VERIFIED 2026-08-20** at `rag,fp8` = `CHAT_GPU_MEM_UTIL=0.57` /
+`CHAT_MAX_MODEL_LEN=131072` / `CHAT_MAX_NUM_SEQS=5` with `KV_CACHE_DTYPE_FP8=fp8`.
+**`CHAT_MAX_NUM_SEQS` is 4 as of 2026-08-21 — see Status.** Everything else here still holds. This
+supersedes
+the earlier `0.70 / 131072 / 4` reshape, which was drafted but never shipped — the operator split
+the fp8-KV win into 5 sessions plus freed card instead. The derivation, the util→sessions table and
+the per-arm sequence override are in `README.md` under "The shipped shape".
+
+**A discovery that invalidated the old story:** `.env` contained **only the four secrets** — no
+`COMPOSE_PROFILES`, no `CHAT_*`. So compose's defaults (`0.55 / 65536 / 8`) were what was live, and
+`docker compose up -d` started **only the gateway**, which is exactly what was running. Every earlier
+statement that "`.env` ships `rag,nvfp4`" described a file that did not contain it.
+
+**Stack: done and verified** (as of the 2026-08-19 pass, at the old shape).
+
+- `docker compose config -q` valid for all five profile combinations.
+- `./scripts/preflight.sh` passes (19 flags, enum values, reranker `--hf-overrides` keys, quantization
+  not deprecated, the `VLLM_API_KEY` env fallback at `api_server.py:310`).
+- `./scripts/smoke.sh` passed 13/13 with the full stack up — at the time. The script has since grown
+  to **30** pass slots (it had 21 even then; the 13 was stale), adding the context-window assertion,
+  the raw-route checks, provider-param forwarding, streaming and a tool-result round-trip.
+- LAN verified from `192.168.205.25:4000`: 200 with key, 401 without, engine ports closed.
+- Co-resident footprint measured **75,308 / 97,887 MiB (76.9%)** at 0.55/0.12/0.12, all healthy,
+  `RestartCount=0`. It *serves* correctly — but the shape is not coherent and ~22 GiB of the card sits
+  unused. See "Engine shape" below; re-shaping production is **paused** by operator decision, nothing
+  in `docker-compose.yml` has been changed.
+
+**Evaluation: restarted from zero on 2026-08-19, on purpose — twice.** There have been three
+generations today and only the third is live; keep them straight:
+
+| generation | fate | why it was discarded |
+|---|---|---|
+| pre-12:18 | **deleted** | `max_gen_toks 4096` and a greedy sampler |
+| 12:18:55 → killed 16:09 | **archived** at `results/eval-stopbug-20260819/` | two harness faults emptied `content` |
+| **17:20:48 → complete 23:52** | live at `results/eval/` | — (all 8 cells, 391 min) |
+
+The first generation is gone for good. Do not go looking for it and do not quote the fp8/off figures
+that used to sit in this file (gsm8k 97.7 / ifeval 81.7 / gpqa 70.7 / mmlu_pro 80.2 /
+humaneval_chat 95.7). They were measured under two settings that made them unusable, both since fixed:
+
+- **`max_gen_toks` was 4096**, below what the model needs to answer at all once it is thinking.
+  Measured demand on one hard prompt: low 3,666 tokens, **medium 11,629**. Overrun is silent —
+  thinking fills `reasoning_content` first, so an exhausted budget returns `content` EMPTY and
+  lm_eval scores a placeholder as wrong. Null-content rate at 4096/low: gsm8k 0.3%, ifeval 4.7%,
+  **gpqa_diamond 31.9%**, capping gpqa near 68 whatever the checkpoint did.
+- **The sampler was greedy.** lm_eval's `LocalChatCompletion` does
+  `temperature = gen_kwargs.pop("temperature", 0)` — it defaults to temperature 0 and never asks
+  the server. So the grid measured a decode path the Mastra app never uses.
+
+The grid now runs `{nvfp4, fp8} × {off, low, medium, xhigh}` at **`max_gen_toks 32768`** — production's
+own ceiling (`REALWORLD_PROFILE.maxOutputTokens` in the Mastra harness) — with Qwen's documented
+per-arm samplers, `limit 120/task` flat and `15/subtask` for `mmlu_pro`. Matching production's budget
+is what makes the numbers mean something: truncation that survives is a real deployment property,
+not a harness artefact. Reduced sample counts are a deliberate trade: error bars are wider, so more
+rows land in the tie band and fall through to the fp8 default.
+
+**The 12:18:55 run was KILLED at 16:09 and its results are ARCHIVED, not deleted.** It had completed
+5 of 8 cells and every thinking cell was measuring a harness fault rather than the checkpoint. The
+whole tree was moved to `results/eval-stopbug-20260819/` (gitignored) so it can be read as evidence
+and can never be tabulated beside a fixed cell. What it measured, for the record:
+
+| cell | mmlu_pro | empty content | what the empties actually were |
+|---|---|---|---|
+| `fp8/off` | 78.6 | 0 | — (thinking disabled, so immune) |
+| `fp8/low` | 53.3 | **82/210** | answer stranded in `reasoning_content` |
+| `fp8/medium` | 81.4 | 0 | — |
+| `fp8/xhigh` | 30.0 | **132/210** | stop string fired inside the CoT |
+| `nvfp4/off` | 74.8 | 0 | — |
+
+**Run COMPLETE (launched 2026-08-19 17:20:48, finished 23:52, 391 min, log
+`logs/grid-20260819-172048.log`).** All 8 cells, fixed harness, `exit=0` and `restarts=0` on every
+cell, `timeout_retries=0` everywhere. It beat the 02:00–04:30 estimate by two hours. The verdict is
+in `results/eval/comparison.md` and summarised under "The measured answer" in `README.md`; the short
+form is that the checkpoints tie on accuracy (18 of 20 comparisons inside the combined stderr, the
+other two marginally `fp8`, and a paired test over all 2,760 items bounding the gap at **at most 1.7
+points**, most likely 0.7) while `nvfp4` is measurably the cheaper engine (**629 vs 499 tok/s**, 1.26x,
+on the `off` cells at equal emitted volume, and 12.7% more KV at the same fraction). Effort moves the model far
+more than the checkpoint does, and `gpqa_diamond` gets *worse* at `xhigh` because 17–18% of its items
+exhaust the 32,768-token budget.
+
+### Two harness faults were emptying `content`, and they dominate at OPPOSITE effort levels
+
+This is the single most important thing on this page. Both are fixed in `evals/lmeval_think.py`;
+removing either half re-opens one of them. Measured head-to-head on identical documents:
+
+| effort | population | stop **sent** | stop **withheld** |
+|---|---|---|---|
+| `low` | 82 prompts | 54/82 empty | 56/82 empty — **no effect** |
+| `xhigh` | 70 documents | 46/70 empty (66%) | **3/70 empty (4%)** |
+
+- **At `low`: the model never emits `</think>`.** It finishes reasoning, states the answer *inside*
+  the reasoning block, then emits EOS. The `qwen3` parser cannot close the segment, so `content` is
+  `null` and the finished answer sits in `reasoning_content` — which upstream lm_eval never reads
+  (`openai_completions.py` takes `message["content"]` and nothing else). Verified by replaying the 82
+  failures: `finish_reason` `stop` on every one, `stop_reason` `None`, `completion_tokens` 412–2589
+  against a 32768 budget, reasoning ending cleanly on a stated answer, and **24/24** carrying an
+  extractable `answer is (X)` of which **20/24 correct**. Fixed by falling back to `reasoning_content`.
+- **At `xhigh`: vLLM matches client stop strings inside the reasoning segment** ([vLLM #52393](https://github.com/vllm-project/vllm/issues/52393),
+  open, PR #52486 unmerged, reported against 0.21.1/0.25.2.dev and reproduced here on **0.27.1**).
+  `mmlu_pro` sends `stop: ["Question:"]` and `gsm8k` sends it too; a long CoT restates it and
+  generation dies mid-`<think>`. Fixed by withholding `stop` and applying the task's `until` locally.
+
+Why the split: reasoning **length**. ~500 completion tokens at `low` against a measured ~9,490-token
+mean at `xhigh` is ~19× more text in which to type `Question:`. A conclusion drawn at one effort level
+does not transfer — the low-effort A/B alone said #52393 was irrelevant, and that was wrong for xhigh.
+
+Result on the two worst cells, re-run with the fixed harness at identical sampler and budget:
+
+| cell | before | after |
+|---|---|---|
+| `fp8` mmlu_pro `low` | 53.3, 82/210 empty | **77.6 ±2.8**, 0 empty, 72 recovered, 0 truncated |
+| `fp8` mmlu_pro `xhigh` | 30.0, 132/210 empty | **78.6 ±5.0**, 0 empty, 3 recovered, 0 truncated |
+
+### `recovered_from_reasoning` vs `truncated_unscored` — never conflate them
+
+Every cell records both, and the distinction is deliberate:
+
+- **`recovered_from_reasoning`** — `content` empty, `finish_reason == "stop"`. A *finished* answer that
+  the parser stranded. Read from `reasoning_content` and scored. This is legitimate for this stack:
+  `README.md` already tells consumers they "must read `reasoning_content` **or** `reasoning`".
+- **`truncated_unscored`** — `content` empty, `finish_reason` anything else. The 32768 budget ran out
+  mid-thought, so the reasoning is *unfinished* and may hold a tentative answer the model was still
+  arguing with. **Deliberately left unscored.** Recovering these would inflate the score, destroy the
+  one measurement the grid makes about a 32768-token deployment, and erase the evidence — a recovered
+  item is no longer empty and so vanishes from `null_content` and from the collector's dagger.
+
+Measured across the finished grid: `truncated_unscored` is 0 at every `off` cell, 0–2 at `low` and
+`medium`, and **22 (fp8) / 23 (nvfp4) at `xhigh`**, essentially all of it in `gpqa_diamond` — 17–18%
+of that task's items at that effort. The xhigh probe had measured 0 of 70 and was simply too small to
+see it. This is real deployment behaviour at a 32,768-token budget, not a bug to fix: at `xhigh` on
+hard science questions this model runs out of room to think roughly one time in six.
+
+**Optional speedup, not applied.** `max-num-seqs 20` is sized so *every* sequence could reach full
+context without preemption. Measured reality is a ~9,500-token mean and KV at ~11%, so sizing for p95
+(~20k) would allow ~43 sequences and roughly halve wall-clock, at the cost of possible preemption on
+an unlucky batch — visible immediately in `vllm:num_preemptions_total`. It was not safe to change mid-grid, and the grid is
+now finished, so this is once again available: `max-num-seqs` is part of the cell fingerprint (see
+Resume), so changing it means the next grid refuses to reuse any existing cell and every cell is
+re-measured. Archive `results/eval/` first, and change it only between whole runs.
+
+</details>
+
+## NEXT SESSION — two consumers now, and nothing is mid-flight
+
+**Everything is committed and MERGED.** `master` is at `2a5887a` and this session's work is on it —
+the 16-commit `flash-next-agentic-and-footprint` branch fast-forwarded, so it points at the same
+commit and is safe to delete. There is **no `main`** in this repo; the default is `master`. There is
+**no remote**, so nothing is pushed anywhere. No restart is pending; the stack is up and passing.
+
+### START HERE
+
+```bash
+./scripts/shape.sh        # the live shape + the boot-line gate. Trust this over any document.
+./scripts/smoke.sh        # expect 30/30
+```
+
+Expect **8.48x GATE PASS at 8 seats, util 0.64**. If you see 0.70 / 9, you are on an older boot than
+this handoff.
+
+Then read **`docs/TUNING.md` §2b, §2c, §2d, §4 and §6** — the authority on shape, KV, capacity and
+caching. §6 is now a **44-row** ledger of claims this repo published and withdrew. Several were
+reintroduced more than once, so treat it as a checklist before asserting any mechanism.
+
+### The one structural change: this stack now serves TWO consumers
+
+Until 2026-09-05 every capacity figure here was defended against one consumer at a measured peak of 2.
+That is no longer the shape of the problem.
+
+| consumer | what it is | its own limit |
+|---|---|---|
+| `deepseek-harness` | the agentic harness, via `MESSAGE.md` | `maxConcurrentAgents: 8` |
+| `eda-mastra-platform` | OpenWebUI + Mastra + docling/whisper sidecars | steady 2, burst 4, schedulable harness runs |
+
+**Both bind to `chat-model` at 131,072 and to `embedding-model` at 2560 dims.** The second consumer
+holds a standing GPU reservation — see §2d — which is why util is 0.64 and seats are 8. **Do not
+reclaim that free card memory.** It is not slack; it is docling and faster-whisper, and it was
+measured and committed, not estimated.
+
+The foundry has no session in this repo. It is reached by cross-session message, and its questions do
+**not** belong in `MESSAGE.md`, which is the harness channel by definition. Conclusions from either
+consumer still go in `docs/TUNING.md`.
+
+### What is genuinely open
+
+1. **`MESSAGE.md` Q21 `REPLY:` is unanswered.** The only ask is the harness's *everyday* fan-out peak
+   once real traffic runs, rather than UAT. Every capacity figure still rests on a peak of 2, and that
+   now has to hold for two consumers sharing 8 seats. A null result closes it.
+2. **`README.md` "The shipped shape" and "Measured on this host — 2026-08-19" still describe the fp8
+   arm.** `shape.sh` overrides it, but it is the first file a new consumer reads and we just acquired
+   one. Offered to the operator and not yet taken up.
+3. **A cold FULL-CONTEXT N-way run has never been done at 8 seats** (nor at 9). Every co-residency
+   proof used the consumers' real ~19.6k prompts. §3 records that even the fp8 arm at 4 seats preempts
+   on cold distinct full-context traffic, so do not assume 8 is immune.
+4. **`fix/eval-grid-budget-and-sampler` at `51e21d2`** is an old branch, unmerged, worth a look before
+   it drifts further.
+
+### Two things that are unexplained, and must stay that way in writing
+
+- **The card lost 1,840 MiB within a single boot** (§6 row 44). No cause measured, none asserted.
+- **The 0.64 reshape freed 7,690 MiB against 5,873 predicted** (§2d). Util-to-resident is not exactly
+  linear on this build. No cause measured, none asserted.
+
+Both are candidates for the same underlying thing and it would be easy to write a plausible story
+connecting them. **Do not.** That is precisely how rows 1-44 got written.
+
+### Closed by the operator 2026-09-05, do not re-raise
+
+- **Credential rotation after a disclosure** — declined, both items. The `LITELLM_MASTER_KEY` reached
+  a transcript, and a Teams webhook URL reached a terminal **minus its `sig=`**, which is the part
+  that makes it callable. Assessed, judged not exploitable, and closed.
+- **The `/engine-embed` passthrough** — declined. The foundry tokenizes locally; §2d records why the
+  neighbouring route would have been actively wrong.
+- **Joining `kb-mastra-net`** — declined by the foundry itself. It uses the published port and the
+  engine isolation boundary stays intact.
+
+**If you are here for the flash-next arm, this block is not your entry point** —
+`docs/FLASH-NEXT-AB-HANDOFF.md` is, and its own START HERE is current. The short version, all
+measured: flash-next ties the 27B on single-turn quality, **wins** on agentic per-step productivity
+(89.8% vs 80.5%, CI [+4.4, +14.1]) and uses 2.2x fewer tokens per solved task — and it **still does
+not ship**, because on-card retrieval does not fit beside it at any utilization. The retrieval floor
+is measured (`results/flash-next/rag-floor-20260904/RESULT.md`): 5.34 GiB against the 3.62 GiB
+flash-next leaves, with no tuning-reachable configuration closing the gap. Whether a smaller chat
+build could is **UNRESOLVED** and needs that build's *resident* footprint measured — its on-disk
+payload delta is not a substitute, and treating it as one is ledger row 38, this repo's fourth
+instance of that error. **Do not spend the 171 GiB on payload arithmetic.**
+
+**The caching investigation is CLOSED. Do not resume it.** Round 7 of `MESSAGE.md` (Q8, Q10, Q16)
+priced it against the only consumer's real traffic: two recorded days are ~36 s of prefill per day, and
+its worst-ever request uses under 3% of the pool. Every capacity figure either session argued over was
+defending headroom nobody touches. Under `CLAUDE.md` §1 that ends the line of work — see `docs/TUNING.md`
+§6 row 23, which records the declined follow-up so it is not picked up as an open thread.
+
+**What the measurement actually established, after two withdrawals.** The steady state
+`floor(P/1568)*1568` is confirmed, including on the consumer's own bytes. The "first request reuses
+`floor(P/7840)*7840`" half is **withdrawn as unproven** — its evidence was contaminated by a probe that
+hardcoded seed 0 in its sequential sweep, so each group inherited the previous group's resident blocks
+(§6 row 21; probe fixed). The warm-up is **one *or* two requests, unpredictably** — five prefixes split
+2/3 and a 5-token size difference flipped it (§6 row 22). Budget two. The within-session append-only
+shape costs nothing extra (`probe_append_only_replay.py`). **No file may assert a mechanism for the
+1-vs-2 variance, and nobody is to go measure it.**
+
+Still open and untouched by any of this: *why* the pool runs short of allocatable blocks at cold 4-way.
+Four candidates are refuted, the admission cap is closed by source reading, and **no file may assert a
+cause.** It is also not worth a boot at present traffic.
+
+### The next move — and it is not more measurement
+
+**Round 7 answered everything this queue was gated on.** Q16: the consumer's prefixes repeat
+always — one byte-identical head served all 45 requests across 14 sessions and two days — so **keep
+caching on** and stop tuning it. Q13: it sent the head bytes. Q8/Q10: peak concurrency 2, one user,
+13-19k prompts, ~200 output tokens. Q17 is answered and declined — N is not their constraint, and they
+have been told to unpin `maxConcurrentAgents` from our admission.
+
+**Queue items 2-6 are closed, not deferred.** Item 2 (`--max-num-batched-tokens 3136`) was declined by
+the consumer on its own grounds (Q15, §6 row 20). Item 4 (the no-caching control) is moot: Q16 makes
+turning caching off an unambiguous regression for the only consumer. Items 3, 5 and 6 are academic
+optimisations under `CLAUDE.md` §1 — priced against ~36 s of prefill per day, none of them can pay for
+the boot they cost. **Do not run them. Do not re-derive a reason to run them.**
+
+So the useful work is elsewhere. The one item still outstanding here is **`master`, now 36 commits
+behind** (merge verified conflict-free). The HF token rotation that used to head this paragraph is
+**CLOSED — declined by the operator, 2026-09-04**; see item 4 below.
+
+`docs/TUNING.md` is now the single home for shape/KV/capacity know-how and for the withdrawn-claims
+ledger. **Do not re-scatter numbers back into `README.md`, `.env`, `docker-compose.yml` or this
+file** — that is the defect the 2026-08-21 pass existed to remove: the same figures were hardcoded
+in eight files (`131,072` in 7, `0.57` in 6, `5.27x` in 5), so every tuning change was a many-file
+edit and one copy always went stale. Numbers a command can print are not written down.
+
+### What landed 2026-08-21 (fourth pass)
+
+- **`artifacts/probes/probe_reuse_geometry.py`** (new) — the only probe doing **shared head + distinct
+  tail**, which is what a real agent sends and which nothing here had ever measured. It imports
+  `measure-ttft.py`'s tokenizer, filler and counter scrape rather than duplicating them. `--concurrent N`
+  runs two simultaneous waves; `--prefix-file` takes a real consumer prompt verbatim. Artifacts in
+  `results/prefix-reuse/`.
+- **The mechanism landed in `docs/TUNING.md` §4** — the checkpoint stride (as a candidate, not a
+  measured reuse figure: §6 row 21), the per-group intersection, the warm-up, and the fact that
+  `num_uncached_common_prefix_tokens` reaches no metric so
+  a stride-capped request is indistinguishable from one sharing nothing (proxy:
+  `vllm:request_prefill_kv_computed_tokens`).
+- **A retraction was itself retracted.** `--max-num-batched-tokens` *does* drive mamba retention
+  (`scheduler.py:396-409` clips every prefill chunk to a block boundary; state is written at chunk
+  ends). Ledger row 14. Then measurement demoted the knob anyway — it only affects request 0 — row 20.
+- **`align` is upstream-EXPERIMENTAL and nothing here said so.** Now quoted from the engine's own boot
+  warning in `docs/TUNING.md`, `README.md`, `HOW-TO.md` and both compose arms. Upstream #45238 /
+  #42317 / #52897 / #40696 recorded; #42317 reports 0% align reuse at our exact
+  `--max-num-batched-tokens 8192`, and #52897 is on our own nvfp4 checkpoint.
+- **Two unbacked figures purged that the third pass missed** — `98.8%` in `measure-ttft.py`'s own
+  docstring and `98.8%`/`81.2%` in this file, where they were stated as fact *and used to prove a
+  conclusion*. They survived because the ledger had no row for reuse percentages; row 18 now exists.
+- **`MESSAGE.md` restructured 940 → 231 lines**, to a strict `ASK / WHY / REPLY` schema. It had become
+  a competing copy of the record. History is in `a70f1f8`.
+- **The admission cap closed without a boot** — the clamp requires `SlidingWindowSpec` or
+  `ChunkedLocalAttentionSpec`; this model has neither.
+
+### What landed 2026-08-21 (third pass)
+
+- **`scripts/shape.sh`** (new) — reads the engine's own boot log and running command, prints pool /
+  concurrency / tokens-per-GiB / sessions, enforces the gate. Exit 1 = oversubscribed, 2 = unreadable.
+  It surfaced a caveat nothing here documented: since vLLM v0.21.0 CUDA-graph memory is profiled, so
+  `--gpu-memory-utilization` is effectively *lower* than the value set.
+- **`docs/TUNING.md`** (new) — derivations, the per-arm dtype reasoning, and the ledger.
+- **`.env` demoted to config** — 147 → 49 lines, 11 assignments, values byte-identical. It was 92%
+  comment, so shape know-how lived in a gitignored file and drifted against README.
+- **`scripts/measure-ttft.py` was lying, and now cannot.** With caching on it reused one deterministic
+  prompt, so reps 2+ were ~96% cache hits: **5.690 s → 0.451 s** at 32k, a 12.6× understatement whose
+  median it would have published. It now builds a fresh prompt per (target, leg), scrapes the
+  prefix-cache counters, and **exits non-zero** on a contaminated cold run. `--deterministic` keeps the
+  old fixed-prompt behaviour for checkpoint A/B only.
+- **`CHAT_PREFIX_CACHING`** env-gates the flag (default ON) so the queued no-caching control is
+  reachable; `eval-grid.sh` compares it before reusing a healthy engine.
+- **`results/boot/chat-fp8-20260821.log`** committed — `logs/*.log` is gitignored, so until now the
+  entire shipped-shape derivation rested on numbers nothing in the repo could reproduce.
+- **`measure-footprint.sh`** now measures tokens-per-GiB live; it had been recommending a util raise
+  from a **bf16** constant roughly half the fp8 reality.
+- **Unbacked figures deleted rather than defended** — the 5-way aggregate/starvation pair, the
+  98.8%/81.2%/40.6% reuse claims, `15/15` needle recall, and a `~12%` cost whose two inputs were both
+  already-withdrawn numbers. See the ledger.
+
+### Do not reintroduce
+
+`MESSAGE.md`'s latest round explicitly invites writing **N=3** into `README.md` and withdraws the
+argument against it. That invitation was **declined** and the section is annotated. `N` stays 4 on
+measured co-residency, and no file may assert a mechanism for the cold-4-way shortage until the
+retention experiment settles it.
+
+### Codex review findings — 9, triaged. **ALL NINE APPLIED 2026-08-21** (second session).
+
+Verbatim findings and their evidence are in the session transcript; this is the actionable triage.
+Every row below is now **DONE**; the table is kept as the record of what was wrong and where, because
+several of these claims had already been reintroduced once. Line numbers are as they were *before*
+the fixes and will no longer resolve — the edits shifted them. What landed:
+
+| # | applied to |
+|---|---|
+| 1 | `README.md` (mechanism block + a two-part correction note), `.env`, `docker-compose.yml` (both the fp8 comment and the retention-knob comment), `artifacts/probes/probe_prefix_saturation.py` docstring — every one now says the cause is **NOT established** and names the withdrawn mechanism verbatim so it cannot be reintroduced |
+| 2 | `HOW-TO.md` limits table 5 → 4 ("the 5th queues"), both restart procedures `REQUIRE >= 4`, `litellm/config.yaml` stream-timeout block re-sized against the 4-session artifacts |
+| 3 | `README.md` ×2 — `rag,nvfp4` → `rag,fp8` |
+| 4 | `README.md` ×2, `HOW-TO.md`, `scripts/measure-ttft.py` (docstring ×2 + both branches of the preemption print; the zero-preemption branch no longer claims "clean prefill" from a zero delta alone) |
+| 5 | `.env.example:71`, `.env` — the 2,743 s / six-session bound is now marked withdrawn where it was asserted |
+| 6 | `docker-compose.yml` nvfp4 arm — "twice the sequences"/8 replaced with the recorded 30.66-vs-23.41 GiB derivation for 6, plus "this arm has never been booted at this shape" |
+| 7 | `README.md` ×2, `.env` ×2, `.env.example`, `docker-compose.yml` — 74.7 replaced by **74.8 and 74.6**, each site saying the average was never a measurement |
+| 8 | probe docstring KV floor marked cold-only; `results/prefix-saturation/probe-4way-20260821-run2.log` given the addendum it lacked |
+| 9 | `MESSAGE.md` — both round-2 `> REPLY:` slots filled from the reconstruction below, each marked `Reconstructed 2026-08-21`, plus an R4 round explaining the loss and the process change |
+
+**Still open after this pass:** the one mechanism (below). Nothing in the tree asserts a cause for it
+any more — that was the point of finding 1.
+
+| # | Where | Fix |
+|---|---|---|
+| 1 | `README.md`, `HANDOFF.md`, `docker-compose.yml`, `.env`, probe docstring | **Overclaim.** "Capacity fits; preemptions are contention" is not proven. `HANDOFF.md` Status is already corrected — propagate that narrower wording to the other four. |
+| 2 | `HOW-TO.md:101`, `README.md:1115`, `HANDOFF.md:1027`, `litellm/config.yaml:248` | Superseded **5-request** shape in current operator/consumer instructions: HOW-TO's table says 5 with "the 6th queues"; both restart procedures still say `REQUIRE >= 5`; LiteLLM's stream-timeout block says "five prefills now serialize". |
+| 3 | `README.md:832`, `README.md:926` | Says `.env` ships `rag,nvfp4`; it actually ships `rag,fp8`. |
+| 4 | `README.md:477`, `README.md:695`, `HOW-TO.md:136`, `scripts/measure-ttft.py:7,45,611` | Claimed every turn / every preemption re-prefills **from token 0**, contradicting corrected text in the same files; and `measure-ttft.py:614` printed "every number above is a clean prefill" from a zero-preemption delta alone. **APPLIED — re-verified 2026-08-21:** every surviving site is qualified ("...when nothing is cached", "on a miss you still pay"), and the "clean prefill" print is gone. The line numbers above are pre-fix and no longer resolve; do not chase them. |
+| 5 | `.env.example:71,87`, `.env:16` | The withdrawn 2,743 s / six-session timeout extrapolation survives as fact at :71 while :87 identifies that same conclusion as invalid. `.env` still calls it an "ARITHMETIC bound". |
+| 6 | `docker-compose.yml:127-130` | nvfp4 arm comment says the same fraction "holds twice the sequences the fp8 arm can" and cites **8**, while the arm actually gates on `CHAT_MAX_NUM_SEQS_NVFP4=6`. **The "+2 mamba pages per GDN layer" half of this finding is already FIXED** (it is +1 per layer, +48 pages, 3.45%). |
+| 7 | `.env.example:102`, `README.md:246`, `README.md:373`, `docker-compose.yml:296` | **74.7 tok/s was never measured** — it is an average of 74.8 (run 1) and 74.6 (run 3). Quote the two figures. |
+| 8 | `artifacts/probes/probe_prefix_saturation.py:24`, run-2 log | Docstring still lists the KV floor as an unconditional PASS criterion; the code correctly applies it only on cold runs. Run 2's log records `[FAIL] KV pressure … RESULT: FAIL` from the superseded probe and, unlike run 1, has no addendum. The gate *logic* was verified sound — vacuous pass impossible, cold-only floor, peak never combines scrapes. |
+| 9 | `MESSAGE.md:378,394` | Both round-2 `> REPLY:` slots are blank: one party's round 3 was overwritten and is **unrecoverable** (untracked, no backup, no git history). The two substantive answers are reconstructible and are recorded below. |
+
+### The two answers lost with that round 3 — restore them into `MESSAGE.md`
+
+- **Q6 — is retention a plateau or a peak; is `max_tokens` a KV lever?** Ran it: cold 4-way at
+  **2,000** forced output tokens gave peak `kv_cache_usage_perc` **1.000** and **+1** preemption,
+  against **8,000** output giving **1.000** and **+2**. Cutting output 4x moved peak occupancy not at
+  all. **`max_tokens` is not a KV lever** — keep their R3 (32768 → 16384) a pure context-budget
+  decision. Blocks *are* freed mid-request: `remove_skipped_blocks` frees one per scheduler step.
+- **Q7 — at 1.000 with zero free blocks, preemption or a 5xx?** **Preemption, never an error.** Run 3
+  hit 473/473 and all four returned `completion=8000, finish=length`; across all four saturation runs
+  zero requests errored or came back short. Their `maxRetries: 0` is safe. Two caveats: **admission**
+  does 400 (`ContextWindowExceededError` — `prompt + max_tokens > max_model_len`, hit at 131,073 vs
+  131,072, one token over), and this is 4 runs at N=4, not a proof at N=5/6.
+
+### Experiment queue — the review is closed, the measurement is not
+
+Finding 6's "+2 mamba pages per GDN layer" half was corrected in the first session
+(`docker-compose.yml`: it is 2 instead of 1 = +1 per layer = +48 pages = 3.45%). **Everything else in
+the table above was applied in the second session on 2026-08-21** — see the DONE table. The line
+numbers in the original triage are now stale by construction; do not chase them.
+
+### The one open mechanism, and the experiment queue
+
+**Open: why the pool runs short of allocatable blocks at cold 4-way.** Do not let any file assert a
+mechanism. Two Codex runs disagreed; **the allocation half is now settled in Run A's favour** from the
+installed source, though neither run's root cause survived:
+
+- Run A: align null-pads and allocates ≤1 physical mamba block per call. **CONFIRMED 2026-08-21** —
+  `MambaManager.allocate_new_blocks` carries a literal `assert num_new_blocks <= 1 +
+  int(has_partial_hit)` for a running request, and `block_pool.py:271-276` skips nulls when hashing.
+  Its *root cause* (`--async-scheduling` reclaim lag) is still **refuted** — the flag is not enabled;
+  it found "async" in `/proc/*/cmdline` by matching **its own grep process**.
+- Run B: predicts `retention_interval=1568` → 75 snapshots/group → ~1,200 blocks. Dead — it rests on
+  the dense model Run A refuted. Its "16-token Mamba state blocks" was also wrong, and the reason is
+  worth knowing: the API-server process really does export a stale `mamba_block_size="16"`, so the
+  claim was a misread of a real label. Under align `mamba_block_size = block_size = 1568`
+  (`platforms/interface.py:917-918`) and 16 is `hash_block_size`. `docs/TUNING.md` 6 row 19.
+
+**One candidate is now CLOSED by source reading, without a boot.** The admission cap
+(`get_num_blocks_to_allocate(..., apply_admission_cap=True)`) cannot be responsible: the clamp at
+`single_type_kv_cache_manager.py:179` requires `_max_admission_blocks_per_request is not None`, that
+value is passed only for `SlidingWindowSpec` / `ChunkedLocalAttentionSpec` (`:1871`), and this model
+has neither — `layer_types = {linear_attention: 48, full_attention: 16}` with no `sliding_window` key,
+so the groups are `FullAttentionSpec` + 3x `MambaSpec`. The branch is inert here.
+
+Queue, **re-ranked 2026-08-21.** The retention interval was #1 in four files; it is now last, because
+the mechanism that justified it is refuted (`docs/TUNING.md` 6 rows 15 and 16) and a new lever with a
+quantified prediction took its place (row 14). Cheapest and most decisive first:
+
+1. ~~**Reuse-geometry probe — shared prefix, distinct tails.**~~ **DONE 2026-08-21, synthetic legs.**
+   New probe `./artifacts/probes/probe_reuse_geometry.py` (it imports `measure-ttft.py`'s tokenizer,
+   filler and counter scrape rather than duplicating them). Artifact:
+   `results/prefix-reuse/reuse-geometry-20260821-baseline8192.{log,json}`. **Its headline result was
+   later WITHDRAWN** — the run was contaminated by a hardcoded seed and the "exact on 12 of 12" figure
+   rested on request-0 readings that were not cold (`docs/TUNING.md` §6 row 21). What survives: a warm
+   prefix reuses `floor(P/1568)*1568`, confirmed on the consumer's real bytes, after a warm-up of one
+   or two requests (row 22). `docs/TUNING.md` §4.
+   **The concurrent variant is also DONE** (`--concurrent 4`, artifact
+   `results/prefix-reuse/reuse-concurrent-20260821-n4.log`): four simultaneous requests on a fresh
+   head reused `0 + 7,840 + 10,976 + 10,976 = 29,792` in wave 1 and `4 x 10,976` in wave 2, so the
+   warm-up is ~2 requests **in total**, not 2 per slot — a checkpoint one request plants is visible to
+   its siblings mid-wave, and `--max-num-seqs 4` does not multiply the cost.
+   **That last leg is DONE 2026-08-21** — the consumer sent its scrubbed head (Q13,
+   `artifacts/from-harness/`) and `--prefix-file` measured it: `…-realprefix.json`. The steady state
+   transferred exactly; the warm-up length did not. Item closed, and so is the rest of this queue.
+2. **`--max-num-batched-tokens 3136`** — **DEMOTED by item 1's result, before it was ever run.** It
+   takes the stride 7,840 → 3,136, but the stride only caps request 0 of each prefix, so this buys
+   that one request while costing ~60% fewer tokens per prefill step on *every* deep prefill. Run it
+   to price the trade, not expecting a win. **Do not use 1568** — the budget is shared across
+   `--max-num-seqs 4` and a competing decode then makes `aligned_end == start`, so the request is
+   skipped for that step (`scheduler.py:951-966`). `docs/TUNING.md` 6 row 20.
+3. **`--prefix-match-unit 32`** — shipped in this image (`config/cache.py:56`,
+   `engine/arg_utils.py:1236`), never tested, and it is in `ignored_factors` for the compile hash so
+   it does **not** trigger `torch.compile`. Below 1568 it flips `enable_partial_hash_hits` True and
+   routes the mamba lookup into its fine-grained branch. Confirm `690,312` / `5.27x` did not move; if
+   the pool changed, the flag does more than documented. Then test it combined with 2.
+4. **No-caching cold 4-way control.** Changes two things (`mamba_cache_mode` falls back to `none`), so
+   write it up as "align+caching vs none+no-caching", never "align vs none". Compare against the
+   **cold** runs, never the warm one. Confirm the boot line returns to `5.45x` / `714,116` — if it
+   still prints `5.27x`, the flag did not take.
+5. **`VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0`, then a positive interval (`1568*8`).** Env var, no CLI
+   flag, set in the compose `environment:` block; legal values `1568 x n, n >= 0`; it validates at
+   startup and **raises** on a bad value, so a clean boot is the first gate. **Expect it to do very
+   little:** align holds only ~1-2 *real* mamba blocks per request, so there is almost nothing for
+   sparse retention to remove (row 16). The "~116,032-token hit (~98.44%)" this item used to predict
+   came from the refuted dense model and is withdrawn (row 18). Run it to close the question.
+6. **`--max-num-batched-tokens 32768`** — the prefill-serialization ladder only, and note it moves the
+   stride the *wrong* way (32,768 → a 31,360-token stride), so it should make reuse worse. Not a
+   capacity experiment.
+7. ~~`--mamba-block-size`~~ — **cancelled.** `platforms/interface.py:917-918` sets
+   `mamba_block_size = cache_config.block_size` unconditionally in the align branch, after any user
+   value is read, so the flag is silently ignored.
+
+**Judge 2 through 5 on all three from the same run** — preemption delta, warm reuse %, aggregate
+throughput — because each lever's direction on occupancy is genuinely unknown, not because occupancy is
+rigged; that earlier warning rested on a false premise and is retired (row 17).
+
+### Traps that cost real time this session
+
+- **`grep` here is a gitignore-aware `ugrep` wrapper** and silently skips `.env`. Use `command grep`
+  for any exhaustive sweep. A "clean" sweep result was a false negative because of this.
+- **Searching `/proc/*/cmdline` for a flag matches the grepping process itself.** Verify "flag is
+  enabled" against the container command, rendered compose, env, **and** the boot log.
+- **vLLM publishes no `cached_tokens`** (`prompt_tokens_details` is null even engine-direct). Reuse
+  comes only from `vllm:prefix_cache_{queries,hits}_total`, which are token counts and cannot be split
+  mamba vs attention — all groups reconcile to one `hit_length`.
+- **The probe needs `PROBE_SEED_BASE` varied for a genuinely cold run.** Identical seeds reproduce
+  byte-identical prompts and silently give a warm run. This is exactly how the handoff author's 0.901
+  / 84.8 tok/s "cold" 4-way row was mislabelled; they withdrew it.
+
+## Resume
+
+```bash
+cd ~/kb-mastra-infra
+./scripts/grid-status.sh                  # one table: per-cell state, nulls, timeouts, progress
+./scripts/grid-status.sh -w               # redraw every 30s; exits itself when the grid ends
+python3 scripts/collect-results.py        # rebuild results/eval/comparison.md from whatever exists
+cat results/eval/comparison.md
+```
+
+If the grid is **not** running and cells are missing:
+
+```bash
+docker compose down                       # the grid needs the card to itself
+./scripts/run-detached.sh grid ./scripts/eval-grid.sh fp8 nvfp4
+```
+
+No environment prefix. Everything that shapes a cell — `MAXTOK`, the sample limits, the engine
+shape — lives in `eval-grid.sh`'s defaults, because a variable prefix does not survive
+`run-detached.sh` (see its header) and because the grid is resumable: a relaunch that forgot a
+prefix would fill later cells at different settings and the collector would tabulate them as peers.
+
+**That rule quietly stopped being true on 2026-08-20 and was restored the same day.** `eval-grid.sh`
+sources `.env` with `set -a` for the secrets, and until that date `.env` held *only* secrets. Once it
+was given production's knobs, `CHAT_GPU_MEM_UTIL=0.70` was exported into every grid run and silently
+overrode the script's own `0.92` — so the fp8-KV experiment booted at 0.70 / 12 sequences against a
+baseline measured at 0.92 / 20, two variables changed in a one-variable experiment. The script now
+captures the shape knobs the operator set *before* sourcing, restores them after, and drops whatever
+`.env` supplied with a line on stderr. `env CHAT_GPU_MEM_UTIL=... ./scripts/eval-grid.sh` still works
+and is still the way to change a shape deliberately.
+
+### Resumability is now gated on a semantic fingerprint, and it REFUSES rather than overwrites
+
+Skipping on task names alone was not safe. Each cell records a `fingerprint:` over everything that
+changes what a number *means* — adapter semantics (`lmeval_think.SEMANTICS`), stop handling, `MAXTOK`,
+the sampler, both sample limits, both task lists, the KV dtype and the engine's full `Cmd` (so model
+revision, quantization and the whole shape). Behaviour:
+
+- same fingerprint + every requested task present → skipped, as before, so an interruption costs nothing;
+- **different or missing fingerprint → the grid REFUSES and exits 1**, before spending any GPU, and
+  prints the `mv` command to archive the offending cell. It does not delete: throwing away hours of
+  GPU time is not a decision a script should take.
+- `FORCE=1` over a populated cell also **refuses**. lm_eval writes a *new* timestamped results file
+  rather than replacing the old one, so a FORCE would blend two generations inside one cell. Archive
+  or remove the cell first.
+
+This is not hypothetical. The 5 completed cells from the killed run predate the fingerprint, and the
+relaunch refused them by name until the tree was archived — verified live, exit 1, zero GPU spent.
+`collect-results.py` asks a **different** question from the other end, and it must not use this key
+to ask it. The fingerprint deliberately hashes the arm, the effort and that effort's sampler, so a
+complete grid always carries eight distinct fingerprints — keying a peers check off it printed
+**⚠ THESE CELLS ARE NOT PEERS** over every valid grid, which is exactly what it did to the finished
+run until 2026-08-20. The collector now compares the fields that must match across cells — `semantics`,
+`kv_cache`, both task lists with their limits, `max_gen_toks`, `stop_handling`, the image digest, and
+the engine flags `--gpu-memory-utilization`, `--max-model-len`, `--max-num-seqs`, `--kv-cache-dtype` —
+names the field and the offending cells when one disagrees, and otherwise prints an explicit
+**All N cells are peers** line. Two questions, two keys: "may I skip this cell?" is the fingerprint's,
+"may I subtract these cells?" is not.
+
+The engine shape is printed at startup and then checked against vLLM's own `Maximum concurrency`
+line; the run refuses rather than proceeding with a shape that can preempt.
+
+To watch the job's own pane: `tmux attach -t kb-grid`, then **`Ctrl-b` then `d` to detach**. `Ctrl-c`
+or `exit` in that pane kills the grid. `grid-status.sh` is the safer read-only view.
+
+A "req-group" in the progress column is not a task. lm_eval can only batch `generate_until` requests
+that share their stop sequences, so groups follow `until`. At current settings a cell is four groups:
+`gsm8k` 120 alone, `ifeval` + `humaneval_chat` 240 together (both `until: []`), `gpqa_diamond` 120,
+then `mmlu_pro` 210 in the second invocation — 480 + 210 = 4 × 120 + 15 × 14, nothing duplicated.
+
+## Roadmap — what is left
+
+1. ~~**Finish the grid**~~ — **DONE.** 8/8 cells, 391 min, finished 2026-08-19 23:52.
+2. ~~**Read the verdict**~~ — **DONE**, and the reading is in `README.md` under "The measured answer"
+   with the full matrix. In short: the checkpoints **tie on accuracy** (18 of 20 comparisons inside
+   the combined stderr; the two exceptions, gsm8k/medium and humaneval_chat/medium, are marginally
+   `fp8`), while `nvfp4` is **measurably the cheaper engine**. Reading order for anyone re-checking
+   it, unchanged except for the first step:
+   1. the peers line above Provenance — the collector states it **either way** now, as
+      **All 8 cells are peers** or as a **⚠ THESE CELLS ARE NOT PEERS** block naming the field that
+      disagrees. Absence of a warning is no longer the signal; the affirmative line is. (Until
+      2026-08-20 the block was keyed off the per-cell fingerprint and therefore fired on every
+      complete grid — see Resume.)
+   2. per-cell `recovered` and `truncated` in Provenance — how much of each score leans on the
+      reasoning fallback, and how much the 32768 budget cost. It cost `xhigh` 22–23 items.
+   3. the **Lost answers** table and any `†` markers, which flag a score depressed by items the
+      harness never received. Both `xhigh` cells are daggered on `gpqa_diamond` at 17–18%.
+   4. only then the deltas. A gap smaller than the two cells' combined
+      stderr is a tie — the collector labels it. On a tie prefer `fp8`: `inference-realworld` already
+      qualified it and it needs no `--chat-template` override.
+   *The serving argument on the other side, now measured rather than predicted:* in the `off` cells —
+   the only clean throughput read, since with thinking disabled nothing generated is hidden from the
+   samples — the arms emitted within **0.04%** of the same token volume (699,820 vs 700,109, counted
+   with the model's own tokenizer) and `nvfp4` finished in 1,112 s against 1,403 s: **629 vs 499
+   tok/s aggregate at 20 concurrent streams, 1.26x the token rate**. It also holds **12.7% more KV** at the same fraction
+   (973,531 vs 863,817 tokens at util 0.92), and in production, where `--kv-cache-dtype` returns to
+   `auto`, its calibrated `kv_cache_scheme` gives it an fp8 KV cache at 34.48 KB/token where FP8 gets
+   bf16 at 66.6 — roughly **twice the KV again**. The accuracy-only tie rule does not see any of this.
+   Weigh it; do not let it silently override the rule.
+3. ~~**Pin the checkpoint**~~ — **DONE 2026-08-20**: `.env` ships `COMPOSE_PROFILES=rag,fp8`. The
+   reasoning, kept because the decision is reversible by one variable:
+   `fp8` if the tie rule governs (and `fp8/medium` is the strongest single cell at 40 min against
+   `xhigh`'s 104), `nvfp4` if the deployment is concurrency- or memory-bound, where ~26% throughput
+   and ~13–100% more KV buy more than an accuracy difference the paired test bounds at **at most 1.7
+   points at 95% confidence**, most likely 0.7. That bound is the number to argue with, not the
+   per-task tie labels — see "Is the difference real?" in `results/eval/comparison.md`.
+4. ~~**Bring up the production stack**~~ — **DONE 2026-08-20, 30/30.** Boot it **staged**, because
+   the chat arm has no `depends_on` and at a 0.94 total there is no slack to absorb two engines
+   profiling the card at once:
+   `docker compose up -d vllm-embedding` → `vllm-reranker` → `chat-fp8 litellm`, then
+   `./scripts/smoke.sh` (expect 30/30). Require the chat engine's own
+   `Maximum concurrency for 131,072 tokens per request: N.NNx` ≥ `--max-num-seqs` before trusting it.
+4b. ~~**Measure the pooling pair and reclaim the surplus**~~ — **DONE 2026-08-20: verdict HOLD.**
+   ~~Measured 22.4 GiB genuinely resident (7.72 GiB weights/non-torch + 2.81 GiB KV each), so the
+   budget was the need and there is nothing to reclaim.~~ **The VERDICT (hold) still stands for the
+   4B pair, but this REASONING is WITHDRAWN — ledger rows 33 and 38.** "The budget was the need" is
+   exactly backwards: `--gpu-memory-utilization` is an engine-wide budget against total card memory
+   and vLLM grows KV to fill it, so 22.4 GiB only ever proved the pair was *allowed* 22.9. The pair's
+   actual floor has since been measured on the 0.6B checkpoints — 5.34 GiB, i.e. a quarter of the
+   budget (`results/flash-next/rag-floor-20260904/RESULT.md`). There IS surplus; it is just not worth
+   reclaiming for the 27B arm, which has headroom it does not use. A 5th session needs the pair under 20.1 GiB,
+   which would halve the embedding engine's batch capacity — declined in favour of the fp8-KV route,
+   which doubles chat sessions without touching the pooling engines. Original rationale: `POOL_GPU_MEM_UTIL=0.12` is a budget, not a
+   need: vLLM fills whatever it is given with KV. `./scripts/measure-footprint.sh` attributes real
+   per-process GPU memory to containers, reads each engine's own allocation lines, and prints the
+   verdict — the pair must come in under ~20.1 GiB for chat to reach `0.79` and a 5th 131k session.
+   Between 20.1 and 23.7 GiB the surplus buys nothing and the headroom is worth more.
+5. **Rotate the credentials** before this faces the LAN — `VLLM_API_KEY` done 2026-08-20; the HF
+   token is **CLOSED, declined by the operator 2026-09-04** (item 4 below). Security carries the
+   staged recipe for any future rotation.
+6. ~~**Re-shape production**~~ — **DONE 2026-08-20**, but for a different target than this item
+   assumed: not 65,536 at `0.70` for 8 sequences, but **131,072 at `0.70` for 4**, because the
+   workload became agentic. The item's own arithmetic still holds and was reused. Original text kept
+   below for the reasoning. PREVIOUSLY: PAUSED by operator decision, nothing applied. The chosen direction is to
+   *keep* `--max-model-len 65536` and move the other two numbers to fit: `CHAT_GPU_MEM_UTIL ~0.70`
+   makes `8 × 65,536` coherent (needs ~35.6 GiB KV; ~38 GiB is available once embedding and reranker
+   hold their ~21 GiB). The one unmeasured input is what those two engines *actually* consume — the
+   ~21 GiB is inferred from the co-resident total, not measured directly, and it decides 0.68 vs 0.72.
+   That needs a three-engine boot, so it needs the card. Verify by booting and requiring vLLM's
+   `Maximum concurrency for 65,536 tokens per request: N.NNx` ≥ `CHAT_MAX_NUM_SEQS`.
+
+## Remaining, in order of value — START HERE
+
+1. ~~**Measure TTFT / prefill at 131k**~~ — **DONE 2026-08-20.** New harness
+   `scripts/measure-ttft.py`; raw output in `results/ttft/*.json`; the reading is in `README.md` under
+   "Prefill / TTFT at depth". Headline: **35.0 s for a 130,219-token prefill** (3,723 prompt tok/s),
+   23.0 s at 98k, 13.3 s at 65k, 0.16 s at 1k — super-linear, and paid on every CACHE-MISSING turn
+   (prefix caching removes most of it on a turn that extends a prefix the engine still holds). Three
+   reps per point, spread under 0.1 s, zero preemptions. The gateway hop is 0.01-0.09 s of that, so
+   the numbers are the engine's own (cross-checked against
+   `vllm:request_prefill_time_seconds` and the raw `/engine` route).
+
+   Three things came out of it that were not in the question:
+
+   - **Prefill is served one request at a time.** Four simultaneous 98k requests produced TTFTs of
+     24.9 / 48.3 / 71.9 / 93.8 s, and at 130k, 35.1 / 70.3 / 105.9 / 140.9 s — one whole prefill
+     apiece, in arrival order, reproduced to 0.2 s. So worst-case TTFT for an admitted request is
+     `--max-num-seqs` × its own prefill: 141 s at full context. The only shipped lever is
+     `--long-prefill-token-threshold` (default 0 = off, verified at
+     `vllm/v1/core/sched/scheduler.py:521`), which trades long-turn latency for short-turn latency.
+     `--max-num-partial-prefills` / `--max-long-partial-prefills`, which the current vLLM
+     docs present as the knobs for this, **do not exist in 0.27.1** — a third docs-vs-image
+     divergence on this stack.
+   - **The admission cliff is expensive.** A 5th concurrent request is not admitted until a slot
+     frees, and a slot frees only when a request ahead stops *generating*. Measured at a 3,072-token
+     budget: the four admitted requests saw TTFTs identical to a four-stream run (so the 5th
+     interfered with nothing), the first finished at 182.7 s, and the 5th's first token arrived at
+     **206.9 s**. The wait scales with the OUTPUT budget, not the prompt — at the advertised 32,768
+     ceiling it lands near 1,780 s, past `stream_timeout`. Watch `vllm:num_requests_waiting` (seen
+     live at running 4 / waiting 1); persistently non-zero means requests are dying of queueing,
+     which no timeout can fix.
+   - **`request_timeout: 2700` was right by accident and is now right on purpose.** The old
+     derivation's two inputs were both wrong and cancelled: the 300 s prefill allowance was ~3x too
+     generous (real worst case 93.8 s), and the 30 tok/s worst-case decode rate was ~1.6x too
+     optimistic (engine-measured `inter_token_latency_seconds` under a saturated 4-way burst:
+     0.053 s over 9,624 tokens = **18.9 tok/s** per stream, against 25.5 with no prefill in flight
+     and 22.6 at full 131k depth). Worst admitted request = 94 s + 32,768 x 0.053 = **1,831 s**,
+     so 2700 is 1.47x. Both timeout comments in `litellm/config.yaml` now carry the arithmetic. The
+     value is unchanged, so nothing needed restarting.
+
+   **This bears directly on item 2 below:** doubling sessions 4 → 8 would roughly halve per-stream
+   decode under saturation, and the 32,768-token term alone would then land near ~3,500 s — beyond
+   `request_timeout`. Re-run `./scripts/measure-ttft.py` on the new shape and re-derive the timeout as
+   part of that change, not after it.
+
+2. ~~**Validate fp8 KV**~~ — **DONE 2026-08-20: accuracy ACCEPTED, capacity is 7 sessions not 8, and
+   applying it needs a `request_timeout` decision first.** Full reading in `README.md` under "Forcing
+   fp8 KV on the FP8 arm"; the bf16 baseline is in `results/eval/` (the `mv` at the Resume section
+   below, which would have renamed it to `results/eval-bf16-20260820/`, was never run).
+
+   - **Accuracy: accepted.** Mean −0.4 at `off` (87.6 → 87.3) and **+0.3** at `medium`
+     (89.6 → 89.9) — opposite directions, which is what noise looks like — against the ≤1.7-point
+     bound. 8 of 10 per-task comparisons inside the combined stderr; the two that are not are
+     `medium` gsm8k (−1.7 against a 1.6 stderr, i.e. exactly on the bound, 117/120 vs 119/120) and
+     `medium` humaneval_chat (−1.7 against a stderr of 1.2 that is only that small because the
+     baseline was a 120/120 ceiling). `medium` gpqa went **up** 3.3 and ifeval up 2.5.
+   - **One variable, verified.** `diff` of the two `provenance.txt` files shows `engine_cmd`
+     differing in exactly one token, `"bfloat16"` → `"fp8"`. The first attempt was not one variable
+     and was killed for it — see Resume.
+   - **Watch this if it goes to production:** `truncated_unscored` on `medium` went 1 → 4 (0.8% →
+     3.3% of `gpqa_diamond`) and the cell ran 2,798 s against 2,392 s at 1,236,771 tokens emitted.
+     Consistent with longer thinking under fp8 KV; also 1-vs-4 of 120 at temperature 0.7, which no
+     test separates. A hypothesis, not a finding.
+   - **Capacity: 1.845x, measured.** KV pool 863,817 → **1,593,344 tokens** at identical util 0.92.
+     Applied to production's measured 572,577 at util 0.70: 1,056,141 tokens = **8.06x** at 131,072,
+     which is **7** sessions under the ×0.95 margin this repo applies everywhere else. 8 clears the
+     engine gate by 0.6%, and oversubscription here is a cliff, not a gradient — vLLM preempts and a
+     preempted sequence resumes from its last cached block boundary — a full 131k from token 0 only
+     when nothing is cached. (Written before caching was enabled, when this said "re-prefills 131k
+     from token 0" unconditionally.) **7 is still 1.75x the shipped 4.**
+   - **It was a serving decision, not a measurement gap, and it was taken.** The projection at the
+     time was that a 32,768-token output would need ~3,039 s at 7 streams and ~3,473 s at 8, both
+     beyond `request_timeout: 2700` — so the choice was between capping `max_output_tokens`, raising
+     the timeout, or taking fewer sessions and banking the memory. The operator chose to **split the
+     win**: 5 sessions plus 10.4 GiB of freed card. See below, and note that the projection those
+     numbers came from turned out to be 27% pessimistic once measured.
+
+   **APPLIED 2026-08-20 — operator chose 5 sessions, not 7, and not 4.** The win was split between
+   concurrency and 10.4 GiB of freed card: `KV_CACHE_DTYPE_FP8=fp8`, `CHAT_GPU_MEM_UTIL=0.57`,
+   `CHAT_MAX_NUM_SEQS=5`. Booted staged and verified — engine reports **5.45x** at 131,072 (gate ≥ 5),
+   KV pool **714,116 tokens** in 22.7 GiB, FlashInfer confirms `kv_cache_dtype=torch.float8_e4m3fn`,
+   `smoke.sh` **30/30**, all four containers healthy at `RestartCount=0`, card **77,198 / 97,887 MiB (78.9%)**
+   at boot and **79,130 (80.8%)** after a 5-way full-context load, leaving **18.32 GiB free**
+   like-for-like against 7.87 before. Zero preemptions throughout **that measurement** — which did
+   NOT generalise: cold 4-way at full context preempts reproducibly, see the Status block above and
+   `docs/TUNING.md` 3. This paragraph is part of the superseded 2026-08-20 record.
+
+   `--kv-cache-dtype` is now **per-arm** (`KV_CACHE_DTYPE_FP8` / `_NVFP4`, falling back to the shared
+   `KV_CACHE_DTYPE`). It had to be: both arms read one variable, so shipping `fp8` would have replaced
+   the NVFP4 arm's *calibrated static* scales with uncalibrated dynamic ones at identical memory cost
+   — a pure downgrade on the inactive arm. `eval-grid.sh` unsets both per-arm variables
+   unconditionally, so its A/B still forces one identical dtype on both arms.
+
+   **Two measured results that were not predicted, both in `README.md`:**
+   - **fp8 KV moves cost from decode to prefill.** Prefill at 130k went 34.98 → 38.80 s (**+10.9%**),
+     single-stream decode 37.4 → 41.8 tok/s (**+11.8%**). Assuming no prefix caching — true when this
+     was measured, **retracted 2026-08-20**, see below — the prefill is paid
+     every turn, so the crossover is **1,355 output tokens** at a 130k context: below it this shape is
+     *slower* per turn (+8.1% at 200 output tokens), above it faster. The measured mean for
+     `chat-model-medium` is 1,792 tokens/request, just above — so a wash on average (−1.5%) and a real
+     loss on short deep-context tool calls. If your turns are mostly short, unset `KV_CACHE_DTYPE_FP8`.
+   - **`request_timeout: 2700` survives, and the extrapolation that said it would not was wrong.**
+     Projecting the saturated ITL linearly from 4 streams gave 2,286 s at a thin 1.18x. **Measured** at
+     5 streams / 98,305 tokens / 3,072-token budget with all five streams overlapping: ITL 0.0513 s
+     over 13,710 tokens = 19.5 tok/s per stream, worst TTFT 126.2 s → **1,807 s, i.e. 1.49x** — better
+     than the previous shape's 1.47x, because fp8 KV's cheaper reads offset the extra stream. Decode
+     contention is strongly sublinear; **do not extrapolate it**, measure with
+     `./scripts/measure-ttft.py --streams N`. The one regression: worst-case TTFT for an admitted
+     request went 93.8 → 126.2 s (five serialized prefills, each ~10% slower).
+
+   Raw measurements: `results/ttft/ttft-kvfp8.json` (sweep + 5-way at 130k) and
+   `results/ttft/ttft-kvfp8-deep.json` (the 5-way 98k leg the timeout is derived from).
+
+3. **Stop unattended-upgrades from swapping the GPU driver mid-run.** On 2026-08-20 06:40 an
+   automatic security update replaced the NVIDIA driver userspace (580.159.03 → 580.173.02) while the
+   old kernel module was loaded, so `nvidia-smi` failed with `Driver/library version mismatch` and no
+   container could reach the GPU until a reboot. It hit an idle box; four hours into a 6.5-hour grid
+   it would have destroyed the run, and a driver change silently alters numerics. `apt-mark showhold`
+   is empty and `APT::Periodic::Unattended-Upgrade` is `1`, with the driver served from
+   `noble-security/restricted`, so **it will recur**. Targeted fix in
+   `/etc/apt/apt.conf.d/50unattended-upgrades`:
+
+   Put it in a **drop-in**, `/etc/apt/apt.conf.d/52-nvidia-no-unattended`, not in
+   `50unattended-upgrades` — and note **two corrections to the version this section used to give**,
+   both established by reading the shipped code rather than by running it:
+
+   ```
+   Unattended-Upgrade::Package-Blacklist {
+           "nvidia-";
+           "libnvidia-";
+   };
+   ```
+
+   - **No leading `^`.** `is_pkgname_in_blacklist` matches with `re.match`
+     (`/usr/bin/unattended-upgrade:1008`), which is already anchored, and
+     `pinning_from_regex_list` builds the apt pin as `'/^' + regex + '/'` (`:258`) — so `"^nvidia-"`
+     compiles to `/^^nvidia-/`. GNU ERE tolerates the doubled anchor (tested: still matches), so the
+     old form worked, but it leans on behaviour POSIX leaves undefined for no benefit. The stock
+     file's own example (`"linux-"`, documented as "matches all packages starting with linux-") is
+     the convention.
+   - **A drop-in, and NOT because `50unattended-upgrades` is a dpkg conffile — it is not.**
+     `dpkg -S` finds no owner for it and it is absent from the package's conffile list. It is
+     **ucf-managed**: the postinst runs `ucf --three-way --debconf-ok /usr/share/unattended-upgrades/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades`.
+     The `/etc` copy is currently byte-identical to that template, so a local edit means an
+     interactive three-way merge prompt the next time the template changes — which on an unattended
+     run stalls or silently resolves to a default, potentially dropping the policy that protects the
+     GPU. APT **appends** list options across files in lexical order (verified empirically with
+     `apt-config dump` over a throwaway parts directory), so a `52-` file merges rather than replaces.
+
+   Mechanism, so nobody wonders whether this only warns: blacklist entries become apt pins at
+   `NEVER_PIN = -32768` (`:118`, `:291`), applied **inside the unattended-upgrades run only**. Manual
+   `apt install` / `apt upgrade` is unaffected — which is the reason to prefer this over
+   `apt-mark hold`, alongside hold needing exact names (22 installed packages here) that change with
+   every driver series.
+
+   Deliberately **not** kernel packages: a new kernel does not break the running one, and
+   `nvidia-kernel-source-580-open` is installed so DKMS builds the module for it at install time. The
+   trade is that driver CVEs then need applying by hand — schedule them with a reboot and re-read the
+   substrate fingerprint afterwards. Note `nvidia-container-toolkit` also matches `nvidia-`, so it is
+   frozen from unattended runs too; that is consistent with the deferred-upgrades note below, which
+   already wanted it taken deliberately.
+
+   **APPLIED 2026-08-20 and verified.** `apt-config dump Unattended-Upgrade::Package-Blacklist`
+   returns both patterns and `unattended-upgrade --dry-run --debug` reports
+   `Blacklist iniziale: nvidia- libnvidia-`. (Do not confuse that with the separate
+   `Packages blacklist due to conffile prompts: []` line, which is a different list.) Replaying the
+   shipped `re.match` over the installed package set: **22 packages** captured, and `libcurl4t64`,
+   `linux-image-7.0.0-29-generic` and `docker-compose-plugin` correctly not captured.
+
+   **WHY IT WAS NEEDED, which only became clear on checking the origins.** `Allowed-Origins` on this
+   host is `${distro_id}:${distro_codename}` and `-security` **only** — `-updates` is commented out.
+   The driver packages sit in **both** `noble-updates/restricted` *and*
+   `noble-security/restricted`, and the latter is allowed. That is the exact path the 06:40 upgrade
+   took, and without this drop-in the next driver security update takes it again.
+
+   **And a cost this section previously overstated: there is none.** An earlier note said the
+   blacklist also freezes `nvidia-container-toolkit` (pending `1.20.0~rc.1-1` → `1.20.0-1`) as an
+   accepted side effect. It does match `nvidia-`, but those four packages come from NVIDIA's own
+   repository, whose origin is **not** in `Allowed-Origins` — so unattended-upgrades was never going
+   to touch them. The blacklist gives up nothing that was previously automatic.
+
+   To prove blacklist→skip end-to-end on a live pending package rather than trusting the mechanism,
+   `curl` is upgradable from `noble-security/main`: dry-run, add a throwaway
+   `/etc/apt/apt.conf.d/53-blacklist-selftest` containing `"curl$"`, dry-run again and watch it
+   vanish, then **delete the throwaway file**.
+4. **`VLLM_API_KEY` rotated 2026-08-20. The HF token rotation is CLOSED — declined by the
+   operator, 2026-09-04.** The engine key was regenerated and all four containers agree on one
+   fingerprint (verified by hashing `VLLM_API_KEY` out of each container's env against `.env`). The
+   HF token was not rotated and will not be: the operator has accepted that exposure, and the
+   checkpoints are already in the HF cache, so it would only matter at the next cold pull.
+   **Recorded as a decision so it is not re-raised as an open item** — it had been carried as the
+   top outstanding task for two weeks. The staged recipe below stands if a rotation is ever wanted.
+
+   **The rotation itself broke the shape, and the fix is written up under Security.** Rotating with
+   `docker compose up -d --force-recreate` raced the chat and embedding engines: chat profiled the
+   card while embedding was allocating, absorbed 1.85 GiB of it into its own overhead figure, and
+   came up at **4.53x against `--max-num-seqs 5`** — a silently oversubscribed engine that passed
+   `smoke.sh` 30/30. It also stranded `kb-vllm-reranker` in `Created`. Recovered by restarting the
+   chat engine alone against a settled card: back to `714,116` tokens / **5.45x**, 30/30. Security now
+   carries a staged rotation recipe and the fingerprint check; use it instead.
+
+### Validate fp8 KV — the exact procedure
+
+fp8 KV halves per-token cost, so the same `0.70` would hold **8** sessions at 131,072 instead of 4
+(4.17 GiB per full-context sequence instead of 8.33). `Qwen3.8-27B-FP8` ships **no** `kv_cache_scheme`,
+so `auto` gives it bf16 and forcing fp8 means uncalibrated dynamic scales — numerics unmeasured on
+this checkpoint. The grid already supports the experiment (`scripts/eval-grid.sh:181`,
+`export KV_CACHE_DTYPE="${KV_EVAL_DTYPE:-bfloat16}"`):
+
+```bash
+./scripts/preflight.sh                           # asserts --kv-cache-dtype accepts fp8 (no GPU cost)
+# NOTE: this mv was NEVER RUN. The bf16 baseline is still at results/eval/, and README.md and this
+# file now cite it there. If you do run it, re-point those citations in the same commit.
+mv results/eval results/eval-bf16-20260820       # cells at a different KV dtype are NOT peers
+docker compose down                              # the grid needs the card to itself
+./scripts/run-detached.sh kvfp8 env KV_EVAL_DTYPE=fp8 EFFORTS=off,medium \
+  ./scripts/eval-grid.sh fp8
+
+# Watch it. BOTH variables are needed: grid-status.sh defaults to the tmux session `kb-grid` and
+# the full 8-cell matrix, so without them it reports this run as "not running", shows six
+# permanently `pending` rows, and `-w` never exits because 2 cells can never reach 8.
+GRID_SESSION=kvfp8 ARMS=fp8 EFFORTS=off,medium ./scripts/grid-status.sh -w
+```
+
+**Two corrections to the command this section used to give, both made 2026-08-20 before running it.**
+It read `env KV_EVAL_DTYPE=fp8 EFFORTS=off,medium ARMS=fp8`, and two-thirds of that was inert:
+
+- `EFFORTS=off,medium` **was silently ignored.** `eval-grid.sh` reassigned `EFFORTS=(off low medium
+  xhigh)` unconditionally, so the "two cells, ~1 h" run would have been four cells at roughly four
+  times the wall clock, with the provenance recording the default it actually used. `EFFORTS` is now
+  read from the environment with the same defaulting discipline as `MAXTOK`, comma or space
+  separated, and an unknown value is **refused** — a cell directory is named `<arm>-<effort>`, so a
+  typo would create a cell `collect-results.py` cannot place and the grid would look complete while
+  missing a row. Same failure class as the variable-prefix trap in `run-detached.sh`'s header: the
+  tunable arrives correctly and the script overwrites it.
+- `ARMS=fp8` as an environment variable does nothing and never did — `ARMS` comes from the
+  **positional** arguments (`ARMS=("${@:-nvfp4 fp8}")`), which the trailing `fp8` already supplies.
+  Harmless, but it implied a knob that is not there.
+
+A **third** fault surfaced on the first launch, from the cell's own provenance rather than from
+reading code: the run booted at `util 0.70 / max-num-seqs 12` against a baseline recorded at
+`0.92 / 20`. `.env` was being sourced into the grid's environment and overriding the script's shape
+defaults — see the added paragraph under Resume. The run was killed ~5 minutes in, the leak was
+closed, and the relaunch boots at `0.92 / 40960 / 20`, matching
+`results/eval/fp8-off/provenance.txt` (NOT `results/eval-bf16-20260820/` — that rename never
+happened) in every field except `--kv-cache-dtype`. That is
+the point of the experiment: **one** variable. Check it the same way before trusting any cell —
+`diff` the new provenance against the archived one and require the KV dtype to be the only
+difference.
+
+`preflight.sh` now also asserts `--kv-cache-dtype` accepts `fp8` and `bfloat16`, not just `auto`, so
+a value the image no longer takes fails in a no-GPU-cost check rather than at engine boot — after the
+production stack has already been taken down for the experiment.
+
+Two cells, ~1 h. Archiving first is not optional: the KV dtype is part of the cell fingerprint, so
+the grid **refuses** to mix them and `collect-results.py` would otherwise have two generations to
+tabulate. Compare against the committed baseline — `fp8/off` mean 87.6, `fp8/medium` 89.6 — and accept
+only if the gap sits inside the ≤1.7-point bound the paired test already established for this task
+mix. ~~If it holds: set `KV_CACHE_DTYPE=fp8` and `CHAT_MAX_NUM_SEQS=8` in `.env`.~~ **DEAD — do not
+follow.** Three things are wrong with it: the session count went 8 → 7 → 5 → **4** on measured
+co-residency (`docs/TUNING.md` 3); `KV_CACHE_DTYPE` is the *shared* variable, and setting it
+downgrades the nvfp4 arm's calibrated static scales (`docs/TUNING.md` 5) — the per-arm
+`KV_CACHE_DTYPE_FP8` is what shipped; and the gate is `./scripts/shape.sh`, not a hardcoded number.
+
+**Re-derive `request_timeout` as part of any session-count change, not after it.** More sessions
+means slower per-stream decode under saturation, so the full-output term grows and can pass the
+configured timeout. Re-run `./scripts/measure-ttft.py --streams N` on the new shape and take the
+`inter_token_latency_seconds` mean from its saturated leg; the arithmetic is in `litellm/config.yaml`
+above `request_timeout`.
+
+> Withdrawn from this paragraph: a specific "eight sessions → ~3,500 s" figure. It came from
+> extrapolating decode contention **linearly**, which measured 27% pessimistic — the same error
+> `docs/TUNING.md` 6 row 8 records. Measure per step; do not scale the number.
+
+Deferred, with the reasoning recorded so it is not re-litigated: `nvidia-container-toolkit` is on
+`1.20.0~rc.1` with `1.20.0` final available — worth taking, but on its own, with a docker restart and
+a single-engine boot to confirm `--gpus all` still works. `docker-compose-plugin` 5.4.0 → 5.5.0 is
+also pending; compose is what resolves the nested per-arm `${CHAT_MAX_NUM_SEQS_FP8:-${...}}`
+substitution, so after upgrading it re-run `docker compose config` and then
+`./scripts/shape.sh` to confirm the shape still resolves as expected. (This used to name specific
+values — `0.70 / 131072 / 4` and `8` on the nvfp4 profile. Two of the four were already wrong when
+written: util ships lower than 0.70, and the nvfp4 arm ships 6, which `docker-compose.yml` states
+explicitly. That is why the check is now a script rather than a remembered triple.)
+
+Optional, not required: add a `litellm-db` service if you want per-consumer virtual keys, budgets and
+the `/ui` panel.
+
+## Engine shape: three numbers that have to agree
+
+`--gpu-memory-utilization`, `--max-model-len` and `--max-num-seqs` are one KV-cache budget seen from
+three sides. When they disagree vLLM does not error — it **preempts**, evicting a running sequence's
+KV cache and recomputing it later. Nothing in a results file records that it happened.
+
+vLLM tells you the answer itself at every boot. Read these two lines together — this is the **old**
+eval shape, kept as the worked example of the failure:
+
+```
+GPU KV cache size: 784,172 tokens
+Maximum concurrency for 65,536 tokens per request: 11.97x     <-- vs --max-num-seqs 32
+```
+
+`11.97x` is how many sequences can reach full context without preemption. Against `max-num-seqs 32`
+that is a **2.7× oversubscription** — and it applied to the eval grid, not just production. It stayed
+harmless only because `max_gen_toks` kept generations far below the advertised 65,536 context. A
+`--max-model-len` far larger than anything you generate makes that advisory meaningless.
+
+The shape **now in use** for the grid, derived from `MAXTOK` and then confirmed by the engine itself:
+
+```
+=== engine shape (derived from MAXTOK=32768, util=0.92) ===
+    max-model-len  40960        (32768 budget + 5000 measured max prompt, rounded to 4096)
+    max-num-seqs   20
+Available KV cache memory: 56.54 GiB          (was 49.86 at util 0.85)
+GPU KV cache size: 863,817 tokens
+Maximum concurrency for 40,960 tokens per request: 21.09x
+shape check OK: 21.09x full-context concurrency >= max-num-seqs 20
+```
+
+Coherent with margin, and `vllm:num_preemptions_total` has stayed 0 in flight. Cutting
+`--max-model-len` to what the work actually needs is what turned that advisory from fiction into a
+usable guarantee.
+
+Measured budget on this host (fp8 arm, bf16 KV), all from the engine's own startup log:
+
+| quantity | value | source |
+|---|---|---|
+| device | 94.97 GiB | `Desired GPU memory utilization is (0.85, 80.72 GiB)` |
+| weights + non-torch | 28.8 GiB | `Actual usage is 28.8 GiB for consumed memory` |
+| peak activation | 2.06 GiB | same line |
+| CUDAGraph | 0.17 GiB | same line |
+| KV in use @ 0.85 | 49.86 GiB → 784,172 tok | `Available KV cache memory` |
+| **KV if fully utilised** | **63.2 GiB** | `--kv-cache-memory=67856582144 ... to fully utilize` |
+
+So **`KV_tokens ≈ (util × 94.97 − 31.03) × 15,727`**, and at util 0.85 roughly 27% of the reachable
+KV is left unclaimed. `scripts/eval-grid.sh` now derives the whole eval shape from `MAXTOK` with
+these constants and then re-checks itself against the engine's own `Maximum concurrency` line,
+refusing to run a shape that can preempt.
+
+Two more measured facts that make the sizing possible:
+
+- **No eval prompt exceeds 5,000 tokens** (`vllm:request_prompt_tokens` over 5,143 requests: 98.6%
+  under 2,000, mean 667). `--max-model-len` only needs `max prompt + max_gen_toks`, so 65,536 was
+  ~13× more than the grid ever uses — and the excess is paid for in concurrency.
+- **`--max-num-seqs` is a throughput/latency dial, not a user limit.** Measured aggregate output:
+  ~345 tok/s at ~6 concurrent, ~580 at 20, ~950–975 at 32; per-stream, ~57 tok/s falls to ~30.
+  Per-stream barely moves between 20 and 32, so aggregate scales almost linearly with concurrency —
+  the card is not compute-saturated even at 32, and lowering the dial costs throughput proportionally.
+  Exceeding it does not slow users down, it **queues** them — watch
+  `vllm:num_requests_waiting_by_reason{reason="capacity"}`.
+- **Keep lm_eval's `num_concurrent` equal to the engine's `--max-num-seqs`.** Below it the batch runs
+  half-empty and the grid takes longer for nothing; above it the surplus queues inside vLLM and
+  inflates per-request latency against both timeouts. `eval-grid.sh` derives one from the other rather
+  than repeating a literal.
+
+### ~~Production shape is incoherent today, and the card is 23% idle~~ — RESOLVED, kept as history
+
+> **This section describes 2026-08-19 and is no longer true.** The shape it complains about
+> (`8 / 65536 / 0.55`) is not what ships, and the card is not 23% idle — the unclaimed memory is a
+> deliberate reservation for a co-resident service. Run `./scripts/shape.sh` for the live shape.
+> Nothing below should be acted on.
+
+`CHAT_MAX_NUM_SEQS:-8` and `CHAT_MAX_MODEL_LEN:-65536` at `CHAT_GPU_MEM_UTIL:-0.55`:
+
+```
+pool @0.55 = (0.55 x 94.97 - 31.03) x 15,727 = ~333,000 tokens
+worst case = 8 x 65,536                      = 524,288 tokens   -> 1.6x oversubscribed
+```
+
+Meanwhile the full stack measured **75,308 / 97,887 MiB — about 22 GiB sitting unused**, because
+chat is capped at 0.55 while embedding and reranker together need only ~21 GiB. Two ways out:
+
+1. **Free:** drop `CHAT_MAX_MODEL_LEN` to 32,768 → `333,000/32,768 = 10.2x` ≥ 8, coherent with
+   margin, no memory moved. Right choice unless consumers genuinely send 64k-token prompts.
+2. **For growth:** raise `CHAT_GPU_MEM_UTIL` to ~0.68 → KV ~33.3 GiB, enough for `8 × 65,536`, with
+   the whole stack still near 90% of the card. This is where the idle 22 GiB goes when you widen
+   access, together with a higher `CHAT_MAX_NUM_SEQS`.
+
+`--max-num-seqs 8` is the one number in `docker-compose.yml`'s command blocks with no comment
+justifying it. Watch `vllm:num_preemptions_total` (0 when this was written; **not 0 today** — cold
+4-way full-context saturation preempts once at the shipped shape, see Status) — a climbing counter,
+or movement on repeated prefixes, means the trio disagrees.
+
+**~~Prefix caching cannot help here.~~ WRONG — RETRACTED 2026-08-20.** The original claim was:
+"Verified on the chat model: `is_hybrid=True`, `supports_mamba_prefix_caching=False`, so vLLM 0.27.1
+disables it and no shared-system-prompt saving is available. The `--enable-prefix-caching` in compose
+belongs to the reranker." The inference was invalid. `supports_mamba_prefix_caching` selects the
+mamba cache MODE, not the feature: `models/config.py` sets `mamba_cache_mode='align'` when prefix
+caching is enabled, and only the `'all'` mode requires that flag. `align`'s sole prerequisite is
+chunked prefill, which was already on. Prefix caching is now enabled on **both chat arms**, so the
+saving this paragraph declared impossible is available in principle. **How much of it you get is a
+separate question and this paragraph used to answer it with two withdrawn numbers** (98.8% on a
+repeated 38k prompt; 81.2% on a real agent task in a NEW session) — neither ever had an artifact, both
+are ledgered at `docs/TUNING.md` 6 row 18. What is reproducible: 95.6% on a byte-identical repeat and
+88.1% on a 4-way replay. Cross-session reuse specifically is **unmeasured**, and `docs/TUNING.md` 4
+explains the mamba-checkpoint-stride reason it may be much lower than a same-session repeat.
+
+## Findings that will bite whoever forgets them
+
+- **THERE ARE TWO TIMEOUTS AND RAISING THE GATEWAY'S FIXES ONLY ONE.** lm_eval's `TemplateAPI`
+  carries its own `timeout: int = 300`, applied client-side as `aiohttp ClientTimeout(total=300)`,
+  entirely independent of litellm. `eval-grid.sh` now passes `timeout=1800` in `--model_args`;
+  verified it lands on the object rather than vanishing into `**kwargs`. At the default 300s the
+  arithmetic is fatal: streams decode at ~30 tok/s each, so a medium request at its measured 11,629
+  tokens needs ~387s and a full 32768-token xhigh request needs ~1,090s. Both exceed 300s, so medium
+  and xhigh time out SYSTEMATICALLY, retry, and land as "(no outputs)" — scored wrong, and
+  indistinguishable in the results json from the model actually being wrong. Whenever you touch
+  `max_gen_toks`, re-check BOTH timeouts against (budget / worst-case per-stream tok/s).
+
+- **`thinking_token_budget` exists in vLLM 0.27.1 and is deliberately NOT used.** Its
+  `ThinkingBudgetStateHolder` "forces end tokens when budget is exceeded", so it would force
+  `</think>` and drive `null_content` to zero — tempting, and wrong here. Production omits it
+  (`adapter.mjs`: `delete next.thinking_token_budget`, "Absence is intentional and asserted by the
+  live wire gate"), so using it would measure a decode mode the Mastra app never uses — the same
+  error as evaluating at temperature 0. The same harness records that an earlier 1,024-token forced
+  close "moved unfinished reasoning into visible output", which the extractive scorers here would
+  mis-parse. And it re-confounds the effort axis: "effort and hard budget are separate
+  interventions". It remains a sound **production** lever for bounding worst-case latency.
+  *This got more tempting, not less, once the `low` losses were traced to an unclosed `</think>` —
+  forcing the end token is precisely the symptom-level cure. It is still the wrong instrument: it
+  changes the decode mode being measured, whereas reading `reasoning_content` changes only which field
+  the harness looks in. Fix the reader, not the model.*
+
+- **`request_timeout` must stay above what the token budget allows, or lm_eval retries in silence.**
+  At `max_gen_toks 32768` with 32 concurrent streams (~33 tok/s each) a request needs ~1,000s and
+  blew the gateway's old 600s limit; lm_eval's `max_retries=3` then re-sent it with no error visible
+  anywhere except a cell that inexplicably took three times as long. `litellm/config.yaml` is now
+  1800. Whenever you raise the budget, re-check this ratio. Each cell records `timeout_retries` in
+  its provenance for exactly this reason — nonzero invalidates the cell's timings.
+
+- **NOTHING IN THE PIPELINE RECORDED TOKEN COUNTS UNTIL 2026-08-20, AND THREE LAYERS EACH LOOK LIKE
+  THEY SHOULD HAVE.** lm_eval keeps no `usage`; LiteLLM in DB-less mode has no spend log; the engines
+  do expose the counters on `/metrics`, but `eval-grid.sh` stops and **removes** each arm's container
+  when it is done, so those die with it. The 2026-08-19 grid therefore has no authoritative record of
+  what it cost to generate. `evals/lmeval_think.py` now sums each response's `usage` — it is the only
+  layer that sees the raw JSON — and writes it to `$THINK_USAGE_FILE`, which the grid folds into
+  provenance as `completion_tokens` (whole generation, reasoning included). It observes only, so
+  `SEMANTICS` is deliberately unchanged and old cells stay peers of new ones.
+  For the cells that predate it, `scripts/count-tokens.py` tokenizes the returned text with the
+  model's own tokenizer. **That is exact only at `off`** — with thinking disabled no reasoning segment
+  exists — and a loose floor everywhere else, because the reasoning tokens were generated, paid for,
+  and then discarded by the parser. Measured: visible output *falls* from 700k tokens at `off` to 146k
+  at `xhigh` while the cell takes four times as long. Do not divide a floor by a wall clock.
+- **The per-cell `fingerprint:` is a cell identity, not a peer key.** It hashes the arm, the effort
+  and that effort's sampler, so a complete grid always carries eight distinct fingerprints. Keying a
+  comparability check off it made `collect-results.py` print **⚠ THESE CELLS ARE NOT PEERS** over
+  every valid grid. Fixed 2026-08-20: the collector compares the fields that must actually match and
+  states the verdict either way. If you add an axis to the grid, add it to the fingerprint in
+  `eval-grid.sh` and NOT to `PEER_FIELDS` in the collector.
+- **THE RAW PASS-THROUGH ROUTE MUST BE AUTHENTICATED BY THE GATEWAY, NOT THE ENGINE.** This was got
+  wrong and committed on 2026-08-20, so it is written down properly. vLLM's `AuthenticationMiddleware`
+  guards **by path prefix only** — `GUARDED_PREFIX = ("/v1", "/v2", "/inference", "/cohere")`,
+  `vllm/entrypoints/serve/utils/server_utils.py:42`, checked at `:90`. So a pass-through configured
+  with `forward_headers: true` and no `auth`, letting the engine refuse, leaves every un-prefixed
+  engine path reachable from the LAN with **no credential**: `/tokenize`, `/detokenize`,
+  `/tokenizer_info`, `/health`, `/load`, `/version`, `/metrics`. `/tokenize` runs the real tokenizer
+  on caller-supplied text.
+  The fix is `auth: true` on the route, which is **free, not Enterprise** — verified in the pinned
+  image at `litellm/proxy/pass_through_endpoints/pass_through_endpoints.py:2795-2806`: `auth == "true"`
+  installs `Depends(user_api_key_auth)` with no `premium_user` check, and the same `dependencies`
+  object is passed to `add_subpath_route`, so `/vllm/*` is covered too. The published docs still
+  annotate `auth` as "(Enterprise)" and are stale relative to the code.
+  Consequence, accepted: `LITELLM_MASTER_KEY` now opens the raw engine API too, so this path is not a
+  second blast radius. `VLLM_API_KEY` still never leaves the gateway container. `scripts/smoke.sh`
+  asserts a no-key `/vllm/tokenize` is refused — that check exists precisely because the hole shipped
+  once. And never combine `forward_headers: true` with an injected `Authorization`: LiteLLM merges
+  `{**request_headers, **headers}`, both spellings survive, and vLLM reads the wrong one.
+- **`stream_timeout` and `num_retries` belong in `router_settings`, and the retry default is 2.**
+  There is no `litellm.stream_timeout` global — `litellm_settings` is applied by a bare `setattr()`
+  onto the litellm module, so `litellm_settings: stream_timeout:` sets an attribute nothing reads.
+  `Router._get_stream_timeout` only ever consults `self.stream_timeout`, which comes from
+  `Router(stream_timeout=...)`, i.e. from `router_settings` (`router.py:661`). Worse,
+  `router.py:646` falls back to `openai.DEFAULT_MAX_RETRIES` — **2** — when neither
+  `router_settings.num_retries` nor `litellm.num_retries` is set, so this gateway was silently
+  re-running timed-out requests twice. (This used to add "each one a full re-prefill because the
+  chat model cannot prefix-cache" — WRONG on both counts and the last surviving copy of that claim:
+  the checkpoint prefix-caches, it is on, and a retry of an identical prompt is largely served from
+  cache. See `docs/TUNING.md` 6, row 1.) That is the same class of failure HANDOFF already records
+  for `request_timeout`.
+  A mistyped key in `router_settings` is only warned-and-ignored, so after any edit check
+  `docker logs kb-litellm` for `is not a valid argument for Router.__init__(). Ignoring this key`.
+- **`/vllm` IS A RESERVED PREFIX IN LITELLM AND CANNOT BE USED FOR OUR PASS-THROUGH.** v1.97.0
+  registers `/vllm/{endpoint:path}` itself (`llm_passthrough_endpoints.py:306`) and lists `/vllm` in
+  `mapped_pass_through_routes` (`_types.py:444`), so a `pass_through_endpoints` entry at that path is
+  shadowed by the built-in and never runs — silently, with no config error. Our route lives at
+  **`/engine`** for that reason. The built-in is also unusable here on its own terms: it resolves the
+  deployment from the body's `model`, appends the endpoint to that deployment's `api_base` (already
+  ending in `/v1`, so `/vllm/tokenize` became `http://vllm-chat:8000/v1/tokenize`) and forwards the
+  caller's headers via `_safe_get_request_headers` — so it requires `LITELLM_MASTER_KEY` at the door
+  and then presents it to vLLM, which requires `VLLM_API_KEY`. 401 unless the two keys are the same,
+  which this stack forbids. Found only by testing against a live engine; nothing static reveals it.
+- **A variable prefix does NOT reach a detached tmux job.** `LIMIT_FLAT=120 ./scripts/run-detached.sh
+  …` silently arrives unset, because once a tmux server exists the new pane inherits the *server's*
+  environment filtered by `update-environment`, not the launching shell's. Verified: the value came
+  through empty. Use `./scripts/run-detached.sh grid env LIMIT_FLAT=120 ./scripts/eval-grid.sh …`.
+  This is why the sample counts live in `eval-grid.sh`'s defaults rather than the launch command.
+
+- **`content: null` HAS TWO CAUSES AND THEY ARE NOT THE SAME BUG.** See Status for the measurements.
+  An unclosed `</think>` (answer stranded in `reasoning_content`, dominant at `low`) and a client stop
+  string matching inside the CoT (vLLM #52393, dominant at `xhigh`) both surface as an empty `content`
+  and an item scored wrong. Neither is the token budget, and neither is monotone in effort — `low` lost
+  82/210 where `medium` lost 0. **Diagnose by latency and `finish_reason`, never by count**, and
+  remember that `N s/it` in an lm_eval progress bar is wall time per item at `num_concurrent`, so
+  per-request latency is ~20× that. Both are fixed in `evals/lmeval_think.py`.
+
+- **`collect-results.py` reads every `results*.json` in a cell but now picks ONE generation per task.**
+  A cell is legitimately two lm_eval invocations, so it cannot just take the newest file. It takes the
+  newest *per task* and then counts only the samples carrying that same run stamp — otherwise a
+  re-run's score would be published beside the previous run's loss count, concealing or inventing
+  corruption. It warns on any task seen at more than one stamp. Do not rely on this to clean up after
+  you: `eval-grid.sh` refuses to create a mixed cell in the first place, and archiving is still the
+  right move.
+
+- **`--kv-cache-dtype auto` is not neutral.** NVFP4 ships a calibrated `kv_cache_scheme`, so `auto`
+  gives it an **fp8** KV cache — measured 34.48 KB/token, matching fp8 over this hybrid's ~17
+  full-attention layers, and confirmed independently at 66.6 KB/token (exactly 2×) when forced to
+  `bfloat16`. Qwen3.8-27B-FP8 ships **no** such scheme, so `auto` gives it bf16. A comment inherited
+  from the source experiment claimed the opposite; it was wrong on v0.27.1. The grid forces one
+  identical value so the A/B varies only the checkpoint; production keeps `auto`.
+- **The two arms resolve different attention backends** and it cannot be equalised: NVFP4 →
+  `FLASHINFER` (its candidate list does not even offer FLASH_ATTN), FP8 → `FLASH_ATTN`. Read the
+  comparison as "checkpoint as deployed", not "weight quantization in isolation".
+- **lm_eval's shipped `humaneval` and `humaneval_instruct` score a hard 0.0 on a chat endpoint.**
+  They need `gen_prefix` to pre-fill the assistant turn, which lm_eval implements as
+  `chat_template(add_generation_prompt=False)` — impossible when the *server* renders from
+  `messages`. `evals/tasks/humaneval_chat/` is a custom chat-native replacement: `until: []` plus a
+  correct fence extractor. It scored **20/20** on a spot check where the shipped tasks scored 0/20.
+  Full diagnosis in `evals/tasks/humaneval_chat/utils_chat.py`.
+- **`--limit` applies per (sub)task** and `mmlu_pro` is a group of 14, so `--limit 300` there means
+  4,200 samples. Hence two invocations per cell with separate limits, merged by the collector.
+- **`lm_eval[api]` is not enough**: `ifeval` imports `langdetect` at runtime. `lm_eval validate`
+  checks task *names*, not imports — the real gate is a `--limit 1` dry run. The venv installs
+  `lm_eval[api,ifeval,math]`.
+- **`humaneval_chat` executes model-generated Python directly on this host**, not in a container.
+  Authorised by the operator. `RUN_UNSAFE=0` drops it.
+- **`vllm serve --help` needs `--gpus all`** — building the argparser instantiates `VllmConfig`, and
+  `DeviceConfig.__post_init__` raises `Failed to infer device type` without a GPU. Without it every
+  flag falsely reports missing. The real surface is `--help=all`, not `--help`.
+- **LiteLLM in DB-less mode returns 400 `no_db_connection`, not 401**, for a wrong key. It *is*
+  refused — nothing is proxied — but alerting that matches on 401 will miss failed auth. A missing
+  header still gives a plain 401.
+
+## Security
+
+`.env` is gitignored and holds three secrets. One rule, and one closed decision:
+
+1. **`VLLM_API_KEY` was regenerated 2026-08-20.** The HF token was also printed to a terminal during
+   this work; rotating it is **CLOSED — declined by the operator, 2026-09-04** (Outstanding item 4).
+   Do not re-raise it as a task.
+2. Keep `LITELLM_MASTER_KEY` different from `VLLM_API_KEY`, so leaking the LAN key does not also
+   grant direct engine access if an engine is ever given a host port.
+
+Rotating `LITELLM_MASTER_KEY` needs only `docker compose restart litellm`.
+
+**Rotating `VLLM_API_KEY` recreates all four containers, so it MUST be staged — do not use
+`docker compose up -d --force-recreate`.** Measured 2026-08-20, doing exactly that: compose brought
+the chat engine and the embedding engine up together, chat profiled the card while embedding was
+still allocating, and **1.85 GiB of embedding's memory was attributed to chat's own overhead**
+(`Actual usage is 32.57 GiB for consumed memory` against a clean boot's 30.72). Chat therefore
+allocated 18.88 GiB of KV instead of 22.7 — `593,590` tokens and **4.53x** against `--max-num-seqs 5`.
+That is a silently **oversubscribed** engine: healthy, serving, 30/30 on smoke, and one concurrent
+full-context request away from preemption, which costs a re-prefill from the last cached block boundary — a full 131k from token 0 only
+when nothing is cached. The same run also
+left `kb-vllm-reranker` in `Created` and never started, because its `depends_on` health gate on
+embedding timed out during the race.
+
+Nothing errors. The only thing that tells you is the boot line. Rotate like this instead:
+
+```bash
+$EDITOR .env                                       # new VLLM_API_KEY
+docker compose up -d --force-recreate vllm-embedding
+docker compose up -d --force-recreate vllm-reranker         # gated on the above
+docker compose up -d --force-recreate chat-fp8 litellm      # biggest allocator last
+docker logs kb-vllm-chat-fp8 2>&1 | grep "Maximum concurrency for 131,072"   # REQUIRE >= 4 (was 5 until 2026-08-21)
+./scripts/smoke.sh                                          # expect 30/30
+```
+
+Then check the rotation actually reached every container — a *partial* rotation surfaces later as
+401s, not now:
+
+```bash
+for c in kb-vllm-chat-fp8 kb-vllm-embedding kb-vllm-reranker kb-litellm; do
+  printf '%-22s %s\n' "$c" "$(docker inspect -f '{{range .Config.Env}}{{println .}}{{end}}' "$c" \
+    | grep '^VLLM_API_KEY=' | cut -d= -f2- | sha256sum | cut -c1-12)"
+done   # all four fingerprints must match each other and .env
+```
+
+If the gate comes back below `--max-num-seqs`, the fix is one restart of the chat engine alone once
+the pooling pair is settled: `docker compose stop chat-fp8 && docker compose up -d chat-fp8`.
+Verified to restore `714,116` tokens / `5.45x` **before prefix caching**; with `align` on the same
+repair restores **`690,312` tokens / `5.27x`**, which is what to check against today.
+# Qwen3.8 + Mastra real-world qualification
+
+## Goal
+
+**Prove Qwen3.8 can reliably operate the composable building blocks.**
+
+Use concrete missions. Keep the harness smaller than the thing being tested.
+
+## Fixed stack
+
+- Model: `Qwen/Qwen3.8-27B-FP8` at `017b9c7af6b5689d5dd426a76e0bc077eb5ca20a`
+- Server: `vllm/vllm-openai:v0.27.1`, served as `eval-model` on port 8004
+- Trace sink: `arizephoenix/phoenix` 20.2.1-nonroot on `127.0.0.1:6006`, opt-in
+- Both stacks are defined only in `docker-compose.vllm.yaml` / `docker-compose.phoenix.yaml`
+- Consumer: `@mastra/core` `1.59.0`
+
+Do not change a pin unless the user asks.
+
+## Operator interface
+
+Use `irw`:
+
+```bash
+irw status
+irw verify fast
+irw verify full
+irw preflight <unique-run-id>
+irw run <unique-run-id>
+irw vllm up | irw vllm down | irw vllm pull
+irw phoenix up | irw phoenix down | irw phoenix pull
+```
+
+Every operation goes through `irw`. Do not launch, stop, or inspect a stack with `docker` directly,
+and do not restate a pin in a script: `run-live.sh` reads them from compose.
+
+At session start, run `irw status`, then read `HANDOFF.md`,
+`harness/mastra-qwen38-realworld/reports/progress.md`, and `LESSONS.md`.
+
+`LESSONS.md` is memory, not a changelog. Record a failure mode that would cost the same time again,
+in the schema at the top of that file; `scripts/verify-lessons.mjs` enforces it and `irw verify fast`
+runs it. Cite an entry by its `## YYYY-MM-DD` heading, never by line number.
+
+## Evaluation contract
+
+Every mission runs unchanged at all four reasoning arms — the three official Qwen reasoning efforts,
+plus thinking-off:
+
+- `xhigh` (Qwen default): thorough analysis for complex tasks
+- `medium`: balance accuracy and speed
+- `low`: optimize for speed and cost
+- `off`: thinking-off. Not a fourth `reasoning_effort` — it is `chat_template_kwargs.enable_thinking:
+  false` with the `reasoning_effort` key omitted from the request entirely, carrying Qwen's own
+  instruct sampler (`temperature 0.7, top_p 0.80, presence_penalty 1.5`, against `1.0 / 0.95 / 0.0`
+  for the three thinking arms)
+
+An `off`-vs-`low` comparison therefore moves two variables at once, thinking and sampler; say so
+whenever you report one.
+
+Persist the outcome for every mission/arm pair — eight missions × four arms is 32 cells per run. Do
+not add alternative arms or experiment machinery unless the user requests it; `off` is the one the
+user requested (`ROADMAP.md` Phase 2).
+
+Use `createOpenAICompatible(...).chatModel('eval-model')` with `supportsStructuredOutputs: true`, the
+owned request transformer, finite tool schemas, `includeUsage: true`, and `maxRetries: 0`. Set effort
+only with `modelSettings.reasoning`, which at `off` means the setting is omitted rather than set to
+anything. For structured output after tools, use a separate tool-free schema
+step and consume `result.object`. Keep XGrammar `enable_in_reasoning=false`.
+
+Never read `.env`, token stores, secrets, or protected data. Qualification traffic (`irw preflight`,
+`irw run`) must remain loopback-only — the wrapper forces `Q38_BIND_ADDR=127.0.0.1`. `irw vllm up` is
+the operator path and may serve the LAN; it must never produce a persisted result. Live traffic and
+only one GPU workload may run at a time. Treat sandbox-denied host checks as `unverified`, not failed.
+
+Do not claim a live result without its persisted result file.
+sha256:0a51ea5b4ae2dc5d81890e5173f54203d2a3ae0cfffe51b8fd2afd4391bfd967 vllm/vllm-openai@sha256:0a51ea5b4ae2dc5d81890e5173f54203d2a3ae0cfffe51b8fd2afd4391bfd967
+c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041  /root/.cache/huggingface/hub/models--Qwen--Qwen3.8-27B-FP8/snapshots/017b9c7af6b5689d5dd426a76e0bc077eb5ca20a/chat_template.jinja
+README.md
+chat_template.jinja
+config.json
+generation_config.json
+model.safetensors
+model.safetensors.index.json
+model_mtp.safetensors
+preprocessor_config.json
+tokenizer.json
+tokenizer_config.json
+video_preprocessor_config.json
+vocab.json
+0.27.1

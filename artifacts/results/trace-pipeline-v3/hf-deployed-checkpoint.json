@@ -1,0 +1,45 @@
+{
+  "id": "unsloth/Qwen3.8-27B-NVFP4",
+  "sha": "7d6f8d4d72f56b92b3cdbf22f156b90e1bab0108",
+  "siblings": [
+    {
+      "rfilename": ".gitattributes"
+    },
+    {
+      "rfilename": "README.md"
+    },
+    {
+      "rfilename": "chat_template.jinja"
+    },
+    {
+      "rfilename": "config.json"
+    },
+    {
+      "rfilename": "generation_config.json"
+    },
+    {
+      "rfilename": "model.safetensors"
+    },
+    {
+      "rfilename": "model.safetensors.index.json"
+    },
+    {
+      "rfilename": "model_mtp.safetensors"
+    },
+    {
+      "rfilename": "preprocessor_config.json"
+    },
+    {
+      "rfilename": "tokenizer.json"
+    },
+    {
+      "rfilename": "tokenizer_config.json"
+    },
+    {
+      "rfilename": "video_preprocessor_config.json"
+    },
+    {
+      "rfilename": "vocab.json"
+    }
+  ]
+}

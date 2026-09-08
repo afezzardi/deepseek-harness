@@ -1,0 +1,13 @@
+{
+  "canonicalFilesVerified": 412,
+  "changed": [],
+  "selectedTargets": {
+    "final-answer": 57,
+    "tool-decision": 69
+  },
+  "splits": {
+    "train": 96,
+    "validation": 18,
+    "test": 12
+  }
+}
