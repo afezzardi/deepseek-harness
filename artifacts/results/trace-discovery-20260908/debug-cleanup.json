@@ -1,0 +1,98 @@
+{
+  "authorization": "User explicitly reaffirmed removal of transient debug traces after reviewing the eight-project cleanup scope.",
+  "before_projects": 37,
+  "backup": "artifacts/results/trace-discovery-20260908/.cleanup/phoenix-before-cleanup.dump",
+  "backup_sha256": "3696fdf531bf0a1109e99145c09e355d07bc78e4ad4135fbeaec3936d7c6e7f9",
+  "deleted": [
+    {
+      "project": "gh-discovery-20260908-audit",
+      "archived_spans": 8
+    },
+    {
+      "project": "gh-discovery-20260908-canonical",
+      "archived_spans": 16
+    },
+    {
+      "project": "gh-discovery-20260908-edge-audit",
+      "archived_spans": 8
+    },
+    {
+      "project": "gh-discovery-20260908-medium-smoke",
+      "archived_spans": 11
+    },
+    {
+      "project": "gh-discovery-20260908-smoke",
+      "archived_spans": 11
+    },
+    {
+      "project": "gh-queue-validation-76e9edd45d2744aabf975992ac0f51b0",
+      "archived_spans": 1
+    },
+    {
+      "project": "gh-validation-8c14cb77-aa35-4c8f-a178-58caff48808b",
+      "archived_spans": 7
+    },
+    {
+      "project": "gh-validation-9cd2f62e-3c01-4979-bc92-098ccbd82f23",
+      "archived_spans": 7
+    }
+  ],
+  "protected_evaluated_projects": [
+    "gh-discovery-20260908-aggregate-1",
+    "gh-discovery-20260908-aggregate-2",
+    "gh-discovery-20260908-aggregate-3",
+    "gh-discovery-20260908-aggregate-4",
+    "gh-discovery-20260908-extract-1",
+    "gh-discovery-20260908-extract-2",
+    "gh-discovery-20260908-extract-3",
+    "gh-discovery-20260908-extract-4",
+    "gh-discovery-20260908-injection-1",
+    "gh-discovery-20260908-injection-2",
+    "gh-discovery-20260908-injection-3",
+    "gh-discovery-20260908-injection-4",
+    "gh-discovery-20260908-read-1",
+    "gh-discovery-20260908-read-2",
+    "gh-discovery-20260908-read-3",
+    "gh-discovery-20260908-read-4",
+    "gh-discovery-20260908-recover-1",
+    "gh-discovery-20260908-recover-2",
+    "gh-discovery-20260908-recover-3",
+    "gh-discovery-20260908-recover-4",
+    "gh-discovery-20260908-write-1",
+    "gh-discovery-20260908-write-2",
+    "gh-discovery-20260908-write-3",
+    "gh-discovery-20260908-write-4"
+  ],
+  "after_projects": 29,
+  "retained_projects": [
+    "default",
+    "gh-discovery-20260908-aggregate-1",
+    "gh-discovery-20260908-aggregate-2",
+    "gh-discovery-20260908-aggregate-3",
+    "gh-discovery-20260908-aggregate-4",
+    "gh-discovery-20260908-canonical-replay",
+    "gh-discovery-20260908-extract-1",
+    "gh-discovery-20260908-extract-2",
+    "gh-discovery-20260908-extract-3",
+    "gh-discovery-20260908-extract-4",
+    "gh-discovery-20260908-injection-1",
+    "gh-discovery-20260908-injection-2",
+    "gh-discovery-20260908-injection-3",
+    "gh-discovery-20260908-injection-4",
+    "gh-discovery-20260908-long-input-1",
+    "gh-discovery-20260908-read-1",
+    "gh-discovery-20260908-read-2",
+    "gh-discovery-20260908-read-3",
+    "gh-discovery-20260908-read-4",
+    "gh-discovery-20260908-recover-1",
+    "gh-discovery-20260908-recover-2",
+    "gh-discovery-20260908-recover-3",
+    "gh-discovery-20260908-recover-4",
+    "gh-discovery-20260908-redaction-1",
+    "gh-discovery-20260908-workflow-1",
+    "gh-discovery-20260908-write-1",
+    "gh-discovery-20260908-write-2",
+    "gh-discovery-20260908-write-3",
+    "gh-discovery-20260908-write-4"
+  ]
+}

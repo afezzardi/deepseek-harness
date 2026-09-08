@@ -1,7 +1,7 @@
 /** Gruppo Happy's opt-in GenAI telemetry backend for upstream DSH profiles. */
 import { Service, type Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
-import { SessionId, SessionSeq, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { SessionId, SessionSeq, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
 import type {} from '@deepseek-ai/dsh-session-query'
 import { SessionTelemetryBackend, SessionTelemetryCoordinator, type SessionTelemetryRecord } from '@deepseek-ai/dsh-session-telemetry'
 import type {} from '@deepseek-ai/dsh-llm'
@@ -77,7 +77,20 @@ export class GenAITraces extends SessionTelemetryBackend {
     const event = { ...source, data: record.body } as SessionEvent
     const header = session.header
     const inherited = session.inheritedEventCount
-    this.queue.push(() => this.mapper.event(header, inherited, event))
+    const ancestors: Array<{ header: SessionHeader; events: readonly SessionEvent[] }> = []
+    let parentId = header.parentSession
+    const seen = new Set<string>([String(header.id)])
+    while (parentId && !seen.has(String(parentId))) {
+      seen.add(String(parentId))
+      const parent = this.ctx.sessions.get(parentId)
+      if (!parent) break
+      ancestors.unshift({ header: parent.header, events: parent.snapshotEvents() })
+      parentId = parent.header.parentSession
+    }
+    this.queue.push(() => {
+      for (const ancestor of ancestors) this.mapper.indexOwnership(ancestor.header, ancestor.events)
+      this.mapper.event(header, inherited, event)
+    })
   }
 
   /** Replay one validated session into a separate Phoenix project; reads never activate it.
@@ -93,6 +106,16 @@ export class GenAITraces extends SessionTelemetryBackend {
       const provider = createProvider({ ...this.settings, project: `${this.settings.project}-replay` }, stats, ids)
       const mapper = new TraceMapper(provider.getTracer('@deepseek-ai/dsh-gh-genai-traces', '0.1.0'), ids, this.settings, this.policy, stats, 'replay')
       try {
+        const ancestors = []
+        let parentId = snapshot.session.parentSession
+        const seen = new Set<string>([String(snapshot.session.id)])
+        while (parentId && !seen.has(String(parentId))) {
+          seen.add(String(parentId))
+          const parent = await this.ctx.sessionQuery.readSession(parentId)
+          ancestors.unshift(parent)
+          parentId = parent.session.parentSession
+        }
+        for (const ancestor of ancestors) mapper.indexOwnership(ancestor.session, ancestor.events)
         await replaySnapshot(snapshot, mapper, this.settings, () => provider.forceFlush())
         if (stats.spansFailed || stats.spansDropped || stats.captureErrors) throw new Error(`gh-genai-traces replay incomplete: ${JSON.stringify(stats)}`)
       } finally {

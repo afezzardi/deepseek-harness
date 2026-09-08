@@ -1,0 +1,23 @@
+{
+  "sessions": 240,
+  "graded": 240,
+  "candidates": 239,
+  "sft": 218,
+  "splits": {
+    "train": 174,
+    "validation": 23,
+    "test": 21
+  },
+  "duplicateRows": 0,
+  "requestGroups": 239,
+  "preferencePairs": 0,
+  "preferenceRejections": {},
+  "rejected": [
+    {
+      "session": "session-ecdf39ad-12e3-4184-88c0-5c4bf1975062",
+      "reason": "Error: Expected a nonempty final assistant answer"
+    }
+  ],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

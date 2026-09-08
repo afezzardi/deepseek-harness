@@ -1,0 +1,24 @@
+$ tsx scripts/verify-md-wrap.ts
+node:fs:1701
+  const stats = binding.lstat(
+                        ^
+
+Error: ENOTDIR: not a directory, lstat '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+    at lstatSync (node:fs:1701:25)
+    at getDirentSync (node:internal/fs/glob:68:16)
+    at Cache.statSync (node:internal/fs/glob:134:17)
+    at #addSubpatterns (node:internal/fs/glob:395:32)
+    at Glob.globSync (node:internal/fs/glob:312:29)
+    at globSync (node:fs:3224:37)
+    at uniqueRepoFiles (/home/andrea/management/deepseek-harness/scripts/repo-files.ts:44:25)
+    at <anonymous> (/home/andrea/management/deepseek-harness/scripts/verify-md-wrap.ts:73:15)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26) {
+  errno: -20,
+  code: 'ENOTDIR',
+  syscall: 'lstat',
+  path: '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+}
+
+Node.js v24.12.0
+[ELIFECYCLE] Command failed with exit code 1.

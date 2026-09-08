@@ -3,7 +3,7 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { build } from 'tsdown'
 const root = fileURLToPath(new URL('./', import.meta.url))
-await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../../tsconfig.base.json', import.meta.url)), entry: { index: 'src/index.ts', evaluation: 'examples/evaluation.ts' }, outDir: 'lib', clean: true,
+await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../../tsconfig.base.json', import.meta.url)), entry: { index: 'src/index.ts', evaluation: 'examples/evaluation.ts', curation: 'src/curation.ts', reward: 'src/reward.ts', 'frozen-profile': 'experiments/frozen-profile.ts', 'audit-profile': 'experiments/audit-profile.ts' }, outDir: 'lib', clean: true,
   platform: 'node', target: 'es2024', format: 'esm', fixedExtension: false, dts: false,
   deps: { neverBundle: [/^@deepseek-ai\/(?!dsh-token-meter\/src\/turn-usage\.ts$)/], alwaysBundle: [/^@deepseek-ai\/dsh-token-meter\/src\/turn-usage\.ts$/, /^@opentelemetry\//, /^zod(?:\/|$)/] },
 })
@@ -19,5 +19,5 @@ paths['@deepseek-ai/dsh-token-meter/src/turn-usage.ts'] = ['../../../packages/ll
 await writeFile(new URL('./lib/tsconfig.paths.json', import.meta.url), JSON.stringify({ compilerOptions: { paths: Object.fromEntries(Object.entries(paths).map(([name, values]) => [name, values.map(value => `../${value}`)])) } }, null, 2) + '\n')
 
 const host = ts.parseConfigFileTextToJson('tsconfig.host.json', await readFile(new URL('../../../tsconfig.host.json', import.meta.url), 'utf8')).config
-const check = { extends: ['../../../../tsconfig.base.json', './tsconfig.paths.json'], compilerOptions: { noEmit: true, composite: false, incremental: false }, include: ['../src/**/*.ts', '../tests/**/*.ts', '../examples/**/*.ts'], references: host.references.map(ref => ({ path: `../../../../${ref.path}` })) }
+const check = { extends: ['../../../../tsconfig.base.json', './tsconfig.paths.json'], compilerOptions: { noEmit: true, composite: false, incremental: false }, include: ['../src/**/*.ts', '../tests/**/*.ts', '../examples/**/*.ts', '../experiments/**/*.ts'], references: host.references.map(ref => ({ path: `../../../../${ref.path}` })) }
 await writeFile(new URL('./lib/tsconfig.check.json', import.meta.url), JSON.stringify(check, null, 2) + '\n')

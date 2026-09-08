@@ -4,13 +4,16 @@
 SSE responses stream through with chunked framing so the client's streaming path
 is exercised; every other response is buffered and sent with a Content-Length.
 """
-import http.server, json, os, socketserver, threading, urllib.error, urllib.request
+import hashlib, http.server, json, os, socketserver, threading, time, urllib.error, urllib.request, uuid
 
 UPSTREAM = os.environ.get("UPSTREAM", "http://100.108.76.12:4000")
 LOG = os.environ.get("RECLOG", "/tmp/recproxy.jsonl")
 PORT = int(os.environ.get("RECPORT", "4100"))
 HOP = ("content-length", "transfer-encoding", "connection", "content-encoding")
 lock = threading.Lock()
+capacity = threading.BoundedSemaphore(int(os.environ.get("REC_CONCURRENCY", "4")))
+active = 0
+waiting = 0
 
 
 class H(http.server.BaseHTTPRequestHandler):
@@ -24,9 +27,32 @@ class H(http.server.BaseHTTPRequestHandler):
             f.write(json.dumps(rec) + "\n")
 
     def _proxy(self, method):
+        global active, waiting
+        arrived = time.time()
+        request_id = uuid.uuid4().hex
+        with lock:
+            waiting += 1
+        capacity.acquire()
+        admitted = time.time()
+        with lock:
+            waiting -= 1
+            active += 1
+            counts = {"active": active, "waiting": waiting}
+        self.observation = dict(request_id=request_id, arrived=arrived, admitted=admitted,
+                                queue_seconds=admitted-arrived, **counts)
+        self._log(dict(event="admitted", **self.observation))
+        try:
+            self._forward(method)
+        finally:
+            with lock:
+                active -= 1
+            capacity.release()
+            self._log(dict(event="released", request_id=request_id, ended=time.time()))
+
+    def _forward(self, method):
         n = int(self.headers.get("Content-Length") or 0)
         raw = self.rfile.read(n) if n else b""
-        rec = {"path": self.path, "method": method}
+        rec = {"path": self.path, "method": method, **self.observation, "event": "response", "request_sha256": hashlib.sha256(raw).hexdigest()}
         try:
             rec["body"] = json.loads(raw)
         except Exception:
@@ -41,7 +67,7 @@ class H(http.server.BaseHTTPRequestHandler):
             r = e
         except Exception as e:
             body = json.dumps({"error": {"message": f"recproxy: {e}"}}).encode()
-            rec.update(status=502, response_bytes=len(body), response_head=body.decode())
+            rec.update(status=502, ended=time.time(), response_bytes=len(body), response_head=body.decode())
             self._log(rec)
             self.send_response(502)
             self.send_header("Content-Type", "application/json")
@@ -52,7 +78,7 @@ class H(http.server.BaseHTTPRequestHandler):
 
         status = getattr(r, "status", None) or r.code
         rhdrs = dict(r.headers)
-        is_sse = "text/event-stream" in (rhdrs.get("Content-Type") or "")
+        is_sse = "text/event-stream" in (r.headers.get("Content-Type") or "").lower()
         collected = bytearray()
 
         if is_sse:
@@ -64,9 +90,11 @@ class H(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             try:
                 while True:
-                    chunk = r.read(4096)
+                    chunk = r.read1(4096)
                     if not chunk:
                         break
+                    if not collected:
+                        rec["first_byte_seconds"] = time.time() - rec["admitted"]
                     collected.extend(chunk)
                     self.wfile.write(b"%X\r\n" % len(chunk) + chunk + b"\r\n")
                     self.wfile.flush()
@@ -84,8 +112,9 @@ class H(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(collected))
 
-        rec.update(status=status, sse=is_sse, response_bytes=len(collected),
-                   response_head=bytes(collected[:6000]).decode("utf-8", "replace"))
+        r.close()
+        rec.update(status=status, sse=is_sse, ended=time.time(), response_bytes=len(collected),
+                   response_head=bytes(collected[:int(os.environ.get("REC_RESPONSE_BYTES", "6000"))]).decode("utf-8", "replace"))
         self._log(rec)
 
     def do_POST(self):
@@ -100,5 +129,6 @@ class S(socketserver.ThreadingMixIn, http.server.HTTPServer):
     allow_reuse_address = True
 
 
-print(f"recproxy :{PORT} -> {UPSTREAM}, log={LOG}", flush=True)
-S(("127.0.0.1", PORT), H).serve_forever()
+if __name__ == "__main__":
+    print(f"recproxy :{PORT} -> {UPSTREAM}, log={LOG}", flush=True)
+    S(("127.0.0.1", PORT), H).serve_forever()

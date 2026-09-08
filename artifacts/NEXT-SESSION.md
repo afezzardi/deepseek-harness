@@ -1,12 +1,18 @@
 # Deployment runbook
 
+## Active work: traces to datasets
+
+Start with the [gh-genai-traces handoff](plugins/gh-genai-traces/HANDOFF.md). The user has authorized continued plugin implementation and substantial real-inference experiments at `medium` reasoning. Priorities are a complete owned-workflow trace hierarchy, explicit capture eligibility and provenance, and validated SFT/DPO/RFT dataset preparation. The [implementation checkpoint](results/trace-curation-20260908/REPORT.md) records completed workflow and approval UAT, 240 baseline trials, 48 preference samples, and 100 streaming comparisons. The handoff lists bounded next work, preserved evidence, inference constraints, and validation limitations. Keep all fork changes under `artifacts/`.
+
+## Upstream baseline
+
 The fork includes upstream revision `c389f96bf3a9b6807cb71ed6bdad5849be0df6d8` through merge `836e963caba622ae214de2344ed0d26b4794469e`. All fork-only product customizations remain under `artifacts/`. A fresh upstream fetch at the merge confirmed that revision as `upstream/master`.
 
 ## Current validation
 
 [gh-genai-traces](plugins/gh-genai-traces/README.md) owns live tracing, recorded-session replay, the local Phoenix stack, and its evaluation example. Its [validation report](plugins/gh-genai-traces/VALIDATION.md) separates source tests, the built headless smoke, native Phoenix ingestion, and deployment blockers. Dated [results](results/) describe their own revisions and are not current deployment acceptance.
 
-The user reports that the self-hosted inference endpoint is offline. Keyless validation does not establish model behavior. Fireworks AI is an available alternative for a bounded live smoke when credentials are supplied; no Fireworks calls are required by the offline tests.
+The self-hosted inference endpoint was exercised on 2026-09-08. The [trace-to-dataset discovery](results/trace-discovery-20260908/REPORT.md) records real workloads at `medium` reasoning, canonical replay, Phoenix evaluations, and dataset limitations. The active user settings still select `xhigh`; discovery uses isolated homes with `agent-default-model.reasoningEffort: medium`. These measurements do not replace the remaining deployment acceptance cases.
 
 ## Configuration and acceptance
 

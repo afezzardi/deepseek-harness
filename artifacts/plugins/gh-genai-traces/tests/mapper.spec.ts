@@ -8,13 +8,13 @@ import { replaySnapshot } from '../src/replay.ts'
 import { createProvider, diagnostics, SourceIds } from '../src/transport.ts'
 import { fixture } from './fixture.ts'
 
-function pipeline() {
+function pipeline(origin: 'live' | 'replay' = 'replay') {
   const settings = resolveConfig({ content: 'rich-redacted' })
   const stats = diagnostics()
   const ids = new SourceIds()
   const exporter = new InMemorySpanExporter()
   const provider = createProvider(settings, stats, ids, exporter)
-  const mapper = new TraceMapper(provider.getTracer('test'), ids, settings, new ContentPolicy(settings, {}), stats, 'replay')
+  const mapper = new TraceMapper(provider.getTracer('test'), ids, settings, new ContentPolicy(settings, {}), stats, origin)
   return { settings, stats, exporter, provider, mapper }
 }
 
@@ -95,8 +95,9 @@ it('correlates eight simultaneous workflow children through recorded child ident
     const workflow = spans.find(span => span.attributes['gh.workflow.run_id'] === runId)!
     const childRoots = spans.filter(span => span.name === 'invoke_agent dsh' && String(span.attributes['gen_ai.conversation.id']).startsWith('child-'))
     expect(childRoots).toHaveLength(8)
-    expect(new Set(childRoots.map(span => span.spanContext().traceId)).size).toBe(8)
-    expect(childRoots.every(span => span.links.some(link => link.context.spanId === workflow.spanContext().spanId))).toBe(true)
+    expect(new Set(childRoots.map(span => span.spanContext().traceId)).size).toBe(1)
+    expect(childRoots.every(span => span.parentSpanContext?.spanId === workflow.spanContext().spanId)).toBe(true)
+    expect(childRoots.every(span => span.spanContext().traceId === workflow.spanContext().traceId)).toBe(true)
     expect(p.stats.captureErrors + p.stats.spansDropped).toBe(0)
   } finally { p.mapper.shutdown(); await p.provider.shutdown() }
 })
@@ -138,5 +139,75 @@ it('replays the recorded headless session through current upstream validation', 
     expect(spans.filter(span => span.attributes['gen_ai.operation.name'] === 'chat')).toHaveLength(2)
     expect(spans.filter(span => span.attributes['gen_ai.operation.name'] === 'execute_tool')).toHaveLength(1)
     expect(p.stats.spansFailed + p.stats.spansDropped + p.stats.captureErrors).toBe(0)
+  } finally { p.mapper.shutdown(); await p.provider.shutdown() }
+})
+
+it('replays a child before its parent with deterministic recorded ownership', async () => {
+  const parent = fixture('owned-parent')
+  const session = Session.create(parent.session.id, parent.events, parent.session)
+  session.append('turn/start', { turn: 2 })
+  const runId = 'owned-run' as import('@deepseek-ai/dsh-tool-workflow/types').ToolWorkflowRunStartData['runId']
+  session.append('tool-workflow/run-start', { runId, name: 'owned' })
+  const child = fixture('owned-child')
+  session.append('tool-workflow/agent-start', { runId, seq: 1, label: 'child', childId: child.session.id })
+  const collect = async (childFirst: boolean) => {
+    const p = pipeline()
+    try {
+      p.mapper.indexOwnership(session.header, session.snapshotEvents())
+      const mapParent = () => { for (const event of session.snapshotEvents()) p.mapper.event(session.header, 0, event) }
+      if (!childFirst) mapParent()
+      await replaySnapshot({ ...child, session: { ...child.session, parentSession: parent.session.id } }, p.mapper, p.settings, () => p.provider.forceFlush())
+      if (childFirst) mapParent()
+      p.mapper.shutdown()
+      await p.provider.forceFlush()
+      const root = p.exporter.getFinishedSpans().find(span => span.attributes['gen_ai.conversation.id'] === 'owned-child' && span.name === 'invoke_agent dsh')!
+      const workflow = p.exporter.getFinishedSpans().find(span => span.attributes['gh.workflow.run_id'] === runId)!
+      expect(root.parentSpanContext?.spanId).toBe(workflow.spanContext().spanId)
+      expect(root.spanContext().traceId).toBe(workflow.spanContext().traceId)
+      return [root.spanContext().spanId, root.spanContext().traceId, root.parentSpanContext?.spanId]
+    } finally { p.mapper.shutdown(); await p.provider.shutdown() }
+  }
+  expect(await collect(true)).toEqual(await collect(false))
+})
+
+it('reports content truncation separately from stream completion and requested effort', async () => {
+  const p = pipeline()
+  try {
+    const source = fixture()
+    for (const event of source.events.slice(0, 3)) p.mapper.event(source.session, 0, event)
+    p.mapper.startCall('long', { provider: 'fixture', model: 'fixture', sessionId: source.session.id, system: 'x'.repeat(70_000), messages: [] }, 1200)
+    p.mapper.endCall('long', { ended: 1250, blocks: [{ type: 'text', text: 'ok' }], finish: 'stop', truncated: false })
+    await p.provider.forceFlush()
+    const model = p.exporter.getFinishedSpans()[0]!
+    expect(model.attributes).toMatchObject({ 'gh.capture.incomplete': false, 'gh.capture.eligible': false, 'gh.capture.rejection_reasons': ['truncated'], 'gh.request.reasoning.observation': 'unobserved', 'gh.task.outcome': 'ungraded' })
+  } finally { p.mapper.shutdown(); await p.provider.shutdown() }
+})
+
+it('buffers a live child that starts before the parent publishes workflow membership', async () => {
+  const p = pipeline('live')
+  try {
+    const parent = fixture('race-parent')
+    const session = Session.create(parent.session.id, parent.events, parent.session)
+    session.append('turn/start', { turn: 2 })
+    const runId = 'race-run' as import('@deepseek-ai/dsh-tool-workflow/types').ToolWorkflowRunStartData['runId']
+    session.append('tool-workflow/run-start', { runId, name: 'race' })
+    for (const event of session.snapshotEvents()) p.mapper.event(session.header, 0, event)
+    const child = fixture('race-child')
+    const header = { ...child.session, parentSession: parent.session.id }
+    for (const event of child.events.slice(0, 3)) p.mapper.event(header, 0, event)
+    p.mapper.startCall('early', { provider: 'fixture', model: 'fixture', messages: [], sessionId: child.session.id }, 1030)
+    p.mapper.endCall('early', { ended: 1040, blocks: [{ type: 'text', text: 'ok' }], finish: 'stop', truncated: false })
+    session.append('tool-workflow/agent-start', { runId, seq: 1, childId: child.session.id, label: 'child' })
+    p.mapper.event(session.header, 0, session.snapshotEvents().at(-1)!)
+    for (const event of child.events.slice(3)) p.mapper.event(header, 0, event)
+    p.mapper.shutdown()
+    await p.provider.forceFlush()
+    const spans = p.exporter.getFinishedSpans()
+    const workflow = spans.find(span => span.attributes['gh.workflow.run_id'] === runId)!
+    const root = spans.find(span => span.name === 'invoke_agent dsh' && span.attributes['gen_ai.conversation.id'] === 'race-child')!
+    expect(root.parentSpanContext?.spanId).toBe(workflow.spanContext().spanId)
+    expect(root.spanContext().traceId).toBe(workflow.spanContext().traceId)
+    expect(spans.find(span => span.name === 'chat fixture')?.spanContext().traceId).toBe(root.spanContext().traceId)
+    expect(p.stats.captureErrors + p.stats.recordsDropped).toBe(0)
   } finally { p.mapper.shutdown(); await p.provider.shutdown() }
 })

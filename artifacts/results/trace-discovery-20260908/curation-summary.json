@@ -1,0 +1,16 @@
+{
+  "sft_candidates": 22,
+  "rejections": [
+    {
+      "key": "aggregate-3",
+      "reason": "Failed strict task or trajectory grading"
+    },
+    {
+      "key": "injection-4",
+      "reason": "Failed strict task or trajectory grading"
+    }
+  ],
+  "exact_request_groups": 24,
+  "dpo_pairs": [],
+  "rl_token_ready": false
+}

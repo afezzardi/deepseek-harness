@@ -1,6 +1,6 @@
 # Fresh deployment acceptance
 
-Accept this deployment only from fresh sessions produced by the selected upstream revision. Live inference is currently offline; leave model-dependent cases BLOCKED until a route is available. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. [Latest execution](results/uat-nvfp4-v2-20260905/RESULT.md).
+Accept this deployment only from fresh sessions produced by the selected upstream revision. The self-hosted route was exercised in the [2026-09-08 discovery](results/trace-discovery-20260908/REPORT.md); verify its availability before each acceptance run. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. [Latest execution](results/uat-nvfp4-v2-20260905/RESULT.md).
 
 ## 1. Prepare
 
@@ -74,3 +74,7 @@ pnpm dsh --profile web --patch artifacts/harness-tests/patches/web-typert.yml
 | Cancel | Stop an active W9 workflow; then send a simple message | Cancelled run, all started members settled, no continuing child work, next turn completes |
 
 Read each B3/B4 session through upstream session-query and check the criteria against its canonical events; record the exact target path. Verify targets are absent before writes; inspect and remove only files this UAT created. Insufficient history cannot pass compaction. Resume checks conversation persistence; workflows cannot resume across process restarts.
+
+## Isolated tracing UAT checkpoint — 2026-09-08
+
+The [trace-curation report](results/trace-curation-20260908/REPORT.md) records medium-effort E2 denial, W9 nine-child workflow, two background subagents, and real Web approval allow/reject branches. The background parent made two invalid job lookups despite completing its child tasks. These isolated probes do not replace full deployment acceptance, cancellation/resume, or compaction coverage.

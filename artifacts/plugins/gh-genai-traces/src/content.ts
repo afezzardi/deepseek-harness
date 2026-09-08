@@ -32,18 +32,22 @@ export class ContentPolicy {
   attributes(key: string, value: unknown): Attributes {
     if (this.settings.content === 'metadata') return { [`gh.content.${key}.status`]: 'omitted' }
     try {
+      let changed = false
       const encoded = JSON.stringify(value, (name, member: unknown) => {
-        if (this.keys.has(name.toLowerCase())) return '[REDACTED]'
-        return typeof member === 'string' ? this.text(member) : member
+        const sanitized = this.keys.has(name.toLowerCase()) ? '[REDACTED]'
+          : typeof member === 'string' ? this.text(member) : member
+        if (sanitized !== member) changed = true
+        return sanitized
       })
-      if (encoded === undefined) return {}
+      if (encoded === undefined) return { [`gh.content.${key}.status`]: 'withheld' }
       const size = Buffer.byteLength(encoded)
       // Keep structured attributes valid JSON. Oversized data is referenced by
       // source identity instead of publishing a broken JSON prefix.
       if (size > this.settings.maxContentBytes) return {
         [`gh.content.${key}.status`]: 'truncated', [`gh.content.${key}.bytes`]: size,
+        [`gh.content.${key}.redaction_changed`]: changed,
       }
-      return { [key]: encoded, [`gh.content.${key}.status`]: 'redacted', [`gh.content.${key}.bytes`]: size }
+      return { [key]: encoded, [`gh.content.${key}.status`]: changed ? 'redacted' : 'complete', [`gh.content.${key}.bytes`]: size, [`gh.content.${key}.redaction_changed`]: changed }
     } catch {
       // Only JSON serialization and the local redaction policy run in this try.
       return { [`gh.content.${key}.status`]: 'withheld' }

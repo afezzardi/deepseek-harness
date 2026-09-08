@@ -46,6 +46,7 @@ Compose 服务使用命名卷，默认保留轨迹 30 天。`PHOENIX_PORT`、`OT
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
+| `metadata` / `exportStandaloneEvents` | `{}` / `false` | 实验、任务和试次标签；显式启用零时长独立事件 span |
 | `content` | `metadata` | `rich-redacted` 包含有大小限制的消息、工具 schema、参数、结果及模型输出的推理内容 |
 | `secretEnv` | 三个指定的提供者密钥变量 | 从导出内容中删除其字面值 |
 | `redactKeys` | 常见凭据字段 | 删除匹配的 JSON 字段；同时脱敏凭据赋值和 bearer token |
@@ -56,7 +57,7 @@ Compose 服务使用命名卷，默认保留轨迹 30 天。`PHOENIX_PORT`、`OT
 | `maxQueueSize` / `maxExportBatchSize` | 2,048 / 128 | 限制 SDK 导出接纳数量及批量大小 |
 | `exportTimeoutMillis` / `shutdownTimeoutMillis` | 3,000 / 5,000 | 限制导出及插件关闭的等待时间 |
 
-脱敏仅修改导出的副本。已知密钥移除并非完整的个人信息检测。截断和脱敏都可能使轨迹不适合训练；数据集整理必须检查这些标记并获取所需源记录。
+每个内容字段区分 `complete`、实际修改的 `redacted`、`truncated`、`omitted` 以及序列化失败的 `withheld`。模型 span 分别记录采集资格、拒绝原因、请求的推理强度、请求/工具/配置哈希，以及尚未评分的任务结果。脱敏仅修改导出的副本。已知密钥移除并非完整的个人信息检测。截断和脱敏都可能使轨迹不适合训练；数据集整理必须检查这些标记并获取所需源记录。
 
 ### 验证与评估
 
@@ -78,7 +79,7 @@ GH_PHOENIX_URL=http://127.0.0.1:6006 GH_GENAI_OTLP_ENDPOINT=http://127.0.0.1:431
 <details>
 <summary>实现与数据所有权</summary>
 
-`SessionTelemetryCoordinator` 提供独立的实时记录；后端补充其规范封装引用并将映射工作入队。`llm/stream` waterfall 提供请求时的 harness 输入及惰性流计时。每个轨迹组织一轮执行，模型调用与工具位于 step span 下；记录的工作流子会话 ID 建立 span 链接。辅助模型调用带有独立用途。插件不安装进程全局 tracer provider 或异步上下文管理器。
+`SessionTelemetryCoordinator` 提供独立的实时记录；后端补充其规范封装引用并将映射工作入队。`llm/stream` waterfall 提供请求时的 harness 输入及惰性流计时。每个轨迹组织一轮执行，模型调用与工具位于 step span 下；记录的工作流子会话 ID 在同一轨迹中建立父 span 上下文。实时子记录在有界缓冲区中等待成员关系发布；回放通过上游服务解析祖先关系。工作流和 step span 使用 Phoenix 的 `CHAIN` 类型。辅助模型调用带有独立用途。插件不安装进程全局 tracer provider 或异步上下文管理器。
 
 回放使用 session-query、上游 surface/header 折叠及上游紧凑流读取器。它在每次记录的 assistant 结算前重建模型输入，并将模型时长标记为首个记录块至最后记录块的间隔。它不导出重建的派发延迟。当记录完整时，上游 token-meter 轮次辅助函数提供精确轮次总量；无法证明输入总量时，每次调用的 token 属性会省略该总量。工具时长覆盖记录的调用至结果间隔，包括期间等待。
 
@@ -105,13 +106,13 @@ SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误�
 <a id="known-limitations-and-deferred-work"></a>
 ## 已知限制与延后工作
 
-首个版本提供轨迹采集和测试夹具评估路径。
+[整理库](src/curation.ts) 通过 `./curation` 导出，验证最终回答 SFT 候选、分组划分和精确请求的托管 DPO 对。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。本地 schema 验证不代表渲染器兼容或训练后模型改进。
 
 - 请求采集表示适配器序列化前的 harness 输入；不采集提供者 HTTP 请求体、tokenizer ID、隐藏推理及附件原始字节。
 - 回放无法恢复会话中没有记录的实时计时或辅助请求细节。冷读取可能包含上游生成的中断关闭记录，并在轮次级别明确标识。
 - 队列丢失、进程崩溃、延迟挂载及热重载可能导致轨迹不完整。为获取完整实时证据，在新轮次前重启采集；使用回放查看完整的已存储轮次。
-- 跨进程子轨迹要求在子进程执行配置中加载插件。记录的工作流 ID 和父会话 ID 保留关联；映射器不会根据计时或到达顺序推断父 span。
-- 自动语义召回、ATIF 导出、SFT/DPO 生成、定价策略及通用评估器均为延后工作。Phoenix 自身的定价估算不代表经过验证的推理成本。
+- 跨进程子轨迹要求加载插件并能读取祖先成员记录。未解析或独立子会话保留会话关系，不伪造嵌套。工作流记录没有调用工具的 ID，因此工作流位于 step 下。映射版本 2 使用独立的确定性 ID 命名空间。
+- 自动语义召回、ATIF 导出、后端渲染器验证、精确 token RL、定价策略及通用评估器均为延后工作。Phoenix 自身的定价估算不代表经过验证的推理成本。
 
 ### 开发备注
 

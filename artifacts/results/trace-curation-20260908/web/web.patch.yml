@@ -1,0 +1,8 @@
+- id: session-persistence-jsonl
+  config:
+    root: /home/andrea/management/deepseek-harness/artifacts/results/trace-curation-20260908/web/.sessions
+- id: gh-genai-traces
+  config:
+    content: rich-redacted
+    project: gh-training-live
+    metadata: {experiment: complex-web-uat}

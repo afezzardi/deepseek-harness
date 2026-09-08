@@ -46,6 +46,7 @@ The [configuration schema](src/config.ts) owns every accepted field and default.
 
 | Field | Default | Meaning |
 |---|---|---|
+| `metadata` / `exportStandaloneEvents` | `{}` / `false` | Campaign/task/trial labels; opt in to zero-duration standalone event spans |
 | `content` | `metadata` | `rich-redacted` includes bounded messages, tool schemas, arguments, results, and model-emitted reasoning |
 | `secretEnv` | Three named provider-key variables | Remove their literal values from exported content |
 | `redactKeys` | Common credential fields | Remove matching JSON fields; credential assignments and bearer tokens are also redacted |
@@ -56,7 +57,7 @@ The [configuration schema](src/config.ts) owns every accepted field and default.
 | `maxQueueSize` / `maxExportBatchSize` | 2,048 / 128 | Bound SDK export admission and batch size |
 | `exportTimeoutMillis` / `shutdownTimeoutMillis` | 3,000 / 5,000 | Bound export and plugin shutdown waits |
 
-Redaction changes exported copies only. Known-secret removal is not comprehensive PII detection. Both truncation and redaction can make a trace unsuitable for training; dataset curation must inspect their markers and obtain the required source records.
+Each content field distinguishes `complete`, actual `redacted` changes, `truncated`, `omitted`, and `withheld` serialization. Model spans separately report capture eligibility, rejection reasons, requested reasoning effort, request/tool/configuration hashes, and an ungraded task outcome. Redaction changes exported copies only. Known-secret removal is not comprehensive PII detection. Both truncation and redaction can make a trace unsuitable for training; dataset curation must inspect their markers and obtain the required source records.
 
 ### Verification and evaluation
 
@@ -78,7 +79,7 @@ The ordinary suite includes a built-plugin headless test with a mock model and a
 <details>
 <summary>Implementation and data ownership</summary>
 
-`SessionTelemetryCoordinator` supplies detached live records; the backend adds their canonical envelope references and enqueues mapping. The `llm/stream` waterfall supplies request-time harness inputs and lazy-stream timing. One trace groups a turn, with model calls and tools under step spans; recorded workflow child IDs establish span links. Auxiliary model calls carry a separate purpose. No process-global tracer provider or asynchronous context manager is installed.
+`SessionTelemetryCoordinator` supplies detached live records; the backend adds their canonical envelope references and enqueues mapping. The `llm/stream` waterfall supplies request-time harness inputs and lazy-stream timing. One trace groups a turn, with model calls and tools under step spans; recorded workflow child IDs establish parent span contexts in the same trace. Live child records wait in a bounded buffer for membership publication; replay resolves ancestors through upstream services. Workflow and step spans use Phoenix’s `CHAIN` kind. Auxiliary model calls carry a separate purpose. No process-global tracer provider or asynchronous context manager is installed.
 
 Replay uses session-query, upstream surface/header folds, and the upstream compact-stream reader. It reconstructs model inputs before each recorded assistant settlement and labels model duration as first-recorded-chunk to last-recorded-chunk. It does not export a reconstructed dispatch latency. The upstream token-meter turn helper supplies exact turn totals when the record is complete; per-call token attributes omit unprovable aggregate input counts. Tool duration covers the recorded call-to-result interval, including any intervening waits.
 
@@ -105,13 +106,13 @@ This plugin contributes no tools, prompts, or model-visible session events. Obse
 <a id="known-limitations-and-deferred-work"></a>
 ## Known Limitations and Deferred Work
 
-The first release establishes tracing and a fixture evaluation path.
+The [curation library](src/curation.ts), exported as `./curation`, validates final-answer SFT candidates, grouped splits, and exact-request managed-DPO pairs. The [experiment guide](experiments/README.md) describes canonical auditing, frozen text sampling, resettable fixtures, and independent grades. Local schema validation does not establish renderer compatibility or trained-model improvement.
 
 - Request capture represents the harness input before adapter serialization; provider HTTP bodies, tokenizer IDs, hidden reasoning, and attachments' raw bytes are not captured.
 - Replay cannot recover live-only timings or auxiliary request details absent from the session. Cold reads may include upstream-generated interruption closers, explicitly identified at the turn level.
 - Queue loss, process crashes, late attachment, and hot reload can leave incomplete traces. Restart capture before a new turn for clean live evidence; use replay for a complete stored turn.
-- Cross-process child traces require the plugin in the child's execution composition. Recorded workflow IDs and parent session IDs retain linkage; the mapper does not infer a parent span from timing or arrival order.
-- Automatic semantic recall, ATIF export, SFT/DPO generation, pricing policy, and a general-purpose evaluator are deferred. Phoenix's own pricing estimates are not validated inference costs.
+- Cross-process child traces require the plugin and access to recorded ancestor membership. Unresolved or independent children retain their session relationship without fabricated nesting. Workflow records lack the invoking tool-call ID, so the workflow stays under the step. Mapping version 2 uses a separate deterministic ID namespace.
+- Automatic semantic recall, ATIF export, backend renderer approval, exact-token RL, pricing policy, and a general-purpose evaluator are deferred. Phoenix's own pricing estimates are not validated inference costs.
 
 ### Dev Note
 

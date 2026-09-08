@@ -1,0 +1,25 @@
+{
+  "revision": "ea7b6c424d9b2b61cb42700b199d3c41268fd4b7",
+  "node": "v24.12.0",
+  "requested_reasoning_effort": "medium",
+  "settings_home_isolated": true,
+  "sha256": {
+    "artifacts/plugins/gh-genai-traces/src/mapper.ts": "e5ad5d98aff41f59391262afdce436b16f280ef4ca556ba6c46b0b5a5ef4e3b1",
+    "artifacts/plugins/gh-genai-traces/src/replay.ts": "ea7085d8e48741a035ce41f0e3dd18b4e5a6f2cdd0b36902e18583af0973b820",
+    "artifacts/plugins/gh-genai-traces/src/index.ts": "35e2fd554c1d4019bfff6c8d1579e555449b0953bbebb42e276219b4d5aa0d74",
+    "artifacts/plugins/gh-genai-traces/src/stream.ts": "02937c169a0d93301d1309a03c30023e2d9c536fcb37fc6fde2627b5e7005a01",
+    "artifacts/plugins/gh-genai-traces/src/config.ts": "b8b18c36f1467fd4f23721218f804838606030e603f6e9814b90b633ef41ce4e",
+    "artifacts/plugins/gh-genai-traces/src/transport.ts": "b73218d95a0b2f36ad6bf21e26f2855080cc65134b8fd95ccb35f5260695be1d",
+    "artifacts/plugins/gh-genai-traces/src/content.ts": "c7ad9a1f129cb492854784e45d1ce0b3cbe18b2fa018da7e770cb4daf5379023",
+    "artifacts/plugins/gh-genai-traces/package-lock.json": "00465cf9e984ae882ae100d81096083642525d1f73affe69dda44db696c49d07",
+    "artifacts/results/trace-discovery-20260908/.home/settings.yaml": "798e8e0286ccb18a72eec7a40a647e9dd2fa157521e886c69f0118cd21fed49d",
+    "artifacts/results/trace-discovery-20260908/discovery.patch.yml": "eb2c53a024a93003c0470a3db055fe37ec19d035700ff42cfff30f3120e8c99f"
+  },
+  "plugin_suite": {
+    "command": "GH_PHOENIX_URL=http://127.0.0.1:6006 GH_GENAI_OTLP_ENDPOINT=http://127.0.0.1:4318/v1/traces pnpm exec vitest run --config artifacts/plugins/gh-genai-traces/vitest.config.ts",
+    "passed": 26,
+    "skipped": 1,
+    "duration_seconds": 3.59,
+    "evidence_source": "captured command output in this session; host retry after sandbox EPERM"
+  }
+}

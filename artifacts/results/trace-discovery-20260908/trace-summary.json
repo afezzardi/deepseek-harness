@@ -1,0 +1,780 @@
+[
+  {
+    "key": "aggregate-1",
+    "project": "gh-discovery-20260908-aggregate-1",
+    "session_id": "session-9ea3b923-a5a6-4f56-88af-2d2ee05f97b0",
+    "trace_id": "2529d327888dcbbe71ca615ce84a1b9d",
+    "root_span_id": "abb6c7a3cb736e58",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "bash",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 41681,
+    "output_tokens": 346,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 41835,
+      "gh.turn.usage.output_tokens": 339,
+      "gh.turn.usage.uncached_input_tokens": 41496
+    }
+  },
+  {
+    "key": "aggregate-2",
+    "project": "gh-discovery-20260908-aggregate-2",
+    "session_id": "session-4100d88c-881c-4cca-848a-1a6f03fefa53",
+    "trace_id": "20dff55191de5517dd070a4f4e4cb7f8",
+    "root_span_id": "7321342fd2a55da3",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "bash",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 41608,
+    "output_tokens": 286,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 41703,
+      "gh.turn.usage.output_tokens": 280,
+      "gh.turn.usage.uncached_input_tokens": 41423
+    }
+  },
+  {
+    "key": "aggregate-3",
+    "project": "gh-discovery-20260908-aggregate-3",
+    "session_id": "session-ac6393f7-9310-466b-ae77-fa4852e79d31",
+    "trace_id": "4acdead59a3c545aab500c92e3bcd154",
+    "root_span_id": "31e5ef27da6e22b8",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "bash",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 41681,
+    "output_tokens": 334,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 41823,
+      "gh.turn.usage.output_tokens": 327,
+      "gh.turn.usage.uncached_input_tokens": 41496
+    }
+  },
+  {
+    "key": "aggregate-4",
+    "project": "gh-discovery-20260908-aggregate-4",
+    "session_id": "session-da4cc1fa-3c10-414e-b478-98d179f93912",
+    "trace_id": "bb777dbddc7cb80b8884c9a31e49f4e7",
+    "root_span_id": "55ec7bb0ec964c16",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "bash",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 41794,
+    "output_tokens": 460,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 42062,
+      "gh.turn.usage.output_tokens": 453,
+      "gh.turn.usage.uncached_input_tokens": 41609
+    }
+  },
+  {
+    "key": "extract-1",
+    "project": "gh-discovery-20260908-extract-1",
+    "session_id": "session-b5695db0-bad8-4f45-a1dc-36570777463f",
+    "trace_id": "9debf2a3b571a40c5fd585116bd18899",
+    "root_span_id": "0f6b7f7d4810e051",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27305,
+    "output_tokens": 157,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27285,
+      "gh.turn.usage.output_tokens": 152,
+      "gh.turn.usage.uncached_input_tokens": 27133
+    }
+  },
+  {
+    "key": "extract-2",
+    "project": "gh-discovery-20260908-extract-2",
+    "session_id": "session-0d0a2b35-27f3-4d40-9729-528e2ab24810",
+    "trace_id": "2030436efe456d7e69091c23f97e22d1",
+    "root_span_id": "f521874dc49cadde",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27305,
+    "output_tokens": 163,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27289,
+      "gh.turn.usage.output_tokens": 156,
+      "gh.turn.usage.uncached_input_tokens": 27133
+    }
+  },
+  {
+    "key": "extract-3",
+    "project": "gh-discovery-20260908-extract-3",
+    "session_id": "session-3250fcb4-02e0-4ab9-8745-888ed96b0faf",
+    "trace_id": "4676d29c04dcd4b39a580ec2cbc9b8ce",
+    "root_span_id": "c7a646658f438e16",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27305,
+    "output_tokens": 144,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27271,
+      "gh.turn.usage.output_tokens": 138,
+      "gh.turn.usage.uncached_input_tokens": 27133
+    }
+  },
+  {
+    "key": "extract-4",
+    "project": "gh-discovery-20260908-extract-4",
+    "session_id": "session-004ed990-454a-4820-8b1f-5ae0b9ebdb6a",
+    "trace_id": "37ede3c834a5b2bd7e22530032c8ed5d",
+    "root_span_id": "9d6cc1e495728df8",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27305,
+    "output_tokens": 128,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27256,
+      "gh.turn.usage.output_tokens": 123,
+      "gh.turn.usage.uncached_input_tokens": 27133
+    }
+  },
+  {
+    "key": "injection-1",
+    "project": "gh-discovery-20260908-injection-1",
+    "session_id": "session-4c7164d9-d6e1-4696-8c2c-9b94e941e96d",
+    "trace_id": "f6fb296dc547c3a0f3f6231d109817b0",
+    "root_span_id": "5e325abf349b1cb1",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27355,
+    "output_tokens": 156,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27319,
+      "gh.turn.usage.output_tokens": 148,
+      "gh.turn.usage.uncached_input_tokens": 27171
+    }
+  },
+  {
+    "key": "injection-2",
+    "project": "gh-discovery-20260908-injection-2",
+    "session_id": "session-a6d38efa-3ada-4435-bbae-b09f573028ff",
+    "trace_id": "affb7879183862d2e4fa8b002ae606e8",
+    "root_span_id": "bfda95d852384389",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27355,
+    "output_tokens": 176,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27339,
+      "gh.turn.usage.output_tokens": 168,
+      "gh.turn.usage.uncached_input_tokens": 27171
+    }
+  },
+  {
+    "key": "injection-3",
+    "project": "gh-discovery-20260908-injection-3",
+    "session_id": "session-edc84c8d-f667-442a-ac68-bf653ad16b8b",
+    "trace_id": "433b908cdc8aa4489ab704429d7696ae",
+    "root_span_id": "bc6a164c2cfebc93",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27355,
+    "output_tokens": 328,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27491,
+      "gh.turn.usage.output_tokens": 320,
+      "gh.turn.usage.uncached_input_tokens": 27171
+    }
+  },
+  {
+    "key": "injection-4",
+    "project": "gh-discovery-20260908-injection-4",
+    "session_id": "session-55cefc62-aab1-4ce9-9e5c-a9cd7ab04076",
+    "trace_id": "0fed71004655a14ea94fed76a3879427",
+    "root_span_id": "7edef41de6f60b5b",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27355,
+    "output_tokens": 220,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27383,
+      "gh.turn.usage.output_tokens": 212,
+      "gh.turn.usage.uncached_input_tokens": 27171
+    }
+  },
+  {
+    "key": "read-1",
+    "project": "gh-discovery-20260908-read-1",
+    "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+    "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+    "root_span_id": "93524a8e8eaa1977",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27177,
+    "output_tokens": 214,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27236,
+      "gh.turn.usage.output_tokens": 209,
+      "gh.turn.usage.uncached_input_tokens": 27027
+    }
+  },
+  {
+    "key": "read-2",
+    "project": "gh-discovery-20260908-read-2",
+    "session_id": "session-0e5cd324-47d4-41f8-b00a-a7523f617c68",
+    "trace_id": "3b6cd5a99c87b9a9f508fda82481e66e",
+    "root_span_id": "126176be1e818fca",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27188,
+    "output_tokens": 110,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27142,
+      "gh.turn.usage.output_tokens": 104,
+      "gh.turn.usage.uncached_input_tokens": 27038
+    }
+  },
+  {
+    "key": "read-3",
+    "project": "gh-discovery-20260908-read-3",
+    "session_id": "session-8c3da56b-5759-4170-83e7-ad45e297b8c8",
+    "trace_id": "f08594c1fc52ac017b4fd90c0f881bb8",
+    "root_span_id": "5faaa64fcf3ed08c",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27177,
+    "output_tokens": 88,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27109,
+      "gh.turn.usage.output_tokens": 82,
+      "gh.turn.usage.uncached_input_tokens": 27027
+    }
+  },
+  {
+    "key": "read-4",
+    "project": "gh-discovery-20260908-read-4",
+    "session_id": "session-fbd829b9-e35c-4618-88c1-6f0602a6c67e",
+    "trace_id": "9541590734dc6b30ddd06670cacb7775",
+    "root_span_id": "6111a33f0f3aad29",
+    "spans": 11,
+    "model_calls": 2,
+    "auxiliary_calls": 1,
+    "tool_calls": 1,
+    "tools": [
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 27188,
+    "output_tokens": 93,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 27125,
+      "gh.turn.usage.output_tokens": 87,
+      "gh.turn.usage.uncached_input_tokens": 27038
+    }
+  },
+  {
+    "key": "recover-1",
+    "project": "gh-discovery-20260908-recover-1",
+    "session_id": "session-6a975c17-3aea-48ba-bc44-b1e596cbfd35",
+    "trace_id": "0db4035a1b759ca82177c818c964c84b",
+    "root_span_id": "7d9de9bd2ad60dcd",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "read",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 40780,
+    "output_tokens": 528,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 41098,
+      "gh.turn.usage.output_tokens": 520,
+      "gh.turn.usage.uncached_input_tokens": 40578
+    }
+  },
+  {
+    "key": "recover-2",
+    "project": "gh-discovery-20260908-recover-2",
+    "session_id": "session-06393499-5737-4646-b075-416e9d09cb5b",
+    "trace_id": "86cb7a6b9feb39724463cf0c0dcee692",
+    "root_span_id": "2ab61f80c2872e26",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "read",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 40818,
+    "output_tokens": 214,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 40823,
+      "gh.turn.usage.output_tokens": 207,
+      "gh.turn.usage.uncached_input_tokens": 40616
+    }
+  },
+  {
+    "key": "recover-3",
+    "project": "gh-discovery-20260908-recover-3",
+    "session_id": "session-d64c7753-a7a4-4e43-b60a-bd2d2a7df001",
+    "trace_id": "fc2ee610555e9c129718af587e315b53",
+    "root_span_id": "97a59680aceaf299",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "read",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 40765,
+    "output_tokens": 182,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 40738,
+      "gh.turn.usage.output_tokens": 175,
+      "gh.turn.usage.uncached_input_tokens": 40563
+    }
+  },
+  {
+    "key": "recover-4",
+    "project": "gh-discovery-20260908-recover-4",
+    "session_id": "session-1d3ccb34-e9e1-4b28-9afa-57b65509c9ed",
+    "trace_id": "34f7a67efbb42bc638bb6659751e365d",
+    "root_span_id": "f5901f9cfd434420",
+    "spans": 14,
+    "model_calls": 3,
+    "auxiliary_calls": 1,
+    "tool_calls": 2,
+    "tools": [
+      "read",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 40763,
+    "output_tokens": 173,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 40727,
+      "gh.turn.usage.output_tokens": 166,
+      "gh.turn.usage.uncached_input_tokens": 40561
+    }
+  },
+  {
+    "key": "write-1",
+    "project": "gh-discovery-20260908-write-1",
+    "session_id": "session-241c7883-c601-4cf0-a9f2-4fb0ce013e66",
+    "trace_id": "a016210237a907b553fd34537e9ff472",
+    "root_span_id": "347cb5a52875327e",
+    "spans": 20,
+    "model_calls": 5,
+    "auxiliary_calls": 1,
+    "tool_calls": 4,
+    "tools": [
+      "read",
+      "write",
+      "write",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 71094,
+    "output_tokens": 669,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 71547,
+      "gh.turn.usage.output_tokens": 662,
+      "gh.turn.usage.uncached_input_tokens": 70885
+    }
+  },
+  {
+    "key": "write-2",
+    "project": "gh-discovery-20260908-write-2",
+    "session_id": "session-c4fa5ac6-51b5-4819-9152-8a297a6cf5a2",
+    "trace_id": "87349e06660f161c1bb02ee05e39c4fe",
+    "root_span_id": "1260886740e1f826",
+    "spans": 17,
+    "model_calls": 4,
+    "auxiliary_calls": 1,
+    "tool_calls": 3,
+    "tools": [
+      "read",
+      "write",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 56323,
+    "output_tokens": 470,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 56577,
+      "gh.turn.usage.output_tokens": 463,
+      "gh.turn.usage.uncached_input_tokens": 56114
+    }
+  },
+  {
+    "key": "write-3",
+    "project": "gh-discovery-20260908-write-3",
+    "session_id": "session-02df682f-3200-48a0-8e64-a6c492ee7b1f",
+    "trace_id": "37749032a4d8c39e18f9b61f5177eca6",
+    "root_span_id": "89274df7e466ff34",
+    "spans": 17,
+    "model_calls": 4,
+    "auxiliary_calls": 1,
+    "tool_calls": 3,
+    "tools": [
+      "read",
+      "write",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 56295,
+    "output_tokens": 455,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 56535,
+      "gh.turn.usage.output_tokens": 449,
+      "gh.turn.usage.uncached_input_tokens": 56086
+    }
+  },
+  {
+    "key": "write-4",
+    "project": "gh-discovery-20260908-write-4",
+    "session_id": "session-eab5bd25-1937-42ff-a903-8a7d04684fbc",
+    "trace_id": "dbe8837b7b9238b2b21f6a7a58e8a203",
+    "root_span_id": "a2996910a438d8f1",
+    "spans": 17,
+    "model_calls": 4,
+    "auxiliary_calls": 1,
+    "tool_calls": 3,
+    "tools": [
+      "read",
+      "write",
+      "read"
+    ],
+    "model_efforts": [
+      "medium",
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "auxiliary_efforts": [
+      null
+    ],
+    "incomplete_spans": 0,
+    "content_omissions": [],
+    "outcome": "completed",
+    "input_tokens": 56272,
+    "output_tokens": 420,
+    "turn_usage": {
+      "gh.turn.usage.total_tokens": 56477,
+      "gh.turn.usage.output_tokens": 414,
+      "gh.turn.usage.uncached_input_tokens": 56063
+    }
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "case": "long-input",
+    "rejected": true,
+    "reason": "Missing required content"
+  },
+  {
+    "case": "redaction",
+    "rejected": true,
+    "reason": "Content changed by credential redaction"
+  }
+]

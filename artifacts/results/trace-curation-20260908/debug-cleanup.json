@@ -1,0 +1,9 @@
+{
+  "project": "gh-training",
+  "reason": "Audit-only placeholder requests; independently graded datasets are in other projects.",
+  "spans": 40,
+  "traces": 10,
+  "backup": "debug-project-backup.json",
+  "backup_sha256": "ee1b2935b56299c34f7acd0a46634f20f3c8051ce552338dac44c87916704798",
+  "http_status": 204
+}

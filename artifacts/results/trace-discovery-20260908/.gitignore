@@ -1,0 +1,13 @@
+.home/
+.homes/
+.sessions/
+*.session.json
+*.spans.json
+*.stderr.log
+__pycache__/
+*.candidates.jsonl
+*.stdout.log
+*.trial.json
+
+.cleanup/
+/lint.log

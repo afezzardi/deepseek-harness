@@ -1,9 +1,10 @@
 /** Correlate DSH events and public model calls into source-addressable spans. */
 import { randomUUID } from 'node:crypto'
-import { ROOT_CONTEXT, SpanKind, SpanStatusCode, trace, type Attributes, type Span, type Tracer } from '@opentelemetry/api'
+import { ROOT_CONTEXT, SpanKind, SpanStatusCode, trace, type Attributes, type Span, type Tracer, type SpanContext } from '@opentelemetry/api'
 import { type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
 import { deriveTurnTokenUsage } from '@deepseek-ai/dsh-token-meter/src/turn-usage.ts'
 import type {} from '@deepseek-ai/dsh-tool-workflow/types'
+import { digest } from './curation.ts'
 import { ContentPolicy, inputMessages, parts, usageAttributes } from './content.ts'
 import type { Settings } from './config.ts'
 import type { CallRequest, CallResult } from './stream.ts'
@@ -22,7 +23,7 @@ interface Turn {
   incomplete: boolean
 }
 interface SessionState { header: SessionHeader; turn?: Turn; lastSeq: number }
-interface ModelCall { open: OpenSpan; sessionId?: string; start: number; incomplete: boolean }
+interface ModelCall { capture: Attributes; open: OpenSpan; sessionId?: string; start: number; incomplete: boolean }
 /** Live and replay use the same span presentation, with explicit origin labels. */
 export type CaptureOrigin = 'live' | 'replay'
 
@@ -32,23 +33,80 @@ export class TraceMapper {
   private readonly calls = new Map<string, ModelCall>()
   private readonly active = new Set<OpenSpan>()
   private readonly childLinks = new Map<string, OpenSpan>()
+  private readonly deferred = new Map<string, Array<() => void>>()
+  private readonly deferredCalls = new Map<string, string>()
+  private readonly releasing = new Set<string>()
+  private deferredCount = 0
+  private readonly ownership = new Map<string, { parentKey: string; traceKey: string }>()
   constructor(
     private readonly tracer: Tracer, private readonly ids: SourceIds,
     private readonly settings: Settings, private readonly policy: ContentPolicy,
     private readonly stats: Diagnostics, private readonly origin: CaptureOrigin,
   ) {}
 
-  private open(key: string, name: string, time: number, attributes: Attributes, parent?: OpenSpan, kind = SpanKind.INTERNAL): OpenSpan | undefined {
+  private open(key: string, name: string, time: number, attributes: Attributes, parent?: OpenSpan | SpanContext, kind = SpanKind.INTERNAL): OpenSpan | undefined {
     if (this.active.size >= this.settings.maxActiveSpans) { this.stats.spansDropped++; return undefined }
     this.ids.key = `${this.origin}:${key}`
     const span = this.tracer.startSpan(this.policy.text(name), { kind, startTime: time, attributes: {
       ...attributes, 'gh.source.id': key, 'gh.capture.origin': this.origin,
-      'gh.mapping.version': '1', 'gh.capture.content': this.settings.content,
-    } }, parent ? trace.setSpan(ROOT_CONTEXT, parent.span) : ROOT_CONTEXT)
+      'gh.mapping.version': '2', 'gh.capture.content': this.settings.content,
+      'metadata': JSON.stringify(this.settings.metadata),
+    } }, parent ? 'span' in parent ? trace.setSpan(ROOT_CONTEXT, parent.span) : trace.setSpanContext(ROOT_CONTEXT, parent) : ROOT_CONTEXT)
     const open = { span, time, key, events: 0, dropped: 0 }
     this.active.add(open)
     return open
   }
+  /** Index recorded workflow membership before mapping a child, including cold replay.
+   * Ancestors must be indexed before descendants; sequence establishes the owning turn.
+   * @param header - parent session identity.
+   * @param events - canonical parent records obtained from upstream services.
+   */
+  indexOwnership(header: SessionHeader, events: readonly SessionEvent[]): void {
+    let turn: number | undefined
+    const runs = new Map<string, string>()
+    for (const event of events) {
+      if (event.type === 'turn/start') turn = event.data.turn
+      if (event.type === 'turn/end') turn = undefined
+      if (event.type === 'tool-workflow/run-start' && turn !== undefined) {
+        runs.set(event.data.runId, this.ownership.get(String(header.id))?.traceKey ?? `${header.id}/turn/${turn}`)
+      }
+      if (event.type === 'tool-workflow/agent-start') {
+        const traceKey = runs.get(event.data.runId)
+        if (traceKey && this.ownership.size < this.settings.maxActiveSpans) {
+          this.ownership.set(event.data.childId, { parentKey: `${header.id}/workflow/${event.data.runId}`, traceKey })
+          this.releaseDeferred(event.data.childId)
+        }
+      }
+    }
+  }
+
+  private defer(id: string, work: () => void): boolean {
+    if (this.deferredCount >= this.settings.maxPendingRecords) { this.stats.recordsDropped++; return false }
+    const pending = this.deferred.get(id) ?? []
+    pending.push(work)
+    this.deferred.set(id, pending)
+    this.deferredCount++
+    return true
+  }
+
+  private releaseDeferred(id: string): void {
+    const pending = this.deferred.get(id)
+    if (!pending) return
+    this.deferred.delete(id)
+    this.deferredCount -= pending.length
+    this.releasing.add(id)
+    try { for (const work of pending) work() } finally { this.releasing.delete(id) }
+  }
+
+  private ownedParent(id: string): SpanContext | undefined {
+    const owner = this.ownership.get(id)
+    if (!owner) return undefined
+    this.ids.key = `${this.origin}:${owner.traceKey}`
+    const traceId = this.ids.generateTraceId()
+    this.ids.key = `${this.origin}:${owner.parentKey}`
+    return { traceId, spanId: this.ids.generateSpanId(), traceFlags: 1, isRemote: true }
+  }
+
   private close(open: OpenSpan | undefined, time: number, incomplete = false): void {
     if (!open || !this.active.delete(open)) return
     open.span.setAttributes({ 'gh.events.dropped': open.dropped, 'gh.capture.incomplete': incomplete || open.dropped > 0 })
@@ -74,6 +132,11 @@ export class TraceMapper {
   event(header: SessionHeader, inherited: number, event: SessionEvent): void {
     if (event.seq < inherited) return
     const id = String(header.id)
+    if (this.origin === 'live' && header.parentSession && !this.ownership.has(id) && !this.releasing.has(id)
+      && (event.type === 'turn/start' || this.deferred.has(id))) {
+      this.defer(id, () => this.event(header, inherited, event))
+      return
+    }
     let state = this.sessions.get(id)
     if (!state) {
       if (this.sessions.size >= this.settings.maxActiveSpans) { this.stats.recordsDropped++; return }
@@ -89,7 +152,8 @@ export class TraceMapper {
     if (event.type === 'turn/start') {
       if (state.turn) this.endTurn(state, event.time, 'incomplete')
       const root = this.open(`${id}/turn/${event.data.turn}`, 'invoke_agent dsh', event.time,
-        { ...attrs, 'gen_ai.operation.name': 'invoke_agent', 'gen_ai.agent.name': 'dsh', 'gh.turn': event.data.turn })
+        { ...attrs, 'gen_ai.operation.name': 'invoke_agent', 'gen_ai.agent.name': 'dsh', 'gh.turn': event.data.turn,
+          'gh.ownership.status': this.ownership.has(id) ? 'recorded-workflow' : header.parentSession ? 'unresolved-parent' : 'root' }, this.ownedParent(id))
       if (!root) return
       const delegation = this.childLinks.get(id)
       if (delegation) root.span.addLink({ context: delegation.span.spanContext(), attributes: { 'gh.link.kind': 'workflow-child' } })
@@ -97,6 +161,7 @@ export class TraceMapper {
     }
     const turn = state.turn
     if (!turn) {
+      if (!this.settings.exportStandaloneEvents) return
       const standalone = this.open(`${id}/event/${event.seq}`, `dsh ${event.type}`, event.time, attrs)
       this.attach(standalone, event)
       this.close(standalone, event.time)
@@ -107,7 +172,7 @@ export class TraceMapper {
     switch (event.type) {
       case 'step/start': {
         if (turn.step) this.close(turn.step, event.time, true)
-        const step = this.open(`${id}/turn/${turn.number}/step/${event.data.step}`, 'dsh step', event.time, { ...attrs, 'gh.step': event.data.step }, turn.root)
+        const step = this.open(`${id}/turn/${turn.number}/step/${event.data.step}`, 'dsh step', event.time, { ...attrs, 'gh.step': event.data.step, 'openinference.span.kind': 'CHAIN' }, turn.root)
         if (step) turn.step = step
         turn.stepNumber = event.data.step
         turn.calls = 0
@@ -134,12 +199,13 @@ export class TraceMapper {
       }
       case 'tool-workflow/run-start': {
         const workflow = this.open(`${id}/workflow/${event.data.runId}`, 'invoke_workflow dsh', event.time,
-          { ...attrs, 'gen_ai.operation.name': 'invoke_workflow', 'gh.workflow.run_id': event.data.runId }, turn.step ?? turn.root)
+          { ...attrs, 'gen_ai.operation.name': 'invoke_workflow', 'gh.workflow.run_id': event.data.runId, 'openinference.span.kind': 'CHAIN', 'gh.workflow.tool_correlation': 'unavailable-in-canonical-events' }, turn.step ?? turn.root)
         if (workflow) turn.workflows.set(event.data.runId, workflow)
         break
       }
       case 'tool-workflow/agent-start': {
         const workflow = turn.workflows.get(event.data.runId)
+        this.indexOwnership(header, turn.events)
         if (workflow) {
           if (this.childLinks.size < this.settings.maxActiveSpans) this.childLinks.set(event.data.childId, workflow)
           const child = this.sessions.get(event.data.childId)?.turn?.root
@@ -192,13 +258,21 @@ export class TraceMapper {
    */
   startCall(callId: string, request: CallRequest, time: number, sourceSeq?: number): void {
     const id = request.sessionId === undefined ? undefined : String(request.sessionId)
+    if (id && this.deferred.has(id)) {
+      if (this.defer(id, () => { this.deferredCalls.delete(callId); this.startCall(callId, request, time, sourceSeq) })) this.deferredCalls.set(callId, id)
+      return
+    }
     const state = id === undefined ? undefined : this.sessions.get(id)
     const turn = state?.turn
     const attempt = turn && !request.purpose ? ++turn.calls : 1
     const key = id && sourceSeq !== undefined ? `${id}/model-event/${sourceSeq}`
       : request.purpose || !turn ? `${id ?? 'unscoped'}/aux/${callId}`
       : `${id}/turn/${turn.number}/step/${turn.stepNumber}/call/${attempt}`
+    const config = { provider: request.provider, model: request.model, reasoningEffort: request.reasoningEffort, temperature: request.temperature, maxTokens: request.maxTokens, stop: request.stop }
     const attrs: Attributes = {
+      'gh.request.sha256': digest({ system: request.system, messages: inputMessages(request.messages), tools: request.tools, config }),
+      'gh.request.tools_sha256': digest(request.tools ?? null), 'gh.request.config_sha256': digest(config),
+      'gh.request.reasoning.observation': request.reasoningEffort === undefined ? 'unobserved' : 'requested',
       'gen_ai.operation.name': 'chat', 'gen_ai.provider.name': this.policy.text(request.provider),
       'gen_ai.request.model': this.policy.text(request.model), 'gen_ai.request.stream': true,
       'gh.request.representation': this.origin === 'live' ? 'harness' : 'reconstructed-harness',
@@ -216,7 +290,7 @@ export class TraceMapper {
     if (request.stop !== undefined) Object.assign(attrs, this.policy.attributes('gh.request.stop_sequences', request.stop))
     if (this.origin === 'replay') attrs['gh.timing.start_basis'] = 'first-recorded-chunk'
     const open = this.open(key, `chat ${request.model}`, time, attrs, request.purpose ? turn?.root : turn?.step ?? turn?.root, SpanKind.CLIENT)
-    if (open) this.calls.set(callId, { open, start: time, incomplete: !request.purpose && !turn, ...id ? { sessionId: id } : {} })
+    if (open) this.calls.set(callId, { capture: attrs, open, start: time, incomplete: !request.purpose && !turn, ...id ? { sessionId: id } : {} })
   }
 
   /** Settle one observed call without copying usage onto its parent spans.
@@ -224,11 +298,25 @@ export class TraceMapper {
    * @param result - bounded output and actual termination facts.
    */
   endCall(callId: string, result: CallResult): void {
+    const deferredSession = this.deferredCalls.get(callId)
+    if (deferredSession) { this.defer(deferredSession, () => this.endCall(callId, result)); return }
     const call = this.calls.get(callId)
     if (!call) { this.stats.captureErrors++; return }
+    const output = this.policy.attributes('gen_ai.output.messages', [{ role: 'assistant', parts: parts(result.blocks), finish_reason: result.finish }])
+    const capture = { ...call.capture, ...output }
+    const statuses = Object.entries(capture).filter(([key]) => key.startsWith('gh.content.') && key.endsWith('.status')).map(([, value]) => value)
+    const reasons = [...new Set(statuses.filter(value => value !== 'complete').map(String))]
+    if (result.truncated) reasons.push('stream-truncated')
+    if (call.incomplete || result.finish === 'incomplete') reasons.push('missing-evidence')
+    if (result.finish !== 'stop' && result.finish !== 'tool-calls') reasons.push(`model-${result.finish}`)
+    if (capture['gh.call.purpose'] !== 'conversation') reasons.push('auxiliary')
     call.open.span.setAttributes({
       ...usageAttributes(result.usage),
-      ...this.policy.attributes('gen_ai.output.messages', [{ role: 'assistant', parts: parts(result.blocks), finish_reason: result.finish }]),
+      ...output,
+      'gh.capture.eligible': reasons.length === 0, 'gh.capture.rejection_reasons': reasons,
+      'gh.privacy.disposition': 'credential-filtered-not-pii-reviewed',
+      'gh.task.outcome': 'ungraded', 'gh.provenance.renderer': 'unobserved',
+      'gh.provenance.tokenizer': 'unobserved', 'gh.provenance.checkpoint': 'unobserved',
       'gen_ai.response.finish_reasons': [result.finish], 'gh.stream.truncated': result.truncated,
     })
     if (this.origin === 'live' && result.firstChunk !== undefined) call.open.span.setAttribute('gen_ai.response.time_to_first_chunk', Math.max(0, result.firstChunk - call.start) / 1000)
@@ -259,6 +347,7 @@ export class TraceMapper {
    * @param time - disposal time.
    */
   disposeSession(sessionId: string, time: number): void {
+    this.releaseDeferred(sessionId)
     const state = this.sessions.get(sessionId)
     if (state) this.endTurn(state, time, 'incomplete')
     this.sessions.delete(sessionId)
@@ -267,10 +356,13 @@ export class TraceMapper {
   /** Close unresolved spans at shutdown; unknown outcomes remain incomplete. */
   shutdown(): void {
     const time = Date.now()
+    for (const id of this.deferred.keys()) this.releaseDeferred(id)
     for (const id of this.sessions.keys()) this.disposeSession(id, time)
     for (const open of this.active) this.close(open, time, true)
     this.calls.clear()
+    this.deferredCalls.clear()
     this.childLinks.clear()
+    this.ownership.clear()
   }
 }
 

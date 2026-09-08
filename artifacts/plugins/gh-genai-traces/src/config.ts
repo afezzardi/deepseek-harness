@@ -9,6 +9,8 @@ export const configSchema = z.object({
     return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password && !url.search && !url.hash
   }, 'endpoint must be HTTP(S) without credentials, query, or fragment').default('http://127.0.0.1:4318/v1/traces'),
   project: z.string().min(1).default('gh-genai-traces'),
+  metadata: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).default({}),
+  exportStandaloneEvents: z.boolean().default(false),
   headers: z.record(z.string(), z.string()).default({}),
   content: z.enum(['rich-redacted', 'metadata']).default('metadata'),
   secretEnv: z.array(z.string().min(1)).default(['DEEPSEEK_API_KEY', 'FIREWORKS_API_KEY', 'LITELLM_MASTER_KEY']),

@@ -1,0 +1,11 @@
+{
+  "count": 48,
+  "workers": 4,
+  "held_out": [
+    "heldout-filter"
+  ],
+  "validation": [
+    "unicode"
+  ],
+  "baseline": "medium"
+}

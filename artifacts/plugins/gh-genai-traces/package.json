@@ -6,7 +6,9 @@
   "license": "MIT",
   "exports": {
     ".": "./lib/index.js",
-    "./evaluation": "./lib/evaluation.js"
+    "./evaluation": "./lib/evaluation.js",
+    "./curation": "./lib/curation.js",
+    "./reward": "./lib/reward.js"
   },
   "scripts": {
     "build": "node build.mjs",

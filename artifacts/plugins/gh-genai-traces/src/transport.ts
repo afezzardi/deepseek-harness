@@ -27,8 +27,8 @@ export function diagnostics(): Diagnostics {
 /** Synchronous span creation consumes a source key without sharing global context. */
 export class SourceIds implements IdGenerator {
   key = ''
-  generateTraceId(): string { return createHash('sha256').update(`gh:v1:trace:${this.key}`).digest('hex').slice(0, 32) }
-  generateSpanId(): string { return createHash('sha256').update(`gh:v1:span:${this.key}`).digest('hex').slice(0, 16) }
+  generateTraceId(): string { return createHash('sha256').update(`gh:v2:trace:${this.key}`).digest('hex').slice(0, 32) }
+  generateSpanId(): string { return createHash('sha256').update(`gh:v2:span:${this.key}`).digest('hex').slice(0, 16) }
 }
 
 /** Bounded queue for immutable captured records; work runs outside the event callback. */
