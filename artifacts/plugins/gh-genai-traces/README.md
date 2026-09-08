@@ -8,7 +8,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-Gruppo Happy can inspect model requests, tool calls, provider usage, and session outcomes in Phoenix. An explicit profile overlay enables live capture; historical replay uses upstream session-query and exports to a separate project. Rich content is redacted and bounded, with source identifiers retained when content is omitted. Canonical sessions remain the reconstruction source.
+Gruppo Happy can inspect model requests, tool calls, provider usage, and session outcomes in Phoenix. An explicit profile overlay enables live capture; historical replay uses shared upstream live-session and persistence reads and exports to a separate project. Rich content is redacted and bounded, with source identifiers retained when content is omitted. Canonical sessions remain the reconstruction source.
 
 ## Table of Contents
 
@@ -36,7 +36,7 @@ pnpm dsh --profile headless --patch artifacts/plugins/gh-genai-traces/lib/overla
 
 The stack exposes Phoenix on `http://127.0.0.1:6006` and OTLP/HTTP on `http://127.0.0.1:4318/v1/traces`. The generated overlay enables `rich-redacted` capture and replaces the stock telemetry backend. Without the overlay, this plugin is absent. Web can use the same overlay alongside the existing Typert and effort-slider overlays.
 
-The Compose services use named volumes and retain traces for 30 days by default. `PHOENIX_PORT`, `OTLP_HTTP_PORT`, and `PHOENIX_RETENTION_DAYS` configure the stack. `stack/setup.mjs` creates a private ignored database credential once; `docker compose ... down` preserves the volumes. The stack disables Phoenix analytics and external UI resources.
+The Compose services use named volumes and retain disposable traces for 30 days by default. The explicit experiment protection operation assigns a non-expiring native policy to retained v3 evidence projects. `PHOENIX_PORT`, `OTLP_HTTP_PORT`, and `PHOENIX_RETENTION_DAYS` configure the stack. `stack/setup.mjs` creates a private ignored database credential once; `docker compose ... down` preserves the volumes. The stack disables Phoenix analytics and external UI resources.
 
 Set `GH_GENAI_OTLP_ENDPOINT` to change the complete trace endpoint and `GH_GENAI_PROJECT` to change the project. Set `GH_GENAI_REPLAY_SESSIONS` to comma-separated session IDs before launching the profile to replay them through the configured DSH store. Replay exports to `<project>-replay`; it does not launch or rewrite the recorded sessions. Rebuild after source changes; restart the profile to apply its overlay.
 
@@ -81,7 +81,7 @@ The ordinary suite includes a built-plugin headless test with a mock model and a
 
 `SessionTelemetryCoordinator` supplies detached live records; the backend adds their canonical envelope references and enqueues mapping. The `llm/stream` waterfall supplies request-time harness inputs and lazy-stream timing. One trace groups a turn, with model calls and tools under step spans; recorded workflow child IDs establish parent span contexts in the same trace. Live child records wait in a bounded buffer for membership publication; replay resolves ancestors through upstream services. Workflow and step spans use Phoenix’s `CHAIN` kind. Auxiliary model calls carry a separate purpose. No process-global tracer provider or asynchronous context manager is installed.
 
-Replay uses session-query, upstream surface/header folds, and the upstream compact-stream reader. It reconstructs model inputs before each recorded assistant settlement and labels model duration as first-recorded-chunk to last-recorded-chunk. It does not export a reconstructed dispatch latency. The upstream token-meter turn helper supplies exact turn totals when the record is complete; per-call token attributes omit unprovable aggregate input counts. Tool duration covers the recorded call-to-result interval, including any intervening waits.
+Replay uses the shared snapshot reader, incremental upstream surface reconstruction, header folds, and the upstream compact-stream reader. It reconstructs model inputs before each recorded assistant settlement and labels model duration as first-recorded-chunk to last-recorded-chunk. It does not export a reconstructed dispatch latency. The upstream token-meter turn helper supplies exact turn totals when the record is complete; per-call token attributes omit unprovable aggregate input counts. Tool duration covers the recorded call-to-result interval, including any intervening waits.
 
 The SDK batches OTLP protobuf exports. Diagnostic counters distinguish record admission, mapping errors, span admission/drop, successful exporter callbacks, failed callbacks, and pending spans. A successful callback is receiver acknowledgement, not proof of durable Phoenix storage. The Collector's persistent queue protects accepted downstream batches; it cannot recover a lost SDK queue. Stable source-derived replay IDs permit repeated import into the tested Phoenix release without duplicate spans.
 
@@ -106,12 +106,12 @@ This plugin contributes no tools, prompts, or model-visible session events. Obse
 <a id="known-limitations-and-deferred-work"></a>
 ## Known Limitations and Deferred Work
 
-The [curation library](src/curation.ts), exported as `./curation`, validates final-answer SFT candidates, grouped splits, and exact-request managed-DPO pairs. The [experiment guide](experiments/README.md) describes canonical auditing, frozen text sampling, resettable fixtures, and independent grades. Local schema validation does not establish renderer compatibility or trained-model improvement.
+The [curation library](src/curation.ts), exported as `./curation`, produces version-2 backend-neutral candidates with explicit grades, review hashes, approval evidence, and selected loss targets. Phoenix owns pinned split assignments. `./fireworks` retains managed SFT/DPO serialization; `./reward` supplies filesystem observations. Final-answer-only supervision is an explicit format objective, with ungraded target reasoning omitted; it is not approved production-agent training data. The [experiment guide](experiments/README.md) describes canonical auditing, frozen text sampling, resettable fixtures, and independent grades. Local schema validation does not establish renderer compatibility or trained-model improvement.
 
 - Request capture represents the harness input before adapter serialization; provider HTTP bodies, tokenizer IDs, hidden reasoning, and attachments' raw bytes are not captured.
 - Replay cannot recover live-only timings or auxiliary request details absent from the session. Cold reads may include upstream-generated interruption closers, explicitly identified at the turn level.
 - Queue loss, process crashes, late attachment, and hot reload can leave incomplete traces. Restart capture before a new turn for clean live evidence; use replay for a complete stored turn.
-- Cross-process child traces require the plugin and access to recorded ancestor membership. Unresolved or independent children retain their session relationship without fabricated nesting. Workflow records lack the invoking tool-call ID, so the workflow stays under the step. Mapping version 2 uses a separate deterministic ID namespace.
+- Cross-process child traces require the plugin and access to recorded ancestor membership. Unresolved or independent children retain their session relationship without fabricated nesting. Workflow records lack the invoking tool-call ID, so the workflow stays under the step. Mapping version 3 namespaces trace, span, and Phoenix session identities by project, origin, and canonical source; workflow children share their owning root’s presentation identity.
 - Automatic semantic recall, ATIF export, backend renderer approval, exact-token RL, pricing policy, and a general-purpose evaluator are deferred. Phoenix's own pricing estimates are not validated inference costs.
 
 ### Dev Note

@@ -3,9 +3,9 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { build } from 'tsdown'
 const root = fileURLToPath(new URL('./', import.meta.url))
-await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../../tsconfig.base.json', import.meta.url)), entry: { index: 'src/index.ts', evaluation: 'examples/evaluation.ts', curation: 'src/curation.ts', reward: 'src/reward.ts', 'frozen-profile': 'experiments/frozen-profile.ts', 'audit-profile': 'experiments/audit-profile.ts' }, outDir: 'lib', clean: true,
+await build({ cwd: root, config: false, tsconfig: fileURLToPath(new URL('../../../tsconfig.base.json', import.meta.url)), entry: { index: 'src/index.ts', evaluation: 'examples/evaluation.ts', curation: 'src/curation.ts', fireworks: 'src/fireworks.ts', 'render-preview': 'src/render-preview.ts', reward: 'src/reward.ts', 'frozen-profile': 'experiments/frozen-profile.ts', 'audit-profile': 'experiments/audit-profile.ts', 'lifecycle-profile': 'experiments/lifecycle-profile.ts', 'benchmark-profile': 'experiments/benchmark-profile.ts' }, outDir: 'lib', clean: true,
   platform: 'node', target: 'es2024', format: 'esm', fixedExtension: false, dts: false,
-  deps: { neverBundle: [/^@deepseek-ai\/(?!dsh-token-meter\/src\/turn-usage\.ts$)/], alwaysBundle: [/^@deepseek-ai\/dsh-token-meter\/src\/turn-usage\.ts$/, /^@opentelemetry\//, /^zod(?:\/|$)/] },
+  deps: { neverBundle: [/^@deepseek-ai\/(?!(?:dsh-token-meter\/src\/turn-usage\.ts|dsh-session\/src\/surface\.ts)$)/], alwaysBundle: [/^@deepseek-ai\/(?:dsh-token-meter\/src\/turn-usage\.ts|dsh-session\/src\/surface\.ts)$/, /^@opentelemetry\//, /^zod(?:\/|$)/] },
 })
 await mkdir(new URL('./lib/', import.meta.url), { recursive: true })
 await writeFile(new URL('./lib/overlay.yml', import.meta.url),
@@ -15,6 +15,7 @@ const base = await readFile(new URL('../../../tsconfig.base.json', import.meta.u
 const ts = await import('typescript')
 const parsed = ts.parseConfigFileTextToJson('tsconfig.base.json', base).config
 const paths = Object.fromEntries(Object.entries(parsed.compilerOptions.paths).map(([name, values]) => [name, values.map(value => `../../../${value}`)]))
+paths['@deepseek-ai/dsh-session/src/surface.ts'] = ['../../../packages/core/session/src/surface.ts']
 paths['@deepseek-ai/dsh-token-meter/src/turn-usage.ts'] = ['../../../packages/llm/token-meter/src/turn-usage.ts']
 await writeFile(new URL('./lib/tsconfig.paths.json', import.meta.url), JSON.stringify({ compilerOptions: { paths: Object.fromEntries(Object.entries(paths).map(([name, values]) => [name, values.map(value => `../${value}`)])) } }, null, 2) + '\n')
 

@@ -1,0 +1,22 @@
+- id: session-telemetry-otel
+  disabled: true
+- id: headless-startup
+  disabled: true
+- id: headless-runner
+  disabled: true
+- id: agent-default-model
+  config:
+    provider: cli-mock
+    model: cli-mock
+- id: agent-loop
+  config:
+    agents: []
+- id: session-persistence-jsonl
+  config:
+    root: './.sessions'
+    compression: none
+- insert:
+    - id: cli-mock-llm
+      name: '../../../../../packages/test-support/loader-smoke/tests/fixtures/cli-mock-llm.ts'
+    - id: gh-lifecycle
+      name: '../../lib/lifecycle-profile.js'

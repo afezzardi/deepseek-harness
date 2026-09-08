@@ -79,3 +79,29 @@ it.skipIf(!endpoint)('ingests native GenAI spans, deduplicates replay, and links
   expect(evaluated.result.score).toBe(1)
   if (process.env.GH_GENAI_EVIDENCE) await writeFile(process.env.GH_GENAI_EVIDENCE, JSON.stringify({ project, exported, stored: spans.length, models: models.length, tools: spans.filter(span => span.span_kind === 'TOOL').length, spans, evaluated }, null, 2) + '\n')
 }, 30_000)
+
+it.skipIf(!endpoint)('stores independent native sessions for the same canonical sources in live and replay projects', async () => {
+  const projects = [`gh-v3-live-${randomUUID()}`, `gh-v3-replay-${randomUUID()}`]
+  const evidence = []
+  for (const [index, project] of projects.entries()) {
+    const settings = resolveConfig({ endpoint: process.env.GH_GENAI_OTLP_ENDPOINT ?? `${endpoint}/v1/traces`, project, content: 'rich-redacted' })
+    const stats = diagnostics(), ids = new SourceIds(), provider = createProvider(settings, stats, ids)
+    const mapper = new TraceMapper(provider.getTracer('gh-v3-sessions'), ids, settings, new ContentPolicy(settings, {}), stats, index ? 'replay' : 'live')
+    try {
+      for (const id of ['canonical-a', 'canonical-b']) await replaySnapshot(fixture(id), mapper, settings, () => provider.forceFlush())
+    } finally { mapper.shutdown(); await provider.shutdown() }
+    let sessions: { session_id: string; traces: { trace_id: string }[] }[] = []
+    const until = Date.now() + 15_000
+    while (Date.now() < until) {
+      const response = await fetch(`${endpoint}/v1/projects/${project}/sessions`)
+      if (response.ok) sessions = ((await response.json()) as { data: typeof sessions }).data
+      if (sessions.length === 2) break
+      await delay(50)
+    }
+    expect(sessions).toHaveLength(2)
+    evidence.push({ project, sessions })
+  }
+  expect(new Set(evidence.flatMap(e => e.sessions.map(s => s.session_id))).size).toBe(4)
+  expect(new Set(evidence.flatMap(e => e.sessions.flatMap(s => s.traces.map(t => t.trace_id)))).size).toBe(4)
+  if (process.env.GH_GENAI_EVIDENCE) await writeFile(`${process.env.GH_GENAI_EVIDENCE}.sessions.json`, JSON.stringify(evidence, null, 2) + '\n')
+}, 40_000)

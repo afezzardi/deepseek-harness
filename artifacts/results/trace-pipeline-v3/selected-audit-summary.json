@@ -1,0 +1,116 @@
+{
+  "version": 2,
+  "sessions": 14,
+  "graded": 3,
+  "failures": 3,
+  "instances": 0,
+  "families": 0,
+  "candidates": 0,
+  "eligibleTargets": 0,
+  "conflicts": [],
+  "rejected": [
+    {
+      "session": "13048e73-8c87-42cc-82ae-ac2851ef24d2",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "36bdc7fe-9077-4cf3-b289-2e03135834e5",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "46fca351-e7b0-4a69-b58a-57704fcf5e0b",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "49ff9e66-668a-4226-9eba-020cdfb48414",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "53eae750-4e53-4f37-a36c-1a046227f6b9",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "62864d74-8494-44b7-a638-eb70d9b662a1",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "99831ef1-57ef-4f4f-9d84-20962ab9a30c",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "ad308a9f-830d-44a7-85d8-cc6b3c2167ed",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "b31afe05-b32e-4b78-9606-11dc4ba7f4d7",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "c598a970-c3bb-4c34-9488-2b773b1095ab",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "ec8b15f3-e14f-45ce-a130-82c19d226c3a",
+      "reason": "Error: Missing independent unambiguous task grade"
+    },
+    {
+      "session": "session-5661c5d8-a8e9-4c48-921b-58a0fa4518b3",
+      "reason": "Error: Privacy review missing or stale"
+    },
+    {
+      "session": "session-a01ce36f-e35f-4c5b-b963-cdecb095b740",
+      "reason": "Error: Privacy review missing or stale"
+    },
+    {
+      "session": "session-e4d7b2ab-d346-4d42-94b1-eb074a44776f",
+      "reason": "Error: Privacy review missing or stale"
+    }
+  ],
+  "telemetry": [
+    {
+      "session": "13048e73-8c87-42cc-82ae-ac2851ef24d2"
+    },
+    {
+      "session": "36bdc7fe-9077-4cf3-b289-2e03135834e5"
+    },
+    {
+      "session": "46fca351-e7b0-4a69-b58a-57704fcf5e0b"
+    },
+    {
+      "session": "49ff9e66-668a-4226-9eba-020cdfb48414"
+    },
+    {
+      "session": "53eae750-4e53-4f37-a36c-1a046227f6b9"
+    },
+    {
+      "session": "62864d74-8494-44b7-a638-eb70d9b662a1"
+    },
+    {
+      "session": "99831ef1-57ef-4f4f-9d84-20962ab9a30c"
+    },
+    {
+      "session": "ad308a9f-830d-44a7-85d8-cc6b3c2167ed"
+    },
+    {
+      "session": "b31afe05-b32e-4b78-9606-11dc4ba7f4d7"
+    },
+    {
+      "session": "c598a970-c3bb-4c34-9488-2b773b1095ab"
+    },
+    {
+      "session": "ec8b15f3-e14f-45ce-a130-82c19d226c3a"
+    },
+    {
+      "session": "session-5661c5d8-a8e9-4c48-921b-58a0fa4518b3"
+    },
+    {
+      "session": "session-a01ce36f-e35f-4c5b-b963-cdecb095b740"
+    },
+    {
+      "session": "session-e4d7b2ab-d346-4d42-94b1-eb074a44776f"
+    }
+  ],
+  "exportRejections": [],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

@@ -8,8 +8,8 @@ import { replaySnapshot } from '../src/replay.ts'
 import { createProvider, diagnostics, SourceIds } from '../src/transport.ts'
 import { fixture } from './fixture.ts'
 
-function pipeline(origin: 'live' | 'replay' = 'replay') {
-  const settings = resolveConfig({ content: 'rich-redacted' })
+function pipeline(origin: 'live' | 'replay' = 'replay', project = 'gh-test') {
+  const settings = resolveConfig({ content: 'rich-redacted', project })
   const stats = diagnostics()
   const ids = new SourceIds()
   const exporter = new InMemorySpanExporter()
@@ -164,10 +164,42 @@ it('replays a child before its parent with deterministic recorded ownership', as
       const workflow = p.exporter.getFinishedSpans().find(span => span.attributes['gh.workflow.run_id'] === runId)!
       expect(root.parentSpanContext?.spanId).toBe(workflow.spanContext().spanId)
       expect(root.spanContext().traceId).toBe(workflow.spanContext().traceId)
+      expect(root.attributes['session.id']).toBe(workflow.attributes['session.id'])
+      expect(root.attributes['gh.session.canonical_id']).toBe('owned-child')
       return [root.spanContext().spanId, root.spanContext().traceId, root.parentSpanContext?.spanId]
     } finally { p.mapper.shutdown(); await p.provider.shutdown() }
   }
   expect(await collect(true)).toEqual(await collect(false))
+})
+
+it('namespaces trace, span and Phoenix session identities by project and origin', async () => {
+  const source = fixture('same-canonical-session')
+  const identities = []
+  for (const [origin, project] of [['live', 'v3-live'], ['replay', 'v3-live'], ['replay', 'v3-replay']] as const) {
+    const p = pipeline(origin, project)
+    try {
+      await replaySnapshot(source, p.mapper, p.settings, () => p.provider.forceFlush())
+      const span = p.exporter.getFinishedSpans().find(s => s.name === 'invoke_agent dsh')!
+      expect(span.attributes['gh.mapping.version']).toBe('3')
+      identities.push({ ...span.spanContext(), session: span.attributes['session.id'] })
+    } finally { p.mapper.shutdown(); await p.provider.shutdown() }
+  }
+  for (const key of ['traceId', 'spanId', 'session'] as const) expect(new Set(identities.map(i => i[key])).size).toBe(3)
+})
+
+it('indexes long histories once and bounds retained ownership sessions', async () => {
+  const p = pipeline(), source = fixture('long-index')
+  try {
+    const events = Array.from({ length: 20_000 }, (_, index) => ({ ...source.events[0]!, seq: index as typeof source.events[0]['seq'] }))
+    let accesses = 0
+    const observed = new Proxy(events, { get(target, key, receiver) { if (typeof key === 'string' && /^\d+$/.test(key)) accesses++; return Reflect.get(target, key, receiver) } })
+    p.mapper.indexOwnership(source.session, observed)
+    for (let i = 0; i < 1000; i++) p.mapper.indexOwnership(source.session, observed)
+    expect(accesses).toBeLessThan(22_000)
+    expect(p.mapper.ownershipOffset('long-index')).toBe(20_000)
+    for (let i = 1; i < p.settings.maxActiveSpans; i++) p.mapper.indexOwnership({ ...source.session, id: SessionId(`bounded-${i}`) }, [])
+    expect(() => p.mapper.indexOwnership({ ...source.session, id: SessionId('overflow') }, [])).toThrow('capacity')
+  } finally { p.mapper.shutdown(); await p.provider.shutdown() }
 })
 
 it('reports content truncation separately from stream completion and requested effort', async () => {

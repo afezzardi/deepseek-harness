@@ -1,0 +1,29 @@
+{
+  "backup": "artifacts/results/trace-pipeline-v3/.backup-final",
+  "sources": 169,
+  "files": 1282,
+  "restored": true,
+  "isolatedDatabase": "gh_restore_b7fc2f0efed64f4eaafd0234c1dbed4b",
+  "databaseEvidence": {
+    "dataset_evaluators": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "dataset_example_revisions": "69166c4ec404872515cd0fb5ffe32d39837f4b9153081fef10fdd677499c7c3e",
+    "dataset_examples": "11f906903d35b414bdd6986c47681d6cbb2bb48ddfe700008960380b248327d1",
+    "dataset_labels": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "dataset_splits": "1e6fffdc255a947677ef5c39b4c903c504655cea5978b1ca9f6beff3d9848d8c",
+    "dataset_splits_dataset_examples": "f566e9f9000702f539e5dd1a6b35353aa72f7da698c5a0090a66ca9986266045",
+    "dataset_versions": "ecf8d4f1c1608ce95313b465a9d7a3280d738cdec5c2456f91560d22204d86f5",
+    "datasets": "df9c7d260b2022ab19ee5b9645390a8fc6387c31ccf9f518ed323dccbe75347b",
+    "experiment_dataset_evaluators": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_eval_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_jobs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_prompt_tasks": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_run_annotations": "871d1bf6097e0c10e4b68bd3b7e1192a0879d7e1d7ccfa9b41f9abfe6110a3ec",
+    "experiment_runs": "2d42ce8d1484242c76cbcb6756d3afae086d26fd5f70518936067f046ed9d81c",
+    "experiment_tags": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_task_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiments": "0cd72a36286a0a934c59d29316f80719bfa5795aef93334a23dea238e08b68a1"
+  },
+  "sourceInventoriesVerified": 169,
+  "dumpHash": "5e47e8413515640da773262106d43cf2851e8476b80dae3d20ad880342c2e4dc"
+}

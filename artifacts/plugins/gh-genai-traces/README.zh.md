@@ -8,7 +8,7 @@ kind: "package-reference"
 
 ## 摘要
 
-Gruppo Happy 可以在 Phoenix 中检查模型请求、工具调用、提供者用量和会话结果。显式 profile 覆盖层启用实时采集；历史回放通过上游 session-query 读取数据，并导出到独立项目。丰富内容经过脱敏且有大小限制；省略内容时仍保留源标识符。规范会话仍是重建数据的依据。
+Gruppo Happy 可以在 Phoenix 中检查模型请求、工具调用、提供者用量和会话结果。显式 profile 覆盖层启用实时采集；历史回放通过共享的上游实时会话和持久化 API 读取数据，并导出到独立项目。丰富内容经过脱敏且有大小限制；省略内容时仍保留源标识符。规范会话仍是重建数据的依据。
 
 ## 目录
 
@@ -36,7 +36,7 @@ pnpm dsh --profile headless --patch artifacts/plugins/gh-genai-traces/lib/overla
 
 栈在 `http://127.0.0.1:6006` 暴露 Phoenix，在 `http://127.0.0.1:4318/v1/traces` 暴露 OTLP/HTTP。生成的覆盖层启用 `rich-redacted` 采集并替换默认遥测后端。不使用覆盖层时，此插件不会加载。Web 可以将同一个覆盖层与现有 Typert 和推理强度滑块覆盖层一起使用。
 
-Compose 服务使用命名卷，默认保留轨迹 30 天。`PHOENIX_PORT`、`OTLP_HTTP_PORT` 和 `PHOENIX_RETENTION_DAYS` 配置此栈。`stack/setup.mjs` 仅创建一次私有且被 Git 忽略的数据库凭据；`docker compose ... down` 保留卷。栈禁用 Phoenix 分析遥测及外部 UI 资源。
+Compose 服务使用命名卷，临时轨迹默认保留 30 天。显式实验保护操作为保留证据的 v3 项目分配不会自动过期的原生策略。`PHOENIX_PORT`、`OTLP_HTTP_PORT` 和 `PHOENIX_RETENTION_DAYS` 配置此栈。`stack/setup.mjs` 仅创建一次私有且被 Git 忽略的数据库凭据；`docker compose ... down` 保留卷。栈禁用 Phoenix 分析遥测及外部 UI 资源。
 
 设置 `GH_GENAI_OTLP_ENDPOINT` 可更改完整轨迹端点，设置 `GH_GENAI_PROJECT` 可更改项目。在启动 profile 前，将 `GH_GENAI_REPLAY_SESSIONS` 设为逗号分隔的会话 ID，即可通过配置的 DSH 存储回放它们。回放导出到 `<project>-replay`，不会启动或重写记录的会话。源码变更后重新构建；重启 profile 以应用其覆盖层。
 
@@ -81,7 +81,7 @@ GH_PHOENIX_URL=http://127.0.0.1:6006 GH_GENAI_OTLP_ENDPOINT=http://127.0.0.1:431
 
 `SessionTelemetryCoordinator` 提供独立的实时记录；后端补充其规范封装引用并将映射工作入队。`llm/stream` waterfall 提供请求时的 harness 输入及惰性流计时。每个轨迹组织一轮执行，模型调用与工具位于 step span 下；记录的工作流子会话 ID 在同一轨迹中建立父 span 上下文。实时子记录在有界缓冲区中等待成员关系发布；回放通过上游服务解析祖先关系。工作流和 step span 使用 Phoenix 的 `CHAIN` 类型。辅助模型调用带有独立用途。插件不安装进程全局 tracer provider 或异步上下文管理器。
 
-回放使用 session-query、上游 surface/header 折叠及上游紧凑流读取器。它在每次记录的 assistant 结算前重建模型输入，并将模型时长标记为首个记录块至最后记录块的间隔。它不导出重建的派发延迟。当记录完整时，上游 token-meter 轮次辅助函数提供精确轮次总量；无法证明输入总量时，每次调用的 token 属性会省略该总量。工具时长覆盖记录的调用至结果间隔，包括期间等待。
+回放使用共享快照读取器、上游增量 surface 重建和 header 折叠及上游紧凑流读取器。它在每次记录的 assistant 结算前重建模型输入，并将模型时长标记为首个记录块至最后记录块的间隔。它不导出重建的派发延迟。当记录完整时，上游 token-meter 轮次辅助函数提供精确轮次总量；无法证明输入总量时，每次调用的 token 属性会省略该总量。工具时长覆盖记录的调用至结果间隔，包括期间等待。
 
 SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误、span 接纳与丢弃、成功导出回调、失败回调及待处理 span。成功回调表示接收端确认，不证明 Phoenix 已持久化存储。Collector 的持久化队列保护已接纳的下游批次，无法恢复丢失的 SDK 队列。基于源生成的稳定回放 ID 允许在已测试的 Phoenix 版本中重复导入而不产生重复 span。
 
@@ -106,12 +106,12 @@ SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误�
 <a id="known-limitations-and-deferred-work"></a>
 ## 已知限制与延后工作
 
-[整理库](src/curation.ts) 通过 `./curation` 导出，验证最终回答 SFT 候选、分组划分和精确请求的托管 DPO 对。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。本地 schema 验证不代表渲染器兼容或训练后模型改进。
+[整理库](src/curation.ts) 通过 `./curation` 生成版本 2 的后端无关候选，包含明确评分、审核哈希、审批证据及选定损失目标。Phoenix 管理固定版本的划分。`./fireworks` 保留托管 SFT/DPO 序列化；`./reward` 提供文件系统观察。仅监督最终回答是明确的格式目标，未评分的目标推理被省略；这些数据尚未获准用于生产智能体训练。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。本地 schema 验证不代表渲染器兼容或训练后模型改进。
 
 - 请求采集表示适配器序列化前的 harness 输入；不采集提供者 HTTP 请求体、tokenizer ID、隐藏推理及附件原始字节。
 - 回放无法恢复会话中没有记录的实时计时或辅助请求细节。冷读取可能包含上游生成的中断关闭记录，并在轮次级别明确标识。
 - 队列丢失、进程崩溃、延迟挂载及热重载可能导致轨迹不完整。为获取完整实时证据，在新轮次前重启采集；使用回放查看完整的已存储轮次。
-- 跨进程子轨迹要求加载插件并能读取祖先成员记录。未解析或独立子会话保留会话关系，不伪造嵌套。工作流记录没有调用工具的 ID，因此工作流位于 step 下。映射版本 2 使用独立的确定性 ID 命名空间。
+- 跨进程子轨迹要求加载插件并能读取祖先成员记录。未解析或独立子会话保留会话关系，不伪造嵌套。工作流记录没有调用工具的 ID，因此工作流位于 step 下。映射版本 3 按项目、来源和规范源身份隔离轨迹、span 与 Phoenix 会话 ID；工作流子会话共享所属根会话的展示身份。
 - 自动语义召回、ATIF 导出、后端渲染器验证、精确 token RL、定价策略及通用评估器均为延后工作。Phoenix 自身的定价估算不代表经过验证的推理成本。
 
 ### 开发备注

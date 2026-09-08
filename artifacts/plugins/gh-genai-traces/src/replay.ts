@@ -1,6 +1,7 @@
 /** Recorded-session replay uses upstream validation, surface folding, and stream readers. */
 import { BlockAssembler, expandAssistantStream, type GenerateOptions } from '@deepseek-ai/dsh-llm'
-import { deriveEventMessage, foldRequestHeader, foldSurface, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { deriveEventMessage, foldRequestHeader, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { SurfaceManager } from '@deepseek-ai/dsh-session/src/surface.ts'
 import type { SessionLogSnapshot } from '@deepseek-ai/dsh-session-query'
 import type { Settings } from './config.ts'
 import type { TraceMapper } from './mapper.ts'
@@ -14,6 +15,7 @@ import type { TraceMapper } from './mapper.ts'
  */
 export async function replaySnapshot(snapshot: SessionLogSnapshot, mapper: TraceMapper, settings: Settings, flush: () => Promise<void>): Promise<void> {
   const prefix: SessionEvent[] = []
+  const surface = new SurfaceManager(prefix)
   let header: ReturnType<typeof foldRequestHeader>
   for (const event of snapshot.events) {
     header = foldRequestHeader([event], header)
@@ -21,7 +23,7 @@ export async function replaySnapshot(snapshot: SessionLogSnapshot, mapper: Trace
       const stream = expandAssistantStream(event.data.stream)
       const first = stream[0]
       if (header && first) {
-        const messages = foldSurface(prefix).nodes.flatMap(seq => {
+        const messages = surface.nodes.flatMap(seq => {
           const source = prefix[seq]
           const message = source ? deriveEventMessage(source) : null
           return message ? [message] : []

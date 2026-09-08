@@ -3,6 +3,10 @@ import { readFile, realpath, mkdir, lstat, symlink } from 'node:fs/promises'
 import { dirname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 const peers = {
+  '@deepseek-ai/dsh-user-approval': 'packages/interaction/user-approval',
+  '@deepseek-ai/dsh-agent': 'packages/core/agent',
+  '@deepseek-ai/dsh-brand': 'packages/util/brand',
+  '@deepseek-ai/dsh-session-persistence': 'packages/session/session-persistence',
   '@deepseek-ai/dsh-loader-smoke': 'packages/test-support/loader-smoke',
   '@deepseek-ai/cordis': 'vendor/cordis',
   '@deepseek-ai/schemastery': 'vendor/schemastery',

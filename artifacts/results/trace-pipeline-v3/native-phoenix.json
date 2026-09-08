@@ -1,0 +1,535 @@
+{
+  "project": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+  "exported": 6,
+  "stored": 6,
+  "models": 2,
+  "tools": 1,
+  "spans": [
+    {
+      "id": "U3Bhbjo2MDc0",
+      "name": "invoke_agent dsh",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "3491fe03db55af64"
+      },
+      "span_kind": "AGENT",
+      "parent_id": null,
+      "start_time": "2026-09-08T17:44:47.362852+00:00",
+      "end_time": "2026-09-08T17:44:47.472852+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.turn": 1,
+        "gh.event.seq": 0,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/turn/1",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.incomplete": false,
+        "gh.mapping.version": "3",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.session.format_version": 2,
+        "gh.ownership.status": "root",
+        "gh.turn.usage.total_tokens": 45,
+        "gh.turn.usage.output_tokens": 11,
+        "gh.turn.usage.uncached_input_tokens": 30,
+        "gh.turn.outcome": "completed",
+        "gen_ai.agent.name": "dsh",
+        "gen_ai.operation.name": "invoke_agent",
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": [
+        {
+          "name": "turn/start",
+          "timestamp": "2026-09-08T17:44:47.362852+00:00",
+          "attributes": {
+            "gh.event.seq": 0,
+            "gh.event.data": "{\"turn\":1}",
+            "gh.content.gh.event.data.bytes": 10,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        },
+        {
+          "name": "user/message",
+          "timestamp": "2026-09-08T17:44:47.372852+00:00",
+          "attributes": {
+            "gh.event.seq": 1,
+            "gh.event.data": "{\"content\":[{\"type\":\"text\",\"text\":\"Read fixture.txt then report its value.\"}],\"source\":{\"kind\":\"user\"},\"role\":\"user\",\"id\":\"e1be9f08-74f1-422d-89c2-0bcb3e559aa9\"}",
+            "gh.event.surface_op": "\"append\"",
+            "gh.content.gh.event.data.bytes": 161,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.surface_op.bytes": 8,
+            "gh.content.gh.event.surface_op.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false,
+            "gh.content.gh.event.surface_op.redaction_changed": false
+          }
+        },
+        {
+          "name": "turn/end",
+          "timestamp": "2026-09-08T17:44:47.472852+00:00",
+          "attributes": {
+            "gh.event.seq": 11,
+            "gh.event.data": "{\"turn\":1,\"reason\":{\"kind\":\"completed\"}}",
+            "gh.content.gh.event.data.bytes": 40,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "U3Bhbjo2MDcz",
+      "name": "dsh step",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "caa789ceaf1042ed"
+      },
+      "span_kind": "CHAIN",
+      "parent_id": "3491fe03db55af64",
+      "start_time": "2026-09-08T17:44:47.443548+00:00",
+      "end_time": "2026-09-08T17:44:47.463548+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.step": 2,
+        "gh.event.seq": 8,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/turn/1/step/2",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.incomplete": false,
+        "gh.mapping.version": "3",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.session.format_version": 2,
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": [
+        {
+          "name": "step/start",
+          "timestamp": "2026-09-08T17:44:47.443548+00:00",
+          "attributes": {
+            "gh.event.seq": 8,
+            "gh.event.data": "{\"turn\":1,\"step\":2}",
+            "gh.content.gh.event.data.bytes": 19,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        },
+        {
+          "name": "assistant/message",
+          "timestamp": "2026-09-08T17:44:47.453548+00:00",
+          "attributes": {
+            "gh.event.seq": 9,
+            "gh.event.data": "{\"turn\":1,\"step\":2,\"message\":{\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"The value is 42.\"}],\"source\":{\"kind\":\"model\",\"provider\":\"fixture\",\"model\":\"fixture\"},\"id\":\"51bbf2b5-0830-4f7f-9ab9-a577e997b1c4\"},\"stream\":[{\"type\":\"chunk\",\"time\":1090,\"chunk\":{\"type\":\"block-end\",\"index\":0,\"block\":{\"type\":\"text\",\"text\":\"The value is 42.\"}}},{\"type\":\"chunk\",\"time\":1091,\"chunk\":{\"type\":\"usage\",\"usage\":{\"inputTokens\":20,\"outputTokens\":6,\"cacheReadTokens\":2,\"cacheWriteTokens\":0}}},{\"type\":\"chunk\",\"time\":1092,\"chunk\":{\"type\":\"finish\",\"reason\":{\"kind\":\"stop\"}}}],\"usage\":{\"inputTokens\":20,\"outputTokens\":6,\"cacheReadTokens\":2,\"cacheWriteTokens\":0}}",
+            "gh.event.surface_op": "\"append\"",
+            "gh.content.gh.event.data.bytes": 646,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.surface_op.bytes": 8,
+            "gh.content.gh.event.surface_op.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false,
+            "gh.content.gh.event.surface_op.redaction_changed": false
+          }
+        },
+        {
+          "name": "step/end",
+          "timestamp": "2026-09-08T17:44:47.463548+00:00",
+          "attributes": {
+            "gh.event.seq": 10,
+            "gh.event.data": "{\"turn\":1,\"step\":2}",
+            "gh.content.gh.event.data.bytes": 19,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "U3Bhbjo2MDcy",
+      "name": "chat fixture",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "fd67b484f92b89a6"
+      },
+      "span_kind": "LLM",
+      "parent_id": "caa789ceaf1042ed",
+      "start_time": "2026-09-08T17:44:47.452967+00:00",
+      "end_time": "2026-09-08T17:44:47.454967+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.call.attempt": 1,
+        "gh.call.purpose": "conversation",
+        "gh.task.outcome": "ungraded",
+        "gh.event.seq": 9,
+        "gh.usage.uncached_input_tokens": 20,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/model-event/9",
+        "gh.stream.truncated": false,
+        "gh.timing.start_basis": "first-recorded-chunk",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.eligible": true,
+        "gh.capture.incomplete": false,
+        "gh.capture.rejection_reasons": [],
+        "gh.content.gh.request.messages.bytes": 620,
+        "gh.content.gh.request.messages.status": "complete",
+        "gh.content.gh.request.messages.redaction_changed": false,
+        "gh.content.gen_ai.tool.definitions.bytes": 136,
+        "gh.content.gen_ai.tool.definitions.status": "complete",
+        "gh.content.gen_ai.tool.definitions.redaction_changed": false,
+        "gh.content.gen_ai.input.messages.bytes": 336,
+        "gh.content.gen_ai.input.messages.status": "complete",
+        "gh.content.gen_ai.input.messages.redaction_changed": false,
+        "gh.content.gen_ai.output.messages.bytes": 100,
+        "gh.content.gen_ai.output.messages.status": "complete",
+        "gh.content.gen_ai.output.messages.redaction_changed": false,
+        "gh.content.gen_ai.system_instructions.bytes": 48,
+        "gh.content.gen_ai.system_instructions.status": "complete",
+        "gh.content.gen_ai.system_instructions.redaction_changed": false,
+        "gh.mapping.version": "3",
+        "gh.privacy.disposition": "credential-filtered-not-pii-reviewed",
+        "gh.request.sha256": "d80be05f80e01ca11e61a1e1a9e86e62c2543089dc1438595a5e8d1408df7bb2",
+        "gh.request.messages": "[{\"content\":[{\"type\":\"text\",\"text\":\"Read fixture.txt then report its value.\"}],\"source\":{\"kind\":\"user\"},\"role\":\"user\",\"id\":\"e1be9f08-74f1-422d-89c2-0bcb3e559aa9\"},{\"role\":\"assistant\",\"content\":[{\"type\":\"tool-call\",\"id\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}],\"source\":{\"kind\":\"model\",\"provider\":\"fixture\",\"model\":\"fixture\"},\"id\":\"c050d9d8-f7fa-4ec7-b1b2-7eeaeb4c4b3d\"},{\"source\":{\"kind\":\"tool\",\"callId\":\"call-read\"},\"content\":[{\"type\":\"tool-result\",\"toolCallId\":\"call-read\",\"content\":[{\"type\":\"text\",\"text\":\"42\"}],\"isError\":false}],\"role\":\"user\",\"id\":\"b6515cc5-c618-40c6-a19f-1ded0cb0b7ed\"}]",
+        "gh.request.reasoning.observation": "unobserved",
+        "gh.request.tools_sha256": "6b20f74566c3661b86376222cc3dca79625cb0b37a93d578824060ba42c80f55",
+        "gh.request.config_sha256": "4edd476ac73fea6fa2cefa061ef94371bb3903767f2378f275ebf720e9f557e6",
+        "gh.request.representation": "reconstructed-harness",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.provenance.renderer": "unobserved",
+        "gh.provenance.tokenizer": "unobserved",
+        "gh.provenance.checkpoint": "unobserved",
+        "llm.tools.0.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"read\", \"description\": \"Read one file\", \"parameters\": {\"type\": \"object\", \"properties\": {\"path\": {\"type\": \"string\"}}}}}",
+        "llm.system": "fixture",
+        "llm.model_name": "fixture",
+        "llm.token_count.total": 28,
+        "llm.token_count.prompt": 22,
+        "llm.token_count.completion": 6,
+        "llm.token_count.prompt_details.cache_read": 2,
+        "llm.finish_reason": "stop",
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "Use the read tool.",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": "Read fixture.txt then report its value.",
+        "llm.input_messages.2.message.role": "assistant",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.id": "call-read",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.name": "read",
+        "llm.input_messages.2.message.tool_calls.0.tool_call.function.arguments": "{\"path\":\"fixture.txt\"}",
+        "llm.input_messages.3.message.role": "tool",
+        "llm.input_messages.3.message.content": "[{\"type\": \"text\", \"content\": \"42\"}]",
+        "llm.input_messages.3.message.tool_call_id": "call-read",
+        "llm.output_messages.0.message.role": "assistant",
+        "llm.output_messages.0.message.content": "The value is 42.",
+        "llm.output_messages.0.message.finish_reason": "stop",
+        "llm.invocation_parameters": "{\"stream\": true}",
+        "gen_ai.tool.definitions": "[{\"type\":\"function\",\"name\":\"read\",\"description\":\"Read one file\",\"parameters\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"}}}}]",
+        "gen_ai.input.messages": "[{\"role\":\"user\",\"parts\":[{\"type\":\"text\",\"content\":\"Read fixture.txt then report its value.\"}]},{\"role\":\"assistant\",\"parts\":[{\"type\":\"tool_call\",\"id\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}]},{\"role\":\"tool\",\"parts\":[{\"type\":\"tool_call_response\",\"id\":\"call-read\",\"response\":[{\"type\":\"text\",\"content\":\"42\"}]}]}]",
+        "gen_ai.usage.cache_read.input_tokens": 2,
+        "gen_ai.usage.cache_write.input_tokens": 0,
+        "gen_ai.usage.input_tokens": 22,
+        "gen_ai.usage.output_tokens": 6,
+        "gen_ai.output.messages": "[{\"role\":\"assistant\",\"parts\":[{\"type\":\"text\",\"content\":\"The value is 42.\"}],\"finish_reason\":\"stop\"}]",
+        "gen_ai.request.model": "fixture",
+        "gen_ai.request.stream": true,
+        "gen_ai.provider.name": "fixture",
+        "gen_ai.response.finish_reasons": [
+          "stop"
+        ],
+        "gen_ai.operation.name": "chat",
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gen_ai.system_instructions": "[{\"type\":\"text\",\"content\":\"Use the read tool.\"}]",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": []
+    },
+    {
+      "id": "U3Bhbjo2MDcx",
+      "name": "dsh step",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "67d5ed231452babf"
+      },
+      "span_kind": "CHAIN",
+      "parent_id": "3491fe03db55af64",
+      "start_time": "2026-09-08T17:44:47.382683+00:00",
+      "end_time": "2026-09-08T17:44:47.432683+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.step": 1,
+        "gh.event.seq": 2,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/turn/1/step/1",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.incomplete": false,
+        "gh.mapping.version": "3",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.session.format_version": 2,
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": [
+        {
+          "name": "step/start",
+          "timestamp": "2026-09-08T17:44:47.382683+00:00",
+          "attributes": {
+            "gh.event.seq": 2,
+            "gh.event.data": "{\"turn\":1,\"step\":1}",
+            "gh.content.gh.event.data.bytes": 19,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        },
+        {
+          "name": "request/header",
+          "timestamp": "2026-09-08T17:44:47.392683+00:00",
+          "attributes": {
+            "gh.event.seq": 3,
+            "gh.event.data": "{\"reason\":\"initial\",\"header\":{\"config\":{\"provider\":\"fixture\",\"model\":\"fixture\"},\"system\":\"Use the read tool.\",\"tools\":[{\"name\":\"read\",\"description\":\"Read one file\",\"parameters\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"}}}}]}}",
+            "gh.content.gh.event.data.bytes": 238,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        },
+        {
+          "name": "assistant/message",
+          "timestamp": "2026-09-08T17:44:47.402683+00:00",
+          "attributes": {
+            "gh.event.seq": 4,
+            "gh.event.data": "{\"turn\":1,\"step\":1,\"message\":{\"role\":\"assistant\",\"content\":[{\"type\":\"tool-call\",\"id\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}],\"source\":{\"kind\":\"model\",\"provider\":\"fixture\",\"model\":\"fixture\"},\"id\":\"c050d9d8-f7fa-4ec7-b1b2-7eeaeb4c4b3d\"},\"stream\":[{\"type\":\"chunk\",\"time\":1040,\"chunk\":{\"type\":\"block-end\",\"index\":0,\"block\":{\"type\":\"tool-call\",\"id\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}}},{\"type\":\"chunk\",\"time\":1041,\"chunk\":{\"type\":\"usage\",\"usage\":{\"inputTokens\":10,\"outputTokens\":5,\"cacheReadTokens\":2,\"cacheWriteTokens\":0}}},{\"type\":\"chunk\",\"time\":1042,\"chunk\":{\"type\":\"finish\",\"reason\":{\"kind\":\"tool-calls\"}}}],\"usage\":{\"inputTokens\":10,\"outputTokens\":5,\"cacheReadTokens\":2,\"cacheWriteTokens\":0}}",
+            "gh.event.surface_op": "\"append\"",
+            "gh.content.gh.event.data.bytes": 754,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.surface_op.bytes": 8,
+            "gh.content.gh.event.surface_op.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false,
+            "gh.content.gh.event.surface_op.redaction_changed": false
+          }
+        },
+        {
+          "name": "tool/call",
+          "timestamp": "2026-09-08T17:44:47.412683+00:00",
+          "attributes": {
+            "gh.event.seq": 5,
+            "gh.event.data": "{\"turn\":1,\"step\":1,\"callId\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}",
+            "gh.content.gh.event.data.bytes": 95,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        },
+        {
+          "name": "tool/result",
+          "timestamp": "2026-09-08T17:44:47.422683+00:00",
+          "attributes": {
+            "gh.event.seq": 6,
+            "gh.event.data": "{\"turn\":1,\"step\":1,\"message\":{\"source\":{\"kind\":\"tool\",\"callId\":\"call-read\"},\"content\":[{\"type\":\"tool-result\",\"toolCallId\":\"call-read\",\"content\":[{\"type\":\"text\",\"text\":\"42\"}],\"isError\":false}],\"role\":\"user\",\"id\":\"b6515cc5-c618-40c6-a19f-1ded0cb0b7ed\"}}",
+            "gh.event.surface_op": "\"append\"",
+            "gh.content.gh.event.data.bytes": 251,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.surface_op.bytes": 8,
+            "gh.content.gh.event.surface_op.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false,
+            "gh.content.gh.event.surface_op.redaction_changed": false
+          }
+        },
+        {
+          "name": "step/end",
+          "timestamp": "2026-09-08T17:44:47.432683+00:00",
+          "attributes": {
+            "gh.event.seq": 7,
+            "gh.event.data": "{\"turn\":1,\"step\":1}",
+            "gh.content.gh.event.data.bytes": 19,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "U3Bhbjo2MDcw",
+      "name": "execute_tool read",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "fa14154d0208b670"
+      },
+      "span_kind": "TOOL",
+      "parent_id": "67d5ed231452babf",
+      "start_time": "2026-09-08T17:44:47.413020+00:00",
+      "end_time": "2026-09-08T17:44:47.423020+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.event.seq": 5,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/event/5",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.incomplete": false,
+        "gh.content.gen_ai.tool.call.result.bytes": 29,
+        "gh.content.gen_ai.tool.call.result.status": "complete",
+        "gh.content.gen_ai.tool.call.result.redaction_changed": false,
+        "gh.content.gen_ai.tool.call.arguments.bytes": 28,
+        "gh.content.gen_ai.tool.call.arguments.status": "complete",
+        "gh.content.gen_ai.tool.call.arguments.redaction_changed": false,
+        "gh.mapping.version": "3",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.session.format_version": 2,
+        "tool.id": "call-read",
+        "tool.name": "read",
+        "tool.parameters": "{\"path\":\"fixture.txt\"}",
+        "gen_ai.tool.call.id": "call-read",
+        "gen_ai.tool.call.result": "[{\"type\":\"text\",\"text\":\"42\"}]",
+        "gen_ai.tool.call.arguments": "\"{\\\"path\\\":\\\"fixture.txt\\\"}\"",
+        "gen_ai.tool.name": "read",
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "output.value": "[{\"type\":\"text\",\"text\":\"42\"}]",
+        "output.mime_type": "application/json",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": [
+        {
+          "name": "tool/result",
+          "timestamp": "2026-09-08T17:44:47.423020+00:00",
+          "attributes": {
+            "gh.event.seq": 6,
+            "gh.event.data": "{\"turn\":1,\"step\":1,\"message\":{\"source\":{\"kind\":\"tool\",\"callId\":\"call-read\"},\"content\":[{\"type\":\"tool-result\",\"toolCallId\":\"call-read\",\"content\":[{\"type\":\"text\",\"text\":\"42\"}],\"isError\":false}],\"role\":\"user\",\"id\":\"b6515cc5-c618-40c6-a19f-1ded0cb0b7ed\"}}",
+            "gh.event.surface_op": "\"append\"",
+            "gh.content.gh.event.data.bytes": 251,
+            "gh.content.gh.event.data.status": "complete",
+            "gh.content.gh.event.surface_op.bytes": 8,
+            "gh.content.gh.event.surface_op.status": "complete",
+            "gh.content.gh.event.data.redaction_changed": false,
+            "gh.content.gh.event.surface_op.redaction_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "U3Bhbjo2MDY5",
+      "name": "chat fixture",
+      "context": {
+        "trace_id": "a0dea681493906b275ab24b8528970b8",
+        "span_id": "ec6d14e82785ec1d"
+      },
+      "span_kind": "LLM",
+      "parent_id": "67d5ed231452babf",
+      "start_time": "2026-09-08T17:44:47.403453+00:00",
+      "end_time": "2026-09-08T17:44:47.405453+00:00",
+      "status_code": "UNSET",
+      "status_message": "",
+      "attributes": {
+        "gh.call.attempt": 1,
+        "gh.call.purpose": "conversation",
+        "gh.task.outcome": "ungraded",
+        "gh.event.seq": 4,
+        "gh.usage.uncached_input_tokens": 10,
+        "gh.events.dropped": 0,
+        "gh.source.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237/model-event/4",
+        "gh.stream.truncated": false,
+        "gh.timing.start_basis": "first-recorded-chunk",
+        "gh.capture.origin": "replay",
+        "gh.capture.content": "rich-redacted",
+        "gh.capture.eligible": true,
+        "gh.capture.incomplete": false,
+        "gh.capture.rejection_reasons": [],
+        "gh.content.gh.request.messages.bytes": 163,
+        "gh.content.gh.request.messages.status": "complete",
+        "gh.content.gh.request.messages.redaction_changed": false,
+        "gh.content.gen_ai.tool.definitions.bytes": 136,
+        "gh.content.gen_ai.tool.definitions.status": "complete",
+        "gh.content.gen_ai.tool.definitions.redaction_changed": false,
+        "gh.content.gen_ai.input.messages.bytes": 95,
+        "gh.content.gen_ai.input.messages.status": "complete",
+        "gh.content.gen_ai.input.messages.redaction_changed": false,
+        "gh.content.gen_ai.output.messages.bytes": 154,
+        "gh.content.gen_ai.output.messages.status": "complete",
+        "gh.content.gen_ai.output.messages.redaction_changed": false,
+        "gh.content.gen_ai.system_instructions.bytes": 48,
+        "gh.content.gen_ai.system_instructions.status": "complete",
+        "gh.content.gen_ai.system_instructions.redaction_changed": false,
+        "gh.mapping.version": "3",
+        "gh.privacy.disposition": "credential-filtered-not-pii-reviewed",
+        "gh.request.sha256": "6836f5ba1572b33d2fab677975fa32838f4c3de2b39c7a291f67f5ba04a1b3de",
+        "gh.request.messages": "[{\"content\":[{\"type\":\"text\",\"text\":\"Read fixture.txt then report its value.\"}],\"source\":{\"kind\":\"user\"},\"role\":\"user\",\"id\":\"e1be9f08-74f1-422d-89c2-0bcb3e559aa9\"}]",
+        "gh.request.reasoning.observation": "unobserved",
+        "gh.request.tools_sha256": "6b20f74566c3661b86376222cc3dca79625cb0b37a93d578824060ba42c80f55",
+        "gh.request.config_sha256": "4edd476ac73fea6fa2cefa061ef94371bb3903767f2378f275ebf720e9f557e6",
+        "gh.request.representation": "reconstructed-harness",
+        "gh.session.canonical_id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gh.provenance.renderer": "unobserved",
+        "gh.provenance.tokenizer": "unobserved",
+        "gh.provenance.checkpoint": "unobserved",
+        "llm.tools.0.tool.json_schema": "{\"type\": \"function\", \"function\": {\"name\": \"read\", \"description\": \"Read one file\", \"parameters\": {\"type\": \"object\", \"properties\": {\"path\": {\"type\": \"string\"}}}}}",
+        "llm.system": "fixture",
+        "llm.model_name": "fixture",
+        "llm.token_count.total": 17,
+        "llm.token_count.prompt": 12,
+        "llm.token_count.completion": 5,
+        "llm.token_count.prompt_details.cache_read": 2,
+        "llm.finish_reason": "tool-calls",
+        "llm.input_messages.0.message.role": "system",
+        "llm.input_messages.0.message.content": "Use the read tool.",
+        "llm.input_messages.1.message.role": "user",
+        "llm.input_messages.1.message.content": "Read fixture.txt then report its value.",
+        "llm.output_messages.0.message.role": "assistant",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.id": "call-read",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.name": "read",
+        "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments": "{\"path\":\"fixture.txt\"}",
+        "llm.output_messages.0.message.finish_reason": "tool-calls",
+        "llm.invocation_parameters": "{\"stream\": true}",
+        "gen_ai.tool.definitions": "[{\"type\":\"function\",\"name\":\"read\",\"description\":\"Read one file\",\"parameters\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"}}}}]",
+        "gen_ai.input.messages": "[{\"role\":\"user\",\"parts\":[{\"type\":\"text\",\"content\":\"Read fixture.txt then report its value.\"}]}]",
+        "gen_ai.usage.cache_read.input_tokens": 2,
+        "gen_ai.usage.cache_write.input_tokens": 0,
+        "gen_ai.usage.input_tokens": 12,
+        "gen_ai.usage.output_tokens": 5,
+        "gen_ai.output.messages": "[{\"role\":\"assistant\",\"parts\":[{\"type\":\"tool_call\",\"id\":\"call-read\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"fixture.txt\\\"}\"}],\"finish_reason\":\"tool-calls\"}]",
+        "gen_ai.request.model": "fixture",
+        "gen_ai.request.stream": true,
+        "gen_ai.provider.name": "fixture",
+        "gen_ai.response.finish_reasons": [
+          "tool-calls"
+        ],
+        "gen_ai.operation.name": "chat",
+        "gen_ai.conversation.id": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+        "gen_ai.system_instructions": "[{\"type\":\"text\",\"content\":\"Use the read tool.\"}]",
+        "session.id": "91e336dcc5a1984e11ef5c565e9bd1df41650d4982d15e24c14ece3b9f4dba23"
+      },
+      "events": []
+    }
+  ],
+  "evaluated": {
+    "dataset": {
+      "dataset_id": "RGF0YXNldDo3",
+      "version_id": "RGF0YXNldFZlcnNpb246OA==",
+      "num_created_examples": 1
+    },
+    "experiment": {
+      "id": "RXhwZXJpbWVudDo2"
+    },
+    "run": {
+      "id": "RXhwZXJpbWVudFJ1bjoyNjg="
+    },
+    "annotations": {
+      "data": [
+        {
+          "id": "VHJhY2VBbm5vdGF0aW9uOjI4"
+        }
+      ]
+    },
+    "evaluation": {
+      "data": {
+        "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjY4"
+      }
+    },
+    "result": {
+      "score": 1,
+      "label": "pass",
+      "explanation": "Compare the recorded read observation with the fixture-owned expected value."
+    }
+  }
+}

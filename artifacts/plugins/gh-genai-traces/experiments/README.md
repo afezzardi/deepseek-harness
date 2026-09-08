@@ -1,51 +1,45 @@
-# Dataset experiments
+# Trace-to-dataset experiments
 
 English | [中文](README.zh.md)
 
-## Summary
+## Ownership and readiness
 
-The experiment scripts launch supported DSH profiles, preserve canonical sessions, and compare model answers with independently computed expected values. They produce local candidates for Fireworks managed text SFT and one-turn DPO. They do not upload data or establish renderer compatibility. [Measured results](../../../results/trace-curation-20260908/REPORT.md) include complex UAT and rejected candidates.
+Phoenix owns curated datasets, immutable published versions, native splits, annotations, and experiments. Canonical DSH sessions own reconstruction. Local snapshots, manifests, receipts, and backups are source evidence and resumable checkpoints. Historical version-1 datasets retain their original meaning. This cycle starts no training jobs.
 
-## Contents
+The [checkpoint report](../../../results/trace-pipeline-v3/REPORT.md) records measured results and pending work. The benchmark has 48 distinct instances across 12 families, equally divided between repository and business tasks. Family-level train/validation/test assignments are frozen before execution, with both domains in each split. Three repetitions require 144 rollouts; the VPN outage prevented their execution.
 
-- [Run and audit](#run-and-audit)
-- [Admission and provenance](#admission-and-provenance)
-- [Preference sampling](#preference-sampling)
-- [Reward environments](#reward-environments)
-- [Provider evidence](#provider-evidence)
+## Collection and auditing
 
-## Run and audit
+`benchmark.py <output>` creates deterministic task definitions and a Phoenix publication input. Task identity hashes the definition and fixtures, excluding temporary workspace paths. `phoenix_dataset.py publish <input> --name <dataset> --receipt <receipt>` publishes stable example identities and version metadata. Exact retries reconcile the same export identity. Changed exports containing existing example IDs require explicit reconciliation; automatic update/upsert is not implemented.
 
-Build the plugin before launching a campaign. `campaign.py <output-directory> <trial-count> <root-workers>` allocates fresh homes and fixture directories; repeated invocations allocate new attempt directories. It uses the preserved medium-effort discovery settings as its template and a local recording proxy at port 4107. This fixture template and route make the runner deployment-specific. Use a new output directory for each campaign; aggregate files describe the latest invocation, while per-attempt evidence is retained.
+`balanced_campaign.py <receipt> <output>` verifies a pinned task dataset and runs three repetitions through supported DSH profiles. It owns a recording proxy capped at four actual forwarded requests, including children, and explicitly sets medium reasoning. Each trial has a private workspace, initial inventory, declared synthetic-review evidence, and atomic result. The lifecycle profile flushes, disposes, and resumes one persisted session between two turns. Interrupted trials without a result receipt require recovery before reuse; do not overwrite their workspace.
 
-The runner supplies the full tracing config because Cordis config patches replace the entire object. New trials use the stable `gh-training-live` project and metadata for experiment, task family, trial, and split. The initial 240-trial campaign's incomplete config used metadata-only capture in `gh-genai-traces`; its canonical sessions remain available for rich replay.
+`prepare-audit.py <campaign> --receipt <receipt>` loads split assignments from a pinned Phoenix version. Use `--audit-only` for reconstruction and grading without promotion. The script identifies session directories and copies stored bytes when necessary; it never decodes generations. Launch its overlay through `pnpm dsh --profile headless` with `GH_AUDIT_MANIFEST` and an isolated `DSH_HOME`. The audit disables the ordinary task runner.
 
-`prepare-audit.py <campaign-directory>` prepares an audit manifest and overlay. It identifies sessions from storage directory names without decoding them. When trials use independent stores, it copies their bytes into an audit store, preserving every generation. `audit-profile.ts`, loaded as an overlay by `pnpm dsh --profile headless`, reads each session through upstream `sessionQuery`, writes detached snapshots, and invokes the tracing backend's replay method. The audit manifest selects the sessions; it never launches recorded agents. All children need explicit inclusion, and a child without its own independent grade is excluded from training candidates.
+The shared snapshot reader uses live-session or persistence APIs and upstream restore validation. It preserves inherited length and event identities and records in-memory interruption repairs without changing stored bytes. Each source/task/grader/configuration identity has an atomic checkpoint. Operational failures remain retryable; deterministic rejection remains durable. Telemetry and backend export run independently after grading, and aggregate JSONL files replace atomically.
 
-## Admission and provenance
+## Admission and objectives
 
-The `./curation` library validates complete final assistant answers, supported text/reasoning/tool blocks, tool definitions, JSON argument objects, unique tool-call IDs, call/result pairing, role placement, and loss weights. Earlier assistant messages have weight zero. Final reasoning is retained in source evidence but omitted from the positive-loss target because the answer grader does not establish reasoning quality. Images and unsupported blocks fail closed.
+Version-2 neutral candidates retain structured messages, tools, reasoning, repair/error events, approval events, request defaults, source hashes, and explicit loss targets. Required dimensions use pass/fail/unknown/not-applicable observations with evidence. Required unknown observations block promotion. Execution exit and timeout remain separate facts. Privacy review binds exact source and transformation hashes. Human-intervention trajectories are retained but excluded from promotion under the current policy.
 
-Capture rejection is independent of task grading. Truncated, omitted, redacted, unserializable, incomplete, or privacy-unreviewed content cannot enter a candidate. A captured failing answer remains available for preference assessment but is excluded from SFT. Graders separately report syntax, semantics, tool trajectory, and environment outcome. A successful process exit cannot establish any of those outcomes.
+Filesystem grading compares initial hashes, allowed JSON outputs, deletions, unexpected entries, and symlinks inside the observed workspace. Typed read/write/edit arguments, recorded results, recovery ordering, and write/read-back ordering provide independent trajectory observations. Tools without a task-specific argument/result grader remain unknown. These checks do not claim to detect writes outside the observed workspace.
 
-Candidates retain canonical session/version/event identities, source and row hashes, normalized request/tool/config hashes, requested reasoning effort, task-family membership, configuration identity, and grader version. Missing checkpoint, tokenizer, and backend renderer evidence stays unknown. Parent/child relationships, task families, and identical requests form connected split groups; held-out membership takes priority over validation and training. Exact duplicate rows are retained as provenance references but excluded from the reported unique SFT yield.
+Connected families, task identities, parent/child sessions, equivalent requests, and eligible duplicate outputs share split groups. Conflicting promoted assignments quarantine the connected group and retain affected version identities. Failing generic outputs do not connect otherwise unrelated families. Unassigned groups cannot promote. Phoenix version metadata freezes split membership because native split associations remain mutable.
 
-## Preference sampling
+Final-answer SFT is a format objective: earlier assistant turns are context, and ungraded final reasoning is omitted from supervised content. It is not approved training data for the thinking production route. Tool-decision selection and task-specific delegation/workflow graders remain unfinished. Unsupported target/masking policies fail closed in both renderer paths.
 
-`GH_FROZEN_SAMPLING=1` selects six deterministic problem instances with eight independent samples per instance in a 48-trial run. The explicit `frozen-profile` overlay supplies a complete text policy, no tools or runtime context, medium reasoning, temperature 0.9, and a 2,048-token output budget before upstream records each request. It disables repository-instruction and skill-catalog injection for this isolated text experiment. This is a narrower evaluation than the normal production-agent campaign.
+## Destinations and reward
 
-The recording proxy verifies identical serialized provider bodies within each request group. The curation library also requires identical canonical reconstructed requests, including configuration and tools, before constructing a preference. Managed DPO admission additionally requires one user turn, no tools, distinct complete assistant outputs, and an independently passing/failing grade pair under one grader version. Same-task answers with different requests cannot form a pair.
+`./fireworks` maintains managed-SFT and frozen-request managed-DPO exports over the shared candidate. DPO requires identical requests, a passing chosen answer, an explicitly failing rejected answer, one user turn, no tools, and distinct outputs. `./render-preview` verifies a captured native Fireworks preview against the submitted row hash, renderer/model evidence, expected context, and selected losses. Remote preview execution and model eligibility remain pending; schema validity is not renderer approval.
 
-The selected backend is [Fireworks managed SFT](https://docs.fireworks.ai/fine-tuning/fine-tuning-models) and [managed DPO](https://docs.fireworks.ai/fine-tuning/dpo-fine-tuning). Local schema tests cover a conservative subset. Fireworks model eligibility, minimum dataset size, registered renderer, thinking-history behavior, rendered token IDs, and loss masks still need backend verification. Two local preference pairs do not meet the documented three-example minimum. No paid training job was created.
+`render_qwen.py <candidate> --tokenizer <directory> --output <file>` renders a pinned local reference tokenizer and validates exact final-answer masks. Optional `--route` requires observed checkpoint/tokenizer/template evidence before checking request tokens against the engine. The upstream reference tokenizer is not proof of the deployed NVFP4 checkpoint. Generated token IDs cannot be recovered by retokenizing text; exact-token RL remains unsupported.
 
-## Reward environments
+The supported `./reward` export provides private resets and independent filesystem reward. `campaign.py` and its frozen-request mode remain historical arithmetic regressions; their index-derived instances overlap across campaigns and must not be counted as distinct new collection instances. Reconstructed-versus-provider payload fidelity still needs execution through the installed adapter with corruption controls.
 
-`GH_REWARD_RESET=1` repeats the write/read-back task with identical initial fixtures in fresh directories. Input hashes are recorded before inference, and output state is observed after the rollout. The `./reward` library provides private fixture allocation and an independent JSON/file-integrity reward. A correct final answer with a wrong file or modified input earns zero filesystem reward. Negative-control tests prove that a fresh reset does not inherit a prior answer file.
+## Protection and restoration
 
-These are resettable rollout experiments and deterministic reward observations. They are not token-level RFT training data: sampled token IDs, aligned log probabilities, and a verified inference/training tokenizer relationship are absent. Retokenizing final text cannot recover that evidence.
+`phoenix_dataset.py protect gh-training-v3-replay` assigns a native non-expiring policy to the new evidence project. Existing historical projects retain their policies. Disposable capture keeps bounded retention. Publication metadata records source inventories and hashes; receipts identify the immutable version and exported row hashes.
 
-## Provider evidence
+`backup.py create unused --output <fresh-backup> --source <canonical-store>` creates a private PostgreSQL dump and source archive. Repeat `--source` for retained stores and configuration evidence. `backup.py restore-check <backup> --output <fresh-check>` restores into a newly created database, verifies dataset/version/provenance and source hashes, then drops only that temporary database. Version-2 backup manifests are supported. Keep backups on storage protected from loss of the working disk; this tool does not create an off-host archive service.
 
-The [recording proxy](../../../recproxy.py) caps actual forwarded requests, including auxiliary and child calls, with `REC_CONCURRENCY` (four for this deployment). Its records distinguish admission, queue wait, first response bytes, status, completion, and client-write failures. `REC_RESPONSE_BYTES` bounds the retained response excerpt. `metrics.py` performs read-only engine scrapes; sampled running/waiting peaks are lower bounds, and engine counters can include other consumers.
-
-`phoenix-export.py` paginates span exports and reports separate execution-root and conversation-model latency distributions. Replay model latency is recorded-chunk time, not inference dispatch latency. Auxiliary calls remain purpose-labelled. Standalone setup-event spans are disabled by default; canonical records remain authoritative for omitted event presentation.
+Raw proxy recordings are private at creation and omit recorded headers. The [handoff](../HANDOFF.md) lists the current receipts, browser evidence, checks, and remaining acceptance work.

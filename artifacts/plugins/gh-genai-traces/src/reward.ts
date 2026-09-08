@@ -1,12 +1,12 @@
 /** Isolated fixture reset and independent filesystem reward observations. */
-import { mkdir, mkdtemp, readFile, writeFile, lstat } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, writeFile, lstat, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { z } from 'zod'
 import { digest } from './curation.ts'
 
 const filesSchema = z.record(z.string().regex(/^[a-zA-Z0-9_-][a-zA-Z0-9._-]*$/), z.string())
-const bytesHash = (value: string) => createHash('sha256').update(value).digest('hex')
+const bytesHash = (value: string | Buffer) => createHash('sha256').update(value).digest('hex')
 /** Fresh directory and immutable expected input hashes for one rollout. */
 export interface RewardEnvironment { directory: string; inputHashes: Record<string, string> }
 
@@ -33,9 +33,10 @@ export async function gradeRewardEnvironment(environment: RewardEnvironment, exp
   for (const [name, expectedHash] of Object.entries(environment.inputHashes)) {
     const file = path.join(environment.directory, name)
     try {
-      if (!(await lstat(file)).isFile() || bytesHash(await readFile(file, 'utf8')) !== expectedHash) inputsUnchanged = false
+      if (!(await lstat(file)).isFile() || bytesHash(await readFile(file)) !== expectedHash) inputsUnchanged = false
     } catch { inputsUnchanged = false }
   }
+  const unexpected = (await readdir(environment.directory)).filter(name => !Object.hasOwn(environment.inputHashes, name) && name !== 'answer.json')
   let outputExists = false
   let outputSyntax = false
   let outputSemantics = false
@@ -48,5 +49,47 @@ export async function gradeRewardEnvironment(environment: RewardEnvironment, exp
       outputSemantics = digest(output) === digest(expected)
     }
   } catch { /* Missing/unreadable files and invalid JSON cannot earn filesystem reward. */ }
-  return { inputsUnchanged, outputExists, outputSyntax, outputSemantics, reward: Number(inputsUnchanged && outputSemantics) }
+  return { version: 2 as const, scope: environment.directory, inputsUnchanged, unexpected, outputExists, outputSyntax, outputSemantics, reward: Number(inputsUnchanged && !unexpected.length && outputSemantics) }
+}
+
+/** Observe every workspace entry without following symbolic links.
+ * @param directory - isolated fixture directory, excluding session/home infrastructure.
+ * @returns relative paths with exact byte hashes and entry types.
+ */
+export async function inventoryWorkspace(directory: string): Promise<Record<string, { kind: 'file' | 'directory' | 'symlink' | 'other'; hash: string | null }>> {
+  const result: Record<string, { kind: 'file' | 'directory' | 'symlink' | 'other'; hash: string | null }> = {}
+  const walk = async (relative: string): Promise<void> => {
+    for (const name of (await readdir(path.join(directory, relative))).sort()) {
+      const key = relative ? `${relative}/${name}` : name, file = path.join(directory, key), stat = await lstat(file)
+      const kind = stat.isSymbolicLink() ? 'symlink' : stat.isFile() ? 'file' : stat.isDirectory() ? 'directory' : 'other'
+      result[key] = { kind, hash: kind === 'file' ? bytesHash(await readFile(file)) : null }
+      if (kind === 'directory') await walk(key)
+    }
+  }
+  await walk(''); return result
+}
+
+/** Check allowed outputs, input integrity, deletions, unexpected entries, and symlinks.
+ * This observation cannot establish writes outside the supplied directory.
+ * @param directory - private fixture workspace.
+ * @param before - inventory recorded before inference.
+ * @param outputs - allowed relative output paths and exact JSON values.
+ * @returns explicit failures and an independent environment observation.
+ */
+export async function gradeWorkspace(directory: string, before: Awaited<ReturnType<typeof inventoryWorkspace>>, outputs: Record<string, unknown>) {
+  const after = await inventoryWorkspace(directory), failures: string[] = []
+  for (const [name, entry] of Object.entries(before)) {
+    if (!Object.hasOwn(outputs, name) && digest(after[name] ?? null) !== digest(entry)) failures.push(`input changed or deleted: ${name}`)
+  }
+  for (const [name, entry] of Object.entries(after)) {
+    if (entry.kind === 'symlink' || entry.kind === 'other') failures.push(`unsupported entry: ${name}`)
+    if (!Object.hasOwn(before, name) && !Object.hasOwn(outputs, name)) failures.push(`unexpected entry: ${name}`)
+  }
+  for (const [name, expected] of Object.entries(outputs)) {
+    if (path.isAbsolute(name) || name.split('/').some(part => part === '..' || part === '')) throw Error('Invalid allowed output path')
+    if (after[name]?.kind !== 'file') { failures.push(`missing regular output: ${name}`); continue }
+    try { if (digest(JSON.parse(await readFile(path.join(directory, name), 'utf8'))) !== digest(expected)) failures.push(`incorrect output: ${name}`) }
+    catch { failures.push(`unreadable JSON output: ${name}`) }
+  }
+  return { version: 2 as const, scope: directory, before, after, failures, status: failures.length ? 'fail' as const : 'pass' as const }
 }

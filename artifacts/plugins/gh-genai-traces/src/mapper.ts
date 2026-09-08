@@ -37,7 +37,8 @@ export class TraceMapper {
   private readonly deferredCalls = new Map<string, string>()
   private readonly releasing = new Set<string>()
   private deferredCount = 0
-  private readonly ownership = new Map<string, { parentKey: string; traceKey: string }>()
+  private readonly ownership = new Map<string, { parentKey: string; traceKey: string; rootSession: string }>()
+  private readonly ownershipProgress = new Map<string, { next: number; turn?: number; runs: Map<string, string> }>()
   constructor(
     private readonly tracer: Tracer, private readonly ids: SourceIds,
     private readonly settings: Settings, private readonly policy: ContentPolicy,
@@ -46,10 +47,10 @@ export class TraceMapper {
 
   private open(key: string, name: string, time: number, attributes: Attributes, parent?: OpenSpan | SpanContext, kind = SpanKind.INTERNAL): OpenSpan | undefined {
     if (this.active.size >= this.settings.maxActiveSpans) { this.stats.spansDropped++; return undefined }
-    this.ids.key = `${this.origin}:${key}`
+    this.ids.key = JSON.stringify([this.settings.project, this.origin, key])
     const span = this.tracer.startSpan(this.policy.text(name), { kind, startTime: time, attributes: {
       ...attributes, 'gh.source.id': key, 'gh.capture.origin': this.origin,
-      'gh.mapping.version': '2', 'gh.capture.content': this.settings.content,
+      'gh.mapping.version': '3', 'gh.capture.content': this.settings.content,
       'metadata': JSON.stringify(this.settings.metadata),
     } }, parent ? 'span' in parent ? trace.setSpan(ROOT_CONTEXT, parent.span) : trace.setSpanContext(ROOT_CONTEXT, parent) : ROOT_CONTEXT)
     const open = { span, time, key, events: 0, dropped: 0 }
@@ -62,22 +63,42 @@ export class TraceMapper {
    * @param events - canonical parent records obtained from upstream services.
    */
   indexOwnership(header: SessionHeader, events: readonly SessionEvent[]): void {
-    let turn: number | undefined
-    const runs = new Map<string, string>()
-    for (const event of events) {
+    if (!this.ownershipProgress.has(String(header.id)) && this.ownershipProgress.size >= this.settings.maxActiveSpans) throw Error('Ownership session index capacity exceeded')
+    const progress = this.ownershipProgress.get(String(header.id)) ?? { next: 0, runs: new Map<string, string>() }
+    this.ownershipProgress.set(String(header.id), progress)
+    let turn = progress.turn
+    const runs = progress.runs
+    for (let index = Math.max(0, progress.next - (events[0]?.seq ?? 0)); index < events.length; index++) {
+      const event = events[index]!
+      if (event.seq < progress.next) continue
+      progress.next = event.seq + 1
       if (event.type === 'turn/start') turn = event.data.turn
-      if (event.type === 'turn/end') turn = undefined
+      if (event.type === 'turn/end') { turn = undefined; runs.clear() }
       if (event.type === 'tool-workflow/run-start' && turn !== undefined) {
+        if (!runs.has(event.data.runId) && runs.size >= this.settings.maxActiveSpans) throw Error('Ownership workflow index capacity exceeded')
         runs.set(event.data.runId, this.ownership.get(String(header.id))?.traceKey ?? `${header.id}/turn/${turn}`)
       }
       if (event.type === 'tool-workflow/agent-start') {
         const traceKey = runs.get(event.data.runId)
         if (traceKey && this.ownership.size < this.settings.maxActiveSpans) {
-          this.ownership.set(event.data.childId, { parentKey: `${header.id}/workflow/${event.data.runId}`, traceKey })
+          this.ownership.set(event.data.childId, { parentKey: `${header.id}/workflow/${event.data.runId}`, traceKey, rootSession: this.ownership.get(String(header.id))?.rootSession ?? String(header.id) })
           this.releaseDeferred(event.data.childId)
         }
       }
     }
+    if (turn === undefined) delete progress.turn
+    else progress.turn = turn
+  }
+
+  /** Next canonical event needed for incremental ownership indexing.
+   * @param id - source session identity.
+   * @returns exclusive indexed sequence offset.
+   */
+  ownershipOffset(id: string): number { return this.ownershipProgress.get(id)?.next ?? 0 }
+
+  private presentation(id: string): Attributes {
+    return { 'session.id': digest([3, this.settings.project, this.origin, this.ownership.get(id)?.rootSession ?? id]),
+      'gh.session.canonical_id': id }
   }
 
   private defer(id: string, work: () => void): boolean {
@@ -101,9 +122,9 @@ export class TraceMapper {
   private ownedParent(id: string): SpanContext | undefined {
     const owner = this.ownership.get(id)
     if (!owner) return undefined
-    this.ids.key = `${this.origin}:${owner.traceKey}`
+    this.ids.key = JSON.stringify([this.settings.project, this.origin, owner.traceKey])
     const traceId = this.ids.generateTraceId()
-    this.ids.key = `${this.origin}:${owner.parentKey}`
+    this.ids.key = JSON.stringify([this.settings.project, this.origin, owner.parentKey])
     return { traceId, spanId: this.ids.generateSpanId(), traceFlags: 1, isRemote: true }
   }
 
@@ -132,8 +153,8 @@ export class TraceMapper {
   event(header: SessionHeader, inherited: number, event: SessionEvent): void {
     if (event.seq < inherited) return
     const id = String(header.id)
-    if (this.origin === 'live' && header.parentSession && !this.ownership.has(id) && !this.releasing.has(id)
-      && (event.type === 'turn/start' || this.deferred.has(id))) {
+    this.indexOwnership(header, [event])
+    if (this.origin === 'live' && header.parentSession && !this.ownership.has(id) && !this.releasing.has(id)) {
       this.defer(id, () => this.event(header, inherited, event))
       return
     }
@@ -147,7 +168,7 @@ export class TraceMapper {
     const gap = event.seq !== state.lastSeq + 1
     state.lastSeq = event.seq
     if (gap && state.turn) state.turn.incomplete = true
-    const attrs: Attributes = { 'gen_ai.conversation.id': id, 'gh.session.format_version': header.version, 'gh.event.seq': event.seq }
+    const attrs: Attributes = { ...this.presentation(id), 'gen_ai.conversation.id': id, 'gh.session.format_version': header.version, 'gh.event.seq': event.seq }
     if (header.parentSession) attrs['gh.session.parent_id'] = String(header.parentSession)
     if (event.type === 'turn/start') {
       if (state.turn) this.endTurn(state, event.time, 'incomplete')
@@ -205,7 +226,7 @@ export class TraceMapper {
       }
       case 'tool-workflow/agent-start': {
         const workflow = turn.workflows.get(event.data.runId)
-        this.indexOwnership(header, turn.events)
+        this.indexOwnership(header, [event])
         if (workflow) {
           if (this.childLinks.size < this.settings.maxActiveSpans) this.childLinks.set(event.data.childId, workflow)
           const child = this.sessions.get(event.data.childId)?.turn?.root
@@ -255,11 +276,12 @@ export class TraceMapper {
    * @param request - frozen harness request, before adapter-specific serialization.
    * @param time - dispatch/iteration time for live capture, first recorded chunk for replay.
    * @param sourceSeq - settlement sequence when replay supplies it.
+   * @param header - observed live session lineage before any model dispatch.
    */
-  startCall(callId: string, request: CallRequest, time: number, sourceSeq?: number): void {
+  startCall(callId: string, request: CallRequest, time: number, sourceSeq?: number, header?: SessionHeader): void {
     const id = request.sessionId === undefined ? undefined : String(request.sessionId)
-    if (id && this.deferred.has(id)) {
-      if (this.defer(id, () => { this.deferredCalls.delete(callId); this.startCall(callId, request, time, sourceSeq) })) this.deferredCalls.set(callId, id)
+    if (id && (this.deferred.has(id) || this.origin === 'live' && header?.parentSession && !this.ownership.has(id) && !this.releasing.has(id))) {
+      if (this.defer(id, () => { this.deferredCalls.delete(callId); this.startCall(callId, request, time, sourceSeq, header) })) this.deferredCalls.set(callId, id)
       return
     }
     const state = id === undefined ? undefined : this.sessions.get(id)
@@ -280,7 +302,7 @@ export class TraceMapper {
       ...this.policy.attributes('gen_ai.input.messages', inputMessages(request.messages)),
       ...this.policy.attributes('gh.request.messages', request.messages),
     }
-    if (id) attrs['gen_ai.conversation.id'] = id
+    if (id) Object.assign(attrs, this.presentation(id), { 'gen_ai.conversation.id': id })
     if (sourceSeq !== undefined) attrs['gh.event.seq'] = sourceSeq
     if (request.system !== undefined) Object.assign(attrs, this.policy.attributes('gen_ai.system_instructions', [{ type: 'text', content: request.system }]))
     if (request.tools !== undefined) Object.assign(attrs, this.policy.attributes('gen_ai.tool.definitions', request.tools.map(tool => ({ type: 'function', name: tool.name, description: tool.description, parameters: tool.parameters }))))
@@ -363,6 +385,7 @@ export class TraceMapper {
     this.deferredCalls.clear()
     this.childLinks.clear()
     this.ownership.clear()
+    this.ownershipProgress.clear()
   }
 }
 

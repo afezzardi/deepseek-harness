@@ -1,0 +1,46 @@
+{
+  "referenceOnly": true,
+  "observedRoute": null,
+  "cases": [
+    {
+      "case": "tool-trajectory",
+      "tokens": 364,
+      "lossTokens": 7,
+      "renderHash": "97b215b5377cb5e1a701d5c739a1d2d3cebdc2b38fd19ed8bca0b7ddbb52489e",
+      "maskHash": "f00fa1f5509f604196fe642af4cf278771e5bf8b3bcdb36d983c8c9be553159c",
+      "rowHash": "75be6e4dfbc22701367b6b86c4c9432f6532202cd5dd9c1b0a1da41a2c2738be"
+    },
+    {
+      "case": "final-answer",
+      "tokens": 88,
+      "lossTokens": 7,
+      "renderHash": "bbb5d8abb72dfff23b14bc602f553705fdd22bf55c75cecf5f360f4add3ea719",
+      "maskHash": "cc3b11fa4601d5a05cd48c8b66d9d16bb0ef1231b6d6b15a023a524cd8cc0b46",
+      "rowHash": "c6f96e166d7cc2bf5b4363e20358a398a430b967c06ab16d651e904c2bac13d1"
+    },
+    {
+      "case": "reasoning-bearing",
+      "tokens": 364,
+      "lossTokens": 7,
+      "renderHash": "97b215b5377cb5e1a701d5c739a1d2d3cebdc2b38fd19ed8bca0b7ddbb52489e",
+      "maskHash": "f00fa1f5509f604196fe642af4cf278771e5bf8b3bcdb36d983c8c9be553159c",
+      "rowHash": "641c4ffa1aafbf721692f0d2d04d0b5aa58dbbefc43db65a25796f0bdc838ca6"
+    },
+    {
+      "case": "recovery",
+      "tokens": 370,
+      "lossTokens": 7,
+      "renderHash": "801499417c55295332a4d828f086637c1523bdcb1e36b38347324fdd3ec58c96",
+      "maskHash": "eb51bda23ee279846ac43a459ae416b58e05fd8f80bc08a3ae8408670654751d",
+      "rowHash": "b96830c37f6b52fa6e2492575879657912415f96878e1280b387e2f62c7b908a"
+    },
+    {
+      "case": "long-context",
+      "tokens": 36364,
+      "lossTokens": 7,
+      "renderHash": "71ddc136004b1cb7acc307b65a10e0091242fa07744585172014012c1ad721a2",
+      "maskHash": "9236aecb155d7fcc6a66afec14b1d7330bdb5d05cbb4fc9eb940601b6cec67db",
+      "rowHash": "a90af98c4e70ebbb909f18aeca282f909c4253d14e71a04690ade53ca9a42c04"
+    }
+  ]
+}

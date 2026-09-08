@@ -23,7 +23,8 @@ class H(http.server.BaseHTTPRequestHandler):
         pass
 
     def _log(self, rec):
-        with lock, open(LOG, "a") as f:
+        with lock, os.fdopen(os.open(LOG, os.O_WRONLY | os.O_CREAT | os.O_APPEND | os.O_NOFOLLOW, 0o600), "a") as f:
+            os.fchmod(f.fileno(), 0o600)
             f.write(json.dumps(rec) + "\n")
 
     def _proxy(self, method):

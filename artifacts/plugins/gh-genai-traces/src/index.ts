@@ -1,13 +1,14 @@
 /** Gruppo Happy's opt-in GenAI telemetry backend for upstream DSH profiles. */
 import { Service, type Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
-import { SessionId, SessionSeq, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
+import { SessionId, SessionSeq, SessionLogOffset, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
 import type {} from '@deepseek-ai/dsh-session-query'
 import { SessionTelemetryBackend, SessionTelemetryCoordinator, type SessionTelemetryRecord } from '@deepseek-ai/dsh-session-telemetry'
 import type {} from '@deepseek-ai/dsh-llm'
 import { ContentPolicy } from './content.ts'
 import { resolveConfig, type Config as InputConfig, type Settings } from './config.ts'
 import { TraceMapper, callIdentity } from './mapper.ts'
+import { readArtifactSnapshot } from './snapshot.ts'
 import { replaySnapshot } from './replay.ts'
 import { observeStream } from './stream.ts'
 import { CaptureQueue, SourceIds, createProvider, deadline, diagnostics } from './transport.ts'
@@ -19,7 +20,7 @@ export const Config: z<Config> = z.any()
 
 /** Single sessionTelemetry provider; live tracing and explicit historical replay. */
 export class GenAITraces extends SessionTelemetryBackend {
-  static inject = ['sessions', 'llm', 'sessionQuery']
+  static inject = ['sessions', 'llm', 'sessionQuery', 'sessionPersistence']
   static Config = Config
   readonly sharing = 'full' as const
   readonly diagnostics = diagnostics()
@@ -44,7 +45,10 @@ export class GenAITraces extends SessionTelemetryBackend {
     ctx.on('llm/stream', (options, next) => {
       const id = callIdentity()
       return observeStream(options, next, settings,
-        (request, time) => this.queue.push(() => this.mapper.startCall(id, request, time)),
+        (request, time) => {
+          const header = request.sessionId ? this.ctx.sessions.get(request.sessionId)?.header : undefined
+          this.queue.push(() => this.mapper.startCall(id, request, time, undefined, header))
+        },
         result => this.queue.push(() => this.mapper.endCall(id, result)),
         () => { this.diagnostics.captureErrors++ },
       )
@@ -84,7 +88,7 @@ export class GenAITraces extends SessionTelemetryBackend {
       seen.add(String(parentId))
       const parent = this.ctx.sessions.get(parentId)
       if (!parent) break
-      ancestors.unshift({ header: parent.header, events: parent.snapshotEvents() })
+      ancestors.unshift({ header: parent.header, events: parent.snapshotEvents(SessionLogOffset(this.mapper.ownershipOffset(String(parent.id)))) })
       parentId = parent.header.parentSession
     }
     this.queue.push(() => {
@@ -100,24 +104,24 @@ export class GenAITraces extends SessionTelemetryBackend {
   replay(sessionId: string): Promise<void> {
     if (this.closing) return Promise.reject(new Error('gh-genai-traces is shutting down'))
     const work = this.replayWork.then(async () => {
-      const snapshot = await this.ctx.sessionQuery.readSession(SessionId(sessionId))
+      const snapshot = await readArtifactSnapshot(this.ctx, SessionId(sessionId))
       const ids = new SourceIds()
       const stats = diagnostics()
       const provider = createProvider({ ...this.settings, project: `${this.settings.project}-replay` }, stats, ids)
-      const mapper = new TraceMapper(provider.getTracer('@deepseek-ai/dsh-gh-genai-traces', '0.1.0'), ids, this.settings, this.policy, stats, 'replay')
+      const mapper = new TraceMapper(provider.getTracer('@deepseek-ai/dsh-gh-genai-traces', '0.1.0'), ids, { ...this.settings, project: `${this.settings.project}-replay` }, this.policy, stats, 'replay')
       try {
         const ancestors = []
         let parentId = snapshot.session.parentSession
         const seen = new Set<string>([String(snapshot.session.id)])
         while (parentId && !seen.has(String(parentId))) {
           seen.add(String(parentId))
-          const parent = await this.ctx.sessionQuery.readSession(parentId)
+          const parent = await readArtifactSnapshot(this.ctx, parentId)
           ancestors.unshift(parent)
           parentId = parent.session.parentSession
         }
         for (const ancestor of ancestors) mapper.indexOwnership(ancestor.session, ancestor.events)
         await replaySnapshot(snapshot, mapper, this.settings, () => provider.forceFlush())
-        if (stats.spansFailed || stats.spansDropped || stats.captureErrors) throw new Error(`gh-genai-traces replay incomplete: ${JSON.stringify(stats)}`)
+        if (stats.spansFailed || stats.spansDropped || stats.captureErrors || stats.recordsDropped) throw new Error(`gh-genai-traces replay incomplete: ${JSON.stringify(stats)}`)
       } finally {
         mapper.shutdown()
         await deadline(provider.shutdown(), this.settings.shutdownTimeoutMillis)

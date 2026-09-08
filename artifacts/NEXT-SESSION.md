@@ -2,7 +2,7 @@
 
 ## Active work: traces to datasets
 
-Start with the [gh-genai-traces handoff](plugins/gh-genai-traces/HANDOFF.md). The user has authorized continued plugin implementation and substantial real-inference experiments at `medium` reasoning. Priorities are a complete owned-workflow trace hierarchy, explicit capture eligibility and provenance, and validated SFT/DPO/RFT dataset preparation. The [implementation checkpoint](results/trace-curation-20260908/REPORT.md) records completed workflow and approval UAT, 240 baseline trials, 48 preference samples, and 100 streaming comparisons. The handoff lists bounded next work, preserved evidence, inference constraints, and validation limitations. Keep all fork changes under `artifacts/`.
+Start with the [gh-genai-traces handoff](plugins/gh-genai-traces/HANDOFF.md) and [version-3 checkpoint report](results/trace-pipeline-v3/REPORT.md). The user requested a viable committed checkpoint before completing the full traces-to-dataset plan. The VPN is down: no 144-rollout balanced baseline ran, no training job started, and the inference host remains unchanged. Local reconstruction, grading, Phoenix, renderer-reference, and restore evidence are recorded separately. Continue in a fresh context, read the external reviews, and keep all changes under `artifacts/`.
 
 ## Upstream baseline
 

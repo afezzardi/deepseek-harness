@@ -28,3 +28,17 @@ it('loads the built tracing backend in headless and replays without rewriting th
     },
   })
 }, LOADER_SMOKE_TEST_TIMEOUT_MS)
+
+it('runs two turns with a real persistence flush, disposal and resume in the built profile', async () => {
+  const driver = fileURLToPath(new URL('./fixtures/lifecycle-driver.ts', import.meta.url))
+  await runLoaderSmoke({ label: 'gh-lifecycle', tempDirPrefix: 'gh-lifecycle-smoke-', binScript: driver, libBinScript: driver, mode: 'lib',
+    configPath: fileURLToPath(new URL('./fixtures/lifecycle.patch.yml', import.meta.url)),
+    tsconfigPath: fileURLToPath(new URL('../../../../tsconfig.json', import.meta.url)),
+    inspect: async cwd => {
+      const snapshot = JSON.parse(await readFile(join(cwd, 'lifecycle-result.json'), 'utf8')) as { events: SessionEvent[] }
+      expect(snapshot.events.filter(e => e.type === 'turn/end' && e.data.reason.kind === 'completed')).toHaveLength(2)
+      expect(snapshot.events.some(e => e.type === 'session/end-seed')).toBe(true)
+      expect(snapshot.events.filter(e => e.type === 'user/message' && e.data.source.kind === 'user')).toHaveLength(2)
+    },
+  })
+}, LOADER_SMOKE_TEST_TIMEOUT_MS)

@@ -6,7 +6,7 @@ Status: implemented
 
 The fork owns an opt-in telemetry backend under `artifacts/`. Upstream owns canonical session generations, capture lifecycle, surface/header reconstruction, and token-usage folds. Phoenix owns trace presentation, annotations, datasets, and experiments. This division keeps upstream merges independent of the local observability policy.
 
-The plugin uses a local OTel provider with native GenAI attributes. Phoenix 20.8.0 performs the presentation conversion at ingestion. The GenAI convention is still developing; `gh.mapping.version = 2` identifies this implementation's mapping. Step and workflow spans explicitly use OpenInference `CHAIN`; Phoenix converts native model/tool attributes. No global instrumentation provider is installed.
+The plugin uses a local OTel provider with native GenAI attributes. Phoenix 20.8.0 performs the presentation conversion at ingestion. The GenAI convention is still developing; `gh.mapping.version = 3` identifies this implementation's mapping. Step and workflow spans explicitly use OpenInference `CHAIN`; Phoenix converts native model/tool attributes. No global instrumentation provider is installed.
 
 ## Consequences
 
@@ -38,6 +38,16 @@ Workflow child roots share the owning workflow's deterministic parent context. L
 
 Canonical workflow events omit the invoking tool-call ID. Guessing from timestamps, open-tool count, or arrival order would assign false ownership under concurrency. The workflow therefore stays under the step with this limitation recorded as an attribute. Independent background subagents retain session references rather than fabricated synchronous parentage.
 
-Content completeness, actual privacy changes, and task success are separate facts. The curation library admits supported complete requests, masks earlier assistant losses, requires an independent final-answer grade for SFT, and reserves connected task/session groups before deduplication. Preference comparisons require identical requests, including tools and sampling configuration; the managed-DPO subset rejects tool trajectories. Renderer approval and exact-token RL remain separate acceptance conditions.
+Content completeness, actual privacy changes, and task success are separate facts. The curation library admits supported complete requests, selects final-answer losses through backend exporters, requires an independent final-answer grade for SFT, and reserves connected task/session groups before deduplication. Preference comparisons require identical requests, including tools and sampling configuration; the managed-DPO subset rejects tool trajectories. Renderer approval and exact-token RL remain separate acceptance conditions.
 
 The [implementation experiment](../../results/trace-curation-20260908/REPORT.md) records wire-level concurrency, resettable fixtures, rejected candidates, and canonical/live/replay comparisons. This extends the existing note; no other active artifact note is superseded.
+
+## Version-3 dataset pipeline
+
+Phoenix owns immutable published dataset versions, native splits, annotations, and experiments. Canonical DSH sessions remain the reconstruction source; local files are source evidence, resumable stage checkpoints, or tested database/source backups. A second local split ledger would introduce a competing dataset owner. Version metadata freezes native split membership, and conflicts quarantine affected groups instead of relabelling promoted examples.
+
+Replay and curation share upstream live-session/persistence reads and restore validation. Stored generations are never decoded or rewritten by artifact code. Reconstruction retains inherited offsets and in-memory interruption-repair identities. Mapping v3 hashes destination project, origin, and canonical source identity; owned workflow children share their root's presentation session and retain their own canonical IDs.
+
+The backend-neutral candidate v2 separates four-state task observations, execution status, exact privacy-review hashes, and explicit loss selection. Human-intervention trajectories remain evidence but cannot promote under the current policy. Final-answer supervision is a format objective; ungraded reasoning is retained in source evidence and omitted from its target. This does not establish suitability for the production thinking route. Exporters reject masks they cannot represent.
+
+Per-session source/task/grader/configuration checkpoints survive independent telemetry and backend failures. Operational failures remain retryable, and final files replace atomically. Fireworks managed SFT/DPO remain explicit destinations alongside local Qwen reference rendering. No tokenizer-reference result, schema check, or Phoenix publication implies renderer approval or training readiness. The [checkpoint report](../../results/trace-pipeline-v3/REPORT.md) owns measured acceptance and unfinished work.
