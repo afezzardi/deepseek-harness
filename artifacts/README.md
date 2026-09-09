@@ -32,4 +32,4 @@ August results record experiments against their stated deployment. They do not e
 
 Keep plugin source and its deployment overlay under `artifacts/plugins/`. DSH's [first-plugin tutorial](../docs/user/develop/basic/index.md), [tool tutorial](../docs/user/develop/basic/tool.md), and [packaging guide](../docs/user/develop/basic/publish.md) own development and installation instructions. Browser extensions use [client modules](../docs/subsystems/client-modules.md) and [UI slots](../packages/client/ui-slots/README.md). Prefer those extension points; DOM selectors and injected CSS depend on the current UI implementation and need rechecking after upstream updates.
 
-The inference host owns engine configuration and its consumer guide (`kb-mastra-infra/HOW-TO.md`). Consult that live source for endpoint behavior instead of maintaining another copy here.
+The user owns both the harness and inference. The inference host maintains engine configuration and its consumer guide (`kb-mastra-infra/HOW-TO.md`); consult that live source for endpoint behavior. Follow the [notification rule](AGENTS.md#inference-host-ownership) before changing inference.

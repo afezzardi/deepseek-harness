@@ -1,0 +1,13 @@
+{"completed": 1, "instance": "scoped-edit-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 2, "instance": "workflow-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 3, "instance": "delegation-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 4, "instance": "recovery-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 5, "instance": "aggregation-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 6, "instance": "lifecycle-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 7, "instance": "long-context-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 8, "instance": "extraction-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 9, "instance": "unicode-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 10, "instance": "untrusted-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 11, "instance": "ordering-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"completed": 12, "instance": "reconciliation-0", "repetition": 1, "exit_code": 0, "timed_out": false}
+{"trials": 12, "instances": 12, "families": 12}

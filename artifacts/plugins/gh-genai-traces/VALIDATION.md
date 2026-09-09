@@ -1,4 +1,10 @@
-# Validation — 2026-09-07
+# Validation index
+
+## Current checkpoint — 2026-09-09
+
+The [r5 report](../../results/trace-pipeline-r3-20260909/REPORT.md) owns current trace-to-dataset evidence: 111 passes, 30 task failures, three timeouts, 300 published eligible targets, and request/full-example renderer parity for 123 real answers. The [handoff](HANDOFF.md#pending-work) separates completed work from training, durability, documentation, and deployment acceptance still pending. No inference configuration change or training job was performed.
+
+## Historical validation — 2026-09-07
 
 Upstream `c389f96bf3a9b6807cb71ed6bdad5849be0df6d8` is merged as `836e963caba622ae214de2344ed0d26b4794469e`. The committed comparison against upstream contains no differences outside `artifacts/`. New fork implementation and documentation also stay under `artifacts/`.
 
@@ -35,7 +41,7 @@ Phoenix is pinned to 20.8.0, Postgres to 16.13-alpine, and the Collector to the 
 
 The Collector file-storage extension requires a writable directory. Persistent exporter queues survive supported restarts, but acceptance into earlier in-memory batches is not a durability guarantee. A downstream outage/restart check passed: stop Phoenix, submit one synthetic span to Collector (HTTP 200), observe export retries, restart Collector, start Phoenix, then query the exact trace ID. Collector logged recovery of one stored item; Phoenix stored exactly one matching span. [Recovery evidence](validation/queue-recovery.json) retains its identity. Power-loss durability, disk exhaustion, and production load have not been exercised here. See the [storage documentation](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/storage/filestorage/README.md) and [Collector resiliency guidance](https://opentelemetry.io/docs/collector/resiliency/).
 
-All model output in these checks is synthetic or recorded. Local inference remains offline; no Fireworks or other paid inference calls were made. Semantic recall, SFT/DPO curation, general task evaluation, and production cost accounting require further implementation and measured acceptance cases.
+All model output in these checks is synthetic or recorded. Local inference was offline for these 2026-09-07 checks; no Fireworks or other paid inference calls were made. At that checkpoint, semantic recall, SFT/DPO curation, general task evaluation, and production cost accounting lacked implementation or acceptance evidence. Subsequent curation and benchmark results are linked above.
 
 ## Version-3 checkpoint
 

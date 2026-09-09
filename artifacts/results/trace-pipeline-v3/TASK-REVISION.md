@@ -1,6 +1,6 @@
 # Next pinned task revision
 
-Status: planned; no additional inference campaign or paid operation has run.
+Status: historical plan, completed by the separately pinned [r5 campaign](../trace-pipeline-r3-20260909/REPORT.md). The proposal below preserves the requirements at the planning checkpoint; current remaining work is in the [handoff](../../plugins/gh-genai-traces/HANDOFF.md#pending-work).
 
 Preserve the r2 task version and its 144-trial experiment. Publish repaired task definitions as a distinct Phoenix version and use a fresh campaign directory. Compare the repaired experiment separately; do not relabel r2 trials or overwrite their workspaces.
 

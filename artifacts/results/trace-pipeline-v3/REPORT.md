@@ -1,5 +1,7 @@
 # Trace pipeline v3 — 2026-09-08 checkpoint
 
+Historical checkpoint: measurements and pending items below describe this run. Use the [r5 report](../trace-pipeline-r3-20260909/REPORT.md) and [current handoff](../../plugins/gh-genai-traces/HANDOFF.md#pending-work) for subsequent results and next actions.
+
 This is the preserved pre-restoration checkpoint. See the [continuation report](CONTINUATION.md) for the completed baseline and subsequent validation.
 
 ## Status

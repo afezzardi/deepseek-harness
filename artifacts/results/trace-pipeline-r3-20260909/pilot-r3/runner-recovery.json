@@ -1,0 +1,8 @@
+{
+  "recordedHash": "b8aca8eb9be9e24631b9a84ededb86eb62f27bed6f882d2c33ce1b6fdc12feee",
+  "recoveredHash": "b8aca8eb9be9e24631b9a84ededb86eb62f27bed6f882d2c33ce1b6fdc12feee",
+  "method": "Reverse the two subsequent runner edits: preflight result-write placement and required task version. Verify exact bytes against the original pilot manifest.",
+  "commitAtRun": "8bc12e2e0b606a2a429e7496e428821dac0dae65",
+  "uncommittedAtRun": true,
+  "completeExecutableArchive": false
+}

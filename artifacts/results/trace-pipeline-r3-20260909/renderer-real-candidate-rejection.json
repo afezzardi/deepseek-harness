@@ -1,0 +1,14 @@
+{
+  "rowHash": "4a6d68d5f90b958928a3298de84e92625c642ad87619ea4d39a22720adf247ce",
+  "policy": {
+    "policy": "final-answer",
+    "event": 34,
+    "blocks": [
+      1
+    ],
+    "reasoning": "omit"
+  },
+  "observedError": "Template transforms target text; explicit mask unsupported",
+  "cause": "Active chat template strips leading/trailing whitespace from final assistant content",
+  "trainingReady": false
+}

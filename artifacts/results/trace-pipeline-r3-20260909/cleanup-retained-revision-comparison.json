@@ -1,0 +1,30 @@
+{
+  "backupDumpHash": "2aa23b458a35dd10e273de4ef7e238241d8b570c2c24950e2f20d86cd097923c",
+  "checks": [
+    {
+      "datasetNumericId": 4,
+      "revisionRows": 240,
+      "matchingBackup": true,
+      "hash": "e3f5f409c5636b6e2e322f2b09335d92bb339589827c453e6aebf8e4d30cc435"
+    },
+    {
+      "datasetNumericId": 5,
+      "revisionRows": 48,
+      "matchingBackup": true,
+      "hash": "7253cdd4766b0ab848005de3e899e2b0dd5a526afd0e0343b2fd3b72d55a4602"
+    },
+    {
+      "datasetNumericId": 8,
+      "revisionRows": 48,
+      "matchingBackup": true,
+      "hash": "761fc839a22d28fd5a45d6e79e60720de32075aef9dcff16e236ed07f1245b2a"
+    },
+    {
+      "datasetNumericId": 13,
+      "revisionRows": 252,
+      "matchingBackup": true,
+      "hash": "f5b70b13f9b25b24fb9073d8391a1b2140d8128828c0fe1baaf80a718cf107f2"
+    }
+  ],
+  "scope": "Exact input/output/metadata revisions; deleted source spans remain available in the backup only."
+}

@@ -32,4 +32,4 @@
 
 插件源码及其部署叠加配置应保存在 `artifacts/plugins/`。DSH 的[首个插件教程](../docs/user/develop/basic/index.zh.md)、[工具教程](../docs/user/develop/basic/tool.zh.md)和[打包指南](../docs/user/develop/basic/publish.zh.md)提供开发与安装说明。浏览器扩展使用[客户端模块](../docs/subsystems/client-modules.zh.md)和 [UI 插槽](../packages/client/ui-slots/README.zh.md)。优先使用这些扩展点；DOM 选择器和注入的 CSS 依赖当前 UI 实现，上游更新后需要重新检查。
 
-推理主机负责引擎配置及其使用指南（`kb-mastra-infra/HOW-TO.md`）。端点行为应以该实时来源为准，不在此处维护另一份副本。
+用户同时拥有 harness 和推理服务。推理主机维护引擎配置及其使用指南（`kb-mastra-infra/HOW-TO.md`）；端点行为以该实时来源为准。修改推理前遵循[通知规则](AGENTS.md#inference-host-ownership)。

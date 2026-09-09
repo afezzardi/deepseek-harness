@@ -1,5 +1,7 @@
 # Independent review — gh-genai-traces and the trace-to-dataset design
 
+Historical review of the baseline named below. The [current handoff](plugins/gh-genai-traces/HANDOFF.md#pending-work) and [r5 review dispositions](results/trace-pipeline-r3-20260909/FABLE-REVIEW.md) own current implementation status and remaining work.
+
 Reviewer: Claude Opus 5. Revision 2, 2026-09-08.
 
 **Review baseline.** Branch `fork/qwen38-deployment` at `0cd6db5b80`, **plus the uncommitted working tree** as of ~19:21 — 13 modified files and the new `src/{checkpoint,fireworks,grading,render-preview,snapshot}.ts`, `tests/{reliability,render-preview}.spec.ts`, and `experiments/{backup,balanced_campaign,benchmark,phoenix_dataset,render_qwen}.py`. Revision 1 of this document was written against the pre-19:00 tree and is superseded; the [repaired list](#repaired-since-revision-1) records what changed so nothing is re-litigated. Line references below are to the working tree, not to HEAD.

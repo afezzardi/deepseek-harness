@@ -1,6 +1,6 @@
 # Fresh deployment acceptance
 
-Accept this deployment only from fresh sessions produced by the selected upstream revision. The self-hosted route was exercised in the [2026-09-08 discovery](results/trace-discovery-20260908/REPORT.md); verify its availability before each acceptance run. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. [Latest execution](results/uat-nvfp4-v2-20260905/RESULT.md).
+Accept this deployment only from fresh sessions produced by the selected upstream revision. The self-hosted route was exercised in the [2026-09-09 benchmark](results/trace-pipeline-r3-20260909/REPORT.md); verify its availability before each acceptance run. Run the required cases in order; record `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` per case in a dated [results](results/) directory. The benchmark does not establish Web or complete deployment UAT acceptance. [Latest dedicated UAT execution](results/uat-nvfp4-v2-20260905/RESULT.md).
 
 ## 1. Prepare
 

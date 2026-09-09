@@ -1,0 +1,8 @@
+.*
+!.gitignore
+.recordings.jsonl
+**/.trials/
+**/.audit-store/
+**/.audit-home/
+**/audit/
+**/.recordings.jsonl

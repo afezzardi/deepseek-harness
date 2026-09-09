@@ -1,0 +1,360 @@
+{
+  "projects": [
+    {
+      "name": "gh-training-v3-live",
+      "description": null,
+      "id": "UHJvamVjdDo1Mw=="
+    },
+    {
+      "name": "gh-v3-replay-25364520-451b-4d2d-8993-f70a1710d6f4",
+      "description": null,
+      "id": "UHJvamVjdDo1Mg=="
+    },
+    {
+      "name": "gh-v3-live-02d8ac03-2aa9-4fc0-99a0-942eac1e9b37",
+      "description": null,
+      "id": "UHJvamVjdDo1MQ=="
+    },
+    {
+      "name": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237",
+      "description": null,
+      "id": "UHJvamVjdDo0OQ=="
+    },
+    {
+      "name": "gh-training-v3-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0OA=="
+    },
+    {
+      "name": "gh-validation-be7cbedf-28f8-427d-ae7c-a99d22131668",
+      "description": null,
+      "id": "UHJvamVjdDo0Ng=="
+    },
+    {
+      "name": "gh-training-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0Mw=="
+    },
+    {
+      "name": "gh-training-live",
+      "description": null,
+      "id": "UHJvamVjdDo0Mg=="
+    },
+    {
+      "name": "gh-genai-traces",
+      "description": null,
+      "id": "UHJvamVjdDo0MQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-canonical-replay",
+      "description": null,
+      "id": "UHJvamVjdDozNw=="
+    },
+    {
+      "name": "gh-discovery-20260908-workflow-1",
+      "description": null,
+      "id": "UHJvamVjdDozNg=="
+    },
+    {
+      "name": "gh-discovery-20260908-redaction-1",
+      "description": null,
+      "id": "UHJvamVjdDozNQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-long-input-1",
+      "description": null,
+      "id": "UHJvamVjdDozNA=="
+    },
+    {
+      "name": "gh-discovery-20260908-write-4",
+      "description": null,
+      "id": "UHJvamVjdDozMg=="
+    },
+    {
+      "name": "gh-discovery-20260908-injection-4",
+      "description": null,
+      "id": "UHJvamVjdDozMQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-recover-4",
+      "description": null,
+      "id": "UHJvamVjdDozMA=="
+    },
+    {
+      "name": "gh-discovery-20260908-aggregate-4",
+      "description": null,
+      "id": "UHJvamVjdDoyOQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-extract-4",
+      "description": null,
+      "id": "UHJvamVjdDoyOA=="
+    },
+    {
+      "name": "gh-discovery-20260908-read-4",
+      "description": null,
+      "id": "UHJvamVjdDoyNw=="
+    },
+    {
+      "name": "gh-discovery-20260908-write-3",
+      "description": null,
+      "id": "UHJvamVjdDoyNg=="
+    },
+    {
+      "name": "gh-discovery-20260908-injection-3",
+      "description": null,
+      "id": "UHJvamVjdDoyNQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-recover-3",
+      "description": null,
+      "id": "UHJvamVjdDoyNA=="
+    },
+    {
+      "name": "gh-discovery-20260908-aggregate-3",
+      "description": null,
+      "id": "UHJvamVjdDoyMw=="
+    },
+    {
+      "name": "gh-discovery-20260908-extract-3",
+      "description": null,
+      "id": "UHJvamVjdDoyMg=="
+    },
+    {
+      "name": "gh-discovery-20260908-read-3",
+      "description": null,
+      "id": "UHJvamVjdDoyMQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-write-2",
+      "description": null,
+      "id": "UHJvamVjdDoyMA=="
+    },
+    {
+      "name": "gh-discovery-20260908-injection-2",
+      "description": null,
+      "id": "UHJvamVjdDoxOQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-recover-2",
+      "description": null,
+      "id": "UHJvamVjdDoxOA=="
+    },
+    {
+      "name": "gh-discovery-20260908-aggregate-2",
+      "description": null,
+      "id": "UHJvamVjdDoxNw=="
+    },
+    {
+      "name": "gh-discovery-20260908-extract-2",
+      "description": null,
+      "id": "UHJvamVjdDoxNg=="
+    },
+    {
+      "name": "gh-discovery-20260908-read-2",
+      "description": null,
+      "id": "UHJvamVjdDoxNQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-write-1",
+      "description": null,
+      "id": "UHJvamVjdDoxNA=="
+    },
+    {
+      "name": "gh-discovery-20260908-injection-1",
+      "description": null,
+      "id": "UHJvamVjdDoxMw=="
+    },
+    {
+      "name": "gh-discovery-20260908-recover-1",
+      "description": null,
+      "id": "UHJvamVjdDoxMg=="
+    },
+    {
+      "name": "gh-discovery-20260908-extract-1",
+      "description": null,
+      "id": "UHJvamVjdDoxMQ=="
+    },
+    {
+      "name": "gh-discovery-20260908-aggregate-1",
+      "description": null,
+      "id": "UHJvamVjdDoxMA=="
+    },
+    {
+      "name": "gh-discovery-20260908-read-1",
+      "description": null,
+      "id": "UHJvamVjdDo5"
+    },
+    {
+      "name": "default",
+      "description": "Default project",
+      "id": "UHJvamVjdDox"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "RGF0YXNldDoxNg==",
+      "name": "gh-benchmark-v3-20260909-r3",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-09T06:50:47.914666+00:00",
+      "updated_at": "2026-09-09T06:50:47.914666+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDoxNQ==",
+      "name": "gh-reconciliation-8ba1495bc7024685869eab1ffd784f72-conflict",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T19:01:30.864972+00:00",
+      "updated_at": "2026-09-08T19:01:30.864972+00:00",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDoxNA==",
+      "name": "gh-reconciliation-8ba1495bc7024685869eab1ffd784f72",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T19:01:29.593343+00:00",
+      "updated_at": "2026-09-08T19:01:29.593343+00:00",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDoxMw==",
+      "name": "gh-curated-v3-baseline-r2",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:58:57.864468+00:00",
+      "updated_at": "2026-09-08T18:58:57.864468+00:00",
+      "example_count": 126
+    },
+    {
+      "id": "RGF0YXNldDoxMg==",
+      "name": "gh-reconciliation-23aa0f23b8e74331b317a4f82a07da15-conflict",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:45:24.851008+00:00",
+      "updated_at": "2026-09-08T18:45:24.851008+00:00",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDoxMQ==",
+      "name": "gh-reconciliation-23aa0f23b8e74331b317a4f82a07da15",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:45:23.673791+00:00",
+      "updated_at": "2026-09-08T18:45:23.673791+00:00",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDoxMA==",
+      "name": "gh-reconciliation-6098b1b0fdda47b38fb26f2497048ff4-conflict",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:37:31.589073+00:00",
+      "updated_at": "2026-09-08T18:37:31.589073+00:00",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDo5",
+      "name": "gh-reconciliation-6098b1b0fdda47b38fb26f2497048ff4",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:37:30.500067+00:00",
+      "updated_at": "2026-09-08T18:37:30.500067+00:00",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDo4",
+      "name": "gh-benchmark-v3-20260908-r2",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T17:52:04.221539+00:00",
+      "updated_at": "2026-09-08T17:52:04.221539+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDo3",
+      "name": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237-evaluated",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T17:44:48.070355+00:00",
+      "updated_at": "2026-09-08T17:44:48.070355+00:00",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDo2",
+      "name": "gh-validation-be7cbedf-28f8-427d-ae7c-a99d22131668-evaluated",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T17:13:16.692721+00:00",
+      "updated_at": "2026-09-08T17:13:16.692721+00:00",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDo1",
+      "name": "gh-benchmark-v3-20260908",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T17:07:19.766969+00:00",
+      "updated_at": "2026-09-08T17:07:19.766969+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDo0",
+      "name": "gh-training-20260908-canonical",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T13:32:35.702154+00:00",
+      "updated_at": "2026-09-08T13:32:35.702154+00:00",
+      "example_count": 240
+    },
+    {
+      "id": "RGF0YXNldDoz",
+      "name": "gh-discovery-20260908-evaluated",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T12:13:59.591897+00:00",
+      "updated_at": "2026-09-08T12:13:59.591897+00:00",
+      "example_count": 24
+    },
+    {
+      "id": "RGF0YXNldDoy",
+      "name": "gh-validation-9cd2f62e-3c01-4979-bc92-098ccbd82f23-evaluated",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T11:58:53.389297+00:00",
+      "updated_at": "2026-09-08T11:58:53.389297+00:00",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDox",
+      "name": "gh-validation-8c14cb77-aa35-4c8f-a178-58caff48808b-evaluated",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-07T21:06:16.265856+00:00",
+      "updated_at": "2026-09-07T21:06:16.265856+00:00",
+      "example_count": 1
+    }
+  ]
+}

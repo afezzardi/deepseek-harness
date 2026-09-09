@@ -1,0 +1,43 @@
+$ node build.mjs
+ℹ entry: src/index.ts, examples/evaluation.ts, src/curation.ts, src/fireworks.ts, src/render-preview.ts, src/reward.ts, experiments/frozen-profile.ts, experiments/audit-profile.ts, experiments/lifecycle-profile.ts, experiments/benchmark-profile.ts, experiments/preflight-profile.ts
+ℹ target: es2024
+ℹ tsconfig: ../../../tsconfig.base.json
+ℹ Build start
+ℹ Cleaning 25 files
+ℹ Hint: consider adding deps.onlyBundle option to avoid unintended bundling of dependencies, or set deps.onlyBundle: false to disable this hint.
+See more at https://tsdown.dev/options/dependencies#deps-onlybundle
+Detected dependencies in bundle:
+- @opentelemetry/core
+- @opentelemetry/semantic-conventions
+- @opentelemetry/resources
+- @opentelemetry/otlp-exporter-base
+- @opentelemetry/otlp-transformer
+- @opentelemetry/api-logs
+- @opentelemetry/sdk-metrics
+- @opentelemetry/exporter-trace-otlp-proto
+- @opentelemetry/sdk-trace
+- @opentelemetry/api
+- zod
+ℹ lib/index.js                              638.77 kB │ gzip: 125.29 kB
+ℹ lib/audit-profile.js                       30.70 kB │ gzip:   8.84 kB
+ℹ lib/reward.js                               5.33 kB │ gzip:   1.99 kB
+ℹ lib/evaluation.js                           5.32 kB │ gzip:   2.03 kB
+ℹ lib/preflight-profile.js                    3.08 kB │ gzip:   1.32 kB
+ℹ lib/lifecycle-profile.js                    2.73 kB │ gzip:   1.24 kB
+ℹ lib/render-preview.js                       2.26 kB │ gzip:   0.97 kB
+ℹ lib/benchmark-profile.js                    1.87 kB │ gzip:   0.90 kB
+ℹ lib/frozen-profile.js                       1.68 kB │ gzip:   0.85 kB
+ℹ lib/curation.js                             0.56 kB │ gzip:   0.27 kB
+ℹ lib/fireworks.js                            0.22 kB │ gzip:   0.16 kB
+ℹ lib/schemas-BdSh8kog.js                   137.09 kB │ gzip:  26.36 kB
+ℹ lib/esm-Al0khMhz.js                        47.66 kB │ gzip:  11.15 kB
+ℹ lib/curation-D8q-HCx6.js                   26.09 kB │ gzip:   7.51 kB
+ℹ lib/snapshot-DK8GOoRT.js                    8.59 kB │ gzip:   3.21 kB
+ℹ lib/getMachineId-win-DDGV21kh.js            1.26 kB │ gzip:   0.73 kB
+ℹ lib/getMachineId-bsd-Dj-yDvSB.js            1.09 kB │ gzip:   0.56 kB
+ℹ lib/getMachineId-darwin-BnYsmp5K.js         1.08 kB │ gzip:   0.60 kB
+ℹ lib/getMachineId-linux-CH9--m0C.js          0.88 kB │ gzip:   0.51 kB
+ℹ lib/getMachineId-unsupported-BF1XrzSr.js    0.69 kB │ gzip:   0.40 kB
+ℹ lib/execAsync-Db5DYw17.js                   0.52 kB │ gzip:   0.33 kB
+ℹ 21 files, total: 917.47 kB
+✔ Build complete in 576ms

@@ -1,5 +1,7 @@
 # Trace pipeline continuation — 2026-09-08
 
+Historical checkpoint: measurements and pending items below describe this run. Use the [r5 report](../trace-pipeline-r3-20260909/REPORT.md) and [current handoff](../../plugins/gh-genai-traces/HANDOFF.md#pending-work) for subsequent results and next actions.
+
 This report preserves the original continuation measurements. Subsequent code-review fixes and deterministic-v5 checks are recorded in [Fable review dispositions](FABLE-REVIEW.md).
 
 The restored self-hosted route completed the frozen 144-trial medium baseline. Phoenix now holds recorded experiment runs and 126 eligible neutral targets. No paid operation, training job, inference configuration change, commit, or push occurred. This report continues the preserved [checkpoint](REPORT.md) at `588162d2e8` on `fork/qwen38-deployment`.

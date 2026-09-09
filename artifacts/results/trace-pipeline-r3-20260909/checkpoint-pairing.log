@@ -1,0 +1,5 @@
+$ tsx scripts/verify-translation-pairing.ts --write artifacts/README.md artifacts/plugins/gh-genai-traces/README.md artifacts/plugins/gh-genai-traces/experiments/README.md
+verify-translation-pairing: recorded artifacts/README.i18n.yaml
+verify-translation-pairing: recorded artifacts/plugins/gh-genai-traces/README.i18n.yaml
+verify-translation-pairing: recorded artifacts/plugins/gh-genai-traces/experiments/README.i18n.yaml
+verify-translation-pairing: 3 record(s) written; run the check to validate the pairs.

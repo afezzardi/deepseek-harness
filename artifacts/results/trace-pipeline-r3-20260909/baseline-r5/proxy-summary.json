@@ -1,0 +1,20 @@
+{
+  "events": {
+    "admitted": 671,
+    "response": 668,
+    "released": 668
+  },
+  "maxActive": 4,
+  "responseStatus": {
+    "200": 668
+  },
+  "admissionWithoutResponse": [
+    "6c1fa3eada0a4cbf970e9fba2e2682bc",
+    "7d052894ea404784bf55e1235e3a510f",
+    "ab6925e9cf40465b889caa854fcaf8d8"
+  ],
+  "templateSettings": {
+    "{\"enable_thinking\": false, \"preserve_thinking\": false}": 144,
+    "{\"enable_thinking\": true, \"preserve_thinking\": false, \"reasoning_effort\": \"medium\"}": 524
+  }
+}
