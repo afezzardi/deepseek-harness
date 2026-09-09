@@ -1,6 +1,6 @@
 import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { exportFireworksSft } from '../src/fireworks.ts'
-import { TRANSFORMATION, type Grade } from '../src/curation.ts'
+import { exportFireworksSft, exportFireworksOutcomeSft } from '../src/fireworks.ts'
+import { TRANSFORMATION, type Candidate, type Grade } from '../src/curation.ts'
 import { Session, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
 import { ApprovalRequestId } from '@deepseek-ai/dsh-user-approval/types'
 import { describe, expect, it } from 'vitest'
@@ -14,6 +14,35 @@ const sourceFixture = fixture()
 const provenance: Provenance = { family: 'read', task: 'read-42', trial: 'read-1', rootSession: 'fixture', revision: 'fixture', configurationHash: 'a'.repeat(64), review: { kind: 'synthetic-fixture', reviewer: 'test', evidence: 'fixture.ts', contentHash: digest(sourceFixture), transformationHash: digest(TRANSFORMATION) } }
 const grade: Grade = { version: 'deterministic-v2', required: ['syntax', 'semantics', 'tools', 'environment'], execution: { exitCode: 0, timedOut: false }, observations: { syntax: { status: 'pass', evidence: ['fixture'] }, semantics: { status: 'pass', evidence: ['fixture'] }, tools: { status: 'pass', evidence: ['fixture'] }, environment: { status: 'pass', evidence: ['fixture'] } } }
 const candidate = () => curateSession(structuredClone(sourceFixture), structuredClone(provenance), structuredClone(grade), policy)
+
+it('derives outcome-supervised reasoning without rewriting the format-only candidate', () => {
+  const source = structuredClone(sourceFixture)
+  const target = source.events.findLast(e => e.type === 'assistant/message')!
+  if (target.type !== 'assistant/message') throw Error('Missing fixture answer')
+  target.data.message.content.unshift({ type: 'reasoning', text: 'The read result contains 42.' })
+  const c = { ...curateSession(source, { ...provenance, review: { ...provenance.review!, contentHash: digest(source) } }, grade, policy), split: 'train' as const }
+  const original = structuredClone(c)
+  const row = exportFireworksOutcomeSft(c)
+  expect(row.messages.at(-1)).toMatchObject({ reasoning_content: 'The read result contains 42.', content: 'The value is 42.', weight: 1 })
+  expect(row.messages.filter(m => m.role === 'assistant').slice(0, -1).every(m => m.weight === 0)).toBe(true)
+  expect(c).toEqual(original)
+  expect(exportFireworksSft(c).messages.at(-1)?.reasoning_content).toBeUndefined()
+  expect(() => exportFireworksOutcomeSft({ ...c, sftEligible: false })).toThrow('admitted')
+  const unassigned: Candidate = { ...c }
+  delete unassigned.split
+  expect(() => exportFireworksOutcomeSft(unassigned)).toThrow('frozen split')
+  const noReasoning = { ...candidate(), split: 'train' as const }
+  expect(() => exportFireworksOutcomeSft(noReasoning)).toThrow('reasoning block')
+  const corrupt = structuredClone(c)
+  corrupt.grade.observations.semantics.status = 'unknown'
+  expect(() => exportFireworksOutcomeSft(corrupt)).toThrow('eligibility')
+  corrupt.grade = structuredClone(c.grade)
+  corrupt.response.content[0] = { type: 'reasoning', text: 'Unreviewed substitution' }
+  expect(() => exportFireworksOutcomeSft(corrupt)).toThrow('mismatch')
+  target.data.message.content.push({ type: 'text', text: ' Checked.' })
+  const multiple = { ...curateSession(source, { ...provenance, review: { ...provenance.review!, contentHash: digest(source) } }, grade, policy), split: 'train' as const }
+  expect(exportFireworksOutcomeSft(multiple).messages.at(-1)?.content).toBe('The value is 42. Checked.')
+})
 
 it('rejects altered file hashes, stale review, invented readiness and contradictory admission', () => {
   expect(validateCandidate(JSON.parse(JSON.stringify(candidate()))).provenance.rowHash).toBe(candidate().provenance.rowHash)
@@ -61,6 +90,35 @@ it('accounts for rejected tool targets including unexpected selection errors', (
   expect(selectToolDecisions(sourceFixture, c, broken).rejections).toEqual([{ session: sourceFixture.session.id,
     event: sourceFixture.events.find(e => e.type === 'assistant/message')!.seq, reason: 'TypeError: selection implementation failed' }])
   expect(selectToolDecisions(sourceFixture, undefined, policy).rejections[0]?.reason).toContain('no eligible')
+})
+
+it('supervises independently graded tool decisions and rejects unresolved history or unknown tools', () => {
+  const source = structuredClone(sourceFixture)
+  const target = source.events.find(e => e.type === 'assistant/message')!
+  const call = source.events.find(e => e.type === 'tool/call')!
+  if (target.type !== 'assistant/message') throw Error('Missing fixture tool decision')
+  target.data.message.content.unshift({ type: 'reasoning', text: 'Read the requested fixture before answering.' })
+  const p = { ...provenance, review: { ...provenance.review!, contentHash: digest(source), transformationHash: digest({ ...TRANSFORMATION, objective: 'tool-decision' }) } }
+  const g = { ...grade, decisions: [{ call: call.seq, status: 'pass' as const, evidence: ['fixture arguments and result independently checked'] }] }
+  const c = { ...curateSession(source, p, g, policy, target.seq), split: 'train' as const }
+  const row = exportFireworksOutcomeSft(c)
+  expect(row.messages.at(-1)).toMatchObject({ weight: 1, content: '', reasoning_content: 'Read the requested fixture before answering.', tool_calls: [{ function: { name: 'read' } }] })
+  const substituted = structuredClone(c)
+  substituted.grade.decisions![0]!.status = 'fail'
+  substituted.grade.decisions!.push({ call: call.seq + 100, status: 'pass', evidence: ['unrelated later action'] })
+  expect(() => exportFireworksOutcomeSft(substituted)).toThrow('bound passing grade')
+  const wrongCall = structuredClone(c)
+  wrongCall.sourceEvidence.toolDecisions![0]!.callId = 'different-call'
+  expect(() => validateCandidate(wrongCall)).toThrow('bound passing grade')
+  expect(() => validateTrainingRow(row)).toThrow()
+  const broken = structuredClone(row)
+  broken.messages.at(-1)!.tool_calls![0]!.function.name = 'missing'
+  expect(() => validateTrainingRow(broken, 'tool-decision')).toThrow('Unknown tool')
+  const unresolved = structuredClone(row)
+  unresolved.messages.splice(-1, 0, { ...structuredClone(row.messages.at(-1)!), weight: 0 })
+  expect(() => validateTrainingRow(unresolved, 'tool-decision')).toThrow('Missing tool results')
+  c.grade.decisions![0]!.status = 'fail'
+  expect(() => exportFireworksOutcomeSft(c)).toThrow('passing decisions')
 })
 
 describe('canonical curation', () => {

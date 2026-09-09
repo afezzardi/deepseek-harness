@@ -106,7 +106,7 @@ SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误�
 <a id="known-limitations-and-deferred-work"></a>
 ## 已知限制与延后工作
 
-[整理库](src/curation.ts) 通过 `./curation` 生成版本 2 的后端无关候选，包含明确评分、审核哈希、审批证据及选定损失目标。Phoenix 管理固定版本的划分。`./fireworks` 保留托管 SFT/DPO 序列化；`./reward` 提供文件系统观察。仅监督最终回答是明确的格式目标，未评分的目标推理被省略；这些数据尚未获准用于生产智能体训练。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。[r5 报告](../../results/trace-pipeline-r3-20260909/REPORT.md) 验证 Qwen 最终回答序列化与已观察引擎的一致性；[交接文档](HANDOFF.md#pending-work) 记录剩余验收工作。本地 schema 验证及 token 一致性不代表训练后模型改进。
+[整理库](src/curation.ts) 通过 `./curation` 生成版本 2 的后端无关候选，包含明确评分、审核哈希、审批证据及选定损失目标。Phoenix 管理固定版本的划分。`./fireworks` 保留托管 SFT/DPO 序列化；`./reward` 提供文件系统观察。仅格式导出省略目标推理。显式结果推理导出保留选定推理以及回答或已评分工具决策，不改写规范候选；任务结果不独立评价推理中的陈述。[基础设施报告](../../results/fireworks-sft-20260909/REPORT.md) 记录 Fireworks 数据集上传、原生预览及剩余兼容性限制。这些数据是后续工作负载的管线夹具，不代表生产训练批准。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。[r5 报告](../../results/trace-pipeline-r3-20260909/REPORT.md) 验证 Qwen 最终回答序列化与已观察引擎的一致性；[交接文档](HANDOFF.md#pending-work) 记录剩余验收工作。本地 schema 验证及 token 一致性不代表训练后模型改进。
 
 - 请求采集表示适配器序列化前的 harness 输入；不采集提供者 HTTP 请求体、tokenizer ID、隐藏推理及附件原始字节。
 - 回放无法恢复会话中没有记录的实时计时或辅助请求细节。冷读取可能包含上游生成的中断关闭记录，并在轮次级别明确标识。

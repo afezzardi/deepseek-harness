@@ -2,7 +2,7 @@
 
 ## Active work: traces to datasets
 
-Start with the [gh-genai-traces handoff](plugins/gh-genai-traces/HANDOFF.md) and [2026-09-09 report](results/trace-pipeline-r3-20260909/REPORT.md). The repaired revision-5 benchmark completed 144 trials: 111 passes, 30 task failures, and three timeouts. Phoenix holds the native experiment and 300 eligible targets. All 201 canonical sessions reconstructed; 524 settled provider requests matched byte-for-byte. Explicit template-trim rendering passes full-example engine token parity for all 111 eligible final answers and twelve pilot answers without changing canonical data or inference configuration. This resolves the observed whitespace blocker, but does not approve production thinking training. Cleanup and tested local backups are recorded in the report. This checkpoint keeps all fork changes under `artifacts/`; push, training, and paid operations remain unauthorized.
+Start with the [gh-genai-traces handoff](plugins/gh-genai-traces/HANDOFF.md) and [foundation report](results/fireworks-sft-20260909/REPORT.md). The user is establishing a reliable trace-to-dataset pipeline before selecting a real workload; no near-term fine-tuning is planned. The r5 benchmark and its canonical sources remain preserved. The explicit reasoning-and-action exporter produces 300 targets with frozen splits; authorized Fireworks train/validation uploads and native previews provide destination evidence. Workload quality, DPO pair collection, RFT rollouts, and actual trainer verification remain separate work. No training, paid inference, inference configuration change, or push is authorized.
 
 ## Upstream baseline
 

@@ -4,7 +4,7 @@
 
 ## 所有权与就绪状态
 
-Phoenix 管理整理后的数据集、不可变发布版本、原生划分、标注和实验。规范 DSH 会话负责重建。本地快照、清单、回执和备份是源证据及可恢复检查点。历史版本 1 数据集保留其原有含义。本轮不启动训练任务。
+Phoenix 管理整理后的数据集、不可变发布版本、原生划分、标注和实验。规范 DSH 会话负责重建。本地快照、清单、回执和备份是源证据及可恢复检查点。历史版本 1 数据集保留其原有含义。数据集准备是后续工作负载的基础设施；本轮不启动训练任务。
 
 [r5 报告](../../../results/trace-pipeline-r3-20260909/REPORT.md) 记录已完成的采集和渲染器验收；[审查处理记录](../../../results/trace-pipeline-r3-20260909/FABLE-REVIEW.md) 记录基准修复。[续作报告](../../../results/trace-pipeline-v3/CONTINUATION.md) 保留历史测量结果。基准包含 12 个任务族的 48 个不同实例，仓库任务和业务任务各占一半。任务族级别的 train/validation/test 划分在执行前固定，每个划分均包含两个领域。修订版 5 向模型提供明确的输出 schema 和工具策略，使用一次性后台委派，并要求按启动顺序返回完整 workflow 子结果。ASCII 转义 Unicode 夹具使字符差异在已部署 tokenizer 的 NFC 规范化后仍得以保留。历史修订版保留原有解释。
 
@@ -28,11 +28,15 @@ Phoenix 管理整理后的数据集、不可变发布版本、原生划分、标
 
 关联任务族、任务身份、父子会话、等价请求和合格重复输出共享划分组。已提升的划分发生冲突时，整个关联组被隔离，并保留受影响版本身份。通用失败输出不会连接原本无关的任务族。未分配的组不能提升。原生划分关联可变，因此 Phoenix 版本元数据固定发布时的划分成员。
 
-最终回答 SFT 是格式目标：较早的 assistant 轮次作为上下文，未经评分的最终推理不进入监督内容。它尚未获准用于采用推理的生产路由训练。选定工具决策要求独立的逐调用通过评分，且属于最后完成的轮次。较早生命周期轮次的决策不被选取。检查点与汇总统计考虑及选取的事件数量，并保留逐事件拒绝原因，包括意外错误。Delegation 检查后台任务身份与结果收集；workflow 检查所属只读子会话、运行顺序、完成状态及有序返回值。相同的子结果无法证明顺序。必须提供规范子会话快照，且已配置的可继续委派不满足基准要求的后台任务协议。两条渲染路径均拒绝不支持的目标或掩码策略。
+最终回答 SFT 是格式目标：较早的 assistant 轮次作为上下文，未经评分的最终推理不进入监督内容。它尚未获准用于采用推理的生产路由训练。选定工具决策要求独立的逐调用通过评分，且属于最后完成的轮次。较早生命周期轮次的决策不被选取。检查点与汇总统计考虑及选取的事件数量，并保留逐事件拒绝原因，包括意外错误。Delegation 检查后台任务身份与结果收集；workflow 检查所属只读子会话、运行顺序、完成状态及有序返回值。相同的子结果无法证明顺序。必须提供规范子会话快照，且已配置的可继续委派不满足基准要求的后台任务协议。Qwen 参考渲染器仅接受最终回答格式目标；Fireworks 结果导出使用独立的推理与行动目标。
 
 ## 目标后端与奖励
 
-`./fireworks` 在共享候选之上保留托管 SFT 和固定请求的托管 DPO 导出。DPO 要求请求相同、选中回答通过、拒绝回答明确失败、只有一个用户轮次、没有工具且输出不同。`./render-preview` 根据提交行哈希、渲染器与模型证据、期望上下文和选定损失验证已采集的原生 Fireworks 预览。只读模型检查确认 `accounts/fireworks/models/qwen3p8-27b` 支持监督式 LoRA 调优。远程预览仍未执行，因为文档中的验证流程包含付费推理。Schema 合法不等于渲染器批准。
+`./fireworks` 提供仅格式的 `exportFireworksSft`、显式 `exportFireworksOutcomeSft` 以及固定请求的托管 DPO 序列化。结果导出要求任务评分通过，且一个非空推理块之后为选定回答块或独立评分通过的工具调用。它在 `reasoning_content` 中保留目标推理，并屏蔽较早的 assistant 消息。任务结果用于选取示范；推理中的各项陈述没有独立评分。原始候选及其损失选择保持不变；其内容审核描述规范转换，导出清单另行记录派生目标。DPO 要求请求相同、选中回答通过、拒绝回答明确失败、只有一个用户轮次、没有工具且输出不同。
+
+`fireworks_bundle.py <receipt> --objective outcome-reasoning --output <fresh-private-directory>` 验证固定的 Phoenix 版本，输出私有 train/validation/test JSONL、源快照、逐行来源以及内容和实现哈希。`--objective final-answer-format` 保留仅回答的格式实验，并记录排除的工具目标。每行均通过所属 TypeScript 验证器；固定划分及已审核内容不可变更。输出目录已存在时会拒绝执行。导出前先构建插件。`firectl dataset create <dataset-id> <split.jsonl>` 上传数据集而不创建训练任务。测试划分保持留出。
+
+`fireworks_preview.py <dataset-resource> --model <model-resource> --context-length <tokens> --output <fresh-directory>` 采集原生数据集预览，不调用推理或训练；`--page-size` 控制响应批量，默认为一个示例以避免预览总大小超限。凭据来自 `FIREWORKS_API_KEY` 或 firectl 默认 API key 配置。`verify_fireworks_preview.py --bundle <directory> --split <split> --preview <directory> --tokenizer <local-directory> --output <report>` 检查源行身份、有序损失片段及模板文本。显式 `--json-serialization ascii --tool-responses separate` 比较已观察到的 Fireworks 展示方式；默认比较保留推理模板的 JSON 与工具结果分组方式。这些适配要求保留的 Qwen3.8 模板哈希和已验证的 ASCII 过滤器行为；报告从模板提取默认推理强度，并记录库版本、声明的展开方式和数据项数量。与采集设置的差异仍单独报告。验证器需要可选的 Transformers 和 Jinja2 依赖。报告保留远端错误，始终不将数据标记为可训练。[基础设施报告](../../../results/fireworks-sft-20260909/REPORT.md) 保存原生证据；[方法选择](../../../results/fireworks-sft-20260909/METHODS.md) 区分 SFT、DPO 和 RFT 的要求。
 
 `render_qwen.py <candidate> --tokenizer <directory> --output <file>` 检查候选内容哈希，使用固定的本地 tokenizer 渲染，并验证精确最终回答掩码。可选 `--route` 要求已观察到的 checkpoint、tokenizer 和模板证据，之后才与引擎比较请求 token。本地模板必须匹配引擎实际使用的模板，后者可能不同于 checkpoint 随附的模板。已检查的引擎通过请求字段 `reasoning` 接收较早 assistant 消息的推理；本地模板消息使用 `reasoning_content`。默认 `--target-whitespace exact` 拒绝目标变换。显式指定 `--target-whitespace template-trim` 仅允许已验证的模板首尾空白删除，并记录删除字符串、源与渲染哈希、渲染器版本、模板哈希及 tokenizer 文件。规范候选及已通过隐私审核的内容保持不变；此序列化仅删除内容，无需重新进行内容隐私审核。渲染器要求只有一个选定文本块，拒绝 tokenizer 新增 token 字符串，并验证掩码连续且精确解码为 `renderedTargetText`。`--route` 检查请求与完整示例 token 一致性。格式目标不监督最终推理及消息结束 token；生产训练需要独立的目标与训练器审核。对文本重新分词无法恢复生成时 token ID；精确 token RL 仍不支持。
 

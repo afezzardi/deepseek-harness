@@ -1,0 +1,9 @@
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.8 /home/andrea/management/deepseek-harness/artifacts/plugins/gh-genai-traces
+
+
+ Test Files  1 passed (1)
+      Tests  22 passed (22)
+   Start at  13:15:02
+   Duration  1.25s (transform 828ms, setup 0ms, import 999ms, tests 97ms, environment 0ms)

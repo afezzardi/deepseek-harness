@@ -32,6 +32,9 @@ export type Provenance = z.infer<typeof provenanceSchema>
 /** Explicit transformation identity used by privacy review and checkpoints. */
 export const TRANSFORMATION = { version: 2, reconstruction: 'upstream-surface', objective: 'final-answer', reasoning: 'retain-source-omit-target' } as const
 
+const toolDecisionBindingSchema = z.object({ block: z.number().int().nonnegative(), call: z.number().int().nonnegative(),
+  callId: z.string().min(1), name: z.string().min(1), arguments: z.string() }).strict()
+
 /** Hash normalized JSON; array order is significant.
  * @param value - serializable data.
  * @returns stable SHA-256 digest.
@@ -90,14 +93,16 @@ export function curateSession(snapshot: SessionLogSnapshot, provenance: Provenan
   if (names.size !== (header.tools?.length ?? 0)) throw Error('Duplicate tool definition')
   validateMessages(messages, names)
   const blocks = response.content.flatMap((block, index) => objective === 'final-answer' ? block.type === 'text' && block.text.trim() ? [index] : [] : block.type === 'tool-call' ? [index] : [])
+  const toolDecisions: z.infer<typeof toolDecisionBindingSchema>[] = []
   if (!blocks.length || objective === 'final-answer' && response.content.some(block => block.type === 'tool-call')) throw Error('Missing selected target')
   if (objective === 'tool-decision') {
     const settlements: Message[] = []
     if (response.content.some(block => block.type !== 'tool-call' && block.type !== 'reasoning')) throw Error('Mixed tool/text target is unsupported')
-    for (const block of response.content) {
+    for (const [index, block] of response.content.entries()) {
       if (block.type !== 'tool-call') continue
       const call = snapshot.events.find(event => event.type === 'tool/call' && event.data.callId === block.id && event.seq > target.seq)
       if (!call || call.type !== 'tool/call' || call.data.name !== block.name || call.data.arguments !== block.arguments || !grade.decisions?.some(d => d.call === call.seq && d.status === 'pass')) throw Error('Selected tool decision has no independent passing grade')
+      toolDecisions.push({ block: index, call: call.seq, callId: call.data.callId, name: call.data.name, arguments: call.data.arguments })
       const result = snapshot.events.find(event => event.type === 'tool/result' && event.data.message.content[0].toolCallId === block.id && event.seq > call.seq)
       if (!result || result.type !== 'tool/result') throw Error('Selected tool result missing')
       settlements.push(result.data.message)
@@ -108,7 +113,7 @@ export function curateSession(snapshot: SessionLogSnapshot, provenance: Provenan
   if (capture['gh.content.candidate.status'] !== 'complete') throw Error(`Capture ${String(capture['gh.content.candidate.status'])}`)
   const sourceHash = digest(snapshot), transformationHash = digest({ ...TRANSFORMATION, objective })
   if (!provenance.review || provenance.review.contentHash !== sourceHash || provenance.review.transformationHash !== transformationHash) throw Error('Privacy review missing or stale')
-  const selection = { policy: objective, event: target.seq, blocks, reasoning: 'omit' as 'omit' | 'masked' | 'supervise' }
+  const selection = { policy: objective as 'final-answer' | 'tool-decision', event: target.seq, blocks, reasoning: 'omit' as const }
   const approvals = snapshot.events.filter(event => event.type === 'approval/asked' || event.type === 'approval/decided')
   const eligible = grade.required.every(key => grade.observations[key].status === 'pass') && approvals.length === 0
   return { version: 2 as const, request, response, target: selection, grade, provenance: { ...provenance,
@@ -120,12 +125,18 @@ export function curateSession(snapshot: SessionLogSnapshot, provenance: Provenan
     rowHash: digest({ request, response, target: { ...selection, event: null } }), outputHash: digest(response.content),
     renderer: null, tokenizer: null, checkpoint: null,
   }, sourceEvidence: { approvalPolicy: 'exclude-human-intervention', approvals, events: snapshot.events.filter(event => event.type === 'tool/result' && event.data.error || event.type === 'assistant/attempt'),
+    ...objective === 'tool-decision' ? { toolDecisions } : {},
     reconstruction: 'reconstruction' in snapshot ? snapshot.reconstruction : null },
   sftEligible: eligible, trainingReady: false as const,
   readiness: { qwen: { schema: 'unverified', renderer: 'unverified' }, fireworks: { schema: 'unverified', renderer: 'unverified' } } }
 }
 /** Shared candidate for all destinations; version-1 files remain historical evidence. */
-export type Candidate = ReturnType<typeof curateSession>
+export type Candidate = ReturnType<typeof curateSession> & {
+  /** Frozen Phoenix membership; absent before partitioning. */
+  split?: 'train' | 'validation' | 'test' | null
+  conflictVersions?: string[]
+  duplicateOf?: string | null
+}
 
 /** Record every owned tool-call assistant event, including unsupported or failed selections.
  * @param snapshot - canonical source containing potential targets.
@@ -165,7 +176,8 @@ const candidateFileSchema = z.looseObject({ version: z.literal(2),
     requestedSettings: z.record(z.string(), z.json()), adapterDefaults: z.record(z.string(), z.literal(true)).nullable(), observedWireSettings: z.null(),
     modelAlias: z.string(), requestedReasoningEffort: z.string().nullable(), renderer: z.null(), tokenizer: z.null(), checkpoint: z.null(),
   }).loose(),
-  sourceEvidence: z.looseObject({ approvalPolicy: z.literal('exclude-human-intervention'), approvals: z.array(z.unknown()), events: z.array(z.unknown()) }),
+  sourceEvidence: z.looseObject({ approvalPolicy: z.literal('exclude-human-intervention'), approvals: z.array(z.unknown()), events: z.array(z.unknown()),
+    toolDecisions: z.array(toolDecisionBindingSchema).optional() }),
   sftEligible: z.boolean(), trainingReady: z.literal(false), readiness: z.object({
     qwen: z.object({ schema: z.literal('unverified'), renderer: z.literal('unverified') }),
     fireworks: z.object({ schema: z.literal('unverified'), renderer: z.literal('unverified') }),
@@ -192,6 +204,15 @@ export function validateCandidate(input: unknown): Candidate {
   if (c.target.policy === 'tool-decision') {
     const decisions = c.grade.decisions ?? []
     if (new Set(decisions.map(d => d.call)).size !== decisions.length || decisions.filter(d => d.status === 'pass' && d.call > c.target.event).length < c.target.blocks.length) throw Error('Candidate tool target lacks distinct passing decisions')
+    const bindings = c.sourceEvidence.toolDecisions
+    if (bindings) {
+      if (digest(bindings.map(b => b.block)) !== digest(c.target.blocks) || new Set(bindings.map(b => b.call)).size !== bindings.length) throw Error('Candidate tool-grade bindings differ from selected blocks')
+      for (const binding of bindings) {
+        const block = c.response.content[binding.block]
+        if (block?.type !== 'tool-call' || block.id !== binding.callId || block.name !== binding.name || block.arguments !== binding.arguments
+          || binding.call <= c.target.event || !decisions.some(d => d.call === binding.call && d.status === 'pass')) throw Error('Candidate selected tool call lacks its bound passing grade')
+      }
+    }
   }
   const names = new Set(c.request.tools?.map(tool => tool.name))
   if (names.size !== (c.request.tools?.length ?? 0)) throw Error('Duplicate candidate tool definition')

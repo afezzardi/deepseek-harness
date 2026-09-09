@@ -9,8 +9,7 @@
     "./evaluation": "./lib/evaluation.js",
     "./curation": "./lib/curation.js",
     "./reward": "./lib/reward.js",
-    "./fireworks": "./lib/fireworks.js",
-    "./render-preview": "./lib/render-preview.js"
+    "./fireworks": "./lib/fireworks.js"
   },
   "scripts": {
     "build": "node build.mjs",

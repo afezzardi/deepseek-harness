@@ -1,0 +1,84 @@
+{
+  "objective": "outcome-reasoning",
+  "sourceDataset": "RGF0YXNldDoxOQ==",
+  "sourceVersion": "RGF0YXNldFZlcnNpb246MjU=",
+  "files": {
+    "train.jsonl": {
+      "sha256": "e0a2cb066bcafd2475a84dc6696f59de29332eccf3176910a778f97c801b197f",
+      "bytes": 8627090,
+      "examples": 223
+    },
+    "validation.jsonl": {
+      "sha256": "5cf858661048363cb58da0706b76ee49be5f04f0df9e5850c23ee11682a6d3ae",
+      "bytes": 2179028,
+      "examples": 40
+    },
+    "test.jsonl": {
+      "sha256": "3f6d07c45dd6e4a909c4c155ebf92bf8e4d64c0a3e0d37ccdf741f1555132ec0",
+      "bytes": 1344593,
+      "examples": 37
+    }
+  },
+  "targets": {
+    "train": {
+      "tool-decision": 150,
+      "final-answer": 73
+    },
+    "validation": {
+      "final-answer": 16,
+      "tool-decision": 24
+    },
+    "test": {
+      "tool-decision": 15,
+      "final-answer": 22
+    }
+  },
+  "excluded": 0,
+  "canonicalFilesUnchanged": 402,
+  "finalCandidates": 141,
+  "identicalRequestPassFailPairs": 0,
+  "previews": {
+    "actions-train-preview-check.json": {
+      "sha256": "75378568aaa0383fc430350fb0bfe8e0c2bf55bd1ae60b140013b74210d508b3",
+      "sourceRowsVerified": 223,
+      "renderings": 446,
+      "matched": 446,
+      "errors": {},
+      "matchesCollectionSettings": 0
+    },
+    "actions-validation-preview-check.json": {
+      "sha256": "8a027aad7a50673eaec880efa0b9a905d38f54aaf15c66cf3f36e64c43d10f78",
+      "sourceRowsVerified": 40,
+      "renderings": 80,
+      "matched": 71,
+      "errors": {
+        "Rendered preview exceeds the response size limit.": 9
+      },
+      "matchesCollectionSettings": 0
+    },
+    "actions-validation-single-check.json": {
+      "sha256": "e47dc0cb9f808d9f970b6b2faf6489565fd0f8945d927e797e4731c093284627",
+      "sourceRowsVerified": 40,
+      "renderings": 80,
+      "matched": 80,
+      "errors": {},
+      "matchesCollectionSettings": 0
+    }
+  },
+  "trainingReady": false,
+  "currentExporterMatchesSubmittedFiles": {
+    "train.jsonl": "e0a2cb066bcafd2475a84dc6696f59de29332eccf3176910a778f97c801b197f",
+    "validation.jsonl": "5cf858661048363cb58da0706b76ee49be5f04f0df9e5850c23ee11682a6d3ae",
+    "test.jsonl": "3f6d07c45dd6e4a909c4c155ebf92bf8e4d64c0a3e0d37ccdf741f1555132ec0"
+  },
+  "reviewedBundle": {
+    "path": ".bundle-reviewed",
+    "manifestSha256": "d0c69fa3c3b2eac1e03a062b7dc4a82d97a0a29e609ca00a9f25038d0b33a7bd",
+    "implementationFilesVerified": 39,
+    "toolGradeBindings": {
+      "canonical-curation-only": 189,
+      "not-applicable": 111
+    }
+  },
+  "repeatedCompleteFinalRequests": 0
+}

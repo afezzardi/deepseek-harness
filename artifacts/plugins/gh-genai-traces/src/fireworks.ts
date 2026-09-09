@@ -1,7 +1,7 @@
 /** Fireworks managed serialization; schema admission is distinct from renderer approval. */
 import { z } from 'zod'
 import type { ContentBlock, Message } from '@deepseek-ai/dsh-llm'
-import { digest, type Candidate } from './curation.ts'
+import { digest, validateCandidate, type Candidate } from './curation.ts'
 
 const toolCall = z.object({ id: z.string().min(1), type: z.literal('function'), function: z.object({ name: z.string().min(1), arguments: z.string() }).strict() }).strict()
 const messageSchema = z.object({
@@ -16,9 +16,10 @@ const rowSchema = z.object({ messages: z.array(messageSchema).min(2), tools: z.a
 export type TrainingRow = z.infer<typeof rowSchema>
 /** Validate serialized training data, including role, tool-pairing, and loss-mask rules.
  * @param input - parsed JSONL row.
- * @returns validated final-answer-only row; rejects malformed or unsupported content.
+ * @param targetPolicy - final assistant content to supervise; tool decisions may end with pending calls.
+ * @returns validated row; rejects malformed or unsupported content.
  */
-export function validateTrainingRow(input: unknown): TrainingRow {
+export function validateTrainingRow(input: unknown, targetPolicy: 'final-answer' | 'tool-decision' = 'final-answer'): TrainingRow {
   const row = rowSchema.parse(input)
   if (!row.messages.some(message => message.role === 'user')) throw Error('Missing user request')
   const pending = new Set<string>()
@@ -40,9 +41,11 @@ export function validateTrainingRow(input: unknown): TrainingRow {
       pending.add(call.id)
     }
     if (message.role === 'tool' && (!message.tool_call_id || !pending.delete(message.tool_call_id))) throw Error('Unpaired tool result')
-    if (target && (message.role !== 'assistant' || !message.content.trim() || message.tool_calls)) throw Error('Expected a nonempty final assistant answer')
+    if (target && (message.role !== 'assistant' || (targetPolicy === 'final-answer'
+      ? !message.content.trim() || message.tool_calls
+      : message.content !== '' || !message.tool_calls?.length))) throw Error('Expected the selected final assistant target')
   }
-  if (pending.size) throw Error('Unsettled tools')
+  if (pending.size && targetPolicy !== 'tool-decision') throw Error('Unsettled tools')
   return row
 }
 
@@ -85,11 +88,34 @@ export function exportFireworksSft(candidate: Candidate): TrainingRow {
   if (candidate.target.policy !== 'final-answer' || candidate.target.reasoning !== 'omit') throw Error('Fireworks exporter cannot express the selected loss mask')
   const selected = candidate.response.content.flatMap((block, index) => block.type === 'text' && block.text.trim() ? [index] : [])
   if (digest(selected) !== digest(candidate.target.blocks)) throw Error('Fireworks exporter cannot express partial target blocks')
+  return serializeCandidate(candidate)
+}
+
+function serializeCandidate(candidate: Candidate, targetReasoning?: string): TrainingRow {
   const request = candidate.request
+  const target = convertMessage(candidate.response, true)
+  if (targetReasoning !== undefined) target.reasoning_content = targetReasoning
   return validateTrainingRow({ messages: [
     ...request.system === undefined ? [] : [{ role: 'system' as const, content: request.system }],
-    ...request.messages.map(message => convertMessage(message)), convertMessage(candidate.response, true),
-  ], ...request.tools === undefined ? {} : { tools: request.tools.map(tool => ({ type: 'function', function: tool })) } })
+    ...request.messages.map(message => convertMessage(message)), target,
+  ], ...request.tools === undefined ? {} : { tools: request.tools.map(tool => ({ type: 'function', function: tool })) } }, candidate.target.policy)
+}
+
+/** Derive reasoning-plus-action SFT from a task-passing candidate.
+ * Task outcomes and selected tool grades admit demonstrations; reasoning statements have no independent grade.
+ * The original candidate's format-only loss selection remains unchanged.
+ * @param input - admitted candidate with complete reviewed source reasoning.
+ * @returns a derived row supervising selected reasoning and answer or tool calls, with earlier assistants masked.
+ */
+export function exportFireworksOutcomeSft(input: Candidate): TrainingRow {
+  const candidate = validateCandidate(input)
+  if (!candidate.sftEligible || !candidate.split) throw Error('Outcome SFT requires an admitted task-passing candidate with a frozen split')
+  const blocks = candidate.response.content
+  const validAction = blocks.length > 1 && digest(candidate.target.blocks) === digest(blocks.slice(1).map((_, index) => index + 1))
+  if (blocks[0]?.type !== 'reasoning' || !blocks[0].text.trim() || !validAction) {
+    throw Error('Outcome SFT requires one nonempty reasoning block followed only by selected answer blocks or tool calls')
+  }
+  return serializeCandidate(candidate, blocks[0].text)
 }
 
 /** Serialize an independently graded, identical-request managed-DPO comparison.

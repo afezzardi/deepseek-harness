@@ -2,32 +2,31 @@
 
 ## Resume here
 
-Read the [2026-09-09 report](../../results/trace-pipeline-r3-20260909/REPORT.md), [Fable dispositions](../../results/trace-pipeline-r3-20260909/FABLE-REVIEW.md), and [experiment guide](experiments/README.md). Work remains under `artifacts/` on `fork/qwen38-deployment`. Collection started from `8bc12e2e0b606a2a429e7496e428821dac0dae65` with the working-tree inputs preserved in its manifest; this checkpoint records the reviewed implementation and results. No push, paid operation, training job, or inference configuration change was performed. The user owns inference and requires notification before any change.
+The user is establishing infrastructure before choosing a real workload, not preparing to fine-tune soon. Read the [foundation report](../../results/fireworks-sft-20260909/REPORT.md), [method comparison](../../results/fireworks-sft-20260909/METHODS.md), and [experiment guide](experiments/README.md). Work stays under `artifacts/` on `fork/qwen38-deployment`.
 
-## Current evidence
+## Preserved collection evidence
 
-Revision 5 pins 48 distinct instances across twelve families. Its complete 144-trial campaign has 111 passes, 30 task failures, and three timeouts. The unchanged deterministic-v6 grader reconstructs 201 sessions; all 402 source files remain unchanged. Provider replay matches 524 settled agent requests, with 144 auxiliary title requests classified separately and three proxy admissions lacking response records. The client proxy caps actual forwarded concurrency at four.
+The [r5 campaign](../../results/trace-pipeline-r3-20260909/REPORT.md) has 48 task instances, 144 trials, 111 passes, 30 task failures, and three timeouts. Its 201 canonical sessions and 402 source files remain authoritative. Phoenix holds all 144 experiment outcomes and 300 eligible targets: 111 final answers and 189 independently graded tool decisions. Do not repeat the campaign without a new task revision or a specific diagnostic purpose.
 
-Phoenix contains the 144-run native experiment and 300 eligible targets: 111 final answers and 189 tool decisions. The task, experiment, and curated receipts are under `benchmark-r5/` and `baseline-r5/` in the report directory. Exact launch sources/configuration are retained privately in `baseline-r5/.implementation/`; the collection-time Git revision alone does not describe those executable inputs. Historical revisions and baseline-r2 remain evidence with their original meaning.
+The existing local Qwen final-answer renderer passed token parity on 123 real rows with explicit template trimming. Its format-only loss excludes target reasoning and termination. That historical result does not describe Fireworks’ managed loss or establish production thinking behavior.
 
-Explicit template-trim rendering passes request and full-example engine token parity for all 111 eligible baseline final answers and twelve pilot answers. Each removes only leading `\n\n`; canonical candidates retain their hashes. Default exact rendering retains its original rejections. The renderer records destination identity and transformations, rejects control-token strings and unsupported block arrangements, and verifies mask contiguity and decoded text. The objective excludes final reasoning and the terminator; no candidate has production thinking-training approval.
+## Foundation evidence
 
-## Cleanup and next decisions
+The explicit Fireworks outcome export retains selected reasoning plus an answer or graded tool calls, with earlier assistant messages masked. Source candidates, privacy reviews, and Phoenix versions are unchanged; per-line derivation hashes identify the separate destination objective. The complete private bundle has 223 train, 40 validation, and 37 held-out test rows. The user authorized train/validation uploads for dataset and renderer verification. Their READY status, download hashes, native preview results, diagnostic limits, and precise command evidence live in the foundation report. These synthetic rows validate the pipeline, not future workload quality.
 
-Cleanup removed forty disposable projects and eleven datasets, including seven orphan experiment projects. Retained historical example revisions match the pre-cleanup dump. The older canonical dataset’s deleted source spans survive only in that local dump. Keep the pre-cleanup backup as well as the final backup; local restore verification does not establish off-host durability. Raw recordings, canonical stores, executable archives, and backups remain ignored private evidence.
-
-The report owns validation results and remaining limits. Before training, decide termination supervision and the production reasoning objective, then validate the actual trainer loss implementation. Tool-decision masks and exact-token RL remain unsupported. Fireworks remote verification remains deferred because its documented procedure includes paid operations. Do not repeat the completed campaign without a new task revision or a specific diagnostic purpose.
+Dataset upload and pre-training rendering are separate from training jobs. Native previews expose reasoning-history modes, template text, and segment loss weights without a training job; exact trainer token IDs still require separate evidence. No paid inference, training, deployment, or inference-host change was performed in the foundation work.
 
 ## Pending work
 
 | Work | Status and next action |
 |---|---|
-| Benchmark repairs, collection, grading, publication | Complete for r5. Preserve all 144 outcomes, including three timeouts. Further failure diagnosis uses a separate diagnostic run. |
-| Qwen final-answer serialization | Verified on 123 real rows. Keep explicit template-trim and the pinned template/tokenizer identity. |
-| Training objective and trainer | Not approved. Decide final-reasoning and terminator supervision, then verify the selected trainer’s token masks and loss behavior before any training. |
-| Tool-decision supervision and exact-token RL | Unsupported. Implement and validate tool masks; exact-token RL also requires sampled token IDs. |
-| Fireworks remote verification | Deferred; its documented procedure includes paid operations requiring separate authorization. |
-| Backup durability | Local restore verified. Select off-host storage and copy both backups before relying on survival of disk loss. |
-| Documentation verification | The Node 24.12 Markdown globber fails with `ENOTDIR`; the other checks and direct changed-file paragraph check pass. Resolve in an upstream or host-maintenance task. |
-| Deployment UAT | The benchmark does not replace [fresh deployment acceptance](../../UAT.md); execute unverified UAT cases separately. |
-| Git checkpoint | Contains the reviewed implementation, evidence, and aligned documentation. Push remains unauthorized. |
+| Real workload | User will define tasks, expected behavior, failure preferences, and rewards. Collect representative complete traces and freeze connected splits then. |
+| SFT objective | Outcome-reasoning export is implemented and exercised as infrastructure. Serving/training effort, history, and template compatibility need workload-specific choices; preview text is not trainer-token or quality evidence. |
+| DPO | Existing r5 evidence has zero identical-request pass/fail pairs. Collect alternatives for the same complete request once useful preferences are defined. Current managed exporter supports one-turn text without tools; a same-request repeat collector and tool/multi-turn exporter remain infrastructure work. |
+| RFT | Reuse resettable tasks and graders when adapting the real workload to fresh policy rollouts. A rollout environment adapter and reward service remain infrastructure work. Historical sampled token IDs are absent; exact-token replay RL remains unsupported. |
+| Training | Intentionally deferred. Do not launch a training job or interpret dataset acceptance as authorization to train. |
+| Backup durability | Earlier local restores passed. Both private pre-cleanup and final backups still need an off-host destination before relying on disk-loss survival. |
+| Documentation host issue | The existing Node 24.12 Markdown globber ENOTDIR failure is separate host/upstream work; report current checks exactly. |
+| Deployment UAT | The benchmark and dataset checks do not replace [fresh deployment acceptance](../../UAT.md). |
+
+Raw sessions, proxy recordings, Phoenix snapshots, destination JSONL, previews, and backups remain private ignored evidence. Preserve the earlier cleanup backups, including the only retained copy of deleted historical spans. The user owns inference; explain a concrete change before changing its configuration or restarting services.

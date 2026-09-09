@@ -1,0 +1,2271 @@
+{
+  "dataset": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-actions-val-5cf85866",
+  "baseModel": "accounts/fireworks/models/qwen3p8-27b",
+  "objective": "outcome-reasoning",
+  "libraries": {
+    "transformers": "5.16.1",
+    "tokenizers": "0.23.2",
+    "jinja2": "3.1.6"
+  },
+  "verifierSha256": "5d72c6bdcb621b22e2cc19f38a6a4c08cb34fb4e9cd16dd99892c6f47e92088c",
+  "jsonSerialization": "ascii",
+  "toolResponses": "separate",
+  "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+  "sourceRowsVerified": 40,
+  "options": [
+    {
+      "default": true,
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "unrollsMultiTurn": false
+    },
+    {
+      "default": false,
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "unrollsMultiTurn": true
+    }
+  ],
+  "results": [
+    {
+      "line": 1,
+      "submittedRowHash": "8ea0cb676f7a77158f109e2d5c17316aa35e525ebdea318b870ef914828b2b9b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "d54b77463f3c6f092d425daae70e3b9352f5ea477b0f82edfee2fbed2c751ad7",
+      "lossTextHash": "31943d76e07ea55a6dafbcf632a36cb3d99ffd56f4ba9636c4c132d70f8b68de",
+      "lossCharacters": 278,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 1,
+      "submittedRowHash": "8ea0cb676f7a77158f109e2d5c17316aa35e525ebdea318b870ef914828b2b9b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "a088154c2131d144283f36f4b749b8e79bb7960f36dfa801fb7153cb574765c6",
+      "lossTextHash": "31943d76e07ea55a6dafbcf632a36cb3d99ffd56f4ba9636c4c132d70f8b68de",
+      "lossCharacters": 278,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 2,
+      "submittedRowHash": "4ab79f2997e61368e3f8ab38b149df7d8b67b8592734014739033cac920e3ded",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "ec5695df0f539e0587cff350c01609f354faaf79df858fb676ca824c68957688",
+      "lossTextHash": "6b6dda538384602bb9137b7314b78203fa7184c51c135fa4f7231570cddf15aa",
+      "lossCharacters": 396,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 2,
+      "submittedRowHash": "4ab79f2997e61368e3f8ab38b149df7d8b67b8592734014739033cac920e3ded",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4f075dc259f94e9b55539d3fab7d213e26dd74dbc47c6d7e1cc41cd7bb3e1b24",
+      "lossTextHash": "6b6dda538384602bb9137b7314b78203fa7184c51c135fa4f7231570cddf15aa",
+      "lossCharacters": 396,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 3,
+      "submittedRowHash": "93985b72ec7dfd910509105d463b845ab5edc00b30d7b4a383f5ffa0d91bbfdb",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "e47b47ae15cb082d85377e7c38bf5237bc3877330a8aed211e1a19b4fe1a16b9",
+      "lossTextHash": "0f6d443abf21068d9f6450565e9d326c4555a9108a055b02b0b005e6d896a1d3",
+      "lossCharacters": 147,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 3,
+      "submittedRowHash": "93985b72ec7dfd910509105d463b845ab5edc00b30d7b4a383f5ffa0d91bbfdb",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "a3a394680b7bc3580e6eda06e6f57ce6176f908619139723b6ab6271715131e9",
+      "lossTextHash": "0f6d443abf21068d9f6450565e9d326c4555a9108a055b02b0b005e6d896a1d3",
+      "lossCharacters": 147,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 4,
+      "submittedRowHash": "b37ef06661dd809a11160a9b5fc11c09f4f1721942a6836af444b3cb1797fc64",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "6016b83cbdea5facfd6bba41a526dde451ad30da5a90c28572095aee7f809f97",
+      "lossTextHash": "7923985a5578194392f0a23f2d0467da3211242c67a2ccfc62514e1d529431cd",
+      "lossCharacters": 137,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 4,
+      "submittedRowHash": "b37ef06661dd809a11160a9b5fc11c09f4f1721942a6836af444b3cb1797fc64",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "22750670e077cab4270e831ce8b73c438b6c464e4f3ee9e3f43db30ef2e16c12",
+      "lossTextHash": "7923985a5578194392f0a23f2d0467da3211242c67a2ccfc62514e1d529431cd",
+      "lossCharacters": 137,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 5,
+      "submittedRowHash": "fa391c26b1b00dbba8fbb9734258368248cb3667bf9e9ffca80d88f369c67d35",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "2e3136db0969943540e5c3914ce68f7057252130161a990e6b1045adb5a404c0",
+      "lossTextHash": "b8ea20c5351546af307f826ea937779e9fa931174ae1ad959cd7e37a1ce9b847",
+      "lossCharacters": 582,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 5,
+      "submittedRowHash": "fa391c26b1b00dbba8fbb9734258368248cb3667bf9e9ffca80d88f369c67d35",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "b22f5477634c0796980b609ce500fe834f001c53449dcd13106f2624b1e28444",
+      "lossTextHash": "b8ea20c5351546af307f826ea937779e9fa931174ae1ad959cd7e37a1ce9b847",
+      "lossCharacters": 582,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 6,
+      "submittedRowHash": "f596cce919d4598fca34fad911cf4d8b65dff9e090e56930fc5573a1bc3e2608",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "e43f39b4adb392f718521d1f37dc90c279bcbf64b7521d570fde7cee86a52963",
+      "lossTextHash": "334b5f12a15099be6f31d1bb481a7cd44d2aaa5aa3d90e3229a6117d23150f6c",
+      "lossCharacters": 384,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 6,
+      "submittedRowHash": "f596cce919d4598fca34fad911cf4d8b65dff9e090e56930fc5573a1bc3e2608",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "e25c35cbc39002c2d7caf2f9f0ac90cdab4c9de381285633be3723c6835bca3f",
+      "lossTextHash": "334b5f12a15099be6f31d1bb481a7cd44d2aaa5aa3d90e3229a6117d23150f6c",
+      "lossCharacters": 384,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 7,
+      "submittedRowHash": "ffa91219096605297f622d395abb354bf4c5ac7003a5e4563db0d84c43f522d3",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "6b927588b0ae92187c02b5b771080297b5520a7d4c4aec7ee421b63cd8a6210a",
+      "lossTextHash": "43e4d46a222f2256ff33e417b58dfaac94439e3a88e83b36da2aac7580cf8da4",
+      "lossCharacters": 475,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 7,
+      "submittedRowHash": "ffa91219096605297f622d395abb354bf4c5ac7003a5e4563db0d84c43f522d3",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "36208b12e8666fdfa8914b4de4c98a2958d77a78c361fc653f543e7763ae70e0",
+      "lossTextHash": "43e4d46a222f2256ff33e417b58dfaac94439e3a88e83b36da2aac7580cf8da4",
+      "lossCharacters": 475,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 8,
+      "submittedRowHash": "fbdf899f043f10556600fad9f29738dd3af9c19c5cf1c6544cf404db6bb8119f",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "0489258949e53b3e09befe6e81979d6798cdd35d0abd360edbeaf15514f6785a",
+      "lossTextHash": "38360ed752cd2c67f2c7c8b7fc7bc16cfc2cb096d93a32df3d72ec5e43fe072a",
+      "lossCharacters": 695,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 8,
+      "submittedRowHash": "fbdf899f043f10556600fad9f29738dd3af9c19c5cf1c6544cf404db6bb8119f",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "966a6aaad5cada92cd33390361dd8cec4b4f5f36e864f71f081134de36f31562",
+      "lossTextHash": "38360ed752cd2c67f2c7c8b7fc7bc16cfc2cb096d93a32df3d72ec5e43fe072a",
+      "lossCharacters": 695,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 9,
+      "submittedRowHash": "e019dfb5bfef4ec473459ca544dbe92357c62769f3ee4030b4d5a69ed61d6061",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "38d4e81534819bc4f83dcfe673aa291d1a2ca8f16d165bdff087a78de41cf7b2",
+      "lossTextHash": "1507023700b75351501f34cf8e6b24ac42e05a7284854151afc69538dc1d307b",
+      "lossCharacters": 1399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 9,
+      "submittedRowHash": "e019dfb5bfef4ec473459ca544dbe92357c62769f3ee4030b4d5a69ed61d6061",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "28a1f926ebb477135534e6ebb149b1232968db7dea135dc276d68343db51b099",
+      "lossTextHash": "1507023700b75351501f34cf8e6b24ac42e05a7284854151afc69538dc1d307b",
+      "lossCharacters": 1399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 10,
+      "submittedRowHash": "61f4c7e527be9aea900a2434ec92030af49da1f7433094700a0bc316d5d9672b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "e11bf68f0ec4b577b3787a9ce6e27e402ac86f5ab9df61b08151c4c6ead59952",
+      "lossTextHash": "aa1ac6159cff8d1a82748464f736048b2d6492721a0a3fd6826a0c5e235e0f4b",
+      "lossCharacters": 360,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 10,
+      "submittedRowHash": "61f4c7e527be9aea900a2434ec92030af49da1f7433094700a0bc316d5d9672b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "c51d862c8889048e2cf10bd1eced01ec2670aced62a66d73a4afa7b1c5238748",
+      "lossTextHash": "aa1ac6159cff8d1a82748464f736048b2d6492721a0a3fd6826a0c5e235e0f4b",
+      "lossCharacters": 360,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 11,
+      "submittedRowHash": "13a7809ae7ebffaba7562cb960b13d35f3f901ce0d9dd46950a0524f6b98955f",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4fc971447b0999accf1f1a4faa98af3034d3e4de4e857e4f25482ce69fe7e36e",
+      "lossTextHash": "d053dd079d7b33d01c96e46bf99600a62a79eb838cf844ba7db8ca06a2883c6e",
+      "lossCharacters": 442,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 11,
+      "submittedRowHash": "13a7809ae7ebffaba7562cb960b13d35f3f901ce0d9dd46950a0524f6b98955f",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4fc971447b0999accf1f1a4faa98af3034d3e4de4e857e4f25482ce69fe7e36e",
+      "lossTextHash": "d053dd079d7b33d01c96e46bf99600a62a79eb838cf844ba7db8ca06a2883c6e",
+      "lossCharacters": 442,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 12,
+      "submittedRowHash": "338bf5cbde7f18b11857e2f2c552c883fa08e993fbcd9ea2f6cdbaed7b60a642",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "68ea306489309ba0f3a2ceb2efec4b2d7268a1f04f9b8bd0be13699d8d2b6ffc",
+      "lossTextHash": "4125725a9232b89363ea14182a90d20ef88454ffb291deb70b820833888f769e",
+      "lossCharacters": 327,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 12,
+      "submittedRowHash": "338bf5cbde7f18b11857e2f2c552c883fa08e993fbcd9ea2f6cdbaed7b60a642",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "68ea306489309ba0f3a2ceb2efec4b2d7268a1f04f9b8bd0be13699d8d2b6ffc",
+      "lossTextHash": "4125725a9232b89363ea14182a90d20ef88454ffb291deb70b820833888f769e",
+      "lossCharacters": 327,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 13,
+      "submittedRowHash": "2184851f55036ddd607a00ebe469131715e2bf738e6cc7873f81ad91e6031dca",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "99a58c8c1ce73b3966ec8076a2a6db495d42a7bfb61bf7eb2d1504891ff80988",
+      "lossTextHash": "118910a774027d0bee2aa9a8c3a6d229eab24a0c8bb37dc7719e84ca74296aa7",
+      "lossCharacters": 356,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 13,
+      "submittedRowHash": "2184851f55036ddd607a00ebe469131715e2bf738e6cc7873f81ad91e6031dca",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4e293207a9f3dda88db6dc701f1c91618fdf49983e28b3ac4442864975ff726f",
+      "lossTextHash": "118910a774027d0bee2aa9a8c3a6d229eab24a0c8bb37dc7719e84ca74296aa7",
+      "lossCharacters": 356,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 14,
+      "submittedRowHash": "88141ac1c05c17702f923cc73e43ab0e04cfb12fbe5ed1e29c9fbb05fd1d4f76",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "eb806805a78884369bdaa28206bbd3d363afb0b74fa706c7d3b732f577013e1b",
+      "lossTextHash": "cdf1ab38d1cad44f09cdcc51a3aba1684b50eb1f4d856d77f6a0ad70c7970155",
+      "lossCharacters": 343,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 14,
+      "submittedRowHash": "88141ac1c05c17702f923cc73e43ab0e04cfb12fbe5ed1e29c9fbb05fd1d4f76",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "e5ad5b958046ced61a0820326fbbd76a85d0407f413f763dd643b73b001b9add",
+      "lossTextHash": "cdf1ab38d1cad44f09cdcc51a3aba1684b50eb1f4d856d77f6a0ad70c7970155",
+      "lossCharacters": 343,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 15,
+      "submittedRowHash": "dd740c30023c1dd1287154fc311be8ee00254d4f22c8972c276bef561e9ccde5",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "1c52e95d2fadd845ffa3c5eeb5f5effce2a5d5406432f5b2d59a18a58d799ee6",
+      "lossTextHash": "fb1a784f0de00717c201eb40b3e1550816ab5d2b136d520ad12119530ba0c120",
+      "lossCharacters": 399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 15,
+      "submittedRowHash": "dd740c30023c1dd1287154fc311be8ee00254d4f22c8972c276bef561e9ccde5",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "1c52e95d2fadd845ffa3c5eeb5f5effce2a5d5406432f5b2d59a18a58d799ee6",
+      "lossTextHash": "fb1a784f0de00717c201eb40b3e1550816ab5d2b136d520ad12119530ba0c120",
+      "lossCharacters": 399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 16,
+      "submittedRowHash": "e90c52f47312d3fb1c7db03e999e7b12dae8f21f5482e042de069c8240f4ec18",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "dbdb63174cedeb6d79e17d11879150b0063fb222d8e6af1638f7109928b478bb",
+      "lossTextHash": "6d809e214e878174374698241bd7b42982d6264fdad989de013bb760aa8ea5d8",
+      "lossCharacters": 469,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 16,
+      "submittedRowHash": "e90c52f47312d3fb1c7db03e999e7b12dae8f21f5482e042de069c8240f4ec18",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "dbdb63174cedeb6d79e17d11879150b0063fb222d8e6af1638f7109928b478bb",
+      "lossTextHash": "6d809e214e878174374698241bd7b42982d6264fdad989de013bb760aa8ea5d8",
+      "lossCharacters": 469,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 17,
+      "submittedRowHash": "95fe259cdb670d82175cc103045a13cb70f10b6daea9fff4226786a8df5821c2",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "1fa831d6abeaaa7974f0408f3d36a9ac53f188e1bef0889280ea72fca0abf046",
+      "lossTextHash": "a11deb46bda3874892d81b4ee3ea5f3626f0d1e9f10a7aae9fa8a8d1bfba6ac5",
+      "lossCharacters": 280,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 17,
+      "submittedRowHash": "95fe259cdb670d82175cc103045a13cb70f10b6daea9fff4226786a8df5821c2",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "1fa831d6abeaaa7974f0408f3d36a9ac53f188e1bef0889280ea72fca0abf046",
+      "lossTextHash": "a11deb46bda3874892d81b4ee3ea5f3626f0d1e9f10a7aae9fa8a8d1bfba6ac5",
+      "lossCharacters": 280,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 18,
+      "submittedRowHash": "884a2d59ff46f7a40ab87edf43a09a9c588047e1a17592e8e4699e6cc46f0afa",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4a6394dece563652dba92b360c44bd1eb3993af691e9a78c81ec7621a2a34f08",
+      "lossTextHash": "cbea12b9db55d262d4a9b2168374661fdba11b9f68f4248d8b0996dbee3d541b",
+      "lossCharacters": 383,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 18,
+      "submittedRowHash": "884a2d59ff46f7a40ab87edf43a09a9c588047e1a17592e8e4699e6cc46f0afa",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "a42c48521227f984f8fe43a32aa9b7d85def0ead566f794149b05593c3ae6001",
+      "lossTextHash": "cbea12b9db55d262d4a9b2168374661fdba11b9f68f4248d8b0996dbee3d541b",
+      "lossCharacters": 383,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 19,
+      "submittedRowHash": "1f39f02faa9552bf6f9159599255b7c7d9f8bd738d8a4bd7f71a690ea065e660",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "cc96de2189ffd3df65137660f059e871ae9f3223d22f058f6c81f41d663eb95c",
+      "lossTextHash": "7b58bee1dbfc51a84074b40ce9bc62df8f3c3f379ef6d22e7b85f08d64df52dc",
+      "lossCharacters": 503,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 19,
+      "submittedRowHash": "1f39f02faa9552bf6f9159599255b7c7d9f8bd738d8a4bd7f71a690ea065e660",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "cc96de2189ffd3df65137660f059e871ae9f3223d22f058f6c81f41d663eb95c",
+      "lossTextHash": "7b58bee1dbfc51a84074b40ce9bc62df8f3c3f379ef6d22e7b85f08d64df52dc",
+      "lossCharacters": 503,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 20,
+      "submittedRowHash": "c16438cc346093437be55fa06d6582d028612fe6f9dcd9018bac4262544c7040",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "df55a5dc8b3b35341d2d7fc4398520d4f22b971c8b6309fd84f6211539386cc0",
+      "lossTextHash": "5968c50e59892f848de35366c6bf1700470f0ede8ac49bd7c83f5779eeac9abc",
+      "lossCharacters": 379,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 20,
+      "submittedRowHash": "c16438cc346093437be55fa06d6582d028612fe6f9dcd9018bac4262544c7040",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "7aa26814427d386bdcfee8796ed0632e7ae186ed05728b2d083aa20c313713bd",
+      "lossTextHash": "5968c50e59892f848de35366c6bf1700470f0ede8ac49bd7c83f5779eeac9abc",
+      "lossCharacters": 379,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 21,
+      "submittedRowHash": "e764a38043eb056287333f522d2772a13074ce1368e11f57112a8999b44fdec1",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "11709df34ce79b366a58da0691cc6a36593f03a15de18a307714bebcd4088020",
+      "lossTextHash": "67a59045f26e05411058af5d4070dd4e4dd69b7cecabaffd634115475f8a7b8d",
+      "lossCharacters": 387,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 21,
+      "submittedRowHash": "e764a38043eb056287333f522d2772a13074ce1368e11f57112a8999b44fdec1",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "11709df34ce79b366a58da0691cc6a36593f03a15de18a307714bebcd4088020",
+      "lossTextHash": "67a59045f26e05411058af5d4070dd4e4dd69b7cecabaffd634115475f8a7b8d",
+      "lossCharacters": 387,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 22,
+      "submittedRowHash": "c013de43298632e04bd78c8cd9776d2c1cf77bd461638dd1622a77e4da927187",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "20b3b2b7d44f4fb683e2dd0c5eee8b22be86b98a74f775ec329c6f847dac93e4",
+      "lossTextHash": "010588b7d869e0e7583ae198180dcc2942d7f0881c24e874ff3647bb97c690b5",
+      "lossCharacters": 557,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 22,
+      "submittedRowHash": "c013de43298632e04bd78c8cd9776d2c1cf77bd461638dd1622a77e4da927187",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "75f416206242d2e4945252f5f3e635383170ad4a6a25e32f39a788270680f60e",
+      "lossTextHash": "010588b7d869e0e7583ae198180dcc2942d7f0881c24e874ff3647bb97c690b5",
+      "lossCharacters": 557,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 23,
+      "submittedRowHash": "91e9211a619eb0c1f0e69665ea1fc332b218f93ce057ca0436990a7156264eb8",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "400af429b53d21f5ec10a57315e892ccb3ada26e2c64384deabf2da6e437d709",
+      "lossTextHash": "21ec1497b3d7c0b2711f124fb021a813d4d6e1468c246cd5202531da3a05cd61",
+      "lossCharacters": 614,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 23,
+      "submittedRowHash": "91e9211a619eb0c1f0e69665ea1fc332b218f93ce057ca0436990a7156264eb8",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "be8eff63fa0c2dad08c7d014b108b589dfe4b84754710c25d2a19aa43c797f04",
+      "lossTextHash": "21ec1497b3d7c0b2711f124fb021a813d4d6e1468c246cd5202531da3a05cd61",
+      "lossCharacters": 614,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 24,
+      "submittedRowHash": "dcbda2821715c2bea7953102e00dc43d20f532c681ece2c93d6000bea86004e4",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "b46b37834c740f814297b44f84af96213b29172cc9ad18c40d04bcc5f2f4b13d",
+      "lossTextHash": "4f3546b45d4d726fa03801e7dd626276f7d624fb419f0677b6a0e5fd85bd97d9",
+      "lossCharacters": 279,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 24,
+      "submittedRowHash": "dcbda2821715c2bea7953102e00dc43d20f532c681ece2c93d6000bea86004e4",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "b46b37834c740f814297b44f84af96213b29172cc9ad18c40d04bcc5f2f4b13d",
+      "lossTextHash": "4f3546b45d4d726fa03801e7dd626276f7d624fb419f0677b6a0e5fd85bd97d9",
+      "lossCharacters": 279,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 25,
+      "submittedRowHash": "3914dc68f7acf6eb661c47a3f09d4a9c73aa84ec0539aae683ae2d7e4b3765d9",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "87d22df5de31c3edfaca60545350a734f9b46438975e55fb1507fa7dddfb5a14",
+      "lossTextHash": "c09e5df8ed494e4075e54ddf8f18d60c6ec660259a1c7c3f126a37adec75151e",
+      "lossCharacters": 369,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 25,
+      "submittedRowHash": "3914dc68f7acf6eb661c47a3f09d4a9c73aa84ec0539aae683ae2d7e4b3765d9",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "bae8e9d666dd5b61ac993b6b7831e63e806d624497e87bf09df8e26065f3c47b",
+      "lossTextHash": "c09e5df8ed494e4075e54ddf8f18d60c6ec660259a1c7c3f126a37adec75151e",
+      "lossCharacters": 369,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 26,
+      "submittedRowHash": "f61e65943fdc9220c3e24cfecf87ba608ffcac57845446c67cbca3db85453eac",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "35fa49df18a2fd67cf921232376f41a07781d95b1751254344b2c86977eb28aa",
+      "lossTextHash": "42f2bfa39a7a60d0b3bae53faef312e2400bfd927117b22a93bec2351700d920",
+      "lossCharacters": 399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 26,
+      "submittedRowHash": "f61e65943fdc9220c3e24cfecf87ba608ffcac57845446c67cbca3db85453eac",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "20881f5f05060b17e8e70e1635eb98eb0bc90cbfb0a5faa6e65fc715e9042e72",
+      "lossTextHash": "42f2bfa39a7a60d0b3bae53faef312e2400bfd927117b22a93bec2351700d920",
+      "lossCharacters": 399,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 27,
+      "submittedRowHash": "d807b9abe92ebbe69144aa82b00420f488f45795df6fe710a164e887a7a99b98",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "3b2bd649f797e2cdb363b5a358364b35779960c25e9beeab090261e9318f26b8",
+      "lossTextHash": "bf635136c365ad896dd71b3b4040e7389623370ba383b3eca0c9a5d0460eb03f",
+      "lossCharacters": 423,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 27,
+      "submittedRowHash": "d807b9abe92ebbe69144aa82b00420f488f45795df6fe710a164e887a7a99b98",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "0552566e8dc8ee8bc2ca9d2fc3098602a4d86807966f21d8f11cf836f63428f3",
+      "lossTextHash": "bf635136c365ad896dd71b3b4040e7389623370ba383b3eca0c9a5d0460eb03f",
+      "lossCharacters": 423,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 28,
+      "submittedRowHash": "1a2882b5a8036448d6be1bed39cddd2fa2a85aa0893a1b8241b193124bf3e892",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "6595a9264b6e0666c92f814b127c3deaee3682da7a99bb89ab96473bc785e367",
+      "lossTextHash": "95e57c86f79c416057e8cb3f2c6a3ba81417f6a76a402462fdeb4e2496918ba3",
+      "lossCharacters": 567,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 28,
+      "submittedRowHash": "1a2882b5a8036448d6be1bed39cddd2fa2a85aa0893a1b8241b193124bf3e892",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "6595a9264b6e0666c92f814b127c3deaee3682da7a99bb89ab96473bc785e367",
+      "lossTextHash": "95e57c86f79c416057e8cb3f2c6a3ba81417f6a76a402462fdeb4e2496918ba3",
+      "lossCharacters": 567,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 29,
+      "submittedRowHash": "3634ae0bed33eeec93aa37166715f58067ea713afc8029c4b197c33767cbc61b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "19af899dd32248bdc889d65cf5da191f51420397e904230213db8fed2fe8f1fd",
+      "lossTextHash": "8d3a19f70fd092d3f966f165cb28787c325c8953a55f6fcc72e706e7d7baefb5",
+      "lossCharacters": 134,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 29,
+      "submittedRowHash": "3634ae0bed33eeec93aa37166715f58067ea713afc8029c4b197c33767cbc61b",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "fb294e03a09748818ded9ba4eb68672ad08650643d81368ddba694f2219f557f",
+      "lossTextHash": "8d3a19f70fd092d3f966f165cb28787c325c8953a55f6fcc72e706e7d7baefb5",
+      "lossCharacters": 134,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 30,
+      "submittedRowHash": "673ac19c3e6e9ead8780f5c711f3470793f6fc1019d13e5fc0262681dd634751",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "b49ef5fc1116aefbd4b05f84582b79efbbce92d48af1a3e707e41be158258fb1",
+      "lossTextHash": "3e8d0ecfb9dd6c48af4351804f955b4b53ea2b879aa27e4200dbd54e777d0aa4",
+      "lossCharacters": 349,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 30,
+      "submittedRowHash": "673ac19c3e6e9ead8780f5c711f3470793f6fc1019d13e5fc0262681dd634751",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "b49ef5fc1116aefbd4b05f84582b79efbbce92d48af1a3e707e41be158258fb1",
+      "lossTextHash": "3e8d0ecfb9dd6c48af4351804f955b4b53ea2b879aa27e4200dbd54e777d0aa4",
+      "lossCharacters": 349,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 31,
+      "submittedRowHash": "1ddb77a1ea1f8ce0747b8ec3bbd25f63ea56364bdaea8428ea03e18d048025bf",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "55caf2b1668bc15f67acf95bd5c1390222f801396b91d10a9415bedb7787a449",
+      "lossTextHash": "d3e97df5f93205b18f3123f1672aa4e8445c806d597663d5af8bcb1928c2ccdf",
+      "lossCharacters": 160,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 31,
+      "submittedRowHash": "1ddb77a1ea1f8ce0747b8ec3bbd25f63ea56364bdaea8428ea03e18d048025bf",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "ed65a282ee7400fab26413b8dce83d7bcde23b9a813504295c13e32230b68cf9",
+      "lossTextHash": "d3e97df5f93205b18f3123f1672aa4e8445c806d597663d5af8bcb1928c2ccdf",
+      "lossCharacters": 160,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 32,
+      "submittedRowHash": "7e1ef8670b5044f1168b47da6cf85669164edb55b4cefac797e454ec8002ae84",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "61b54e9d331b2bb9b4d903a19c160157a76742787e6df76b0203657d33df6f67",
+      "lossTextHash": "91736f9679e705d35085f4695f89b8d3f2b18ebd1c74aef1311dfdf50937ab17",
+      "lossCharacters": 279,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 32,
+      "submittedRowHash": "7e1ef8670b5044f1168b47da6cf85669164edb55b4cefac797e454ec8002ae84",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "61b54e9d331b2bb9b4d903a19c160157a76742787e6df76b0203657d33df6f67",
+      "lossTextHash": "91736f9679e705d35085f4695f89b8d3f2b18ebd1c74aef1311dfdf50937ab17",
+      "lossCharacters": 279,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 33,
+      "submittedRowHash": "bdea72f1b8c38d725ff77c0e4f8aba82ff0fbedd8ca5eddba36f791bee026489",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "0d03d8d258278dd261db90146923ec37e8d28a19cbcd163c87b04522be04eeb1",
+      "lossTextHash": "14f4f5bd9c92d18cc707ef387ebb288052a4011b8b2a776d2838b0e978b2f0c4",
+      "lossCharacters": 233,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 33,
+      "submittedRowHash": "bdea72f1b8c38d725ff77c0e4f8aba82ff0fbedd8ca5eddba36f791bee026489",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "11b51e2fef542c6bb099df67d8c5835cd09de89b8def90672c666031f0480753",
+      "lossTextHash": "14f4f5bd9c92d18cc707ef387ebb288052a4011b8b2a776d2838b0e978b2f0c4",
+      "lossCharacters": 233,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 34,
+      "submittedRowHash": "0e2b5615f5e3e156cc67bd1e6e304ccd2ccae00628b6c15439d05e8ff00d81c6",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "8c3bc232fd2966fc4b8aeed161a7cb8311b840c5eb3457bcedbd7bd85b483295",
+      "lossTextHash": "5ea170116cee88ccbbc1765ead139293fd881a9ea28948aa43d59cb9832842e2",
+      "lossCharacters": 776,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 34,
+      "submittedRowHash": "0e2b5615f5e3e156cc67bd1e6e304ccd2ccae00628b6c15439d05e8ff00d81c6",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "8c3bc232fd2966fc4b8aeed161a7cb8311b840c5eb3457bcedbd7bd85b483295",
+      "lossTextHash": "5ea170116cee88ccbbc1765ead139293fd881a9ea28948aa43d59cb9832842e2",
+      "lossCharacters": 776,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 35,
+      "submittedRowHash": "2dd70774d6ff348db0814a1e6a62a0227107f6451755abd4c74cf8521fa9d627",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "eff5f2189ad42e5269839e845b8d103116524b7f50ec4e6c917082d4dba7f60d",
+      "lossTextHash": "0fc84bd07924f65529bacff2949b9000bd32546fdeb417db693fc05cd1424533",
+      "lossCharacters": 377,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 35,
+      "submittedRowHash": "2dd70774d6ff348db0814a1e6a62a0227107f6451755abd4c74cf8521fa9d627",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "eff5f2189ad42e5269839e845b8d103116524b7f50ec4e6c917082d4dba7f60d",
+      "lossTextHash": "0fc84bd07924f65529bacff2949b9000bd32546fdeb417db693fc05cd1424533",
+      "lossCharacters": 377,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 36,
+      "submittedRowHash": "af86f26eae1e5e6a6534399c6e287cb6958f2448ce0195d9d0c937551ead9901",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4d4e80c7cc889b34319ea16749a4a01586c4dcbaa457a250cfb3975cf59a118e",
+      "lossTextHash": "955f958720ac9d482c79b11b420f0c691a0c26fe436811e8a5df6931804a0d2c",
+      "lossCharacters": 405,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 36,
+      "submittedRowHash": "af86f26eae1e5e6a6534399c6e287cb6958f2448ce0195d9d0c937551ead9901",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "4d4e80c7cc889b34319ea16749a4a01586c4dcbaa457a250cfb3975cf59a118e",
+      "lossTextHash": "955f958720ac9d482c79b11b420f0c691a0c26fe436811e8a5df6931804a0d2c",
+      "lossCharacters": 405,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 37,
+      "submittedRowHash": "3bfbf82fbefb1fc38ded1015eaa651fcdc11cfdfc88d1a12b3e48239b80143a1",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "5cc2fbb47b6d2e54d6c28afb2737d9fd19d451162d0e7bc31a275357b6389303",
+      "lossTextHash": "cbb0431856408005af7e605921c0cfb0930fc7d316b19f70990f1ede87f3f336",
+      "lossCharacters": 334,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 37,
+      "submittedRowHash": "3bfbf82fbefb1fc38ded1015eaa651fcdc11cfdfc88d1a12b3e48239b80143a1",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "5cc2fbb47b6d2e54d6c28afb2737d9fd19d451162d0e7bc31a275357b6389303",
+      "lossTextHash": "cbb0431856408005af7e605921c0cfb0930fc7d316b19f70990f1ede87f3f336",
+      "lossCharacters": 334,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 38,
+      "submittedRowHash": "1a139591b49f272c7a512bda60a640fe5d7a27b92a8948750276223e0b3ec928",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "5bc6393904eb85ccd08b3dbd14894106285592e49099c8859a901b9edb9afd78",
+      "lossTextHash": "b1adbafbeb2e85db16e62968ec2bf02cd31d79f33f5f39ba0820f7956898b5cb",
+      "lossCharacters": 344,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 38,
+      "submittedRowHash": "1a139591b49f272c7a512bda60a640fe5d7a27b92a8948750276223e0b3ec928",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "89591737b1463bea52b88a8d8bf91be20f3ac0cbbe649156c48d86926633ba49",
+      "lossTextHash": "b1adbafbeb2e85db16e62968ec2bf02cd31d79f33f5f39ba0820f7956898b5cb",
+      "lossCharacters": 344,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 39,
+      "submittedRowHash": "208860e13b0eb576642408d6f9805e9dc3699f93077f39eee2f948c0cb7ed549",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "a6c84a9eee1f7bad9b09378b751369e21189cfa0afb95a6c11ab63b362ae061d",
+      "lossTextHash": "ee6d8ab73ee20c586b93d47cb30546885352d99ae8fce77e16dfbb2f426b1b64",
+      "lossCharacters": 126,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 39,
+      "submittedRowHash": "208860e13b0eb576642408d6f9805e9dc3699f93077f39eee2f948c0cb7ed549",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "3dd41f1d63e8bc7a9969afa71ee2769dd5041101a26c3916600483fbef626c10",
+      "lossTextHash": "ee6d8ab73ee20c586b93d47cb30546885352d99ae8fce77e16dfbb2f426b1b64",
+      "lossCharacters": 126,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 40,
+      "submittedRowHash": "f263f0da2bc3ce0319d15bed3c0af86a77688a28f5b437401182fa83a6d7e5ec",
+      "mode": "THINKING_TRACE_HISTORY_MODE_PRESERVED",
+      "advertisedUnrollsMultiTurn": false,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "930db241470b097fd23c5afd3c42d4746f777deb83535b7b9f13e8be4b6088fe",
+      "lossTextHash": "2942ad084e26a9e0a7edeb5f542c1d4d71b3af10c7b4545caf39782fa6b9c69c",
+      "lossCharacters": 293,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": true,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    },
+    {
+      "line": 40,
+      "submittedRowHash": "f263f0da2bc3ce0319d15bed3c0af86a77688a28f5b437401182fa83a6d7e5ec",
+      "mode": "THINKING_TRACE_HISTORY_MODE_INTERLEAVED",
+      "advertisedUnrollsMultiTurn": true,
+      "observedDatumCount": 1,
+      "nativeTemplateMatch": true,
+      "selectedLossMatch": true,
+      "terminatorSupervised": true,
+      "jsonSerialization": "ascii",
+      "toolResponses": "separate",
+      "destinationTemplateHash": "c7498bbd52bc9520e3f080d57a96c27feca407d6bcf62108301b27a2520e16f8",
+      "emptyReasoningTarget": false,
+      "renderedTextHash": "930db241470b097fd23c5afd3c42d4746f777deb83535b7b9f13e8be4b6088fe",
+      "lossTextHash": "2942ad084e26a9e0a7edeb5f542c1d4d71b3af10c7b4545caf39782fa6b9c69c",
+      "lossCharacters": 293,
+      "matchesCollectionTemplateSettings": false,
+      "comparisonSettings": {
+        "native": {
+          "preserve_thinking": false,
+          "reasoning_effort": "xhigh"
+        },
+        "collection": {
+          "preserve_thinking": false,
+          "reasoning_effort": "medium"
+        }
+      }
+    }
+  ],
+  "trainingReady": false,
+  "tokenIdsVerified": false
+}

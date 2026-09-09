@@ -1,0 +1,40 @@
+{
+  "datasets": [
+    {
+      "split": "train",
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-actions-train-e0a2cb06",
+      "validation": {
+        "httpStatus": 400,
+        "response": "{\n  \"code\": 9,\n  \"details\": [],\n  \"message\": \"dataset is already uploaded\"\n}"
+      },
+      "state": "READY",
+      "format": "CHAT",
+      "examples": 223,
+      "estimatedTokens": "2149800",
+      "averageTurns": 10.995,
+      "sha256": "e0a2cb066bcafd2475a84dc6696f59de29332eccf3176910a778f97c801b197f",
+      "downloadedBytesMatch": true
+    },
+    {
+      "split": "validation",
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-actions-val-5cf85866",
+      "validation": {
+        "httpStatus": 400,
+        "response": "{\n  \"code\": 9,\n  \"details\": [],\n  \"message\": \"dataset is already uploaded\"\n}"
+      },
+      "state": "READY",
+      "format": "CHAT",
+      "examples": 40,
+      "estimatedTokens": "516200",
+      "averageTurns": 7.885,
+      "sha256": "5cf858661048363cb58da0706b76ee49be5f04f0df9e5850c23ee11682a6d3ae",
+      "downloadedBytesMatch": true
+    }
+  ],
+  "heldOutTestExamples": 37,
+  "operations": [
+    "validateUpload",
+    "get",
+    "local-download-hash-comparison"
+  ]
+}
