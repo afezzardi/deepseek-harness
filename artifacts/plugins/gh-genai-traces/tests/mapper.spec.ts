@@ -90,7 +90,7 @@ describe('canonical replay', () => {
     const p = pipeline()
     try {
       const source = fixture()
-      for (const event of source.events.slice(0, 3)) p.mapper.event(source.session, 0, event)
+      for (const event of source.events.slice(0, 4)) p.mapper.event(source.session, 0, event)
       p.mapper.disposeSession(String(source.session.id), 2000)
       await p.provider.forceFlush()
       const root = p.exporter.getFinishedSpans().find(span => span.attributes['gen_ai.operation.name'] === 'invoke_agent')!
@@ -133,7 +133,7 @@ it('separates concurrent calls, retry attempts, and auxiliary purposes', async (
   try {
     for (const id of ['a', 'b']) {
       const source = fixture(id)
-      for (const event of source.events.slice(0, 3)) p.mapper.event(source.session, 0, event)
+      for (const event of source.events.slice(0, 4)) p.mapper.event(source.session, 0, event)
     }
     const request = (id: string) => ({ provider: 'fixture', model: 'fixture', messages: [], sessionId: SessionId(id) })
     p.mapper.startCall('a1', request('a'), 1100)
@@ -206,7 +206,7 @@ it('namespaces trace, span and Phoenix session identities by project and origin'
     try {
       await replaySnapshot(source, p.mapper, p.settings, () => p.provider.forceFlush())
       const span = p.exporter.getFinishedSpans().find(s => s.name === 'invoke_agent dsh')!
-      expect(span.attributes['gh.mapping.version']).toBe('3')
+      expect(span.attributes['gh.mapping.version']).toBe('4')
       identities.push({ ...span.spanContext(), session: span.attributes['session.id'] })
     } finally { p.mapper.shutdown(); await p.provider.shutdown() }
   }
@@ -232,7 +232,7 @@ it('reports content truncation separately from stream completion and requested e
   const p = pipeline()
   try {
     const source = fixture()
-    for (const event of source.events.slice(0, 3)) p.mapper.event(source.session, 0, event)
+    for (const event of source.events.slice(0, 4)) p.mapper.event(source.session, 0, event)
     p.mapper.startCall('long', { provider: 'fixture', model: 'fixture', sessionId: source.session.id, system: 'x'.repeat(70_000), messages: [] }, 1200)
     p.mapper.endCall('long', { ended: 1250, blocks: [{ type: 'text', text: 'ok' }], finish: 'stop', truncated: false })
     await p.provider.forceFlush()

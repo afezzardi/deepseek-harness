@@ -63,13 +63,17 @@ def row_digest(example):
 
 def validate_content(candidate):
     """Verify the neutral file's content identity before publication or reference rendering."""
-    if candidate['version'] != 2 or candidate['trainingReady'] is not False:
-        raise ValueError('Expected an explicitly non-training-ready v2 candidate')
+    if candidate['version'] != 3 or candidate['trainingReady'] is not False:
+        raise ValueError('Expected an explicitly non-training-ready v3 candidate')
     provenance, target = candidate['provenance'], candidate['target']
+    if 'system' in candidate['request']:
+        raise ValueError('V3 system instructions must be ordered messages')
+    if not provenance.get('messageId') or provenance['messageId'] != candidate['response'].get('id') or provenance.get('throughSeq', -1) < provenance['sourceEvent']:
+        raise ValueError('Candidate message identity or cutoff mismatch')
     checks = {'requestHash': digest(candidate['request']), 'toolsHash': digest(candidate['request'].get('tools')),
               'configHash': digest(candidate['request']['config']), 'outputHash': digest(candidate['response']['content']),
               'rowHash': digest({'request': candidate['request'], 'response': candidate['response'], 'target': {**target, 'event': None}}),
-              'transformationHash': digest({'version': 2, 'reconstruction': 'upstream-surface', 'objective': target['policy'], 'reasoning': 'retain-source-omit-target'})}
+              'transformationHash': digest({'version': 3, 'reconstruction': 'upstream-surface', 'objective': target['policy'], 'reasoning': 'retain-source-omit-target'})}
     if any(provenance[key] != value for key, value in checks.items()):
         raise ValueError('Curated candidate content hash mismatch')
     if candidate['response']['role'] != 'assistant' or candidate['response']['source']['kind'] != 'model' or provenance['sourceEvent'] != target['event'] or target['event'] < provenance['inheritedEventCount']:
@@ -103,7 +107,14 @@ def validate_curated(example, required=False):
         raise ValueError('Curated publication requires admitted candidates with stable identities')
     provenance, target, grade = candidate['provenance'], candidate['target'], candidate['grade']
     if target['policy'] == 'tool-decision':
+        bindings = candidate['sourceEvidence'].get('toolDecisions')
+        if not bindings or [b['block'] for b in bindings] != target['blocks']:
+            raise ValueError('Curated tool target lacks exact grade bindings')
         decisions = grade.get('decisions', [])
+        for binding in bindings:
+            block = candidate['response']['content'][binding['block']]
+            if (block.get('id'), block.get('name'), block.get('arguments')) != (binding['callId'], binding['name'], binding['arguments']) or not any(d['call'] == binding['call'] and d['status'] == 'pass' for d in decisions):
+                raise ValueError('Curated tool-grade binding mismatch')
         if len({d['call'] for d in decisions}) != len(decisions) or sum(d['status'] == 'pass' and d['call'] > target['event'] for d in decisions) < len(target['blocks']):
             raise ValueError('Curated tool target lacks distinct passing decisions')
     review = provenance['review']

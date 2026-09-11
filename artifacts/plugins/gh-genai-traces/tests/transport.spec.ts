@@ -1,21 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import { ExportResultCode } from '@opentelemetry/core'
 import type { SpanExporter } from '@opentelemetry/sdk-trace'
-import { CaptureQueue, createProvider, diagnostics, SourceIds } from '../src/transport.ts'
+import { CaptureWorkQueue, createProvider, diagnostics, SourceIds } from '../src/transport.ts'
 import { resolveConfig } from '../src/config.ts'
 
 describe('bounded capture and delivery', () => {
   it('reports queue overflow and contains mapping failures', async () => {
     const stats = diagnostics()
-    const queue = new CaptureQueue(2, stats)
+    const queue = new CaptureWorkQueue(2, stats)
     const ran: number[] = []
     queue.push(() => { throw Error('mapping') })
     queue.push(() => { ran.push(1) })
     queue.push(() => { ran.push(2) })
-    await Promise.resolve()
+    await queue.close()
     expect(ran).toEqual([1])
     expect(stats).toMatchObject({ recordsAccepted: 2, recordsDropped: 1, captureErrors: 1 })
-    queue.close()
     queue.push(() => { ran.push(3) })
     expect(stats.recordsDropped).toBe(2)
   })

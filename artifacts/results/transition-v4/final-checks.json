@@ -1,0 +1,32 @@
+{
+  "doc-sync-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-doc-sync-final.log",
+    "sha256": "4c1717e776da399c6d01ea9e8253746e8d2fab445f0ac295d53cc6839ac6722f"
+  },
+  "lint-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-lint-final.log",
+    "sha256": "6e7ab184b186592b0e2e3cca1ae9661ec3762ffbf4a8150afd8326523beac416"
+  },
+  "scoped-lint-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-scoped-lint-final.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "feedback-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-feedback-final.log",
+    "sha256": "c28abb1420a06773df4213f76c91939a42b1ac17e6c53f472736754edf5d954d"
+  },
+  "typecheck-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-typecheck-final.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build-final": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-build-final.log",
+    "sha256": "e511210861d1dc5b748d8c8a12aa3e8b362acc60db88e2dccf0793a001bae9a8"
+  }
+}

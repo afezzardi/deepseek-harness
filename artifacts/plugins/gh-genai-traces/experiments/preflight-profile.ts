@@ -22,7 +22,7 @@ async function run(ctx: Context): Promise<void> {
   const root = await ctx.agents.create({ sessionId: SessionId(`session-${randomUUID()}`), meta: { cwd: process.cwd() }, agentOptions: selection, setup })
   try {
     const parent = await ctx.systemPrompt.assemble(assembleContextFor(root.agent))
-    const child = await ctx.agents.create({ sessionId: SessionId(`session-${randomUUID()}`), meta: { cwd: process.cwd(), parentSession: root.agent.session.id, origin: 'subagent' }, agentOptions: selection, setup })
+    const child = await ctx.agents.create({ parentAgent: root.agent, sessionId: SessionId(`session-${randomUUID()}`), meta: { cwd: process.cwd(), parentSession: root.agent.session.id, origin: 'subagent' }, agentOptions: selection, setup })
     try {
       const nested = await ctx.systemPrompt.assemble(assembleContextFor(child.agent))
       let executed = false

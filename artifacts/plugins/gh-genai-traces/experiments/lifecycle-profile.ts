@@ -9,9 +9,10 @@ import { SessionId } from '@deepseek-ai/dsh-session'
 import type {} from '@deepseek-ai/cordis-plugin-loader'
 import type {} from '@deepseek-ai/dsh-cmdline'
 import { z } from 'zod'
+import { readArtifactSnapshot } from '../src/upstream.ts'
 
 /** Public services for creating, flushing, disposing, and resuming an agent. */
-export const inject = ['agentDefaultModel', 'agents', 'sessions']
+export const inject = ['agentDefaultModel', 'agents', 'sessions', 'sessionQuery', 'sessionPersistence']
 const taskSchema = z.object({ prompt: z.string().min(1), continuation: z.string().min(1) })
 
 async function run(ctx: Context): Promise<void> {
@@ -30,7 +31,7 @@ async function run(ctx: Context): Promise<void> {
       handle.agent.followup(createUserMessage({ source: { kind: 'user' }, content: [{ type: 'text', text: prompt }] }))
       await handle.agent.whenIdle()
       await ctx.sessions.flush(handle.agent.session)
-      const events = handle.agent.session.snapshotEvents()
+      const { events } = await readArtifactSnapshot(ctx, sessionId)
       const end = events.findLast(e => e.type === 'turn/end')
       if (end?.type !== 'turn/end' || end.data.reason.kind !== 'completed') throw Error(`Lifecycle turn ${index + 1} did not complete`)
       if (index) {

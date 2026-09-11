@@ -4,6 +4,7 @@ import { ROOT_CONTEXT, SpanKind, SpanStatusCode, trace, type Attributes, type Sp
 import { type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
 import { deriveTurnTokenUsage } from '@deepseek-ai/dsh-token-meter/src/turn-usage.ts'
 import type {} from '@deepseek-ai/dsh-tool-workflow/types'
+import { UPSTREAM_REVISION } from './upstream.ts'
 import { digest } from './curation.ts'
 import { ContentPolicy, inputMessages, parts, usageAttributes } from './content.ts'
 import type { Settings } from './config.ts'
@@ -50,7 +51,7 @@ export class TraceMapper {
     this.ids.key = JSON.stringify([this.settings.project, this.origin, key])
     const span = this.tracer.startSpan(this.policy.text(name), { kind, startTime: time, attributes: {
       ...attributes, 'gh.source.id': key, 'gh.capture.origin': this.origin,
-      'gh.mapping.version': '3', 'gh.capture.content': this.settings.content,
+      'gh.mapping.version': '4', 'gh.upstream.revision': UPSTREAM_REVISION, 'gh.capture.content': this.settings.content,
       'metadata': JSON.stringify(this.settings.metadata),
     } }, parent ? 'span' in parent ? trace.setSpan(ROOT_CONTEXT, parent.span) : trace.setSpanContext(ROOT_CONTEXT, parent) : ROOT_CONTEXT)
     const open = { span, time, key, events: 0, dropped: 0 }
@@ -68,7 +69,8 @@ export class TraceMapper {
     this.ownershipProgress.set(String(header.id), progress)
     let turn = progress.turn
     const runs = progress.runs
-    for (let index = Math.max(0, progress.next - (events[0]?.seq ?? 0)); index < events.length; index++) {
+    if (events.length && events[events.length - 1]!.seq < progress.next) return
+    for (let index = Math.max(0, events.length && events.at(-1)!.seq - events[0]!.seq + 1 === events.length ? progress.next - events[0]!.seq : 0); index < events.length; index++) {
       const event = events[index]!
       if (event.seq < progress.next) continue
       progress.next = event.seq + 1
@@ -96,8 +98,14 @@ export class TraceMapper {
    */
   ownershipOffset(id: string): number { return this.ownershipProgress.get(id)?.next ?? 0 }
 
+  /** Whether recorded workflow membership resolves this child's trace.
+   * @param id - canonical child Session identity.
+   * @returns true after its parent's membership event was indexed.
+   */
+  hasOwnership(id: string): boolean { return this.ownership.has(id) }
+
   private presentation(id: string): Attributes {
-    return { 'session.id': digest([3, this.settings.project, this.origin, this.ownership.get(id)?.rootSession ?? id]),
+    return { 'session.id': digest([4, this.settings.project, this.origin, this.ownership.get(id)?.rootSession ?? id]),
       'gh.session.canonical_id': id }
   }
 
@@ -277,17 +285,19 @@ export class TraceMapper {
    * @param time - dispatch/iteration time for live capture, first recorded chunk for replay.
    * @param sourceSeq - settlement sequence when replay supplies it.
    * @param header - observed live session lineage before any model dispatch.
+   * @param messageId - canonical assistant identity when settlement proves it.
+   * @param dispatchKey - identity for an unmatched dispatch within an explicit attempt.
    */
-  startCall(callId: string, request: CallRequest, time: number, sourceSeq?: number, header?: SessionHeader): void {
+  startCall(callId: string, request: CallRequest, time: number, sourceSeq?: number, header?: SessionHeader, messageId?: string, dispatchKey?: string): void {
     const id = request.sessionId === undefined ? undefined : String(request.sessionId)
     if (id && (this.deferred.has(id) || this.origin === 'live' && header?.parentSession && !this.ownership.has(id) && !this.releasing.has(id))) {
-      if (this.defer(id, () => { this.deferredCalls.delete(callId); this.startCall(callId, request, time, sourceSeq, header) })) this.deferredCalls.set(callId, id)
+      if (this.defer(id, () => { this.deferredCalls.delete(callId); this.startCall(callId, request, time, sourceSeq, header, messageId, dispatchKey) })) this.deferredCalls.set(callId, id)
       return
     }
     const state = id === undefined ? undefined : this.sessions.get(id)
     const turn = state?.turn
     const attempt = turn && !request.purpose ? ++turn.calls : 1
-    const key = id && sourceSeq !== undefined ? `${id}/model-event/${sourceSeq}`
+    const key = id && messageId ? `${id}/message/${messageId}` : dispatchKey ? `${id ?? 'unscoped'}/dispatch/${dispatchKey}` : id && sourceSeq !== undefined ? `${id}/model-event/${sourceSeq}`
       : request.purpose || !turn ? `${id ?? 'unscoped'}/aux/${callId}`
       : `${id}/turn/${turn.number}/step/${turn.stepNumber}/call/${attempt}`
     const config = { provider: request.provider, model: request.model, reasoningEffort: request.reasoningEffort, temperature: request.temperature, maxTokens: request.maxTokens, stop: request.stop }
@@ -304,7 +314,9 @@ export class TraceMapper {
     }
     if (id) Object.assign(attrs, this.presentation(id), { 'gen_ai.conversation.id': id })
     if (sourceSeq !== undefined) attrs['gh.event.seq'] = sourceSeq
-    if (request.system !== undefined) Object.assign(attrs, this.policy.attributes('gen_ai.system_instructions', [{ type: 'text', content: request.system }]))
+    if (messageId !== undefined) attrs['gh.message.id'] = messageId
+    const system = request.system === undefined ? [] : [{ type: 'text', content: request.system }]
+    if (system.length) Object.assign(attrs, this.policy.attributes('gen_ai.system_instructions', system))
     if (request.tools !== undefined) Object.assign(attrs, this.policy.attributes('gen_ai.tool.definitions', request.tools.map(tool => ({ type: 'function', name: tool.name, description: tool.description, parameters: tool.parameters }))))
     if (request.reasoningEffort !== undefined) attrs['gen_ai.request.reasoning.level'] = request.reasoningEffort
     if (request.temperature !== undefined) attrs['gen_ai.request.temperature'] = request.temperature

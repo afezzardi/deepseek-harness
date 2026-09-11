@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { expect, it } from 'vitest'
 import { Session, SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
+import { SessionObservationReader } from '@deepseek-ai/dsh-session-query/src/observation.ts'
 import type { Context } from '@deepseek-ai/cordis'
 import { fixture } from './fixture.ts'
 import { readArtifactSnapshot } from '../src/snapshot.ts'
@@ -22,8 +23,10 @@ it('reads live and persisted seeded children without modifying source identities
   const persistence = { open: async () => ({ header, inheritedEventCount: inherited,
     read: async () => ({ events: structuredClone(events), eventState: 'detached' }), close: async () => { closed++ } }) }
   for (const live of [child, undefined]) {
-    // This test supplies only the two public services consumed by the reader.
-    const ctx = { sessions: { get: () => live }, sessionPersistence: persistence } as unknown as Context
+    // The real upstream observation reader supplies the lazy immutable cut and disposable lease.
+    const ctx = { sessions: { get: () => live }, sessionPersistence: persistence, get: () => { throw Error("Projection work was not disabled") } } as unknown as Context
+    const reader = new SessionObservationReader(ctx)
+    Object.assign(ctx, { sessionQuery: { observeSession: reader.read.bind(reader) } })
     const snapshot = await readArtifactSnapshot(ctx, header.id)
     expect(snapshot.inheritedEventCount).toBe(inherited)
     expect(snapshot.events).toEqual(live ? live.snapshotEvents() : events)

@@ -11,6 +11,8 @@ from phoenix_dataset import Phoenix, atomic
 root = Path(__file__).resolve().parents[4]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('campaign')
+parser.add_argument('--template', help='Directory containing settings.yaml and cordis.patch.yml; defaults to versioned artifacts configuration')
+parser.add_argument('--project', default='gh-training-v4')
 mode = parser.add_mutually_exclusive_group(required=True)
 mode.add_argument('--receipt', help='Pinned Phoenix task or previous promoted dataset receipt')
 mode.add_argument('--audit-only', action='store_true', help='Reconstruct and grade without promotion')
@@ -71,6 +73,7 @@ home = campaign/'.audit-home'
 home.mkdir(exist_ok=True, mode=0o700)
 for name in ['settings.yaml','cordis.patch.yml']:
     if not (home/name).exists():
-        shutil.copyfile(root/'artifacts/results/trace-discovery-20260908/.home'/name,home/name)
-(campaign/'audit.patch.yml').write_text('- id: headless-startup\n  disabled: true\n- id: headless-runner\n  disabled: true\n- id: session-persistence-jsonl\n  config:\n    root: '+str(store_root)+'\n- id: gh-genai-traces\n  config:\n    content: rich-redacted\n    project: gh-training-v3\n    maxContentBytes: 1048576\n- insert:\n    - id: gh-audit\n      name: '+str(root/'artifacts/plugins/gh-genai-traces/lib/audit-profile.js')+'\n')
+        source = Path(args.template)/name if args.template else root/'artifacts'/('dsh-settings.yaml' if name == 'settings.yaml' else 'dsh-cordis.patch.yml')
+        shutil.copyfile(source,home/name)
+(campaign/'audit.patch.yml').write_text('- id: headless-startup\n  disabled: true\n- id: headless-runner\n  disabled: true\n- id: session-persistence-jsonl\n  config:\n    root: '+str(store_root)+'\n- id: gh-genai-traces\n  config:\n    content: rich-redacted\n    project: '+args.project+'\n    maxContentBytes: 1048576\n- insert:\n    - id: gh-audit\n      name: '+str(root/'artifacts/plugins/gh-genai-traces/lib/audit-profile.js')+'\n')
 print(json.dumps(dict(sessions=len(ids),files=len(files))))

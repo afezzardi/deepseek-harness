@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write artifacts/plugins/gh-genai-traces/README.md
-README.md: 2066ff3e4dff54ca2db3d13633deb147be86ac17
-README.zh.md: 1fe67bb2adb152d26769041274b0d86ee44cddf5
+README.md: 72ba37787b0d3a4b7f754e50e0c85ae84322171e
+README.zh.md: 294c48a0a30dd551ab4a086415ac1b4259ddc6fc

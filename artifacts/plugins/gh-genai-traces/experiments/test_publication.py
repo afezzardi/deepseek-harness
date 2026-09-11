@@ -55,14 +55,14 @@ class EncodingTests(unittest.TestCase):
 
 def curated_fixture():
     request = {'config': {'provider': 'fixture', 'model': 'fixture'}, 'messages': []}
-    response = {'role': 'assistant', 'source': {'kind': 'model'}, 'content': [{'type': 'text', 'text': '42'}]}
+    response = {'id': 'fixture-answer', 'role': 'assistant', 'source': {'kind': 'model'}, 'content': [{'type': 'text', 'text': '42'}]}
     target = {'policy': 'final-answer', 'event': 3, 'blocks': [0], 'reasoning': 'omit'}
-    provenance = {'session': 'fixture', 'sourceHash': '1' * 64, 'sourceEvent': 3, 'inheritedEventCount': 0,
+    provenance = {'messageId': 'fixture-answer', 'throughSeq': 4, 'session': 'fixture', 'sourceHash': '1' * 64, 'sourceEvent': 3, 'inheritedEventCount': 0,
                   'requestHash': digest(request), 'toolsHash': digest(None), 'configHash': digest(request['config']),
                   'outputHash': digest(response['content']), 'rowHash': digest({'request': request, 'response': response, 'target': {**target, 'event': None}}),
-                  'transformationHash': digest({'version': 2, 'reconstruction': 'upstream-surface', 'objective': 'final-answer', 'reasoning': 'retain-source-omit-target'})}
+                  'transformationHash': digest({'version': 3, 'reconstruction': 'upstream-surface', 'objective': 'final-answer', 'reasoning': 'retain-source-omit-target'})}
     provenance['review'] = {'contentHash': provenance['sourceHash'], 'transformationHash': provenance['transformationHash']}
-    candidate = {'version': 2, 'trainingReady': False, 'sftEligible': True, 'request': request, 'response': response, 'target': target,
+    candidate = {'version': 3, 'humanFeedback': None, 'trainingReady': False, 'sftEligible': True, 'request': request, 'response': response, 'target': target,
                  'provenance': provenance, 'split': 'train', 'sourceEvidence': {'approvals': []}, 'grade': {'required': ['semantics'], 'observations': {'semantics': {'status': 'pass'}}}}
     fidelity = {'status': 'byte-exact', 'canonicalRequestHash': provenance['requestHash'], 'canonicalSourceHash': provenance['sourceHash'],
                 'session': 'fixture', 'event': 3, 'recordedHash': 'e' * 64, 'reconstructedHash': 'e' * 64}
@@ -113,16 +113,17 @@ class CuratedAdmissionTests(unittest.TestCase):
         p = c['provenance']
         p['outputHash'] = digest(c['response']['content'])
         p['rowHash'] = digest({'request': c['request'], 'response': c['response'], 'target': {**c['target'], 'event': None}})
-        p['transformationHash'] = digest({'version': 2, 'reconstruction': 'upstream-surface', 'objective': 'tool-decision', 'reasoning': 'retain-source-omit-target'})
+        p['transformationHash'] = digest({'version': 3, 'reconstruction': 'upstream-surface', 'objective': 'tool-decision', 'reasoning': 'retain-source-omit-target'})
         p['review']['transformationHash'] = p['transformationHash']
         row['id'] = p['rowHash']
         passed = {'call': 4, 'status': 'pass', 'evidence': ['fixture']}
         c['grade']['decisions'] = [passed]
+        c['sourceEvidence']['toolDecisions'] = [{'block': 0, 'call': 4, 'callId': 'call', 'name': 'read', 'arguments': '{}'}]
         validate_curated(row)
         for decisions in [[], [{**passed, 'status': 'fail'}], [{**passed, 'status': 'unknown'}], [passed, passed], [{**passed, 'call': 2}]]:
             with self.subTest(decisions=decisions):
                 c['grade']['decisions'] = decisions
-                with self.assertRaisesRegex(ValueError, 'distinct passing decisions'):
+                with self.assertRaisesRegex(ValueError, 'binding|distinct passing decisions'):
                     validate_curated(row)
 
 

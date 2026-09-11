@@ -91,7 +91,7 @@
       "path": "../../../packages/client/ui-tool"
     },
     {
-      "path": "../../../packages/client/ui-deliverables"
+      "path": "../../../packages/client/ui-deliverables/tsconfig.client.json"
     },
     {
       "path": "../../../packages/client/ui-workflow-run"

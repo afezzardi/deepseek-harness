@@ -10,7 +10,7 @@ import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
 import type { PiAiProviderProfile } from '@deepseek-ai/dsh-llm-pi-ai'
 import { deriveEventMessage, foldRequestHeader, foldSurface, Session } from '@deepseek-ai/dsh-session'
 import type { SessionLogSnapshot } from '@deepseek-ai/dsh-session-query'
-import { digest } from '../src/curation.ts'
+import { digest, curationSourceHash } from '../src/curation.ts'
 import { atomicJson } from '../src/checkpoint.ts'
 
 function divergence(a: unknown, b: unknown, at = '$'): string | null {
@@ -72,7 +72,7 @@ it.skipIf(!process.env.GH_FIDELITY_MANIFEST)('reconstructs recorded payloads wit
         let error: string | undefined
         try {
           const prepared = await ctx.llm.prepareCall(header.config)
-          for await (const chunk of prepared.stream({ ...header.config, ...header.system === undefined ? {} : { system: header.system }, ...header.tools === undefined ? {} : { tools: header.tools }, messages })) void chunk
+          for await (const chunk of prepared.stream({ ...header.config, ...header.tools === undefined ? {} : { tools: header.tools }, messages })) void chunk
         }
         catch (caught) { error = String(caught) }
         if (!captured) { rows.push({ session: snapshot.session.id, event: event.seq, status: 'uncaptured', error }); continue }
@@ -84,7 +84,7 @@ it.skipIf(!process.env.GH_FIDELITY_MANIFEST)('reconstructs recorded payloads wit
         corrupted.messages[0]!.content = 'SABOTAGED_PAYLOAD'
         expect(matchRecording(corrupted, byHash, new Set())).toBe(-1)
         rows.push({ session: snapshot.session.id, event: event.seq, eventType: event.type, status: match < 0 ? 'unmatched' : reconstructedHash === nearest?.request_sha256 ? 'byte-exact' : 'json-exact',
-          reconstructedHash, canonicalRequestHash: digest({ ...header, messages }), canonicalSourceHash: digest(snapshot), recordedHash: nearest?.request_sha256 ?? null, recording: nearest?.file ?? null,
+          reconstructedHash, canonicalRequestHash: digest({ ...header, messages }), canonicalSourceHash: curationSourceHash(snapshot, event.type === 'assistant/message' ? event.data.message.id : undefined), recordedHash: nearest?.request_sha256 ?? null, recording: nearest?.file ?? null,
           divergence: nearest ? divergence(body, nearest.body) : '$.unmatched', adapterDefaults: header.adapterDefaults ?? null,
           requestedSettings: Object.fromEntries(Object.entries(header.config).filter(([key]) => !Object.hasOwn(header.adapterDefaults ?? {}, key))),
           observedWireSettings: Object.fromEntries(Object.entries(body as Record<string, unknown>).filter(([key]) => !['messages', 'tools'].includes(key))), corruptionRejected: true })

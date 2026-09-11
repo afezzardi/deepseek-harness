@@ -1,0 +1,154 @@
+{
+  "adapter": "installed PiAiAdapter with offline fetch capture",
+  "settingsHash": "2dad5fe5b0e5f44b72ea4943b689a50f2bd6a3425454404d6c088befaf7d1684",
+  "recordingScope": "complete",
+  "unmatchedRecordings": [
+    {
+      "index": 0,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "02590364cd156ea0c7ea7fdb0072071f775539e3a6e19348084d8b64048bb5c3",
+      "requestId": "b8b6d12fce474c4a81f1140dc8a6580b",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 1,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "d0a17127796d72896233594f555ef2ef6dc1719950e3dfc37a37571c96c54f20",
+      "requestId": "4dc1c4f503494016a92cb63604aeb491",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 10,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "47d0afc1abd42657052e1f6152c78de93e2d67eb94df1eff81b94bacd952ccad",
+      "requestId": "3aed015c27904708a1cb581e2d849f74",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 11,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "16fccef3d19a7b996843695b59d945ee128a57e0cb1f107dd6ad715f2be24e16",
+      "requestId": "f34783ac1ccf478f9db9d8abc1ce2c69",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 18,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "e9279f573fabc853aa8940927bfe8252633c5c7f88044db5504ca5c94a8596fa",
+      "requestId": "d56bab7d364b47369e24027002b06e9c",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 19,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "f15bf264857b6b53b8db26316ef7d4569398ee5b6885f2d8dee6287db6bc8d9d",
+      "requestId": "1c636496585648ee8e81d59da354cd32",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 27,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "5a6480e68038ed8b5afd1a46e3afe8d6b4bee7865d76ea5e3a4e52c605e05e59",
+      "requestId": "11a6a14b0d2a44039b11f5e46bb70477",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 38,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "04786c62dca9238b4d19fe03086f4c29300849bc64d25ff635c3a71707381754",
+      "requestId": "a51cbf5bcef145019ee2d7c9cfe74c3b",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 44,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "72d8b93b2160640844e7649f2df8b4c4c217a46dbccf54b35170fcf61a2a1d3f",
+      "requestId": "4a26b9b893ce4ff5bdc68fd9b02ffb6d",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 49,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "782f4ed9cb925bfd1514c485c7727106ef1facc1d86df83db3c10465852f43ac",
+      "requestId": "be721d8f91484d0f8ed3e7c7e3064265",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 56,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "c57155471099184fb45e520c16b678a5fc0b47ea1bb3b24f8bb4d2553b61fdf1",
+      "requestId": "75c4b93f2a3e4e3ca7192bcfd765858d",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 65,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "8665188720094514641347653d16b39ef6f624becf9e8392d2191b53666d0ce8",
+      "requestId": "b458ba3d1bcc4417b7cc91ae977bd7e5",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 66,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "c2c5b3cc32632300377cd03194aa6c3a0d4ea2de45fd4f72694077053b220fd8",
+      "requestId": "0111dde81c7b42048c7608c3c2d781be",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 73,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "37e714b483d2be6612529e741f3eb0e1180c628c4b13fd658b317a30760a3072",
+      "requestId": "9ad5329f7f7c457fa5ff2b03832d7d9e",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 77,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "745daf0572363499e071658225cb991fe635fd9a0935fe625c51253800f3cc59",
+      "requestId": "6c05eec0f6c74ea192f92427d96f3210",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    },
+    {
+      "index": 81,
+      "file": "/tmp/dsh-v3-transition/artifacts/results/transition-v4-final/.recordings.jsonl",
+      "requestHash": "873cc0c74181c582d73476218b6326c03acecbc2fae7c3a7e21d39669716267a",
+      "requestId": "b91a309de4e442e494fcf8ea4e0821a1",
+      "classification": "auxiliary-session-title",
+      "proxyWriteError": null,
+      "systemHash": "ea01939147126c59eed406f27adaadb0685c261268c427821d59367e2afb63e9"
+    }
+  ],
+  "rendererApproved": false,
+  "rowCount": 68,
+  "byteExactRows": 68
+}

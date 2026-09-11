@@ -1,7 +1,7 @@
 name: gh-genai-traces
 services:
   postgres:
-    image: postgres:16.13-alpine
+    image: postgres:16.13-alpine@sha256:4e6e670bb069649261c9c18031f0aded7bb249a5b6664ddec29c013a89310d50
     environment:
       POSTGRES_USER: phoenix
       POSTGRES_PASSWORD: ${PHOENIX_DB_PASSWORD:?Set PHOENIX_DB_PASSWORD in stack/.env}
@@ -15,7 +15,7 @@ services:
       retries: 20
     restart: unless-stopped
   phoenix:
-    image: arizephoenix/phoenix:version-20.8.0
+    image: arizephoenix/phoenix:version-20.8.0@sha256:41489a3f4f04310545393d0000cd950f35fad71060bd676d937f0afad379e8f9
     environment:
       PHOENIX_SQL_DATABASE_URL: postgresql://phoenix:${PHOENIX_DB_PASSWORD}@postgres:5432/phoenix
       PHOENIX_ALLOW_EXTERNAL_RESOURCES: 'false'
@@ -28,7 +28,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
   collector-storage-init:
-    image: postgres:16.13-alpine
+    image: postgres:16.13-alpine@sha256:4e6e670bb069649261c9c18031f0aded7bb249a5b6664ddec29c013a89310d50
     user: "0:0"
     entrypoint: [chown, "10001:10001", /var/lib/otelcol]
     volumes:

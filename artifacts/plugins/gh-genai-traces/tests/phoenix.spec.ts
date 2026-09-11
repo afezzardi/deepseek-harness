@@ -105,3 +105,59 @@ it.skipIf(!endpoint)('stores independent native sessions for the same canonical 
   expect(new Set(evidence.flatMap(e => e.sessions.flatMap(s => s.traces.map(t => t.trace_id)))).size).toBe(4)
   if (process.env.GH_GENAI_EVIDENCE) await writeFile(`${process.env.GH_GENAI_EVIDENCE}.sessions.json`, JSON.stringify(evidence, null, 2) + '\n')
 }, 40_000)
+
+it.skipIf(!endpoint)('reconciles native HUMAN ratings, edits, and deletion against canonical model spans', async () => {
+  const { mkdtemp, rm } = await import('node:fs/promises')
+  const { tmpdir } = await import('node:os')
+  const { FeedbackPublisher } = await import('../src/feedback.ts')
+  const stateDirectory = await mkdtemp(`${tmpdir()}/gh-native-feedback-`)
+  const project = `gh-feedback-v4-${randomUUID()}`, source = fixture(project)
+  const settings = resolveConfig({ endpoint: `${endpoint}/v1/traces`, project, content: 'rich-redacted', feedback: { enabled: true, endpoint: endpoint!, stateDirectory } })
+  const stats = diagnostics(), ids = new SourceIds(), provider = createProvider(settings, stats, ids)
+  const policy = new ContentPolicy(settings, {}), mapper = new TraceMapper(provider.getTracer('native-feedback'), ids, settings, policy, stats, 'live')
+  const publisher = new FeedbackPublisher(settings, policy, stats, { list: async () => [project], revision: async () => undefined, read: async () => source, flush: () => provider.forceFlush(),
+    redact: (_source, event) => event, replay: async () => { throw Error('Live canonical span must be available') } })
+  try {
+    await replaySnapshot(source, mapper, settings, () => provider.forceFlush())
+    const target = source.events.findLast(event => event.type === 'assistant/message')!
+    if (target.type !== 'assistant/message') throw Error('Missing message')
+    const messageId = target.data.message.id
+    const { messageSpanId } = await import('../src/feedback.ts')
+    const spanId = messageSpanId(project, 'live', project, messageId)
+    await expect.poll(async () => {
+      const response = await fetch(`${endpoint}/v1/projects/${project}/spans?span_id=${spanId}`)
+      return response.ok ? ((await response.json()) as { data: unknown[] }).data.length : 0
+    }, { timeout: 15000 }).toBe(1)
+    const add = (rating: 'positive' | 'negative', version: string) => source.events.push({ type: 'feedback/message-put', seq: source.events.length as import('@deepseek-ai/dsh-session').SessionSeq, time: 4000,
+      data: { sessionId: source.session.id, item: { messageId, rating, note: 'Native acceptance fixture', createdAt: 4000, updatedAt: 4000, version: version as import('@deepseek-ai/dsh-message-feedback').MessageFeedbackVersion } } })
+    const read = async () => {
+      const response = await fetch(`${endpoint}/v1/projects/${project}/span_annotations?span_ids=${spanId}`)
+      if (!response.ok) throw Error(`Annotation read ${response.status}`)
+      return ((await response.json()) as { data: Array<{ annotator_kind: string; result: { score: number }; metadata: { feedbackVersion: string } }> }).data
+    }
+    add('positive', '00000000-0000-4000-8000-000000000001'); await publisher.reconcile()
+    expect(await read()).toMatchObject([{ annotator_kind: 'HUMAN', result: { score: 1 } }])
+    add('negative', '00000000-0000-4000-8000-000000000002'); await publisher.reconcile(); await publisher.reconcile()
+    expect(await read()).toMatchObject([{ annotator_kind: 'HUMAN', result: { score: 0 }, metadata: { feedbackVersion: '00000000-0000-4000-8000-000000000002' } }])
+    expect(await read()).toHaveLength(1)
+    const fork = structuredClone(source)
+    fork.session = { ...fork.session, id: `${project}-fork` as typeof fork.session.id, parentSession: source.session.id }
+    fork.inheritedEventCount = fork.events.length as typeof fork.inheritedEventCount
+    fork.events.push({ type: 'feedback/message-put', seq: fork.events.length as import('@deepseek-ai/dsh-session').SessionSeq, time: 4001,
+      data: { sessionId: fork.session.id, item: { messageId, rating: 'positive', createdAt: 4001, updatedAt: 4001, version: '00000000-0000-4000-8000-000000000003' as import('@deepseek-ai/dsh-message-feedback').MessageFeedbackVersion } } })
+    const forkPublisher = new FeedbackPublisher(settings, policy, stats, { list: async () => [String(fork.session.id)], revision: async () => undefined,
+      read: async id => id === fork.session.id ? fork : source, flush: () => provider.forceFlush(), redact: (_source, event) => event,
+      replay: async () => { throw Error('Original live span must exist') } })
+    try {
+      await forkPublisher.reconcile()
+      expect(await read()).toHaveLength(2)
+      fork.events.push({ type: 'feedback/message-delete', seq: fork.events.length as import('@deepseek-ai/dsh-session').SessionSeq, time: 4002, data: { sessionId: fork.session.id, messageId } })
+      await forkPublisher.reconcile()
+      expect(await read()).toMatchObject([{ result: { score: 0 } }])
+      expect(await read()).toHaveLength(1)
+    } finally { await forkPublisher.shutdown() }
+    source.events.push({ type: 'feedback/message-delete', seq: source.events.length as import('@deepseek-ai/dsh-session').SessionSeq, time: 4001, data: { sessionId: source.session.id, messageId } })
+    await publisher.reconcile(); expect(await read()).toEqual([])
+    expect(stats.feedbackFailures).toBe(0)
+  } finally { await publisher.shutdown(); mapper.shutdown(); await provider.shutdown(); await rm(stateDirectory, { recursive: true, force: true }) }
+}, 30000)

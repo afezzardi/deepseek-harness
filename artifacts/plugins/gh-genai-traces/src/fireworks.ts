@@ -96,7 +96,6 @@ function serializeCandidate(candidate: Candidate, targetReasoning?: string): Tra
   const target = convertMessage(candidate.response, true)
   if (targetReasoning !== undefined) target.reasoning_content = targetReasoning
   return validateTrainingRow({ messages: [
-    ...request.system === undefined ? [] : [{ role: 'system' as const, content: request.system }],
     ...request.messages.map(message => convertMessage(message)), target,
   ], ...request.tools === undefined ? {} : { tools: request.tools.map(tool => ({ type: 'function', function: tool })) } }, candidate.target.policy)
 }

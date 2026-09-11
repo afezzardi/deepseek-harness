@@ -52,7 +52,7 @@ export async function evaluateReadFixture(baseURL: string, project: string, expe
   }] })
   const dataset = z.object({ data: z.object({ dataset_id: z.string(), version_id: z.string(), num_created_examples: z.number() }) }).parse(await request('/v1/datasets/upload?sync=true', {
     name: `${project}-evaluated`, action: 'create',
-    inputs: [{ messages: parseAttribute(first.attributes, 'gh.request.messages'), system: parseAttribute(first.attributes, 'gen_ai.system_instructions'), tools: parseAttribute(first.attributes, 'gen_ai.tool.definitions') }],
+    inputs: [{ messages: parseAttribute(first.attributes, 'gh.request.messages'), tools: parseAttribute(first.attributes, 'gen_ai.tool.definitions') }],
     outputs: [{ expected_value: expected }], metadata: [metadata], span_ids: [root.context.span_id],
   })).data
   const examples = z.object({ data: z.object({ examples: z.array(z.object({ id: z.string() })) }) }).parse(await request(`/v1/datasets/${dataset.dataset_id}/examples`))

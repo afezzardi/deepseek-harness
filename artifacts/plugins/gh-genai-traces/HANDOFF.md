@@ -2,11 +2,11 @@
 
 ## Resume here
 
-The user is establishing infrastructure before choosing a real workload, not preparing to fine-tune soon. Read the [foundation report](../../results/fireworks-sft-20260909/REPORT.md), [method comparison](../../results/fireworks-sft-20260909/METHODS.md), and [experiment guide](experiments/README.md). Work stays under `artifacts/` on `fork/qwen38-deployment`.
+The user is establishing infrastructure before choosing a real workload, not preparing to fine-tune soon. Read the [foundation report](../../results/fireworks-sft-20260909/REPORT.md), [method comparison](../../results/fireworks-sft-20260909/METHODS.md), and [experiment guide](experiments/README.md). The transition checkout lives in `/tmp/dsh-v3-transition` on `fork/qwen38-v3-transition`, with upstream `c291e7961a515f6d7af9304e7fd1d257929aef26`. The user authorized committing the reviewed transition and its corrections. Deployment remains pending manual acceptance. Fork changes stay under `artifacts/`, except the authorized `.github/workflows/fork-artifacts.yml`.
 
 ## Preserved collection evidence
 
-The [r5 campaign](../../results/trace-pipeline-r3-20260909/REPORT.md) has 48 task instances, 144 trials, 111 passes, 30 task failures, and three timeouts. Its 201 canonical sessions and 402 source files remain authoritative. Phoenix holds all 144 experiment outcomes and 300 eligible targets: 111 final answers and 189 independently graded tool decisions. Do not repeat the campaign without a new task revision or a specific diagnostic purpose.
+The [r5 campaign](../../results/trace-pipeline-r3-20260909/REPORT.md) has 48 task instances, 144 trials, 111 passes, 30 task failures, and three timeouts. Its 201 canonical sessions and 402 source files describe that development run. Phoenix holds all 144 experiment outcomes and 300 eligible targets: 111 final answers and 189 independently graded tool decisions. These datasets and their provenance are disposable development evidence; rebuilding them is authorized. The V3 transition has a fresh small acceptance campaign; its [review resolution](../../results/transition-v4/FABLE-RESOLUTION.md) records current checks and remaining acceptance gaps.
 
 The existing local Qwen final-answer renderer passed token parity on 123 real rows with explicit template trimming. Its format-only loss excludes target reasoning and termination. That historical result does not describe Fireworks’ managed loss or establish production thinking behavior.
 

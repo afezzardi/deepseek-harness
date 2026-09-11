@@ -72,7 +72,7 @@ def inventory(directory):
     return result
 
 
-def execute(task, repetition, output, template, proxy, implementation=None, preflight=False):
+def execute(task, repetition, output, template, proxy, implementation=None, preflight=False, effort="medium", project="gh-training-v4-live"):
     trial = task['task_id'] + '-' + str(repetition)
     directory = output / '.trials' / trial
     template_settings = (template / 'settings.yaml').read_text()
@@ -80,7 +80,7 @@ def execute(task, repetition, output, template, proxy, implementation=None, pref
         raise ValueError('Expected the declared Qwen inference route in the settings template')
     settings = template_settings.replace('http://100.108.76.12:4000/engine/v1', proxy + '/engine/v1')
     implementation = implementation or execution_identity(template)
-    identity = digest({'task': task, 'repetition': repetition, 'implementation': implementation, 'cwd': str(ROOT), 'runner': 6, 'preflight': preflight})
+    identity = digest({'task': task, 'repetition': repetition, 'implementation': implementation, 'cwd': str(ROOT), 'runner': 7, 'preflight': preflight, 'effort': effort, 'project': project})
     result_file = directory / 'result.json'
     if result_file.exists():
         prior = json.loads(result_file.read_text())
@@ -107,9 +107,9 @@ def execute(task, repetition, output, template, proxy, implementation=None, pref
                           'taskHash': digest({k: manifest[k] for k in ['prompt', 'before', 'outputs', 'expected']})}
     atomic(directory / 'task.json', manifest)
     patch = directory / 'trace.patch.yml'
-    patch.write_text('- id: session-persistence-jsonl\n  config:\n    root: ' + str(directory / '.sessions') + '\n- id: gh-genai-traces\n  config:\n    content: rich-redacted\n    project: gh-training-v3-live\n    metadata: ' + json.dumps({'task': task['task_id'], 'trial': trial, 'family': task['family'], 'reasoning': 'medium'}) + '\n')
+    patch.write_text('- id: session-persistence-jsonl\n  config:\n    root: ' + str(directory / '.sessions') + '\n- id: gh-genai-traces\n  config:\n    content: rich-redacted\n    project: ' + project + '\n    metadata: ' + json.dumps({'task': task['task_id'], 'trial': trial, 'family': task['family'], 'reasoning': effort}) + '\n')
     with patch.open('a') as stream:
-        stream.write('- insert:\n    - id: gh-benchmark-policy\n      name: ' + str(ROOT / 'artifacts/plugins/gh-genai-traces/lib/benchmark-profile.js') + '\n      config: ' + json.dumps({'effort': 'medium', 'rootTools': task['allowed_tools'], 'childTools': task['child_tools']}) + '\n')
+        stream.write('- insert:\n    - id: gh-benchmark-policy\n      name: ' + str(ROOT / 'artifacts/plugins/gh-genai-traces/lib/benchmark-profile.js') + '\n      config: ' + json.dumps({'effort': effort, 'rootTools': task['allowed_tools'], 'childTools': task['child_tools']}) + '\n')
         stream.write('- id: tool-subagent\n  config:\n    provider: spawn\n    toolName: subagent\n    backgroundMode: ' + task['delegation_mode'] + '\n    enableRunInBackground: true\n    toolFilter:\n      allow: [read]\n')
     argv = ['pnpm', 'dsh', '--profile', 'headless', '--patch', str(ROOT / 'artifacts/plugins/gh-genai-traces/lib/overlay.yml'), '--patch', str(patch), prompt]
     started = time.time()

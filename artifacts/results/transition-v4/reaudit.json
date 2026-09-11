@@ -1,0 +1,17 @@
+{
+  "graderVersion": "deterministic-v6",
+  "graded": 16,
+  "eligibleTargets": 41,
+  "samePublishedTargetIdentities": true,
+  "publishedVersion": "RGF0YXNldFZlcnNpb246Mjk=",
+  "consideredToolEvents": 30,
+  "selectedToolEvents": 26,
+  "rejectedToolEvents": 4,
+  "rejectionReasons": {
+    "Error: Root trajectory has no eligible final-answer candidate": 4
+  },
+  "duplicateToolEvidence": [],
+  "canonicalFilesUnchanged": 52,
+  "nativePublicationPerformed": false,
+  "inferencePerformed": false
+}

@@ -26,8 +26,16 @@ export const configSchema = z.object({
   scheduledDelayMillis: positive.default(1000),
   exportTimeoutMillis: positive.default(3000),
   shutdownTimeoutMillis: positive.default(5000),
+  feedback: z.object({
+    enabled: z.boolean().default(false),
+    endpoint: z.url().refine(value => { const u = new URL(value); return ['http:', 'https:'].includes(u.protocol) && !u.username && !u.password && !u.search && !u.hash }, 'Phoenix endpoint must be HTTP(S) without credentials, query, or fragment').default('http://127.0.0.1:6006'),
+    headers: z.record(z.string(), z.string()).default({}),
+    stateDirectory: z.string().min(1).optional(),
+    reconcileIntervalMillis: positive.default(30_000),
+    requestTimeoutMillis: positive.default(5000),
+  }).strict().default({ enabled: false, endpoint: 'http://127.0.0.1:6006', headers: {}, reconcileIntervalMillis: 30_000, requestTimeoutMillis: 5000 }),
   replaySessionIds: z.array(z.string().min(1)).default([]),
-}).strict().refine(c => c.maxExportBatchSize <= c.maxQueueSize, 'maxExportBatchSize must not exceed maxQueueSize')
+}).strict().refine(c => !c.feedback.enabled || !/[/?#]/.test(c.project), 'Feedback project must not contain /, ?, or #').refine(c => c.maxExportBatchSize <= c.maxQueueSize, 'maxExportBatchSize must not exceed maxQueueSize')
 /** Fully resolved plugin settings. */
 export type Settings = z.infer<typeof configSchema>
 /** Accepted deployment settings before defaults are materialized. */
@@ -37,4 +45,8 @@ export type Config = z.input<typeof configSchema>
  * @param input - configuration from Cordis or a test.
  * @returns complete settings.
  */
-export function resolveConfig(input: Config): Settings { return configSchema.parse(input) }
+export function resolveConfig(input: Config): Settings {
+  const settings = configSchema.parse(input)
+  if (settings.feedback.enabled && process.platform === 'win32') throw new Error('Feedback publishing requires POSIX flock support')
+  return settings
+}

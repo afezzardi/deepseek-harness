@@ -37,7 +37,9 @@ try {
     const after = agent.session.snapshotEvents()
     await writeFile('result.json', JSON.stringify({ before, after, header: agent.session.header }))
   } finally {
+    const backend = ctx.sessionTelemetry as GenAITraces
     await ctx.fiber.dispose()
+    await writeFile('diagnostics.json', JSON.stringify(backend.diagnostics))
   }
   await writeFile('captures.json', JSON.stringify(captures))
 } finally {

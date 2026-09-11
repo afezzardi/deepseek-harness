@@ -1,5 +1,5 @@
 /** Small canonical trajectory: a tool request, observation, and final answer. */
-import { createAssistantMessage, createToolResultMessage, createUserMessage, ToolCallId, type AssistantStreamRecord } from '@deepseek-ai/dsh-llm'
+import { createSystemMessage, createAssistantMessage, createToolResultMessage, createUserMessage, ToolCallId, type AssistantStreamRecord } from '@deepseek-ai/dsh-llm'
 import { Session, SessionId, SessionLogOffset, type SessionEvent } from '@deepseek-ai/dsh-session'
 import type { SessionLogSnapshot } from '@deepseek-ai/dsh-session-query'
 
@@ -10,9 +10,10 @@ import type { SessionLogSnapshot } from '@deepseek-ai/dsh-session-query'
 export function fixture(id = 'fixture'): SessionLogSnapshot {
   const session = Session.create(SessionId(id))
   session.append('turn/start', { turn: 1 })
+  session.append('system/message', { turn: 1, step: 1, message: createSystemMessage('Use the read tool.', '@deepseek-ai/dsh-system-prompt') }, { surfaceOp: 'append' })
   session.append('user/message', createUserMessage({ content: [{ type: 'text', text: 'Read fixture.txt then report its value.' }], source: { kind: 'user' } }), { surfaceOp: 'append' })
   session.append('step/start', { turn: 1, step: 1 })
-  session.append('request/header', { reason: 'initial', header: { config: { provider: 'fixture', model: 'fixture' }, system: 'Use the read tool.', tools: [{ name: 'read', description: 'Read one file', parameters: { type: 'object', properties: { path: { type: 'string' } } } }] } })
+  session.append('request/header', { reason: 'initial', header: { config: { provider: 'fixture', model: 'fixture' }, tools: [{ name: 'read', description: 'Read one file', parameters: { type: 'object', properties: { path: { type: 'string' } } } }] } })
   const callId = ToolCallId('call-read')
   const block = { type: 'tool-call' as const, id: callId, name: 'read', arguments: '{"path":"fixture.txt"}' }
   const stream: AssistantStreamRecord[] = [

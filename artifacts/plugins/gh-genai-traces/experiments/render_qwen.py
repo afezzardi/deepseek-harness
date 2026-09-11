@@ -12,7 +12,7 @@ from phoenix_dataset import atomic, digest, validate_content
 
 def messages(candidate):
     request = candidate['request']
-    result = [] if 'system' not in request else [{'role': 'system', 'content': request['system']}]
+    result = []
     for message in request['messages'] + [candidate['response']]:
         item = {'role': 'tool' if message['source']['kind'] == 'tool' else message['role'], 'content': ''}
         for block in message['content']:
@@ -40,7 +40,7 @@ def render(candidate, tokenizer, template_kwargs, target_whitespace="exact"):
     if target_whitespace not in ("exact", "template-trim"):
         raise ValueError("Unsupported target whitespace policy")
     validate_content(candidate)
-    if candidate['version'] != 2 or candidate['target']['policy'] != 'final-answer' or candidate['target']['reasoning'] != 'omit':
+    if candidate['version'] != 3 or candidate['target']['policy'] != 'final-answer' or candidate['target']['reasoning'] != 'omit':
         raise ValueError('Unsupported Qwen loss policy')
     blocks = candidate['response']['content']
     selected = candidate['target']['blocks']

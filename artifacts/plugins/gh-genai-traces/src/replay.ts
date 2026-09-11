@@ -29,11 +29,10 @@ export async function replaySnapshot(snapshot: SessionLogSnapshot, mapper: Trace
           return message ? [message] : []
         })
         const request: GenerateOptions = { ...header.config, messages, sessionId: snapshot.session.id,
-          ...header.system === undefined ? {} : { system: header.system },
           ...header.tools === undefined ? {} : { tools: header.tools },
         }
         const id = `${snapshot.session.id}:${event.seq}`
-        mapper.startCall(id, request, first.time, event.seq)
+        mapper.startCall(id, request, first.time, event.seq, snapshot.session, event.type === 'assistant/message' ? event.data.message.id : undefined)
         const assembler = new BlockAssembler()
         let bytes = 0
         let truncated = false

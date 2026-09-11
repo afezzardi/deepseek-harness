@@ -64,7 +64,7 @@ it('selects only independently assessed tool calls and keeps ungraded reasoning 
   expect(() => curateSession(sourceFixture, p, grade, policy, event.seq)).toThrow('independent')
   const c = curateSession(sourceFixture, p, { ...grade, decisions: [{ call: call.seq, status: 'pass', evidence: ['independent argument and observation check'] }] }, policy, event.seq)
   expect(c.target).toMatchObject({ policy: 'tool-decision', blocks: [0], reasoning: 'omit' })
-  expect(c.request.messages).toHaveLength(1)
+  expect(c.request.messages).toHaveLength(2)
   expect(validateCandidate(c).target.policy).toBe('tool-decision')
   for (const status of ['fail', 'unknown'] as const) {
     const changed = structuredClone(c)
@@ -205,9 +205,10 @@ it('blocks unknown required evidence and quarantines connected promoted split co
 
 it('retains approval evidence and excludes human-assisted trajectories from promotion', () => {
   const source = structuredClone(sourceFixture)
-  const session = Session.create(source.session.id, source.events, source.session)
+  const session = Session.create(source.session.id, source.events.slice(0, -1), source.session)
   session.append('approval/asked', { id: ApprovalRequestId('review'), toolName: 'write' })
   session.append('approval/decided', { id: ApprovalRequestId('review'), outcome: 'allowed-once' })
+  session.append('turn/end', { turn: 1, reason: { kind: 'completed' } })
   source.events = [...session.snapshotEvents()]
   const c = curateSession(source, { ...provenance, review: { ...provenance.review!, contentHash: digest(source) } }, grade, policy)
   expect(c.sourceEvidence.approvals).toHaveLength(2)
@@ -220,7 +221,7 @@ it('reconstructs a compacted request from the upstream replacement while retaini
   const session = Session.create(source.session.id, source.events, source.session)
   session.append('turn/start', { turn: 2 })
   session.append('user/message', createUserMessage({ content: [{ type: 'text', text: 'Compacted context: the observed value is 42.' }], source: { kind: 'plugin', plugin: 'fixture-compaction' } }),
-    { surfaceOp: { op: 'replace', start: SessionSeq(1), end: SessionSeq(9) }, sourceEventSeqs: [1, 4, 6, 9].map(SessionSeq) })
+    { surfaceOp: { op: 'replace', startSeq: SessionSeq(2), endSeq: SessionSeq(10) }, sourceEventSeqs: [2, 5, 7, 10].map(SessionSeq) })
   session.append('step/start', { turn: 2, step: 1 })
   const block = { type: 'text' as const, text: '42' }
   session.append('assistant/message', { turn: 2, step: 1, message: createAssistantMessage({ content: [block], source: { provider: 'fixture', model: 'fixture' } }), stream: [
@@ -231,8 +232,8 @@ it('reconstructs a compacted request from the upstream replacement while retaini
   session.append('turn/end', { turn: 2, reason: { kind: 'completed' } })
   const compacted = { ...source, events: [...session.snapshotEvents()] }
   const c = curateSession(compacted, { ...provenance, review: { ...provenance.review!, contentHash: digest(compacted) } }, grade, policy)
-  expect(c.request.messages).toHaveLength(1)
-  expect(c.request.messages[0]!.content).toEqual([{ type: 'text', text: 'Compacted context: the observed value is 42.' }])
+  expect(c.request.messages).toHaveLength(2)
+  expect(c.request.messages[1]!.content).toEqual([{ type: 'text', text: 'Compacted context: the observed value is 42.' }])
   expect(JSON.stringify(source.events)).toBe(original)
   const corrupt = structuredClone(compacted)
   const replacement = corrupt.events.filter(e => e.type === 'user/message').find(e => typeof e.surfaceOp === 'object')!

@@ -7,7 +7,7 @@ import { SessionId } from '@deepseek-ai/dsh-session'
 import type { GenAITraces } from '../src/index.ts'
 import { ContentPolicy } from '../src/content.ts'
 import { resolveConfig } from '../src/config.ts'
-import { curateSession, partitionCandidates, preferencePair, validateCandidate, selectToolDecisions, candidateGroupKeys, digest, TRANSFORMATION, type Candidate, type Grade, type SplitAssignment } from '../src/curation.ts'
+import { curateSession, partitionCandidates, preferencePair, validateCandidate, selectToolDecisions, candidateGroupKeys, digest, curationSourceHash, TRANSFORMATION, type Candidate, type Grade, type SplitAssignment } from '../src/curation.ts'
 import { readArtifactSnapshot } from '../src/snapshot.ts'
 import { atomicJson, atomicText, checkpoint, DeterministicRejection } from '../src/checkpoint.ts'
 import { gradeTask, gradingIdentity, GRADER_VERSION } from '../src/grading.ts'
@@ -15,7 +15,7 @@ import type { inventoryWorkspace } from '../src/reward.ts'
 import { exportFireworksSft } from '../src/fireworks.ts'
 
 /** Persistence and telemetry are profile-owned services. */
-export const inject = ['sessions', 'sessionPersistence', 'sessionTelemetry']
+export const inject = ['sessions', 'sessionPersistence', 'sessionQuery', 'sessionTelemetry']
 const manifestSchema = z.object({ output: z.string(), sessionIds: z.array(z.string()), trials: z.array(z.object({
   trial: z.string(), family: z.string(), prompt: z.string(), expected: z.unknown(), directory: z.string(),
   cwd: z.string().refine(path.isAbsolute, 'Trial cwd must be absolute').optional(),
@@ -66,7 +66,7 @@ export async function apply(ctx: Context): Promise<void> {
             candidate = curateSession(snapshot, { family: trial.family, task: trial.task_id ?? digest({ prompt: trial.prompt, before: trial.before }), trial: trial.trial,
               rootSession: id, revision: manifest.revision, configurationHash: digest(config),
               review: reviewValid ? { kind: 'synthetic-fixture', reviewer: trial.review!.reviewer, evidence: trial.review!.evidence,
-                contentHash: digest(snapshot), transformationHash: digest(TRANSFORMATION) } : null }, grade, policy)
+                contentHash: curationSourceHash(snapshot), transformationHash: digest(TRANSFORMATION) } : null }, grade, policy)
           } catch (error) { rejection = String(error) }
           const selection = selectToolDecisions(snapshot, candidate, policy)
           return { grade, candidate, selection, rejection }

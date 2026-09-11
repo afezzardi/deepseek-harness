@@ -34,11 +34,21 @@ docker compose -f artifacts/plugins/gh-genai-traces/stack/compose.yml up -d
 pnpm dsh --profile headless --patch artifacts/plugins/gh-genai-traces/lib/overlay.yml "your task"
 ```
 
-栈在 `http://127.0.0.1:6006` 暴露 Phoenix，在 `http://127.0.0.1:4318/v1/traces` 暴露 OTLP/HTTP。生成的覆盖层启用 `rich-redacted` 采集并替换默认遥测后端。不使用覆盖层时，此插件不会加载。Web 可以将同一个覆盖层与现有 Typert 和推理强度滑块覆盖层一起使用。
+栈在 `http://127.0.0.1:6006` 暴露 Phoenix，在 `http://127.0.0.1:4318/v1/traces` 暴露 OTLP/HTTP。生成的覆盖层在 `gh-genai-traces-v4` 中启用 `rich-redacted` 采集和反馈协调，并替换默认遥测后端。不使用覆盖层时，此插件不会加载。Web 可以将同一个覆盖层与现有 Typert 和推理强度滑块覆盖层一起使用。
 
 Compose 服务使用命名卷，临时轨迹默认保留 30 天。显式实验保护操作为保留证据的 v3 项目分配不会自动过期的原生策略。`PHOENIX_PORT`、`OTLP_HTTP_PORT` 和 `PHOENIX_RETENTION_DAYS` 配置此栈。`stack/setup.mjs` 仅创建一次私有且被 Git 忽略的数据库凭据；`docker compose ... down` 保留卷。栈禁用 Phoenix 分析遥测及外部 UI 资源。
 
 设置 `GH_GENAI_OTLP_ENDPOINT` 可更改完整轨迹端点，设置 `GH_GENAI_PROJECT` 可更改项目。在启动 profile 前，将 `GH_GENAI_REPLAY_SESSIONS` 设为逗号分隔的会话 ID，即可通过配置的 DSH 存储回放它们。回放导出到 `<project>-replay`，不会启动或重写记录的会话。源码变更后重新构建；重启 profile 以应用其覆盖层。
+
+### 人工反馈与 V3 兼容性
+
+原生对话框确认的赞与踩会成为 Phoenix 的 `dsh.user_rating` HUMAN 标注：正面评分为 1，负面评分为 0。备注经过脱敏并受大小限制。编辑会更新同一标识符；删除会移除实时和回放标注。评分表示用户偏好，不代表确定性任务成功，也不会自动赋予训练资格。 对继承消息的评分关联到原始所属会话的跨度，并在元数据和注释标识中保留评分所在的会话。
+
+直接挂载时，`feedback.enabled` 默认为 false；生成的覆盖配置会启用它。`feedback.endpoint` 默认为 `http://127.0.0.1:6006`，覆盖配置支持 `GH_GENAI_PHOENIX_ENDPOINT`。`feedback.headers` 默认为 `{}`。启动、收到通知以及每隔 `feedback.reconcileIntervalMillis`（默认 30,000）时执行协调；`feedback.requestTimeoutMillis` 默认为 5,000。缺少实时 span 时会使用回放项目。失败可从持久化 Session 数据重试。`feedback.stateDirectory` 默认为 `$DSH_HOME/gh-genai-traces`，仅保存内核锁文件；共享主目录的发布进程会串行协调。反馈发布需要 POSIX flock 支持。 对账在内存中缓存成功处理的持久化修订和已确认的变更；未变化的会话只需 stat 检查，无关追加不会重新发布评分。外部恢复 Phoenix 后，重启插件以重建投影。没有备注时标记为 absent。Windows 在配置解析时拒绝启用反馈。
+
+适配器针对上游 `c291e7961a515f6d7af9304e7fd1d257929aef26`。Session V3 将系统指令保存为有序消息。版本 3 候选记录所选 `messageId` 和已完成轮次的 `throughSeq`；后续反馈不会改变源数据或请求哈希。派生工具审核验证已审核轨迹，并记录 `review.derivedFrom`。审批证据覆盖所选前缀；工具选择还受根候选资格限制。重建元数据独立于审核内容，但前缀中的修复事件仍参与哈希。`sessionVersion` 表示规范化格式，不推断原始迁移来源。上游会拒绝不受支持的预发布 V2 文件，此类数据需要重新采集。
+
+`correlationFailures` 统计无法匹配或存在歧义的请求观测。`feedbackFailures` 统计协调操作失败；`feedbackPending` 统计最近一轮未解决的评分。这些计数器是进程内诊断。[迁移回归测试](tests/transition.spec.ts)、[反馈测试](tests/feedback.spec.ts) 和可选的 [Phoenix 原生检查](tests/phoenix.spec.ts) 提供可执行示例。构建上游后运行 `node artifacts/check.mjs`；全新 CI 检出可使用 `--build-upstream`。 `ownershipRecoveryFailures` 统计祖先读取失败；采集继续，但不推断所属关系。子会话新轮次开始时重试恢复。`captureAbandoned` 统计整体关闭期限到达时放弃的活动和排队观察。
 
 ### 采集控制
 
@@ -83,7 +93,7 @@ GH_PHOENIX_URL=http://127.0.0.1:6006 GH_GENAI_OTLP_ENDPOINT=http://127.0.0.1:431
 
 回放使用共享快照读取器、上游增量 surface 重建和 header 折叠及上游紧凑流读取器。它在每次记录的 assistant 结算前重建模型输入，并将模型时长标记为首个记录块至最后记录块的间隔。它不导出重建的派发延迟。当记录完整时，上游 token-meter 轮次辅助函数提供精确轮次总量；无法证明输入总量时，每次调用的 token 属性会省略该总量。工具时长覆盖记录的调用至结果间隔，包括期间等待。
 
-SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误、span 接纳与丢弃、成功导出回调、失败回调及待处理 span。成功回调表示接收端确认，不证明 Phoenix 已持久化存储。Collector 的持久化队列保护已接纳的下游批次，无法恢复丢失的 SDK 队列。基于源生成的稳定回放 ID 允许在已测试的 Phoenix 版本中重复导入而不产生重复 span。
+SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误、span 接纳与丢弃、成功导出回调、失败回调及待处理 span。成功回调表示接收端确认，不证明 Phoenix 已持久化存储。Collector 的持久化队列保护已接纳的下游批次，无法恢复丢失的 SDK 队列。基于源生成的稳定回放 ID 在映射版本 4 内对重复导入去重；更改映射版本时应使用新项目。
 
 </details>
 
@@ -106,12 +116,12 @@ SDK 批量导出 OTLP protobuf。诊断计数区分记录接纳、映射错误�
 <a id="known-limitations-and-deferred-work"></a>
 ## 已知限制与延后工作
 
-[整理库](src/curation.ts) 通过 `./curation` 生成版本 2 的后端无关候选，包含明确评分、审核哈希、审批证据及选定损失目标。Phoenix 管理固定版本的划分。`./fireworks` 保留托管 SFT/DPO 序列化；`./reward` 提供文件系统观察。仅格式导出省略目标推理。显式结果推理导出保留选定推理以及回答或已评分工具决策，不改写规范候选；任务结果不独立评价推理中的陈述。[基础设施报告](../../results/fireworks-sft-20260909/REPORT.md) 记录 Fireworks 数据集上传、原生预览及剩余兼容性限制。这些数据是后续工作负载的管线夹具，不代表生产训练批准。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。[r5 报告](../../results/trace-pipeline-r3-20260909/REPORT.md) 验证 Qwen 最终回答序列化与已观察引擎的一致性；[交接文档](HANDOFF.md#pending-work) 记录剩余验收工作。本地 schema 验证及 token 一致性不代表训练后模型改进。
+[整理库](src/curation.ts) 通过 `./curation` 生成版本 3 的后端无关候选，包含明确评分、审核哈希、审批证据及选定损失目标。Phoenix 管理固定版本的划分。`./fireworks` 保留托管 SFT/DPO 序列化；`./reward` 提供文件系统观察。仅格式导出省略目标推理。显式结果推理导出保留选定推理以及回答或已评分工具决策，不改写规范候选；任务结果不独立评价推理中的陈述。[基础设施报告](../../results/fireworks-sft-20260909/REPORT.md) 记录 Fireworks 数据集上传、原生预览及剩余兼容性限制。这些数据是后续工作负载的管线夹具，不代表生产训练批准。[实验指南](experiments/README.zh.md) 说明规范审计、固定文本采样、可重置夹具和独立评分。[r5 报告](../../results/trace-pipeline-r3-20260909/REPORT.md) 验证 Qwen 最终回答序列化与已观察引擎的一致性；[交接文档](HANDOFF.md#pending-work) 记录剩余验收工作。本地 schema 验证及 token 一致性不代表训练后模型改进。
 
 - 请求采集表示适配器序列化前的 harness 输入；不采集提供者 HTTP 请求体、tokenizer ID、隐藏推理及附件原始字节。
 - 回放无法恢复会话中没有记录的实时计时或辅助请求细节。冷读取可能包含上游生成的中断关闭记录，并在轮次级别明确标识。
 - 队列丢失、进程崩溃、延迟挂载及热重载可能导致轨迹不完整。为获取完整实时证据，在新轮次前重启采集；使用回放查看完整的已存储轮次。
-- 跨进程子轨迹要求加载插件并能读取祖先成员记录。未解析或独立子会话保留会话关系，不伪造嵌套。工作流记录没有调用工具的 ID，因此工作流位于 step 下。映射版本 3 按项目、来源和规范源身份隔离轨迹、span 与 Phoenix 会话 ID；工作流子会话共享所属根会话的展示身份。
+- 跨进程子轨迹要求加载插件并能读取祖先成员记录。未解析或独立子会话保留会话关系，不伪造嵌套。工作流记录没有调用工具的 ID，因此工作流位于 step 下。映射版本 4 按项目、来源和规范源身份隔离轨迹、span 与 Phoenix 会话 ID；工作流子会话共享所属根会话的展示身份。
 - 自动语义召回、ATIF 导出、特定训练器的渲染及损失验证、精确 token RL、定价策略及通用评估器均为延后工作。Phoenix 自身的定价估算不代表经过验证的推理成本。
 
 ### 开发备注
