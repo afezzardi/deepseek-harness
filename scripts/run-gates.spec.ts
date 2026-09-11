@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi, type MockInstance } from 'vitest'
 import {
   cliGateOptions,
+  collectDescendants,
   defaultConcurrency,
   formatGateResultReason,
   gatesForMode,
@@ -927,6 +928,29 @@ describe('process-table parsing', () => {
 
   it('drops blank and malformed lines', () => {
     expect(parsePidPpidLines('  123   1\n\ncommand not found\n999 abc\n')).toEqual([[123, 1]])
+  })
+})
+
+describe('process-table traversal', () => {
+  it('returns unique descendants in breadth-first order and excludes unrelated processes', () => {
+    expect(collectDescendants(10, [[20, 10], [30, 20], [40, 10], [20, 10], [60, 50]]))
+      .toEqual([20, 40, 30])
+    expect(collectDescendants(99, [[20, 10]])).toEqual([])
+  })
+
+  it('excludes the root when reused parent PIDs form a cycle', () => {
+    expect(collectDescendants(10, [[20, 10], [10, 20], [30, 20]])).toEqual([20, 30])
+    expect(collectDescendants(10, [[10, 10], [20, 10]])).toEqual([20])
+  })
+
+  it('visits descendant cycles once', () => {
+    expect(collectDescendants(10, [[20, 10], [30, 20], [20, 30], [40, 30]])).toEqual([20, 30, 40])
+  })
+
+  it('handles a wide process table without spreading children into call arguments', () => {
+    const grandchildren = Array.from({ length: 150_000 }, (_, index) => index + 100)
+    const rows: Array<[number, number]> = [[20, 10], ...grandchildren.map((pid): [number, number] => [pid, 20])]
+    expect(collectDescendants(10, rows)).toEqual([20, ...grandchildren])
   })
 })
 

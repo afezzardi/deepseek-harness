@@ -24,6 +24,8 @@ The per-gate package scripts remain the vocabulary for ad hoc local runs. `hygie
 
 ## Verification
 
+The fail-fast sampler treats PID relationships as a graph: Windows can reuse parent identifiers, so traversal visits each PID once and excludes the root. Its queue is independent of the adjacency lists, and individual child appends avoid JavaScript's function-argument limit on wide tables. Cycle, duplicate-row, and wide-table regressions exercise the same traversal used by sampling and termination.
+
 [scripts/run-gates.spec.ts](../../../../scripts/run-gates.spec.ts) rejects invalid graphs before the executor runs, pins pass-required and settle-only ordering, pins the hygiene, consumer, and native Windows inventories and their failure semantics, exercises signal termination through a real child process, and proves that streamed output is immediate and unbuffered. [scripts/publint-all.spec.ts](../../../../scripts/publint-all.spec.ts) rejects a missing public export before downstream artifact consumers run.
 
 ## Alternatives considered
@@ -36,6 +38,8 @@ The per-gate package scripts remain the vocabulary for ad hoc local runs. `hygie
 - **Run `publint` with unbounded concurrency** — minimizes elapsed time on small repositories only by gambling with process count, memory pressure, package tarball creation, and readable logs.
 
 ## Consequences
+
+Process-table cycles cannot grow the sampler queue indefinitely or crash the coordinator. The visited set costs memory proportional to the observed PIDs; PID-only observations still do not prove process identity after identifier reuse.
 
 Scheduler-backed commands take the slowest dependency chain instead of the sum of independent gates and report the gate that dominates. Invalid graphs fail before partial execution. The cost is a custom scheduler with an explicit mode inventory.
 
