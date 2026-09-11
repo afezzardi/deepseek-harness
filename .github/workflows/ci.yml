@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 
@@ -594,7 +595,7 @@ jobs:
           key: coverage-times-${{ github.run_id }}
 
   windows-native-tests:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: >-
       ${{ github.event.repository.fork && 'windows-2025'
           || vars.DSH_CI_FAILOVER_WINDOWS == 'blacksmith' && 'blacksmith-16vcpu-windows-2025'
@@ -603,7 +604,7 @@ jobs:
           && fromJSON('["self-hosted", "dsh-win-ci", "windows"]')
           || 'dsh-windows-2025-16core' }}
     name: windows node 24 / native tests
-    timeout-minutes: 60
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
         with:
