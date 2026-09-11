@@ -139,7 +139,7 @@ async function startupSession(
       const result = await startupOperation.done
       if (result.waitReason === 'session_exit') throw new Error('PTY shell exited during startup')
       if (result.waitReason === 'timeout') throw new Error('PTY shell did not reach readiness before startup timeout')
-      viewport = result.viewport
+      viewport = result.viewport || viewport
       if (result.waitReason === 'stdin_read') break
     }
     session.motd = viewport

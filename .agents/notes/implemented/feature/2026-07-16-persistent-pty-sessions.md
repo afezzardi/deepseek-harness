@@ -181,3 +181,7 @@ The package ships concise tool guidance explaining persistent state, owner isola
 **Process loss destroys terminal state.** In-process sessions do not survive a harness crash or restart, and raw scrollback is not durable. Important work must be committed to files or another durable system.
 
 **`node-pty` is a native dependency of `dsh-subprocess-local`.** Installation, supported Node versions, prebuild availability, and platform behavior require built-artifact smokes on every supported OS.
+
+## Startup output across readiness probes
+
+PowerShell startup can settle on output silence before a later probe establishes stdin readiness. The startup message retains the most recent non-empty bounded output segment when that readiness probe is silent. Probe output and readiness evidence remain separate: an empty continuation must not erase observed output, and retained text does not independently establish readiness.

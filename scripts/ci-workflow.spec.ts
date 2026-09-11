@@ -327,12 +327,12 @@ describe('CI workflow', () => {
       linuxAggregate: aggregate['runs-on'] as string,
       windows: windowsBuild['runs-on'] as string,
     }
-    const evaluate = (expression: string, vars: Record<string, string>, login = 'maintainer'): unknown => {
+    const evaluate = (expression: string, vars: Record<string, string>, login = 'maintainer', fork = false): unknown => {
       const body = expression.trim().slice(3, -2)
       return runInNewContext(body, {
         vars,
         fromJSON: JSON.parse,
-        github: { event: { pull_request: { user: { login } } } },
+        github: { event: { repository: { fork }, pull_request: { user: { login } } } },
       }, { timeout: 1000 })
     }
     for (const [name, selector, variable, pool, hosted] of [
@@ -348,6 +348,13 @@ describe('CI workflow', () => {
       for (const mode of ['', 'hosted', 'unexpected']) {
         expect(evaluate(selector, { [variable]: mode }), `${name} default on ${mode}`).toBe(hosted)
       }
+    }
+
+    for (const job of [node24, node24Coverage, node24Consumers]) {
+      expect(evaluate(job['runs-on'] as string, {}, 'maintainer', true)).toBe('ubuntu-24.04')
+    }
+    for (const job of [windowsBuild, windowsCoverage, windowsNativeTests, windowsObservational]) {
+      expect(evaluate(job['runs-on'] as string, {}, 'maintainer', true)).toBe('windows-2025')
     }
 
     // The run-gates aggregate lanes stop at the first blocking gate failure so
@@ -940,13 +947,15 @@ describe('Issue lifecycle workflow', () => {
     const lifecycleJob = workflowJob(lifecycle, 'lifecycle')
     if (!Array.isArray(lifecycleJob.steps)) throw new TypeError('Issue lifecycle job must define steps')
 
-    // The job has no job-level `if`, so it is listed on every pull_request /
-    // pull_request_review event and reports success instead of a gray skip. The
-    // write-capable steps are gated at step level so approved/commented reviews
-    // never mint a Project/Issue App token nor touch the board.
+    // Organization integrations are upstream-only; review-specific write permissions remain step-gated.
     expect(lifecycle.on).toHaveProperty('pull_request')
     expect(lifecycle.on).toHaveProperty('pull_request_review')
-    expect(lifecycleJob.if).toBeUndefined()
+    for (const job of [lifecycleJob, workflowJob(policy, 'policy'), workflowJob(loadWorkflow('.github/workflows/build-preview-cloudflare.yml'), 'preview')]) {
+      expect(job.if).toBe('${{ !github.event.repository.fork }}')
+      for (const fork of [true, false]) {
+        expect(runInNewContext((job.if as string).trim().slice(3, -2), { github: { event: { repository: { fork } } } })).toBe(!fork)
+      }
+    }
     // Keep the subscription-type gates: issue-lifecycle does not re-subscribe
     // ready_for_review (issue-policy owns that) and only reacts to submitted
     // review events.
