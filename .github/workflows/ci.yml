@@ -645,7 +645,8 @@ jobs:
             });
           });
           '@ | Set-Content -LiteralPath $diagnostics
-          node --import "$diagnostics" ./node_modules/vitest/vitest.mjs run `
+          $diagnosticsUrl = node --input-type=module -e 'import { pathToFileURL } from "node:url"; console.log(pathToFileURL(process.argv[1]).href)' "$diagnostics"
+          node --import "$diagnosticsUrl" ./node_modules/vitest/vitest.mjs run `
             --no-file-parallelism `
             --reporter=verbose `
             --testTimeout 90000 `
