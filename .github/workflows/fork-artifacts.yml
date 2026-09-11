@@ -1,15 +1,7 @@
 name: Fork artifacts
 on:
+  # Large upstream merges can exceed GitHub path-filter diff limits.
   pull_request:
-    paths:
-      - artifacts/plugins/**
-      - artifacts/check.mjs
-      - .github/workflows/fork-artifacts.yml
-      - packages/**
-      - native/**
-      - vendor/**
-      - pnpm-lock.yaml
-      - tsconfig*.json
   workflow_dispatch:
 permissions:
   contents: read

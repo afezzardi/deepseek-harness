@@ -35,6 +35,8 @@ concurrency:
 
 jobs:
   lifecycle:
+    # Upstream organization credentials and hosted services are unavailable in forks.
+    if: ${{ !github.event.repository.fork }}
     name: Issue lifecycle
     # Runs on every pull_request_review event so the check reports success rather
     # than a gray "skipped" segment. The token-creating and board-mutating steps

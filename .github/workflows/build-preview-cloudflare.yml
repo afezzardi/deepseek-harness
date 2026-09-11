@@ -32,6 +32,8 @@ env:
 
 jobs:
   preview:
+    # Upstream organization credentials and hosted services are unavailable in forks.
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-24.04
     name: cloudflare pages preview
     steps:

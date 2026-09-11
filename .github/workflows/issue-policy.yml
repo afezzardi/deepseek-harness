@@ -13,6 +13,8 @@ permissions:
 
 jobs:
   policy:
+    # Upstream organization credentials and hosted services are unavailable in forks.
+    if: ${{ !github.event.repository.fork }}
     name: Issue policy
     runs-on: ubuntu-latest
     steps:
