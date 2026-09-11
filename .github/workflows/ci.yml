@@ -634,15 +634,24 @@ jobs:
           }
       - name: Run Windows-specific native tests
         shell: pwsh
-        run: >-
-          pnpm exec vitest run
-          --no-file-parallelism
-          --reporter=verbose
-          --testTimeout 90000
-          packages/shell/tool-pwsh/tests/loader.spec.ts
-          packages/workflow/workflow-worker-thread/tests/workflow-worker-thread.spec.ts
-          packages/workflow/tool-ralph/tests/integration.spec.ts
-          packages/subprocess/subprocess-local/tests/process-exit.spec.ts
+        run: |
+          $diagnostics = Join-Path $env:RUNNER_TEMP 'dsh-child-exits.mjs'
+          @'
+          import { subscribe } from 'node:diagnostics_channel';
+          subscribe('child_process', ({ process: child }) => {
+            child.once('exit', (code, signal) => {
+              console.error('[child-exit]', JSON.stringify({ pid: child.pid, code, signal }));
+            });
+          });
+          '@ | Set-Content -LiteralPath $diagnostics
+          node --import "$diagnostics" ./node_modules/vitest/vitest.mjs run `
+            --no-file-parallelism `
+            --reporter=verbose `
+            --testTimeout 90000 `
+            packages/shell/tool-pwsh/tests/loader.spec.ts `
+            packages/workflow/workflow-worker-thread/tests/workflow-worker-thread.spec.ts `
+            packages/workflow/tool-ralph/tests/integration.spec.ts `
+            packages/subprocess/subprocess-local/tests/process-exit.spec.ts
 
   windows-observational:
     if: github.event_name == 'pull_request'
