@@ -14,6 +14,12 @@ The [lint spec](../../../../scripts/oxlint-contract.spec.ts) copies the TypeScri
 
 The [runner temporary-storage policy](2026-09-06-pr-ci-runner-temporary-storage.md) continues to own job cleanup and capacity. This decision adds reader isolation within that storage; it does not replace the runner policy.
 
-## Alternatives
+## Alternatives considered
 
-Ignoring missing files in catalog generation would hide source mutations. Serializing tests inside one Vitest process would not protect scans in other coverage partitions. Both leave ownership of the transient files unresolved.
+**Ignore missing files in catalog generation.** This would hide source mutations and leave ownership of the transient files unresolved.
+
+**Serialize tests inside one Vitest process.** This would not protect scans in other coverage partitions.
+
+## Consequences
+
+The copied workspace adds setup I/O and temporary disk usage. Catalog scans can run concurrently with lint probes without reading their transient sources.

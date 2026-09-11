@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/testing/2026-09-11-private-lint-contract-workspace.md
-2026-09-11-private-lint-contract-workspace.md: 5af61c1e3e01f762634861b9f39038033b4c143f
-2026-09-11-private-lint-contract-workspace.zh.md: 4565660ea2f6974bf5d6e4352a89fd04edfc74b8
+2026-09-11-private-lint-contract-workspace.md: 1829b786fc24529a10eb37cb9975a3b726981f8d
+2026-09-11-private-lint-contract-workspace.zh.md: 24a875cfdb9a10f29758baa8511b2a35164d3ec9
