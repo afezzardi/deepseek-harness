@@ -1,0 +1,26 @@
+{
+  "restored": true,
+  "isolatedDatabase": "gh_restore_a33440610c974c4aafe57078d88349bc",
+  "databaseEvidence": {
+    "dataset_evaluators": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "dataset_example_revisions": "7def08c00ae0ab5a2264b3041bda02d2269973baf6a78f16d896248744830b4f",
+    "dataset_examples": "c7d59b70f1e5a1c2d5cee136fe068e184a3799032750af8912203f30436e06de",
+    "dataset_labels": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "dataset_splits": "1e6fffdc255a947677ef5c39b4c903c504655cea5978b1ca9f6beff3d9848d8c",
+    "dataset_splits_dataset_examples": "39b96a09e77d6456220c964972fa0e034e2c677592d0cf2e9a20786c6182bb67",
+    "dataset_versions": "cf35e3c068edea02cd7a61dfb7e5404254d8bc2637b7bf889f44d03b0a9bd28b",
+    "datasets": "b810e42faf2791063cbff29133f2f814ad8c3a0906c977e596a1ba4872d34bc9",
+    "experiment_dataset_evaluators": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_eval_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_jobs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_prompt_tasks": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_run_annotations": "f92d7642fa9ad88b1883404e88d78143d5d3d9dd2a8496f883ba8cd6a38e4939",
+    "experiment_runs": "a255575c4a38b2b2691592d56b8bc543e4a9e66654b6d8cbeabdc0c1157800fa",
+    "experiment_tags": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiment_task_logs": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "experiments": "fbafb6ca328bdaf11de2e028ba62bd8448e32b8a9f4ddcb73f5925fe02638720"
+  },
+  "sourceInventoriesVerified": 7,
+  "dumpHash": "89140043908f2ed6b671d42a8a2e1264c38b03c35ec2600f5541394137518743"
+}

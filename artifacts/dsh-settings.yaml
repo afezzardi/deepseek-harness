@@ -1,0 +1,82 @@
+# Local Qwen routes. Credentials resolve from LITELLM_MASTER_KEY.
+# Use /engine/v1 for the configured chat-template reasoning exchange.
+# local-qwen-off supplies non-thinking auxiliary calls.
+llm-pi-ai:
+  providers:
+    local-qwen:
+      displayName: Local Qwen3.8-27B NVFP4
+      apiKeyEnv: LITELLM_MASTER_KEY
+      api: openai-completions
+      reasoning: medium
+      baseURL: http://100.108.76.12:4000/engine/v1
+      streamIdleTimeoutMs: 900000
+      retryPolicy:
+        mode: normal
+        maxRetries: 0
+      compat:
+        supportsDeveloperRole: false
+        supportsReasoningEffort: true
+        supportsUsageInStreaming: true
+        supportsStrictMode: false
+        maxTokensField: max_tokens
+        thinkingFormat: chat-template
+        chatTemplateKwargs:
+          enable_thinking:
+            $var: thinking.enabled
+          reasoning_effort:
+            $var: thinking.effort
+            omitWhenOff: true
+          preserve_thinking: false
+      models:
+        - id: chat-model
+          name: Qwen3.8-27B NVFP4
+          contextWindow: 131072
+          maxTokens: 16384
+          input: [ text, image ]
+          reasoningEfforts:
+            off:
+            low: low
+            medium: medium
+            xhigh: xhigh
+
+    local-qwen-off:
+      displayName: Local Qwen3.8-27B NVFP4 (no thinking)
+      apiKeyEnv: LITELLM_MASTER_KEY
+      api: openai-completions
+      reasoning: off
+      baseURL: http://100.108.76.12:4000/engine/v1
+      streamIdleTimeoutMs: 900000
+      retryPolicy:
+        mode: normal
+        maxRetries: 0
+      compat:
+        supportsDeveloperRole: false
+        supportsReasoningEffort: true
+        supportsUsageInStreaming: true
+        supportsStrictMode: false
+        maxTokensField: max_tokens
+        thinkingFormat: chat-template
+        chatTemplateKwargs:
+          enable_thinking:
+            $var: thinking.enabled
+          reasoning_effort:
+            $var: thinking.effort
+            omitWhenOff: true
+          preserve_thinking: false
+      models:
+        - id: chat-model
+          name: Qwen3.8-27B NVFP4 (no thinking)
+          contextWindow: 131072
+          maxTokens: 16384
+          input: [ text, image ]
+          reasoningEfforts:
+            off:
+            low: low
+            medium: medium
+            xhigh: xhigh
+
+agent-default-model:
+  provider: local-qwen
+  model: chat-model
+ui-onboarding:
+  welcomeNoticeVersion: 2026-08-13.1

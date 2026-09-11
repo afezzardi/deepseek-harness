@@ -1,0 +1,8 @@
+# Web overlay: enable the RPC services disabled by the home patch.
+# Requires a completed build for the Typert artifacts.
+- id: typert
+  disabled: false
+- id: typert-loader
+  disabled: false
+- id: typert-gateway
+  disabled: false

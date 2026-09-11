@@ -1,0 +1,7 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Traceback (most recent call last):
+  File "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/verify-renderer.py", line 43, in <module>
+    result = render(candidate, tokenizer, kwargs)
+  File "/home/andrea/management/deepseek-harness/artifacts/plugins/gh-genai-traces/experiments/render_qwen.py", line 59, in render
+    raise ValueError('Template transforms target text; explicit mask unsupported')
+ValueError: Template transforms target text; explicit mask unsupported

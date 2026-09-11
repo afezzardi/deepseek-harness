@@ -1,0 +1,37 @@
+{
+  "focused-after": {
+    "log": "/tmp/dsh-ci-focused-after.log",
+    "sha256": "f6fe4cc5891df16fa3068a2acb4bd6810d5de971ad19975091e9865ec82e5e0b",
+    "exitCode": 0
+  },
+  "repair-final-tests": {
+    "log": "/tmp/dsh-ci-repair-final-tests.log",
+    "sha256": "0ba7b61aeeb8a12679b12e054d9668ad59a6bd8df4afea9add0325a551af88c3",
+    "exitCode": 0
+  },
+  "repair-build": {
+    "log": "/tmp/dsh-ci-repair-build.log",
+    "sha256": "64ef08db5f788538f55cd5966150004bdf6e8bf9056a3f950fdeb9b17bd7e4cc",
+    "exitCode": 0
+  },
+  "repair-docs": {
+    "log": "/tmp/dsh-ci-repair-docs.log",
+    "sha256": "3b47d34784f2b4be49533498a21ca794a3cf6f0463d06fe9f1c2b90e79ffaf46",
+    "exitCode": 0
+  },
+  "repair-lint": {
+    "log": "/tmp/dsh-ci-repair-lint.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exitCode": 0
+  },
+  "pwsh-snapshot-focused": {
+    "log": "/tmp/dsh-ci-pwsh-snapshot-focused.log",
+    "sha256": "0cafa9837434f93de85f38857486651a37118feea29591a019226c3908817e4e",
+    "exitCode": 0
+  },
+  "terminalCoverage": {
+    "log": "/tmp/dsh-terminal-coverage.log",
+    "sha256": "acc6f1094c8af1760bcbf5c203de9acf98af279b461d2d4531eb3d154ba30afd",
+    "allMetricsPercent": 100
+  }
+}

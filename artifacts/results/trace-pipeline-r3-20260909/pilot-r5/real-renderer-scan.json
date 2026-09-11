@@ -1,0 +1,81 @@
+{
+  "rows": [
+    {
+      "rowHash": "fa35b13bbc804bbaee57adda4763576c34fcfd143d790633a6be833cfea08b05",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "0335ec02eff2d99f08dd141fb4a0ad06cf8a708c481b1a224ad713449c4f67d3",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "453ee589a6dd117f1bc9d67f4fd03b2c47e2b284d4b40e4c9b4f094576904aa0",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "06242e7e013efc15f9ff7ac20eb8724370d4cabb2a41cca4716740b37aca5993",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": false
+    },
+    {
+      "rowHash": "21380411991a97fb8720422d42176ee916a04eae3b6284aa8b41bd639509c738",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": false
+    },
+    {
+      "rowHash": "8840329ccdd3b9ad1da59e4e8ee85fced31274a0f62f24008731d3a44c58ffd0",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "c150fc0ff11a10a205331c1b86dbeea5bb5eae70bc14fb9220b6bb64359319ba",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "ed7a30312f513c1d81278a42615abd4b4432ec06c9a0fff5ccf200a2641d605c",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": false
+    },
+    {
+      "rowHash": "674337bea715667140a278ed11f9761a52daf93e46e753158d11020c82b3f3e7",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": false
+    },
+    {
+      "rowHash": "1e1a8459921f48f673f27db32bc1b93dbf4ab394e39722c664b104a38b1d637d",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    },
+    {
+      "rowHash": "dc03ff4a4b4ce4cdc3119f7f9855e84636955e38c6f54f651a52d1e12a018c24",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": false
+    },
+    {
+      "rowHash": "044cf332ce9ece6d76d6ac90ab147f61f7e01a19ddf35e66ce32c3f5eca21f39",
+      "status": "rejected",
+      "error": "Template transforms target text; explicit mask unsupported",
+      "sftEligible": true
+    }
+  ],
+  "scope": "all final-answer candidates, including task failures; no transformation",
+  "counts": {
+    "rejected": 12
+  },
+  "eligibleFinalAnswers": 7
+}

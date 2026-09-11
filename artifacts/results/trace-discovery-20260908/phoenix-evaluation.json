@@ -1,0 +1,582 @@
+{
+  "dataset": {
+    "dataset_id": "RGF0YXNldDoz",
+    "version_id": "RGF0YXNldFZlcnNpb246Mw==",
+    "num_created_examples": 24,
+    "num_updated_examples": 0,
+    "num_deleted_examples": 0
+  },
+  "experiment": {
+    "id": "RXhwZXJpbWVudDoz",
+    "dataset_id": "RGF0YXNldDoz",
+    "dataset_version_id": "RGF0YXNldFZlcnNpb246Mw==",
+    "name": "recorded-discovery-v1",
+    "description": null,
+    "repetitions": 1,
+    "metadata": {
+      "reasoning_effort": "medium",
+      "grader": "strict final answer + canonical tool evidence + written file state"
+    },
+    "project_name": "Experiment-9086e1edd04d6e2f04ac1ec6",
+    "created_at": "2026-09-08T12:13:59.704870+00:00",
+    "updated_at": "2026-09-08T12:13:59.704870+00:00",
+    "example_count": 24,
+    "successful_run_count": 0,
+    "failed_run_count": 0,
+    "missing_run_count": 24
+  },
+  "runs": [
+    {
+      "key": "aggregate-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoz"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjM="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246Mw=="
+        }
+      }
+    },
+    {
+      "key": "aggregate-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo0"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjQ="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246NA=="
+        }
+      }
+    },
+    {
+      "key": "aggregate-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo1"
+      },
+      "result": {
+        "score": 0,
+        "label": "fail",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjU="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246NQ=="
+        }
+      }
+    },
+    {
+      "key": "aggregate-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo2"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjY="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246Ng=="
+        }
+      }
+    },
+    {
+      "key": "extract-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo3"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjc="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246Nw=="
+        }
+      }
+    },
+    {
+      "key": "extract-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo4"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjg="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246OA=="
+        }
+      }
+    },
+    {
+      "key": "extract-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjo5"
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjk="
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246OQ=="
+        }
+      }
+    },
+    {
+      "key": "extract-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxMA=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjEw"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTA="
+        }
+      }
+    },
+    {
+      "key": "injection-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxMQ=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjEx"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTE="
+        }
+      }
+    },
+    {
+      "key": "injection-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxMg=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjEy"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTI="
+        }
+      }
+    },
+    {
+      "key": "injection-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxMw=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjEz"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTM="
+        }
+      }
+    },
+    {
+      "key": "injection-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxNA=="
+      },
+      "result": {
+        "score": 0,
+        "label": "fail",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE0"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTQ="
+        }
+      }
+    },
+    {
+      "key": "read-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxNQ=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE1"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTU="
+        }
+      }
+    },
+    {
+      "key": "read-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxNg=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE2"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTY="
+        }
+      }
+    },
+    {
+      "key": "read-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxNw=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE3"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTc="
+        }
+      }
+    },
+    {
+      "key": "read-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxOA=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE4"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTg="
+        }
+      }
+    },
+    {
+      "key": "recover-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoxOQ=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjE5"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MTk="
+        }
+      }
+    },
+    {
+      "key": "recover-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyMA=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjIw"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjA="
+        }
+      }
+    },
+    {
+      "key": "recover-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyMQ=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjIx"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjE="
+        }
+      }
+    },
+    {
+      "key": "recover-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyMg=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjIy"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjI="
+        }
+      }
+    },
+    {
+      "key": "write-1",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyMw=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjIz"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjM="
+        }
+      }
+    },
+    {
+      "key": "write-2",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyNA=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjI0"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjQ="
+        }
+      }
+    },
+    {
+      "key": "write-3",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyNQ=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjI1"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjU="
+        }
+      }
+    },
+    {
+      "key": "write-4",
+      "run": {
+        "id": "RXhwZXJpbWVudFJ1bjoyNg=="
+      },
+      "result": {
+        "score": 1,
+        "label": "pass",
+        "explanation": "Strict final-output syntax and expected value, recorded tool criteria, and file contents for write tasks."
+      },
+      "annotation": {
+        "data": [
+          {
+            "id": "VHJhY2VBbm5vdGF0aW9uOjI2"
+          }
+        ]
+      },
+      "evaluation": {
+        "data": {
+          "id": "RXhwZXJpbWVudEV2YWx1YXRpb246MjY="
+        }
+      }
+    }
+  ]
+}

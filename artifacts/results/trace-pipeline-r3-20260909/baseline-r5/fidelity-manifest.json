@@ -1,0 +1,9 @@
+{
+  "snapshots": "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/baseline-r5/audit",
+  "recordings": [
+    "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/baseline-r5/.recordings.jsonl"
+  ],
+  "settings": "/home/andrea/management/deepseek-harness/artifacts/results/trace-discovery-20260908/.home/settings.yaml",
+  "output": "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/baseline-r5/provider-fidelity.json",
+  "recordingScope": "complete"
+}

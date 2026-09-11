@@ -1,0 +1,10 @@
+{
+  "snapshots": "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-v3/.selected-audit",
+  "recordings": [
+    "/home/andrea/management/deepseek-harness/artifacts/results/trace-curation-20260908/provider-streaming.jsonl",
+    "/home/andrea/management/deepseek-harness/artifacts/results/trace-curation-20260908/provider.jsonl"
+  ],
+  "settings": "/home/andrea/management/deepseek-harness/artifacts/results/trace-discovery-20260908/.home/settings.yaml",
+  "output": "/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-v3/fable-r1/provider-fidelity-selected.json",
+  "recordingScope": "selected-sources"
+}

@@ -1,0 +1,1 @@
+$ node --import tsx/esm apps/cli/src/bin.ts --profile headless --patch artifacts/plugins/gh-genai-traces/lib/overlay.yml --patch artifacts/results/trace-pipeline-r3-20260909/pilot-r3/audit.patch.yml

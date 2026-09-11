@@ -1,0 +1,27 @@
+{
+  "sessions": 2,
+  "graded": 0,
+  "candidates": 0,
+  "sft": 0,
+  "splits": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "duplicateRows": 0,
+  "requestGroups": 0,
+  "preferencePairs": 0,
+  "preferenceRejections": {},
+  "rejected": [
+    {
+      "session": "session-91a7918d-beeb-4129-be23-45e90cf074fb",
+      "reason": "Missing or ambiguous trial association"
+    },
+    {
+      "session": "session-bb6d5c07-baca-4651-8343-bdce92d1be1e",
+      "reason": "Missing or ambiguous trial association"
+    }
+  ],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

@@ -1,0 +1,6 @@
+{
+  "verified": 41,
+  "datasetVersion": "RGF0YXNldFZlcnNpb246Mjk=",
+  "command": "python3 artifacts/plugins/gh-genai-traces/experiments/phoenix_dataset.py verify artifacts/results/transition-v4-final/curated-receipt.json",
+  "exitCode": 0
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "type": "model/selection",
+    "seq": 3,
+    "time": 1788681292207,
+    "data": {
+      "provider": "local-qwen",
+      "model": "chat-model",
+      "reasoningEffort": "xhigh"
+    }
+  },
+  {
+    "type": "model/selection",
+    "seq": 5,
+    "time": 1788681464976,
+    "data": {
+      "provider": "local-qwen",
+      "model": "chat-model",
+      "reasoningEffort": "off"
+    }
+  },
+  {
+    "type": "model/selection",
+    "seq": 21,
+    "time": 1788681467099,
+    "data": {
+      "provider": "local-qwen",
+      "model": "chat-model",
+      "reasoningEffort": "low"
+    }
+  },
+  {
+    "type": "model/selection",
+    "seq": 22,
+    "time": 1788681467149,
+    "data": {
+      "provider": "local-qwen",
+      "model": "chat-model",
+      "reasoningEffort": "medium"
+    }
+  }
+]

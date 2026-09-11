@@ -1,0 +1,84 @@
+[
+  {
+    "project": "gh-v3-live-02d8ac03-2aa9-4fc0-99a0-942eac1e9b37",
+    "sessions": [
+      {
+        "id": "UHJvamVjdFNlc3Npb246NTEz",
+        "session_id": "69f8f4cd3060e4e36687a3ae58164de9a344e2abebcbd9a5fe3f5eb71a3cfe91",
+        "project_id": "UHJvamVjdDo1MQ==",
+        "start_time": "2026-09-08T17:44:47.363535+00:00",
+        "end_time": "2026-09-08T17:44:47.473535+00:00",
+        "traces": [
+          {
+            "id": "VHJhY2U6MTE3OQ==",
+            "trace_id": "b1840387565078c4e378971a52aea66f",
+            "start_time": "2026-09-08T17:44:47.363535+00:00",
+            "end_time": "2026-09-08T17:44:47.473535+00:00"
+          }
+        ],
+        "token_count_prompt": 34,
+        "token_count_completion": 11,
+        "token_count_total": 45
+      },
+      {
+        "id": "UHJvamVjdFNlc3Npb246NTE0",
+        "session_id": "591bfa26c2556e34fd4dcce2fe78ed19646d0e112b7e53dfb84d52c7a4268cea",
+        "project_id": "UHJvamVjdDo1MQ==",
+        "start_time": "2026-09-08T17:44:47.382914+00:00",
+        "end_time": "2026-09-08T17:44:47.432914+00:00",
+        "traces": [
+          {
+            "id": "VHJhY2U6MTE4MA==",
+            "trace_id": "56a1c0107da87799bcfcd4a9f3ba6e6f",
+            "start_time": "2026-09-08T17:44:47.382914+00:00",
+            "end_time": "2026-09-08T17:44:47.432914+00:00"
+          }
+        ],
+        "token_count_prompt": 12,
+        "token_count_completion": 5,
+        "token_count_total": 17
+      }
+    ]
+  },
+  {
+    "project": "gh-v3-replay-25364520-451b-4d2d-8993-f70a1710d6f4",
+    "sessions": [
+      {
+        "id": "UHJvamVjdFNlc3Npb246NTE1",
+        "session_id": "06f483c8095f739eb1df48bd9898bb32774571f2d7b78d08a1129204671da5f9",
+        "project_id": "UHJvamVjdDo1Mg==",
+        "start_time": "2026-09-08T17:44:47.363147+00:00",
+        "end_time": "2026-09-08T17:44:47.473147+00:00",
+        "traces": [
+          {
+            "id": "VHJhY2U6MTE4MQ==",
+            "trace_id": "887bcc169cecfc673f4afeccd1f42e73",
+            "start_time": "2026-09-08T17:44:47.363147+00:00",
+            "end_time": "2026-09-08T17:44:47.473147+00:00"
+          }
+        ],
+        "token_count_prompt": 34,
+        "token_count_completion": 11,
+        "token_count_total": 45
+      },
+      {
+        "id": "UHJvamVjdFNlc3Npb246NTE2",
+        "session_id": "51d6578e8a590c141c7f96bacdbfdd360e3a40ae3c0bbd16accbb867b3a1a5e2",
+        "project_id": "UHJvamVjdDo1Mg==",
+        "start_time": "2026-09-08T17:44:47.363302+00:00",
+        "end_time": "2026-09-08T17:44:47.473302+00:00",
+        "traces": [
+          {
+            "id": "VHJhY2U6MTE4Mg==",
+            "trace_id": "0ac68e4de49b827068404e86dab56c67",
+            "start_time": "2026-09-08T17:44:47.363302+00:00",
+            "end_time": "2026-09-08T17:44:47.473302+00:00"
+          }
+        ],
+        "token_count_prompt": 34,
+        "token_count_completion": 11,
+        "token_count_total": 45
+      }
+    ]
+  }
+]

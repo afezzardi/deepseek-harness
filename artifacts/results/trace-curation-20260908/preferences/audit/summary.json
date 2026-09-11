@@ -1,0 +1,18 @@
+{
+  "sessions": 48,
+  "graded": 48,
+  "candidates": 48,
+  "sft": 9,
+  "splits": {
+    "train": 9,
+    "validation": 0,
+    "test": 0
+  },
+  "duplicateRows": 36,
+  "requestGroups": 6,
+  "preferencePairs": 2,
+  "preferenceRejections": {},
+  "rejected": [],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

@@ -1,0 +1,15 @@
+- id: headless-startup
+  disabled: true
+- id: headless-runner
+  disabled: true
+- id: session-persistence-jsonl
+  config:
+    root: /home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-v3/baseline-r2/.audit-store
+- id: gh-genai-traces
+  config:
+    content: rich-redacted
+    project: gh-training-v3
+    maxContentBytes: 1048576
+- insert:
+    - id: gh-audit
+      name: /home/andrea/management/deepseek-harness/artifacts/plugins/gh-genai-traces/lib/audit-profile.js

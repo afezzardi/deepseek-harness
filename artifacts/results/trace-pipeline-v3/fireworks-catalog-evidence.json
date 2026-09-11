@@ -1,0 +1,6 @@
+{
+  "privateInventory": ".fireworks-qwen-models.json",
+  "sha256": "49322b2471376281c21c569d970b252a9ea2f537f55bd27fb3d943df4145c4f4",
+  "selectedModel": "accounts/fireworks/models/qwen3p8-27b",
+  "selectedEvidence": "fireworks-qwen38-model.json"
+}

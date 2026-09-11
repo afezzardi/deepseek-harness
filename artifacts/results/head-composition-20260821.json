@@ -1,0 +1,50 @@
+{
+  "source_recording": "/tmp/rec.jsonl",
+  "wire_max_tokens": 16384,
+  "chat_template_kwargs": {
+    "enable_thinking": true,
+    "reasoning_effort": "medium",
+    "preserve_thinking": false
+  },
+  "tool_count": 25,
+  "shared_prefix_tokens": 7455,
+  "shared_prefix_without_tool_schemas": 836,
+  "tool_schema_tokens": 6619,
+  "contributors": [
+    {
+      "index": 1,
+      "role": "user",
+      "contributor": "user task",
+      "bytes": 440,
+      "rendered_tokens": 98,
+      "cumulative_tokens": 7553
+    },
+    {
+      "index": 2,
+      "role": "user",
+      "contributor": "workspace instructions (AGENTS.md files)",
+      "bytes": 16374,
+      "rendered_tokens": 3748,
+      "cumulative_tokens": 11301
+    },
+    {
+      "index": 3,
+      "role": "user",
+      "contributor": "runtime context snapshot",
+      "bytes": 481,
+      "rendered_tokens": 98,
+      "cumulative_tokens": 11399
+    },
+    {
+      "index": 4,
+      "role": "user",
+      "contributor": "skill catalog",
+      "bytes": 8971,
+      "rendered_tokens": 1976,
+      "cumulative_tokens": 13375
+    }
+  ],
+  "rendered_total_tokens": 13375,
+  "constant_bytes_after_divergence": 25826,
+  "constant_tokens_after_divergence": 5822
+}

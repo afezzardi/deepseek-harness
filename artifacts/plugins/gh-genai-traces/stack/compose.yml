@@ -1,0 +1,53 @@
+name: gh-genai-traces
+services:
+  postgres:
+    image: postgres:16.13-alpine@sha256:4e6e670bb069649261c9c18031f0aded7bb249a5b6664ddec29c013a89310d50
+    environment:
+      POSTGRES_USER: phoenix
+      POSTGRES_PASSWORD: ${PHOENIX_DB_PASSWORD:?Set PHOENIX_DB_PASSWORD in stack/.env}
+      POSTGRES_DB: phoenix
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U phoenix -d phoenix']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  phoenix:
+    image: arizephoenix/phoenix:version-20.8.0@sha256:41489a3f4f04310545393d0000cd950f35fad71060bd676d937f0afad379e8f9
+    environment:
+      PHOENIX_SQL_DATABASE_URL: postgresql://phoenix:${PHOENIX_DB_PASSWORD}@postgres:5432/phoenix
+      PHOENIX_ALLOW_EXTERNAL_RESOURCES: 'false'
+      PHOENIX_TELEMETRY_ENABLED: 'false'
+      PHOENIX_DEFAULT_RETENTION_POLICY_DAYS: ${PHOENIX_RETENTION_DAYS:-30}
+    ports:
+      - '127.0.0.1:${PHOENIX_PORT:-6006}:6006'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+  collector-storage-init:
+    image: postgres:16.13-alpine@sha256:4e6e670bb069649261c9c18031f0aded7bb249a5b6664ddec29c013a89310d50
+    user: "0:0"
+    entrypoint: [chown, "10001:10001", /var/lib/otelcol]
+    volumes:
+      - collector-data:/var/lib/otelcol
+    restart: "no"
+  collector:
+    image: otel/opentelemetry-collector-contrib@sha256:799dc6cf12c96192af37b5bdba804da8c10b3bc563b43cb90c3f3c58d9572ad6
+    command: ['--config=/etc/otelcol/config.yml']
+    volumes:
+      - ./collector.yml:/etc/otelcol/config.yml:ro
+      - collector-data:/var/lib/otelcol
+    ports:
+      - '127.0.0.1:${OTLP_HTTP_PORT:-4318}:4318'
+    depends_on:
+      collector-storage-init:
+        condition: service_completed_successfully
+      phoenix:
+        condition: service_started
+    restart: unless-stopped
+volumes:
+  postgres-data:
+  collector-data:

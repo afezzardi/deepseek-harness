@@ -1,0 +1,30 @@
+# Home patch for the local Qwen deployment.
+# Web requires harness-tests/patches/web-typert.yml to enable its RPC services.
+# Config patches replace the entire config object; retain every required field.
+- id: typert
+  disabled: true
+- id: typert-loader
+  disabled: true
+- id: typert-gateway
+  disabled: true
+
+- id: compaction-basic
+  config:
+    thresholdRatio: 0.8
+    summarizationProvider: local-qwen-off
+    summarizationModel: chat-model
+
+- id: workflow-worker-thread
+  config:
+    provider: spawn
+    maxConcurrentAgents: 8
+
+- id: session-title-llm
+  config:
+    targetWords: 5
+    targetCjkCharacters: 10
+    maxInputBytes: 4096
+    maxOutputTokens: 64
+    timeoutMs: 60000
+    provider: local-qwen-off
+    model: chat-model

@@ -1,0 +1,33 @@
+{
+  "reference": {
+    "dataset": "HuggingFaceH4/Multilingual-Thinking",
+    "revision": "f423949d2726f5a5633ea10ac45bc1ea1e0de6e7",
+    "sha256": "db53734e93e43a211c631b460fdfc6c01fa0c919f426046e89360928a6f85e26",
+    "rows": 1000,
+    "columns": [
+      "reasoning_language",
+      "developer",
+      "user",
+      "analysis",
+      "final",
+      "messages"
+    ],
+    "assistantFields": [
+      "content",
+      "role",
+      "thinking"
+    ],
+    "assistantMessages": 1000,
+    "assistantThinkingNonempty": 1000,
+    "toolMessages": 0
+  },
+  "ours": {
+    "rows": 111,
+    "targetReasoningOmitted": 111,
+    "contextReasoningRows": 111,
+    "objective": "final-answer-format",
+    "bundle": ".bundle",
+    "scope": "Historical 111-row diagnostic; the complete outcome-reasoning export has 300 targets."
+  },
+  "comparison": "The reference retains assistant thinking separately from final content. Fireworks uses reasoning_content for that field. It is a structural reference, not a task-quality or tool-trajectory control; no rows were mixed into the DSH corpus."
+}

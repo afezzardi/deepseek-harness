@@ -1,0 +1,67 @@
+{
+  "sessions": 14,
+  "graded": 3,
+  "candidates": 2,
+  "sft": 0,
+  "splits": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "duplicateRows": 0,
+  "requestGroups": 2,
+  "preferencePairs": 0,
+  "preferenceRejections": {},
+  "rejected": [
+    {
+      "session": "13048e73-8c87-42cc-82ae-ac2851ef24d2",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "36bdc7fe-9077-4cf3-b289-2e03135834e5",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "46fca351-e7b0-4a69-b58a-57704fcf5e0b",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "49ff9e66-668a-4226-9eba-020cdfb48414",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "53eae750-4e53-4f37-a36c-1a046227f6b9",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "62864d74-8494-44b7-a638-eb70d9b662a1",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "99831ef1-57ef-4f4f-9d84-20962ab9a30c",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "ad308a9f-830d-44a7-85d8-cc6b3c2167ed",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "b31afe05-b32e-4b78-9606-11dc4ba7f4d7",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "c598a970-c3bb-4c34-9488-2b773b1095ab",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "ec8b15f3-e14f-45ce-a130-82c19d226c3a",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "session-e4d7b2ab-d346-4d42-94b1-eb074a44776f",
+      "reason": "Error: Assistant fields on non-assistant message"
+    }
+  ],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

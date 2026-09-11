@@ -1,0 +1,567 @@
+[
+  {
+    "key": "aggregate-1",
+    "session_id": "session-9ea3b923-a5a6-4f56-88af-2d2ee05f97b0",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "5a9676d0cdb3eaf3",
+      "1f04c63f6ddb6160",
+      "cf8f8a87c19169be"
+    ]
+  },
+  {
+    "key": "aggregate-2",
+    "session_id": "session-4100d88c-881c-4cca-848a-1a6f03fefa53",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "6405b1764ba34a26",
+      "3fa651087f15ba96",
+      "165d98a260575679"
+    ]
+  },
+  {
+    "key": "aggregate-3",
+    "session_id": "session-ac6393f7-9310-466b-ae77-fa4852e79d31",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "2c0c6f1ba858a325",
+      "1bdb27b37c44e510",
+      "29143431ab681b89"
+    ]
+  },
+  {
+    "key": "aggregate-4",
+    "session_id": "session-da4cc1fa-3c10-414e-b478-98d179f93912",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "70f1bdbf1b94525c",
+      "29c0da6d05b8511f",
+      "bf0cd2d34f98a61c"
+    ]
+  },
+  {
+    "key": "extract-1",
+    "session_id": "session-b5695db0-bad8-4f45-a1dc-36570777463f",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "d81f4cc86edd242e",
+      "807f986bb6a547c4"
+    ]
+  },
+  {
+    "key": "extract-2",
+    "session_id": "session-0d0a2b35-27f3-4d40-9729-528e2ab24810",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "fbaf9f1702eddb71",
+      "18fcf74111016fb2"
+    ]
+  },
+  {
+    "key": "extract-3",
+    "session_id": "session-3250fcb4-02e0-4ab9-8745-888ed96b0faf",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "b464bd5413b6549f",
+      "71b1d6ac4e4a0e5d"
+    ]
+  },
+  {
+    "key": "extract-4",
+    "session_id": "session-004ed990-454a-4820-8b1f-5ae0b9ebdb6a",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "34c8056b196670a7",
+      "89af9a35adcb1dca"
+    ]
+  },
+  {
+    "key": "injection-1",
+    "session_id": "session-4c7164d9-d6e1-4696-8c2c-9b94e941e96d",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "749e4f9738d39606",
+      "c82c86b3da7d4ab9"
+    ]
+  },
+  {
+    "key": "injection-2",
+    "session_id": "session-a6d38efa-3ada-4435-bbae-b09f573028ff",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "983feab41f22bf43",
+      "d5e106a3ff6fce43"
+    ]
+  },
+  {
+    "key": "injection-3",
+    "session_id": "session-edc84c8d-f667-442a-ac68-bf653ad16b8b",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "ea9580e5b0982c58",
+      "6261c250899681ef"
+    ]
+  },
+  {
+    "key": "injection-4",
+    "session_id": "session-55cefc62-aab1-4ce9-9e5c-a9cd7ab04076",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "16d493e729bbf86a",
+      "b9651d19c9b7c08c"
+    ]
+  },
+  {
+    "key": "read-1",
+    "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "498b30544926c326",
+      "1d17d8ab8a10307a"
+    ]
+  },
+  {
+    "key": "read-2",
+    "session_id": "session-0e5cd324-47d4-41f8-b00a-a7523f617c68",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "9ec03623800f10b3",
+      "62832cb49706c461"
+    ]
+  },
+  {
+    "key": "read-3",
+    "session_id": "session-8c3da56b-5759-4170-83e7-ad45e297b8c8",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "9ef7b637167b8640",
+      "4debdc8d97f8f22f"
+    ]
+  },
+  {
+    "key": "read-4",
+    "session_id": "session-fbd829b9-e35c-4618-88c1-6f0602a6c67e",
+    "events": 27,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "bb518e3ee129774c",
+      "a21f368bda3a9d42"
+    ]
+  },
+  {
+    "key": "recover-1",
+    "session_id": "session-6a975c17-3aea-48ba-bc44-b1e596cbfd35",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [
+      {
+        "name": "FsError",
+        "code": "FS_NOT_FOUND"
+      }
+    ],
+    "replay_model_spans": [
+      "ac01f35b30fd6315",
+      "3e5ed22b185eee25",
+      "231c850559780f05"
+    ]
+  },
+  {
+    "key": "recover-2",
+    "session_id": "session-06393499-5737-4646-b075-416e9d09cb5b",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [
+      {
+        "name": "FsError",
+        "code": "FS_NOT_FOUND"
+      }
+    ],
+    "replay_model_spans": [
+      "797022b21d02b92b",
+      "eb1669a596feb47e",
+      "272e12d6ee430877"
+    ]
+  },
+  {
+    "key": "recover-3",
+    "session_id": "session-d64c7753-a7a4-4e43-b60a-bd2d2a7df001",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [
+      {
+        "name": "FsError",
+        "code": "FS_NOT_FOUND"
+      }
+    ],
+    "replay_model_spans": [
+      "182500b849edd48d",
+      "fb51cf533347ac62",
+      "66a90be3790e94f4"
+    ]
+  },
+  {
+    "key": "recover-4",
+    "session_id": "session-1d3ccb34-e9e1-4b28-9afa-57b65509c9ed",
+    "events": 32,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [
+      {
+        "name": "FsError",
+        "code": "FS_NOT_FOUND"
+      }
+    ],
+    "replay_model_spans": [
+      "a3cb6027a4df797d",
+      "7099c2e10940b076",
+      "b89262b2a132fdd4"
+    ]
+  },
+  {
+    "key": "write-1",
+    "session_id": "session-241c7883-c601-4cf0-a9f2-4fb0ce013e66",
+    "events": 42,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "bd9399e1d7c05bff",
+      "eb5000826aff3032",
+      "632d5e3cc184c588",
+      "86eb49a1076efd5f",
+      "3ecdcba50f843eba"
+    ]
+  },
+  {
+    "key": "write-2",
+    "session_id": "session-c4fa5ac6-51b5-4819-9152-8a297a6cf5a2",
+    "events": 37,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "7080c2cb2bcdb5bd",
+      "7521ff72824123a8",
+      "53dcdbbba9588b8f",
+      "39b1b2f56c88bbb8"
+    ]
+  },
+  {
+    "key": "write-3",
+    "session_id": "session-02df682f-3200-48a0-8e64-a6c492ee7b1f",
+    "events": 37,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "9e422cffb135b522",
+      "bc8662828eefe6cf",
+      "e7061c6fcce8eb33",
+      "9a974404e4809ccc"
+    ]
+  },
+  {
+    "key": "write-4",
+    "session_id": "session-eab5bd25-1937-42ff-a903-8a7d04684fbc",
+    "events": 37,
+    "checks": {
+      "model_count": true,
+      "tool_count": true,
+      "completed": true,
+      "canonical_effort": true,
+      "replay_count": true,
+      "live_output": true,
+      "replay_output": true,
+      "replay_request": true,
+      "replay_effort": true,
+      "tool_source": true
+    },
+    "errors": [],
+    "replay_model_spans": [
+      "ace56a196a3f7a92",
+      "faf4ff33e0aa857d",
+      "70175240ca19c85b",
+      "8be681905654604a"
+    ]
+  }
+]

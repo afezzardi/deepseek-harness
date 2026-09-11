@@ -1,0 +1,21 @@
+{
+  "data": {
+    "id": "RXhwZXJpbWVudDoz",
+    "dataset_id": "RGF0YXNldDoz",
+    "dataset_version_id": "RGF0YXNldFZlcnNpb246Mw==",
+    "name": "recorded-discovery-v1",
+    "description": null,
+    "repetitions": 1,
+    "metadata": {
+      "grader": "strict final answer + canonical tool evidence + written file state",
+      "reasoning_effort": "medium"
+    },
+    "project_name": "Experiment-9086e1edd04d6e2f04ac1ec6",
+    "created_at": "2026-09-08T12:13:59.704870+00:00",
+    "updated_at": "2026-09-08T12:13:59.704870+00:00",
+    "example_count": 24,
+    "successful_run_count": 24,
+    "failed_run_count": 0,
+    "missing_run_count": 0
+  }
+}

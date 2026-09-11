@@ -1,0 +1,119 @@
+{
+  "projects": [
+    {
+      "name": "Experiment-189ab76b57ae905f88e82ef8",
+      "description": "dataset_id: RGF0YXNldDoxNA==\ndataset_version_id: RGF0YXNldFZlcnNpb246MTc=",
+      "id": "UHJvamVjdDo1Ng=="
+    },
+    {
+      "name": "Experiment-09c110bb9e5bd91f00b7c191",
+      "description": "dataset_id: RGF0YXNldDoxMQ==\ndataset_version_id: RGF0YXNldFZlcnNpb246MTM=",
+      "id": "UHJvamVjdDo1NA=="
+    },
+    {
+      "name": "gh-training-v3-live",
+      "description": null,
+      "id": "UHJvamVjdDo1Mw=="
+    },
+    {
+      "name": "Experiment-899166b4d243e6f2e2f1335b",
+      "description": "dataset_id: RGF0YXNldDo3\ndataset_version_id: RGF0YXNldFZlcnNpb246OA==",
+      "id": "UHJvamVjdDo1MA=="
+    },
+    {
+      "name": "gh-training-v3-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0OA=="
+    },
+    {
+      "name": "Experiment-8a17712a7629805491472bab",
+      "description": "dataset_id: RGF0YXNldDo2\ndataset_version_id: RGF0YXNldFZlcnNpb246Nw==",
+      "id": "UHJvamVjdDo0Nw=="
+    },
+    {
+      "name": "gh-training-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0Mw=="
+    },
+    {
+      "name": "gh-training-live",
+      "description": null,
+      "id": "UHJvamVjdDo0Mg=="
+    },
+    {
+      "name": "Experiment-9086e1edd04d6e2f04ac1ec6",
+      "description": "dataset_id: RGF0YXNldDoz\ndataset_version_id: RGF0YXNldFZlcnNpb246Mw==",
+      "id": "UHJvamVjdDo0MA=="
+    },
+    {
+      "name": "Experiment-970cea2877aba823b13aaecd",
+      "description": "dataset_id: RGF0YXNldDoy\ndataset_version_id: RGF0YXNldFZlcnNpb246Mg==",
+      "id": "UHJvamVjdDo2"
+    },
+    {
+      "name": "Experiment-edaa1bf705f3ad683f8faa6a",
+      "description": "dataset_id: RGF0YXNldDox\ndataset_version_id: RGF0YXNldFZlcnNpb246MQ==",
+      "id": "UHJvamVjdDoz"
+    },
+    {
+      "name": "default",
+      "description": "Default project",
+      "id": "UHJvamVjdDox"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "RGF0YXNldDoxNg==",
+      "name": "gh-benchmark-v3-20260909-r3",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-09T06:50:47.914666+00:00",
+      "updated_at": "2026-09-09T06:50:47.914666+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDoxMw==",
+      "name": "gh-curated-v3-baseline-r2",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T18:58:57.864468+00:00",
+      "updated_at": "2026-09-08T18:58:57.864468+00:00",
+      "example_count": 126
+    },
+    {
+      "id": "RGF0YXNldDo4",
+      "name": "gh-benchmark-v3-20260908-r2",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T17:52:04.221539+00:00",
+      "updated_at": "2026-09-08T17:52:04.221539+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDo1",
+      "name": "gh-benchmark-v3-20260908",
+      "description": "Artifact pipeline v3; canonical DSH sources remain authoritative.",
+      "metadata": {
+        "owner": "gh-pipeline-v3"
+      },
+      "created_at": "2026-09-08T17:07:19.766969+00:00",
+      "updated_at": "2026-09-08T17:07:19.766969+00:00",
+      "example_count": 48
+    },
+    {
+      "id": "RGF0YXNldDo0",
+      "name": "gh-training-20260908-canonical",
+      "description": "",
+      "metadata": {},
+      "created_at": "2026-09-08T13:32:35.702154+00:00",
+      "updated_at": "2026-09-08T13:32:35.702154+00:00",
+      "example_count": 240
+    }
+  ]
+}

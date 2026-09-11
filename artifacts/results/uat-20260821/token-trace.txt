@@ -1,0 +1,75 @@
+# Prompt-token trace of the web session (4b249882), against the compaction events
+# One row per model request. Percentages are of the 114,688-token admission ceiling
+# (131,072 max_model_len minus the route's maxTokens 16384).
+
+       56  t1  s1   prompt   13510            11.8%   out    60
+      239  t1  s2   prompt   13681 (+171)     11.9%   out   492
+     1026  t1  s3   prompt   25512 (+11831)   22.2%   out   756
+     1737  t2  s1   prompt   26236 (+724)     22.9%   out   700
+     1885  t3  s1   prompt   26902 (+666)     23.5%   out   157
+     4026  t3  s2   prompt   37539 (+10637)   32.7%   out  2133
+     4514  t4  s1   prompt   38061 (+522)     33.2%   out   539
+     5004  t4  s2   prompt   39729 (+1668)    34.6%   out   512
+     5764  t4  s3   prompt   40767 (+1038)    35.5%   out   784
+     6032  t4  s4   prompt   41596 (+829)     36.3%   out   291
+     6643  t4  s5   prompt   41939 (+343)     36.6%   out   635
+     8353  t4  s6   prompt   43434 (+1495)    37.9%   out  1703
+     8900  t5  s1   prompt   42152 (-1282)    36.8%   out   536
+     9120  t6  s1   prompt   42688 (+536)     37.2%   out   240
+     9280  t6  s2   prompt   43465 (+777)     37.9%   out   221
+    10712  t6  s3   prompt   47046 (+3581)    41.0%   out  1417
+    11608  t7  s1   prompt   47887 (+841)     41.8%   out   885
+    13155  t8  s1   prompt   48370 (+483)     42.2%   out  1536
+    13878  t9  s1   prompt   49326 (+956)     43.0%   out   802
+    17924  t9  s2   prompt   71402 (+22076)   62.3%   out  4030
+    18259  t10 s1   prompt   73739 (+2337)    64.3%   out   354
+    18435  t10 s2   prompt   74156 (+417)     64.7%   out   218
+    18704  t10 s3   prompt   74423 (+267)     64.9%   out   259
+    19022  t11 s1   prompt   74268 (-155)     64.8%   out   337
+    19148  t11 s2   prompt   74668 (+400)     65.1%   out   168
+    19518  t11 s3   prompt   74865 (+197)     65.3%   out   360
+    20027  t12 s1   prompt   74860 (-5)       65.3%   out   527
+    20277  t12 s2   prompt   75406 (+546)     65.7%   out   242
+    20286  *** MANUAL /compact: 77 nodes, 74487 tokens, provider=local-qwen maxTokens=8192
+    20621  t13 s1   prompt   16057 (-59349)   14.0%   out   322
+    20704  t14 s1   prompt   16319 (+262)     14.2%   out    92
+    23724  t14 s2   prompt   31699 (+15380)   27.6%   out  3009
+    23755  t15 s1   prompt   33320 (+1621)    29.1%   out    40
+    25933  t15 s2   prompt   43728 (+10408)   38.1%   out  2171
+    27334  t16 s1   prompt   44957 (+1229)    39.2%   out  1390
+    27479  t17 s1   prompt   45651 (+694)     39.8%   out   165
+    27550  t17 s2   prompt   46207 (+556)     40.3%   out   113
+    27781  t17 s3   prompt   47993 (+1786)    41.8%   out   352
+    27927  t17 s4   prompt   52203 (+4210)    45.5%   out   165
+    28097  t17 s5   prompt   62300 (+10097)   54.3%   out   256
+    31200  t17 s6   prompt   65493 (+3193)    57.1%   out  3087
+    31281  t18 s1   prompt   68132 (+2639)    59.4%   out   101
+    31459  t18 s2   prompt   69959 (+1827)    61.0%   out   247
+    31740  t18 s3   prompt   75521 (+5562)    65.8%   out   336
+    31913  t18 s4   prompt   78801 (+3280)    68.7%   out   211
+    32129  t18 s5   prompt   80936 (+2135)    70.6%   out   237
+    32380  t18 s6   prompt   81748 (+812)     71.3%   out   274
+    32600  t18 s7   prompt   87341 (+5593)    76.2%   out   243
+    32845  t18 s8   prompt   89525 (+2184)    78.1%   out   268
+    38526  t18 s9   prompt   90193 (+668)     78.6%   out  5674
+    38646  t19 s1   prompt   94948 (+4755)    82.8%   out   158
+    38757  t19 s2   prompt   95502 (+554)     83.3%   out   131
+    38810  t19 s3   prompt   95799 (+297)     83.5%   out    90
+    40637  t19 s4   prompt   97336 (+1537)    84.9%   out  1850
+    41434  t19 s5   prompt   99496 (+2160)    86.8%   out   819
+    41719  t19 s6   prompt  101179 (+1683)    88.2%   out   322
+    44322  t19 s7   prompt  101202 (+23)      88.2%   out  2632
+    44328  *** AUTO PRUNE: 1 node, 12496 tokens
+    44330  *** AUTO PRUNE: 1 node, 8107 tokens
+    44332  *** AUTO PRUNE: 1 node, 2266 tokens
+    44334  *** AUTO PRUNE: 1 node, 5753 tokens
+    44336  *** AUTO PRUNE: 1 node, 4930 tokens
+    44611  t19 s8   prompt   72636 (-28566)   63.3%   out   306
+    47929  t19 s9   prompt   73176 (+540)     63.8%   out  3376
+    48009  t19 s10  prompt   77632 (+4456)    67.7%   out   116
+    48680  t19 s11  prompt   79262 (+1630)    69.1%   out   703
+    50746  t19 s12  prompt   80346 (+1084)    70.1%   out  2087
+    51068  t19 s13  prompt   82468 (+2122)    71.9%   out   345
+    51164  t19 s14  prompt   82877 (+409)     72.3%   out   118
+    53000  t19 s15  prompt   83128 (+251)     72.5%   out  1857
+    56929  t19 s16  prompt   85112 (+1984)    74.2%   out  3921

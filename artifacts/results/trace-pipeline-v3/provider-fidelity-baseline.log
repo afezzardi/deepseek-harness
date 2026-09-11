@@ -1,0 +1,27 @@
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.8 /home/andrea/management/deepseek-harness/artifacts/plugins/gh-genai-traces
+
+ ❯ tests/provider-fidelity.spec.ts (2 tests | 1 failed) 120046ms
+   × reconstructs recorded payloads with corruption and unmatched-request diagnostics 120039ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/provider-fidelity.spec.ts > reconstructs recorded payloads with corruption and unmatched-request diagnostics
+Error: Test timed out in 120000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/provider-fidelity.spec.ts:31:44
+     29| })
+     30|
+     31| it.skipIf(!process.env.GH_FIDELITY_MANIFEST)('reconstructs recorded pa…
+       |                                            ^
+     32|   const manifest = JSON.parse(await readFile(process.env.GH_FIDELITY_M…
+     33|     snapshots: string; recordings: string[]; settings: string; output:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  20:51:46
+   Duration  123.37s (transform 1.62s, setup 0ms, import 2.66s, tests 120.05s, environment 0ms)

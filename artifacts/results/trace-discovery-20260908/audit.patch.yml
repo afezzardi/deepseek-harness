@@ -1,0 +1,3 @@
+- insert:
+    - id: discovery-session-export
+      name: /home/andrea/management/deepseek-harness/artifacts/results/trace-discovery-20260908/export-sessions.mjs

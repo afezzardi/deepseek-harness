@@ -1,0 +1,110 @@
+$ tsx scripts/run-gates.ts doc-sync
+run-gates: doc-sync running 33 gate(s) with 4 worker(s) from 24 available CPU(s), doc-sync cap 4.
+run-gates: start doc-typecheck
+run-gates: start documentation build
+run-gates: start doc graphs
+run-gates: start markdown links
+run-gates: PASS markdown links (28.29s)
+run-gates: start type equivalence
+run-gates: PASS doc-typecheck (35.10s)
+run-gates: start cordis catalog
+run-gates: PASS doc graphs (41.45s)
+run-gates: start Cordis inspect catalog
+run-gates: PASS type equivalence (17.43s)
+run-gates: start verify-mermaid
+run-gates: PASS Cordis inspect catalog (8.54s)
+run-gates: start scoped events
+run-gates: PASS cordis catalog (23.53s)
+run-gates: start translation pairing
+run-gates: PASS documentation build (62.80s)
+run-gates: start markdown wrap
+run-gates: PASS verify-mermaid (17.73s)
+run-gates: start client catalog
+
+== FAILED markdown wrap (1.12s) ==
+command: pnpm run verify-md-wrap
+outcome: exit 1
+$ tsx scripts/verify-md-wrap.ts
+node:fs:1701
+  const stats = binding.lstat(
+                        ^
+
+Error: ENOTDIR: not a directory, lstat '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+    at lstatSync (node:fs:1701:25)
+    at getDirentSync (node:internal/fs/glob:68:16)
+    at Cache.statSync (node:internal/fs/glob:134:17)
+    at #addSubpatterns (node:internal/fs/glob:395:32)
+    at Glob.globSync (node:internal/fs/glob:312:29)
+    at globSync (node:fs:3224:37)
+    at uniqueRepoFiles (/home/andrea/management/deepseek-harness/scripts/repo-files.ts:44:25)
+    at <anonymous> (/home/andrea/management/deepseek-harness/scripts/verify-md-wrap.ts:73:15)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26) {
+  errno: -20,
+  code: 'ENOTDIR',
+  syscall: 'lstat',
+  path: '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+}
+
+Node.js v24.12.0
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start export jsdoc
+run-gates: PASS client catalog (4.85s)
+run-gates: start tool catalog
+run-gates: PASS tool catalog (2.69s)
+run-gates: start config catalog
+run-gates: PASS export jsdoc (8.62s)
+run-gates: start persistence catalog
+run-gates: PASS config catalog (2.77s)
+run-gates: start Session format catalog
+run-gates: PASS scoped events (24.06s)
+run-gates: start public repository links
+run-gates: PASS Session format catalog (0.90s)
+run-gates: start doc refs
+run-gates: PASS persistence catalog (2.55s)
+run-gates: start subsystem pages
+run-gates: PASS doc refs (1.38s)
+run-gates: start package paths
+run-gates: PASS subsystem pages (1.39s)
+run-gates: start tsconfig paths
+run-gates: PASS public repository links (2.52s)
+run-gates: start config source ownership
+run-gates: PASS tsconfig paths (0.92s)
+run-gates: start package README model experience
+run-gates: PASS config source ownership (0.90s)
+run-gates: start agent note classification
+run-gates: PASS package paths (1.65s)
+run-gates: start agent note format
+run-gates: PASS agent note classification (1.07s)
+run-gates: start archived agent notes
+run-gates: PASS agent note format (1.12s)
+run-gates: start skill invocation metadata
+run-gates: PASS archived agent notes (1.10s)
+run-gates: start translation prompt
+run-gates: PASS skill invocation metadata (0.99s)
+run-gates: start doc budgets
+run-gates: PASS translation prompt (0.87s)
+run-gates: start documentation standard tests
+run-gates: PASS doc budgets (0.89s)
+run-gates: start documentation site checks
+run-gates: PASS documentation standard tests (3.08s)
+run-gates: start package README limitations
+run-gates: PASS package README model experience (9.14s)
+
+== FAILED translation pairing (29.11s) ==
+command: pnpm run verify-translation-pairing
+outcome: exit 1
+$ tsx scripts/verify-translation-pairing.ts
+verify-translation-pairing: bilingual pairing rules violated (see docs/i18n/README.md):
+  artifacts/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: PASS documentation site checks (9.32s)
+run-gates: PASS package README limitations (7.52s)
+
+run-gates: 31 passed, 2 failed, 0 skipped in 91.11s.
+run-gates: unsuccessful gates:
+  - FAILED translation pairing (29.11s, exit 1)
+    pnpm run verify-translation-pairing
+  - FAILED markdown wrap (1.12s, exit 1)
+    pnpm run verify-md-wrap
+[ELIFECYCLE] Command failed with exit code 1.

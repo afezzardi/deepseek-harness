@@ -1,0 +1,3952 @@
+{
+  "rows": [
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "fa35b13bbc804bbaee57adda4763576c34fcfd143d790633a6be833cfea08b05",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "13849b73da0bc4a6e6b557bad2104d4c1c35c2adac50c596af0b5aeb91244696",
+        "renderedHash": "1627bc523794687cfdaad0f06592cad2af294d49591941c60927e8f81884c710",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9794,
+      "lossTokens": 14,
+      "inputHash": "c199fb005c34e45a4f3a230bb176f311ba8dbbf089f93047963d4ffec4f588d3",
+      "maskHash": "c79db752be8e48413800a72bff96ebb8d4c1872c5b62868a5b688e35ba0177a3",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "0335ec02eff2d99f08dd141fb4a0ad06cf8a708c481b1a224ad713449c4f67d3",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ed534b701fcd4894d66bbfae08fd644b47c2c6b6dfb04f4bef2fc6fc517abd8a",
+        "renderedHash": "f1185f6db94c6e2f1eae7549b76f009ea7b309d3d15ed9096e07f1a6c6f7d76b",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 27979,
+      "lossTokens": 15,
+      "inputHash": "4b9206e68580ec6685c505f2ed2bdc5b88739d8893ce86075c7aa87fa9b96cfb",
+      "maskHash": "0655ab244751a8b2f96c3e88c3500e7c2d4b9970108ec8a12c7bbee9a2529122",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "453ee589a6dd117f1bc9d67f4fd03b2c47e2b284d4b40e4c9b4f094576904aa0",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "9ec162f820ec1dcd25c04e438fd898716c0c7c2912dc0b8249406ca1d871a1a1",
+        "renderedHash": "0b2308140e5f96c3f2deef488e30c5e515324b6e6a54cc5e8a370c52192e29e9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8334,
+      "lossTokens": 17,
+      "inputHash": "c0b4adb6005c928e190ea3edab77b3d5886366051143465de3624235b1c51100",
+      "maskHash": "94e193ff0edbec20f123010f0eb32b34668bf2f8057c49491e8da766cf4acb57",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "06242e7e013efc15f9ff7ac20eb8724370d4cabb2a41cca4716740b37aca5993",
+      "sftEligible": false,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1ebe87d876f11b0734a85a374e81a1f4c85a7522247d59ca37e08ab5ba8a803b",
+        "renderedHash": "8287a7ede848a551e70b9797a522ddaf55462376dc3c2819c1719c774107fec5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8421,
+      "lossTokens": 32,
+      "inputHash": "2c355f78752f8ab0c16eaa9a61efb0e0711e45752751ffc40a3fd2f4529f6e35",
+      "maskHash": "a1a81d4541970c2af8c51a8e3e61324db4b65743d8ccacb7d40baad0e8fab440",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "21380411991a97fb8720422d42176ee916a04eae3b6284aa8b41bd639509c738",
+      "sftEligible": false,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6dd912f7137591bbfc73c27a1f70d5835b632365881519b96e29733c6e4216ec",
+        "renderedHash": "3cc8744add28eb6ac18ae551c8dbaa1b5c04d22d0d4346f3b8431d545666007d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8669,
+      "lossTokens": 15,
+      "inputHash": "21871672f8a09f682f8a967479df52df0d724c610152aea3fda2e3f8e3bd5872",
+      "maskHash": "bd3c98ba8e116ef187afa05a500317d3ab11e4e68564fc45a7ff3f360c0eb644",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "8840329ccdd3b9ad1da59e4e8ee85fced31274a0f62f24008731d3a44c58ffd0",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5a35e624c1be761fc3ee693e4dd1e65ed5069a74f08a09c60587cde39baee6a7",
+        "renderedHash": "9fd1d02677c1fb4f07154abcd78d4664db5790ea987d43245772ef52d022790f",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9260,
+      "lossTokens": 14,
+      "inputHash": "7fb8e1dc6a49780e2d68ece0d63c84c44bac948624792ef014c2c6203e9568a6",
+      "maskHash": "acc82b02f5c08e5f6f7456f27045b06a2653aee27684681f73d8225ab11beef9",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "c150fc0ff11a10a205331c1b86dbeea5bb5eae70bc14fb9220b6bb64359319ba",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cfcfddd026b94b471b1bc48deae9de3f70579d16597d5407d09b7ec38199b45",
+        "renderedHash": "1c095f38602a0f7378be13ae44781dba0c184099b103185e734c6cda8e9a55dc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8388,
+      "lossTokens": 53,
+      "inputHash": "0966d5516ada14bac457398225987b3cd814c3c5c8acecb90092426a311da7a8",
+      "maskHash": "537f39743489e984018ce1f6ae73d337d86fe9e74a447e7debdbfa34b6a6e064",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "ed7a30312f513c1d81278a42615abd4b4432ec06c9a0fff5ccf200a2641d605c",
+      "sftEligible": false,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "611049310326664d1d34d2151c45716906c1081bba6501a84502a9bde3a3d5b2",
+        "renderedHash": "60c1a0f061fd0463c4fd1ee59645a0e159104820e23b4dbccfd92b5460fb1a17",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8342,
+      "lossTokens": 54,
+      "inputHash": "9326ed3443bd02e79bee210084b9479f00614d9cf104877514c1fef87f27fa52",
+      "maskHash": "58643b592acfa527d82dd89b871612b6f24ca752f32122f69c27555dffa2eda8",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "674337bea715667140a278ed11f9761a52daf93e46e753158d11020c82b3f3e7",
+      "sftEligible": false,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "f1df26bf4529d76ff3bad4462bc92a2c839d55fc69f203461a5e365b2e8bfd90",
+        "renderedHash": "a0b8f8d7471c87dccb5b7b1b66ab23e6fd4c5c770e109d2bd12174eb53d44281",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9407,
+      "lossTokens": 21,
+      "inputHash": "ff8aec6da84fba1eb54085658ec5bea27d8746776f03e30b9f0b9268fef5ab3a",
+      "maskHash": "ef9b6de61514172cbb9bf08d36ac527682dcf6f14ad0583d57dea6286dd1f53a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "1e1a8459921f48f673f27db32bc1b93dbf4ab394e39722c664b104a38b1d637d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "894f63f960891271473d9ee9726ed86f19eccc0902684968c8bf794325e47f1f",
+        "renderedHash": "2e246b0641016d5d2a8c0b62ce0ba16392bb5d77e0a66b67fddd9adee55388b7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8425,
+      "lossTokens": 15,
+      "inputHash": "2687f86ae186f64df06c0a00ec210e78aba70943d26fc302038d66164e787c65",
+      "maskHash": "418e6dcf57293bd5ab16a63a049ebc11be4201985df56ce8746366a8ee9b03a4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "dc03ff4a4b4ce4cdc3119f7f9855e84636955e38c6f54f651a52d1e12a018c24",
+      "sftEligible": false,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ed0b4b7b4a09b45dd34491eadcbc4f2ede2382b55636a541415ef1d1ce861ad2",
+        "renderedHash": "0a4edf4859e755007c5cc2ed72f37b01d419918fb5e0a384b58c5e10d9cfb4fa",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8623,
+      "lossTokens": 54,
+      "inputHash": "b915f5ee16f3d34f48fbdeb30b323951d02f670523b28a61aa7cb93ac0a143d9",
+      "maskHash": "67db535899ed937a80c3805220cb6276149cea9df79bfc650a144a5f83e39ca8",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "pilot-r5",
+      "rowHash": "044cf332ce9ece6d76d6ac90ab147f61f7e01a19ddf35e66ce32c3f5eca21f39",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "91965ddd9c9452feb06608f71152310b4c1246477ad1765db1b1aab03701cd25",
+        "renderedHash": "2ac67276078d9e56f3d013e0b50b7c0dfc43f8f2c21d4a7b64a119f40d3efd5c",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8333,
+      "lossTokens": 23,
+      "inputHash": "21a783eeda5d00c0567e2e2daaf4964c5f332e655752d3509fc841ea25fca520",
+      "maskHash": "b34f46e372964acedf7816a5bcc9b09d4ff31633da04c8de82a90fc273d3f48d",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "8db714de347b0424624dabaffb31eb782399f9ff0e67829ab2ad2d91fcd77d24"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "595a78be20f49b0f05457b7328528e938a221875f091ac8d1acc317cf0153e6f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6f928ea011247bc34098e312b33ba62de64d2614eb252414b3a49b4d65ec4c57",
+        "renderedHash": "994b77ef6aafb3f087aff6883f6e1e3acdde3eb25f30e076b080a96a8ade0b40",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9072,
+      "lossTokens": 15,
+      "inputHash": "705bdfe64c67d1237f6f69c95544b6de14a8360fd20bd60dfb4c108fb6e815ea",
+      "maskHash": "e301291d7f9b9cc14c423644deb8740bf05f46ba5d6592883d138c2f04ffafe5",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "4d5a302624c00bf6aec9e9eb94923fbee6445e7e98ae36e24662ea0cba2e9429",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "91965ddd9c9452feb06608f71152310b4c1246477ad1765db1b1aab03701cd25",
+        "renderedHash": "2ac67276078d9e56f3d013e0b50b7c0dfc43f8f2c21d4a7b64a119f40d3efd5c",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8705,
+      "lossTokens": 23,
+      "inputHash": "207fcf31ece86afbcfe2794060ea14c06cb62815c62d8f0c7b15cf29e5538991",
+      "maskHash": "a79d5cc4fdb43647d7bda069a8d61fbf3e6a49d39646ca807bf76a24335b4544",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "febbf0f463431630215fa04e945b990d2d6e2ae07e4461c42cc2d4068adf5b53",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "894f63f960891271473d9ee9726ed86f19eccc0902684968c8bf794325e47f1f",
+        "renderedHash": "2e246b0641016d5d2a8c0b62ce0ba16392bb5d77e0a66b67fddd9adee55388b7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8425,
+      "lossTokens": 15,
+      "inputHash": "9f74a16d1cbe7125000c409cba63f65829435926a0bd05e1f3abc52cbb351852",
+      "maskHash": "418e6dcf57293bd5ab16a63a049ebc11be4201985df56ce8746366a8ee9b03a4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "b0052d4e51f55e22210401aa6a72c46c53ecc437e7dd8424bbe66fac23d2eff3",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "eb1e97f3e48ca32e633c7f8b82b07a309aa8535e106d169701e58663f1df5816",
+        "renderedHash": "7b200139a706529aa74c32f7db0c6894afcd09b0bd28da0c2c79378efc075b97",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8327,
+      "lossTokens": 17,
+      "inputHash": "37e4765e49123bcc79aa1db36087cdeda717e579b151d85f6251021e06fc48ca",
+      "maskHash": "7b443dfab01c5aba24a772e3fe95e281e6235b8bd093cc3cacf8303bfd17d339",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "5ea2ce1a15638a7100a07d9c8ab29d36bfc8442129e2d24839dd4aff1f85fc6b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "f68ca4379a6a4ddf553a623a043a90dc0b38c1ed82eadc73765ce8caa88713c1",
+        "renderedHash": "dd4ef32431434567b970e7abc610e4aa806be11321270bec55d5a72e93727697",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8651,
+      "lossTokens": 15,
+      "inputHash": "85498a5abd23ed42d524aee48e1855e485e22c802b01e507e7cddb94f4d43616",
+      "maskHash": "975d104043d9678ec0f15660c4f0db04367f095b400c5072d830dd4cef37f7be",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "feaf314bafb276d0459d98ce544b637b984beee2f094724b9765ce43469ef1a1",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "e155b7a51f02ef0d1f4e55d48b64b2115615d5ee1f0e8d6d026f7a0a1ce0f4c4",
+        "renderedHash": "01a77ce3279a1b2194252b164d192157caff31760ceb6a9e72c89bf915eacaa0",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8450,
+      "lossTokens": 15,
+      "inputHash": "fe9edfee1d6004770c6a8241f62a2c87be615b57e9d923c4a54deef68a5d14f7",
+      "maskHash": "cb8ac825216d293fb9ed3d500a6cd035568d4d7aa1df027a003727988aae35a3",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "4bd063a56dc5f54e60000149d989b16d872c96ed3ac89919bf36b7d3e7cd9aa9",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "63e42585032e172129014c9bd210b4679ebff0aa3fab037af9f1e1c827effc23",
+        "renderedHash": "5ea697fbabe3931a5c7bfa2f9d149947dfb1100c407d55a0d3d46acce8c60268",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 10681,
+      "lossTokens": 14,
+      "inputHash": "430b27320a07568305a412f7ead943c83a0ad35853afe1a125afd8e068f76a4f",
+      "maskHash": "19b47fc22f13dca908eff9794a020fdf792f04c8951224225d0796dd3b377096",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "b6a898c614628bf4912b37637546bbcb7feb8d68dcbf0e05b59faa6b18b32ba9",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fc322efa5278cb41fc98c8597eac5485cea06793865e65be702ce206cbf294eb",
+        "renderedHash": "12f2ee70b7f9415d8b02c86c6813d9f05ef4b071cf2f2114f6e0549ef42fb1c4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9420,
+      "lossTokens": 17,
+      "inputHash": "5b64d4f83f77b126a2d39995a6871d24e7cd97a1f2ef11a301cf26463d182a1d",
+      "maskHash": "f2fdf0c2def18707b76dcfe46e1f3b1b7fa4dadf9d972e53f98641198fd49a2f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "7195a5272c95eb3cc47443aedd20119dd4f14fbc64c963dfaf09780ab37ba7e8",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5bdc9b8e30201347db63239d4c36d52bb76e909402b573a797e4e623323175ad",
+        "renderedHash": "c289d328f579582e26a06ce083fd742b398602beb0293c107da092e5af2a1b49",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9279,
+      "lossTokens": 17,
+      "inputHash": "a895cdb3eb29391a02cad7b92a936693f64a5488d5aea053f761de9c66ad89cb",
+      "maskHash": "2ba269ef52255198300521138ba3786571a83b71337f170a0bdb653f2dd51743",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "836ea0434a0b71680e08f5d67671edc3c2639b0f4eb83ed646d83738cb5f3b27",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ce527930189d4f37758709c75c31dde57584bcb1b6a59f3458d43aaf5a8efd83",
+        "renderedHash": "54b8cff570a3372ad08cb99c2b64826f6131db4f3a06a9b6c14dbf2d04ef3565",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9374,
+      "lossTokens": 16,
+      "inputHash": "9da2c2eebd1b426e83e6322d5d561a1bb871283d4bc2d759a502fe0f153050d3",
+      "maskHash": "11232c052c062a5112eed8db03f2d0b38e8be8e4f77aacb195a35d29dad746f9",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "2ece1924efede0a79ae3220d5233216c83978ca715eb5a5e9ef6d58c876222ac",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "20b01f8401a6c168166c0cbfd788a3e190a629e0b05c7bf155785f92fd39a59f",
+        "renderedHash": "d0c3891eb89bea9be8dc286f3ab6ee953b10d486adbd3547cd3743f49727e754",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9270,
+      "lossTokens": 14,
+      "inputHash": "734357d8dee87ed04b65b8f4a93e0abf499e498c7a18e09ad3263fb0017423b6",
+      "maskHash": "95e34c1672a38572efc411cc3addae60b1a5f272d72b15fdf17ed13f49b7bf19",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "43c46925f67c04846fa5e4140cbc1287a704b2e6c8944fc7df547a1da2026ad2",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fc322efa5278cb41fc98c8597eac5485cea06793865e65be702ce206cbf294eb",
+        "renderedHash": "12f2ee70b7f9415d8b02c86c6813d9f05ef4b071cf2f2114f6e0549ef42fb1c4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9424,
+      "lossTokens": 17,
+      "inputHash": "223224b1d7267310dfa3a30aff1308cfe8638e09ba97ed65f00cc7e5abcfe226",
+      "maskHash": "14656556ed9f5acca01ed607745415d8766886da14dbb05af66132b33c1161f4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "87f25127e18be3b1835e3144d9fdf0d41eeb4eaa2fa9b547f049f99b526dc69f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "766cc8d7decf25ca62bfa8413e6f7077b0b85df84e460ce2dcf89bc1f9ad299c",
+        "renderedHash": "501fb2f7b66aa8150ae7a8a71bae84eae9c4d86564c5fd34b08130c145b519a2",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9368,
+      "lossTokens": 16,
+      "inputHash": "627f728b701cb7f07b6093639a3dfc1c2eceac082655eaa4d9896f8e05597f79",
+      "maskHash": "f53be13d2b3b225cacf9461503c0aeb60f059a70f8c2938215a4ca840be89b64",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3d025c2f87f634f983141a45d36e9d0abb9daec4fe15cdb27e57761c4dd9337d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "acb1f1ee1c442a461739c7a4f5c1294b713df40f9405c502b3e87d4d7e4a6eb5",
+        "renderedHash": "e62cc1ace2e824f35cf9851701a95631f99a0a400c7fe7c4cc682041940ee7ce",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8299,
+      "lossTokens": 15,
+      "inputHash": "9ae73bc1a92452dec5eec94b4fe6196cc95c8dd7ebea4c80d4666ab11af70ac1",
+      "maskHash": "5f980f70091bcef4c5f567d539e63943a85ecd2c7a6c794c6b3269d174903c2b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "2673476244f68b9fdb242ad440636f2a8d562fc3ca6fe5fce4d2509def8f5506",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "13849b73da0bc4a6e6b557bad2104d4c1c35c2adac50c596af0b5aeb91244696",
+        "renderedHash": "1627bc523794687cfdaad0f06592cad2af294d49591941c60927e8f81884c710",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 10277,
+      "lossTokens": 14,
+      "inputHash": "51233232a023b506129039bb0c57237b220cbbd8c32f5da3ea97e8565b56f86c",
+      "maskHash": "230cb461832cfa7d395cb52b20b01be4124d51261b6984aea3d44f30dcb2f9fb",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "0feebeabe76f656193cf74c6a32937131f4055c0af82db8a008dbce94de60420",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4aa70fcf0f03930e4e8ce9e7181d0513427a0f3c9860f47e191f6c7f4ef38bb4",
+        "renderedHash": "1f7341e712dbe6bc20b6a34b6eb461d8bfbc4e53c1cd4e9f43c12ffee467019a",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8365,
+      "lossTokens": 17,
+      "inputHash": "4d0ad2b68ff17602aeeebf1572ff15815e7e5c1f428ab91b79ec505621acec87",
+      "maskHash": "41e4868fc914ab8a3036e448f3dde72966136c23b205e39e45367fe3c8b1314d",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "bb39f3c97a7a9f66cc0cd7c4a9d9b6bba3ede1e7db7252cba226eb579ac1e7d8",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "578035d5782fe98ad2b5f4cc79e5b87eb6ae8e046cfd031af0ceaa99b2ff6058",
+        "renderedHash": "a638bc8a93e02e0bb96edbdf988efd15672e0fd513770319cea209df4a45b41f",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9227,
+      "lossTokens": 14,
+      "inputHash": "9dbecfa6b80b51024e49e0d70916d0704fff65eba28b2b190e012c328689f06b",
+      "maskHash": "7880bdee9046b0ec36cf8a814ce41b145622d219ff91352fd2f764aa665adfcc",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "d3c8b828732e72898ecacfef01f51998830a0a18528290c4dd19fa6c84ead888",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "766cc8d7decf25ca62bfa8413e6f7077b0b85df84e460ce2dcf89bc1f9ad299c",
+        "renderedHash": "501fb2f7b66aa8150ae7a8a71bae84eae9c4d86564c5fd34b08130c145b519a2",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9393,
+      "lossTokens": 16,
+      "inputHash": "0b4422bee368b1e62b83b585281d14f63242ead257fbd2384c764b88b481a92d",
+      "maskHash": "901ad869587be235c29a1bc0c3d120766e923a1730fb4cf5d062b9553940e6ed",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3844d115f15991793e0f82e5b538991dd9073e48cf4d370f37d67129e2be3854",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5d8d4200caad8de06845685a8a9cb77cbc101148e5da31760f16a2f410ef97e6",
+        "renderedHash": "293e87c8e3f51a6d4ff911af86376b0c2bbb24661142dd73857d5da8c18b36c5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8418,
+      "lossTokens": 27,
+      "inputHash": "6619e969f36138093eb0ba6281b202866cde6d00457c1937c46a05513a548ce8",
+      "maskHash": "2b8bdb89abb4bd574a00f9111776a30aa8ad64d0f96609e04f4e9e67276df387",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "aa5ebc5dc191104df23139401c559289ca336bfc4e9ff5239509519996ceea1c",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cd027fa1cb0239faeb1c4c701215d10a0ecddb7d27c5c91a39ccae3a189350d",
+        "renderedHash": "d81684c14fdf968e2f8a3febf4e80c753940203a41b8730f8dc73d1ffcf5a72a",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8926,
+      "lossTokens": 27,
+      "inputHash": "a57648cb9cf82fb23671ffa6a0b5ff741a69bde5a103293e00d6da5d0149e547",
+      "maskHash": "52580664bb7eff49b8b1ee6197c1a13588561267277779a944c1a6fc0ddd1642",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "05279c1f46e995b5d4408f7bb5482ffe02861bef22659e2d1a8b5946a78a9a87",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "aea352854eb4e614fb03784010555558ba11c1b8c0bbaee6988bd42c336e20a7",
+        "renderedHash": "458e57b105f61080fd627a99ddbb3913bf7f404b651cca21399638d4a4e5d0fb",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 10396,
+      "lossTokens": 14,
+      "inputHash": "7517464a81c6c31727a4df6f7d96d9e8b985a6d7756067f3a7136195dda12597",
+      "maskHash": "6763d784e57e41dc00d2f419b49a60ed60c279db1acb50f416077d9ecb1d880a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "76b03386a1f7137570a7c25b08dd51f97bedd1298e6960197e5a4d4f1548e8da",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "9aa3acca8dc4e5878b0b56f1287caad827b9ce4e403bfe2c9a9915be565baf9e",
+        "renderedHash": "6508350d5ee70478e9a6a75bd6cd2b3d28f5018790c3677d5957ccbe55ff352f",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8435,
+      "lossTokens": 15,
+      "inputHash": "9ec28bacb212725407cb82fe6265fece8dd3689856073ace833398d2a3735e2b",
+      "maskHash": "7c1ce4ec658bcc95f9c8d422d4e5ff64ef3bcc20d5c5dfbe589b68fefbc80087",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "a260f75bc4504560282a64eea73ca3a1e07ea342f8eb5fee3a68fa275051c229",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4172ccdc09d53f33089c5eb528299701163d48a9c29441c88ee3475fe501e98b",
+        "renderedHash": "dadc2269e0079a2431790a664af4dac5916d4a6612f2c9de0e8104d3c639adc6",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8355,
+      "lossTokens": 30,
+      "inputHash": "88f3b30d58b5d06f88ffc1be43eeaba82a8d3be2580b6e5a80d397ef9c6e1e4f",
+      "maskHash": "26e52b0bba6397ff08d0e323cde815c8cade3f2cc65c093c5c7173145a032747",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3ac2ad5519a2b8a46f856f28a324079a99930e784f5bdee2c4b5d7a1593837d7",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "95c3ff4dc2382c3a8b9cc8f4d645f004b736fbc5b9593ed46ce32b839ed1d1b4",
+        "renderedHash": "107f98581a0ea08d22d20b18311196bf70e0950e2d0f2736f6dede5bb520c0f4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8388,
+      "lossTokens": 47,
+      "inputHash": "24d6583a8614a9765e3c4ec47e8b3d460920d425e75c7f4f458c4be0276a8e5a",
+      "maskHash": "ad726dc65aaed80a32917017f65959a1b68580f2ec6f937d1b8df47c6e8df0e8",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "5af967c2e5da45c45c2529b9107a65b3da17a180f2b5014ebf8969f74be117b4",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "89b0838065e543818a07316f9b31b5b0d86b3a5ae048513ed4697f70b60ff3ce",
+        "renderedHash": "3f46de41ba43995de4d78904714f84f54011de2cb8264e486a5a94530d6fe619",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8470,
+      "lossTokens": 15,
+      "inputHash": "07e1811fe263d52982fbe7937cef9f95160bcf4b35d0bed82a19323008c195f1",
+      "maskHash": "7e2370896a6c267a5381a9cc13358d8d104717aa08a1601762e76254e9252893",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "2d0877d00dc38f2a631afa19d48d6eb9276e0cff1c7cae153880b43b1dec74fd",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4e904f2cd82fb41bc749b175b3ef55d2a7a748cf8872c80dad3369dba0d5b29e",
+        "renderedHash": "3b05ae8ccfd77487c4764da764ac53fd5a294caba6ff2d763ceacb10ad9a4743",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 31850,
+      "lossTokens": 15,
+      "inputHash": "45ad83a613276adc9de0197838f494791253a71e44f5b9142291fa73dad57f45",
+      "maskHash": "b24691e6e48250b9430458e8ee2b043b8d692ca7d9021e864dd225f12824b75c",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "bb9bec4a41c7fc65dc556f1fe8f4ed4f80462e0338cf8671bdf954e50506fd83",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "062ed05571d78de18b20baa6315ca278ab61f21a39a23a39421168eeeae4b3b4",
+        "renderedHash": "f98e9944b0f68c424d8fadd5b592b4d579c1658ad508816fc9de108bb48a9e8d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 29806,
+      "lossTokens": 15,
+      "inputHash": "66d82a6f12629ae8d7aa8193e5aea0e5f67b116765b050e9151b88d477303f31",
+      "maskHash": "9e82686b8e6433060d2d4bba3d71ad25e0916c2d93e1154955d4e460585249d1",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "dc36cc1a2d1f88dfaf9f0bc0a81a4062a0351ffb7c0a5fc26d67317884c7dcc6",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6028def2dc2b4f71109acb0261428bbbf711eab86f0e8ddb6fdc35f105a89f9d",
+        "renderedHash": "87c2543f6960268714f2a9097ae62e98069fca11206129b465092981bbe6a4a7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8316,
+      "lossTokens": 15,
+      "inputHash": "1cd7873ecd7211181a665ab6df01b4821a7414028dd3c2cfebbb31d5475f9308",
+      "maskHash": "8094f16e50c4ffc1c52555ab18d192668c6344a616bd8b1dafaac56e3b940345",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "b23ff0c192296f7dcfda64af24d32b044271ca8e8333cbd316da24d25f4b3968",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ed534b701fcd4894d66bbfae08fd644b47c2c6b6dfb04f4bef2fc6fc517abd8a",
+        "renderedHash": "f1185f6db94c6e2f1eae7549b76f009ea7b309d3d15ed9096e07f1a6c6f7d76b",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 27977,
+      "lossTokens": 15,
+      "inputHash": "8aeba0878500f3ebc6cf269d8cb79b32a60d0d1479cd6a0bb255c247ca923b4a",
+      "maskHash": "729813bb268c76fe12626c318186439d00d514b3dfe2992ec1d980bf37caf1ea",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3dd55f4c55734860fa10c0a289cd2cacfda7f8c134f731f396b2a15d8787b54f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1c0eae6408ec43a4196821e20426091cf38d203975cbf6b3aee49c30118db35e",
+        "renderedHash": "d16e391565429eaa2f2b85ef139471cc5db9d169c8370e34eb96a281264ff9e1",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8335,
+      "lossTokens": 23,
+      "inputHash": "a0059daed5a29e30775ac2983f7cd4c1d030f623e4c511480a148145ae33c147",
+      "maskHash": "d474c53b89070ad81e7f01959d3706d3db826bdfb8e5b728e036a709a04c7480",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "279f463bebdb90e9dbee549cdfa1f707f24b36a2271b2cde6d3f6df3388722ff",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ed534b701fcd4894d66bbfae08fd644b47c2c6b6dfb04f4bef2fc6fc517abd8a",
+        "renderedHash": "f1185f6db94c6e2f1eae7549b76f009ea7b309d3d15ed9096e07f1a6c6f7d76b",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 28009,
+      "lossTokens": 15,
+      "inputHash": "3204a8fab31b24a2830252375f030958010a0810c5272daecccb728c07686d32",
+      "maskHash": "1bec84d580ef594b3715546374de137afb86ab74d486c6dcce8bbd994db7e348",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "dbd5ab6703df986af4b40332397a68def65fc45a73ee7bdbc628c99bf1d8ed8e",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6f928ea011247bc34098e312b33ba62de64d2614eb252414b3a49b4d65ec4c57",
+        "renderedHash": "994b77ef6aafb3f087aff6883f6e1e3acdde3eb25f30e076b080a96a8ade0b40",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8472,
+      "lossTokens": 15,
+      "inputHash": "9ea9a83cbf9741e12e7b29241d910ca753d232ae9e482d4ada112417f0af6f8e",
+      "maskHash": "df612db5efee27fd63da4d4aa31b20ea8d8571c1d27f0b6bd9760cadbc287929",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "69be297e2bf1cf678e01b2db8d6afd115e4e4296eb5cfc515c88e3b956122f32",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "3ab34344b9aade1dfb4f4200bd14851369a670a0c2c4aa8da5559121d7317495",
+        "renderedHash": "e3dc36794d20301fea73d1ae125ca532476f7fec576df49b8dc5c7ab3d6ebde7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8329,
+      "lossTokens": 23,
+      "inputHash": "d8e203de9e3b51ec8876b2b703abb86276c96d2c3665561a25911b8da084fc2d",
+      "maskHash": "acacaecb3e38a17f3db8299ae06856270df676f302a45eee7b1983142cf54b09",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "ee062a6d1b910cd8482a2d380b78dd30671f400d5bdcba0d92816d6364e1d19e",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cfcfddd026b94b471b1bc48deae9de3f70579d16597d5407d09b7ec38199b45",
+        "renderedHash": "1c095f38602a0f7378be13ae44781dba0c184099b103185e734c6cda8e9a55dc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8390,
+      "lossTokens": 53,
+      "inputHash": "485a0d11a7c42c766cd4252087fcf1a8044bac293e1cf50848ec18a2ccd39a6b",
+      "maskHash": "be4a664573c00e1b40cedaa8ba82b4ba7b71c02b6f5a3501a4e4e04ec4cd1c23",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "8da8e85c65cb6030a20852a11cdfe461f05f45386cf422217b8972cd564643e5",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6a9835f27c123caf5251c164103a3d081e758ce4f5bf92385ed04a6abb8c56ba",
+        "renderedHash": "8a02b85ba3d0bbf2ef24761c4ff485029b975bfd929276afe3d05d1248d23766",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8882,
+      "lossTokens": 27,
+      "inputHash": "9e58120c2b6a99a291d95562d1fa76b30b23f8894ee59f83fccdf9ad02182c56",
+      "maskHash": "4166aa7bf16ea9f9e35fdfa2cc0ca127c03ba7f087221f8b447979b3eb221ad6",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "50f03c2dbdf9bfc2a44f4f7992acf8896ea42506ab69ce9235952bf8c7cbb9da",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "95c3ff4dc2382c3a8b9cc8f4d645f004b736fbc5b9593ed46ce32b839ed1d1b4",
+        "renderedHash": "107f98581a0ea08d22d20b18311196bf70e0950e2d0f2736f6dede5bb520c0f4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8377,
+      "lossTokens": 47,
+      "inputHash": "fb20d7434775af598db716c281991f0cd0112cbd24929bfe96dd30bc7c45d483",
+      "maskHash": "84bf7a17b37511a8584e57825235a722b46ce12db0c83591b08734307fd77b7e",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "72d44362158f9d41c4a6bf2cb0eb686ffce0376e983c0552aaf6957f190305bc",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2f69548755898c41dac1b2f4ce3c10d1f0a048dca5d8ed99e0fc8064b9785aac",
+        "renderedHash": "3192c28c9ced0192e2439731195d9f26148674a51e5763291d5ccdea219477d2",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9229,
+      "lossTokens": 14,
+      "inputHash": "f83a0a168834cf4f290f80be47fa68efeba71d46981636be13f9261a74a262c8",
+      "maskHash": "6a400599a39fafa79e8a712193c918d839e911051b0fca2904ab0d778f4d9a54",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "f5994b7fcb90f88a0509fcd861fe5671497d95a012c95f582c0493f20e08f40b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "29c67c1e62c56ef4f9433ea2eb48733832c6e668f61ebf33c3dd88349c32d271",
+        "renderedHash": "18f8a680ca4eaac895fc6cbfc920283148397ac306dd869fe6f33525f870a8c9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8362,
+      "lossTokens": 36,
+      "inputHash": "0aaa99ba58ef556a214c76196f5fe94344ae8042110a2fb37cf45e3400f19790",
+      "maskHash": "9a4ed5752a073c2eef4280f3402294f7f9c6bf0dc9e4546db67d08f7d4344996",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "15688654ce11c4dc766f4a9f4a263ab0cb96242db791a3d1e62b769a02f9e43b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "766cc8d7decf25ca62bfa8413e6f7077b0b85df84e460ce2dcf89bc1f9ad299c",
+        "renderedHash": "501fb2f7b66aa8150ae7a8a71bae84eae9c4d86564c5fd34b08130c145b519a2",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9414,
+      "lossTokens": 16,
+      "inputHash": "1a359aa8bcf5e7fe8258527aceb0f124e3a7b898009e257138005ad37c2cf42a",
+      "maskHash": "a2696cb34b9e53ab68a256995f431642b468b1eae7f04bfc65f5ff272a8d4251",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "ec5f4608166c67e438603b14202c8e72913904c5f27570f3be2636b5fc505485",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fe17863a37328f72c1f243c2775c8158a7fd06543041984f25291aca95beb895",
+        "renderedHash": "4900581a93c939c59607fef32dda2ad3301b5cd32a54570617b770151dabed36",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8573,
+      "lossTokens": 15,
+      "inputHash": "760660a56968feb319e5150543c32f88dd46341c3b17b66708f74393c21572c9",
+      "maskHash": "2ecd17b1fb13443b010a723e8ede8fb8209a31cbc9a6910261173537ccc650a6",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "5f56393da72c7bd3714262f5317e1bbf557818781b9e90a41a89c6b444903ef1",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fe17863a37328f72c1f243c2775c8158a7fd06543041984f25291aca95beb895",
+        "renderedHash": "4900581a93c939c59607fef32dda2ad3301b5cd32a54570617b770151dabed36",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8389,
+      "lossTokens": 15,
+      "inputHash": "9ae2404176006eb03325d5f891686d14dc9dc18aee48a731e5387907f30dbb51",
+      "maskHash": "322f7c7ae4ea4bdbac1a82eacac5a516163f6a4da7a8fddd9cff2a201b017a4f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "53213d8067edf326c88262a220364301d52c261ca8987c4864a67e84c6fe9c7f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "50b42094943b4724208445b4c041ee5ca7dc4e68a3c78eecce64fb9d45fe50bb",
+        "renderedHash": "7ad973166562f664afdb1461d30021eeb0a4cd60255b75e9444a2e60c1ea35fc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 11156,
+      "lossTokens": 14,
+      "inputHash": "b50f73e1d1eeba3c72c45295521ad16bca6b488e42e6027655cf84c20b51ecb7",
+      "maskHash": "328e2e69a7f08f3d3c8c1d36e76be74ea2c4448c78b072411788e1c25f1e8965",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "2a5b776f884bf16c138e2c35c0cb892905ed20fc4908e6bcbc61b722b0c4c3ae",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2f69548755898c41dac1b2f4ce3c10d1f0a048dca5d8ed99e0fc8064b9785aac",
+        "renderedHash": "3192c28c9ced0192e2439731195d9f26148674a51e5763291d5ccdea219477d2",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9231,
+      "lossTokens": 14,
+      "inputHash": "feeba31841021332928efd4d97d77f6ff798e8059ff4af9c893241b7946bd33b",
+      "maskHash": "7d2fa1e4c1823e6d1b9f2df0e7bba089df8feb5294600b8fcbf11174bde067b5",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "1b1ee1eff54f37271e4a2253d55e2bcefb541f60494b9162e22ee26c7518da40",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "20e3dd89f83cfedc1fba7a6ffd1ad8eaa4ab30934305154e9120e02c437a32d7",
+        "renderedHash": "1536bbb5fb08e7ef5ef78d31b28d3c2795d2216391c1dc54c2fa8598733a5d28",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8345,
+      "lossTokens": 17,
+      "inputHash": "86c959956e1a48cede427ff497f914b1d38544e1f322de7f95ed75bab263c0c7",
+      "maskHash": "80cdb3469bb4d10cb7be0e802c5bef4a05438395252957685019af1edbb8e937",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "56a1d92019f4bb13d8f51db96d39290653faff2538217b6931e8ba2dfd911b30",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6dd912f7137591bbfc73c27a1f70d5835b632365881519b96e29733c6e4216ec",
+        "renderedHash": "3cc8744add28eb6ac18ae551c8dbaa1b5c04d22d0d4346f3b8431d545666007d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8677,
+      "lossTokens": 15,
+      "inputHash": "60474abc6869fc4e1812e554edbe91171135a85387e5e86ef5dadf9117c1f1b5",
+      "maskHash": "92f8194c1fc9b26e5ad15922313fa11e0701c21dc8947419861d4dd163c2eb54",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "43c8c9317e2e22f71646b71cc17707722300fc765222ea4d134ec1d32f141975",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "91965ddd9c9452feb06608f71152310b4c1246477ad1765db1b1aab03701cd25",
+        "renderedHash": "2ac67276078d9e56f3d013e0b50b7c0dfc43f8f2c21d4a7b64a119f40d3efd5c",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8335,
+      "lossTokens": 23,
+      "inputHash": "84fa200372974b8753be61f0604c20c497678adeb79683aa3d5c0b7bc74cd167",
+      "maskHash": "d474c53b89070ad81e7f01959d3706d3db826bdfb8e5b728e036a709a04c7480",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "09606f4941e2dad1b4a17277870a9fea991c7530c2487437a3b941af457609e5",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "894f63f960891271473d9ee9726ed86f19eccc0902684968c8bf794325e47f1f",
+        "renderedHash": "2e246b0641016d5d2a8c0b62ce0ba16392bb5d77e0a66b67fddd9adee55388b7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8425,
+      "lossTokens": 15,
+      "inputHash": "e6b5bfa0454adabb122937107f44bf19f7ff23c69cd1fe314c92fa881a58b06f",
+      "maskHash": "418e6dcf57293bd5ab16a63a049ebc11be4201985df56ce8746366a8ee9b03a4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "40d8382300aa905dc6e47eb3998acb8c2e08a9b6785f57863530e4d23462049b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "73cce857b81081f7a1ec1a273a4dc4270b800e4fb6f01b11617206be5c17ad12",
+        "renderedHash": "95617e959215d012519db39baae6ee8c5d05ff6ed1f5a0aa90be54a9d6204565",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9217,
+      "lossTokens": 17,
+      "inputHash": "d3e3069f753c1f4793ea4c326ad11e5453b0d6f537584553f85dd9ab5e53665a",
+      "maskHash": "a608f7ff9c38b8cf25e08251523a0603325b3ccaf8ca9b36f067ebfa9cecdf3f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "f685a2edfc3f4c6a20056a6bcb67905dce173c9f0d4600cd78277f58fb0dd4da",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "d00fa5de2b012a2a99e3e5b586acc628c88907f7d0e2c0160d5b7091df241d43",
+        "renderedHash": "95b436cdc29a4cfff9ceff6cbe058b2d459c904c1a36428fe01cde17b7392eb9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9345,
+      "lossTokens": 17,
+      "inputHash": "db121105dfbdd75a274c07a7d2d86d9769d7925a533f040d06a56fb95d5cb349",
+      "maskHash": "ec8abb08e832b6398ab2fe50a1fdec073f1a6fdfc43ab7cae43239e63c74844a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "db113b6f0d11e723ada7204df964ba5226bb2e49251de7d8454432b4403ae65d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cfcfddd026b94b471b1bc48deae9de3f70579d16597d5407d09b7ec38199b45",
+        "renderedHash": "1c095f38602a0f7378be13ae44781dba0c184099b103185e734c6cda8e9a55dc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8401,
+      "lossTokens": 53,
+      "inputHash": "dd5e12934daf21805b129b290420d3a608a89bbbe849646242a03a3a2e1cb811",
+      "maskHash": "958f38c022212a581f67b0d7db04688232f77476372d4f4668b6905ea50ff334",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "370c550e7840e1e2a6768234da7a41133c11dfad1c3c8f2aee5064520941e74b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1c0eae6408ec43a4196821e20426091cf38d203975cbf6b3aee49c30118db35e",
+        "renderedHash": "d16e391565429eaa2f2b85ef139471cc5db9d169c8370e34eb96a281264ff9e1",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8335,
+      "lossTokens": 23,
+      "inputHash": "1b3be7ea621aeb987b90dddf0ad08c7c78ba9e18822101d8dcc428a0a188663b",
+      "maskHash": "d474c53b89070ad81e7f01959d3706d3db826bdfb8e5b728e036a709a04c7480",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "ec785b7627562db3ce645d7d15b89608f4fe86c6bdcf9d824fcf93d38c83c512",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5a35e624c1be761fc3ee693e4dd1e65ed5069a74f08a09c60587cde39baee6a7",
+        "renderedHash": "9fd1d02677c1fb4f07154abcd78d4664db5790ea987d43245772ef52d022790f",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9313,
+      "lossTokens": 14,
+      "inputHash": "103f823ee33296791d89c1e2dbdb984b08e5208611cf3ed18754556f0a61d527",
+      "maskHash": "5fb452126c3684ef98db46df74275720dc24fb346acb263b685b6b188ed2c55f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "fb5fde4a9b8ec7807febb506567cdfa468d2c22b7da367579d197584f2cda986",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "95c3ff4dc2382c3a8b9cc8f4d645f004b736fbc5b9593ed46ce32b839ed1d1b4",
+        "renderedHash": "107f98581a0ea08d22d20b18311196bf70e0950e2d0f2736f6dede5bb520c0f4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8377,
+      "lossTokens": 47,
+      "inputHash": "3ac32dcabfbb4f1d225ee012e12b677387c582b8aaae162cb27184b52517f400",
+      "maskHash": "84bf7a17b37511a8584e57825235a722b46ce12db0c83591b08734307fd77b7e",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "efff64b2813464e8edd98ead6bb037b9780ae6c0517aea04a0e2021ffc11e1f8",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cfcfddd026b94b471b1bc48deae9de3f70579d16597d5407d09b7ec38199b45",
+        "renderedHash": "1c095f38602a0f7378be13ae44781dba0c184099b103185e734c6cda8e9a55dc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8401,
+      "lossTokens": 53,
+      "inputHash": "f865b1e03ea89d76f0dedb33b498f5bf08a82956005007a74f23f9613e2035d0",
+      "maskHash": "958f38c022212a581f67b0d7db04688232f77476372d4f4668b6905ea50ff334",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "71298ec77651a57603d3a8ae9614de5cb3cacae540469559d95f6c48b83450d5",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "9ec162f820ec1dcd25c04e438fd898716c0c7c2912dc0b8249406ca1d871a1a1",
+        "renderedHash": "0b2308140e5f96c3f2deef488e30c5e515324b6e6a54cc5e8a370c52192e29e9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8336,
+      "lossTokens": 17,
+      "inputHash": "c8601d9d255cbd500b1faf56921b65b06a4755fafd85eaf29483d2ad7f25b627",
+      "maskHash": "c5ab985dba83f68a19269bb34754552c306ade58aa094b4bec4e6855df23c931",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "bee2efe44ae871e0d7e2f4854389bdb93209baf1de2ec71028c2c65c4bac066a",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "73cce857b81081f7a1ec1a273a4dc4270b800e4fb6f01b11617206be5c17ad12",
+        "renderedHash": "95617e959215d012519db39baae6ee8c5d05ff6ed1f5a0aa90be54a9d6204565",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9213,
+      "lossTokens": 17,
+      "inputHash": "627e1a951921285b16777322580010acd888a79567028b708cb634e697ce55aa",
+      "maskHash": "3aa9ffe41a2b9f86c08bae5122dd97eed0d8a659389a041e3ff6c13488c17f6c",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "b7a467492f5419a33bd3af09a6ca98ab65eb0726a37ae31fad48ba63c37f660b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6aa5eb63908bf8177e799bc7bf2cfaabbbc1502848f9ba0091d046ff3ad7d445",
+        "renderedHash": "f91693de81d8f1542aa393d3e46393c56000f6e5e583566ad7308ad6efd9b8b5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8430,
+      "lossTokens": 15,
+      "inputHash": "0fabbf05cdfe3359e25739ed38c51b7b504035a810ed7d2b01f7a93e1c6b749e",
+      "maskHash": "d7ce6e394f2f7da6f26b27b711aa32d876bc2613b012086a5b9a0cabdb101489",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "36c9ed9cf6f70881c3b5da1987bc53bfd2e376b1258855bf09b46cce7d90f4f5",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "7488ac0284828c378b04fca60510d0c9438b5e5b7317fbed49406398a47174b8",
+        "renderedHash": "41c328473abdaaf889baf8a9b714a89dcf16c9960454cb8a5c0947845d59ab78",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8372,
+      "lossTokens": 15,
+      "inputHash": "312cf83893d62e79a2eefb15a1e22fe84dce62d8b139df1462448d207ea3a036",
+      "maskHash": "f93f517a18f68e4d8301fcee15c88f8f397bd5bf8a546bfeec9ca62dd89e5d2c",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "710b0fb62a117d4a4050e98f24047aed87fd3e315936e62ba2d8c8b477be66fa",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2f9dd5a7a5643bd070942e60080f2c1a841e95cf8154c150a0ba27476fbff133",
+        "renderedHash": "5ab2f8d0043d911fa1258502eeb8527e026123e2a84bbb817aa9b10c7d66d659",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8281,
+      "lossTokens": 15,
+      "inputHash": "1c759482e0640031951ccdd9ae882ede775701df7eb96bda36ff0c25efda9afe",
+      "maskHash": "8c4e36901e6d4f8776b2b546dbf1501f72272e550c5dcd4e86d17c220bef6040",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "f80af037ed9b8d63fb94a77a7655a08b47cbfbea8678c5a2a2a4ef010d9e326d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "402951e001686734fa3f451660fc86f5a0d17f2ad77f4956c95215f9dece8344",
+        "renderedHash": "18122edaefaba0e8333962307ca8220703f63e0f023d1af1c6f65032d206cd44",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 33430,
+      "lossTokens": 15,
+      "inputHash": "91e625fec94f3aa7de677b5f8ac504b9da865ac66f65a4ac0849c0f7efdb750a",
+      "maskHash": "eb0207f6d2c2e6f1e3b0e7ea647c4807f9545e9a9492fca75b5bd4577aeb4e5b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "ef49910d822e3df6bd649779ea8dc13dc2691d256310175e7bab14651b0669f8",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6aa5eb63908bf8177e799bc7bf2cfaabbbc1502848f9ba0091d046ff3ad7d445",
+        "renderedHash": "f91693de81d8f1542aa393d3e46393c56000f6e5e583566ad7308ad6efd9b8b5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8430,
+      "lossTokens": 15,
+      "inputHash": "a0f5e7a51d5b1049dc6ac162f6d303474a19089fb7d3c6bf1c1e0426cec9dceb",
+      "maskHash": "d7ce6e394f2f7da6f26b27b711aa32d876bc2613b012086a5b9a0cabdb101489",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "adf4b1c61e926bffb57aaa44c43e4e160f86d7882a776e86cefd6f67cf11cfc6",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "13849b73da0bc4a6e6b557bad2104d4c1c35c2adac50c596af0b5aeb91244696",
+        "renderedHash": "1627bc523794687cfdaad0f06592cad2af294d49591941c60927e8f81884c710",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9629,
+      "lossTokens": 14,
+      "inputHash": "6e26d440d2e7cb93abb3f562396fbfc47b6d5a30b97f608437076e7fe860d8a9",
+      "maskHash": "183746145064ad5db0f301d41a8d6bbf5bf8e8a3e650fa196b7a0008348752b9",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "1a470dffc50d4d76e6a6c48f5b3e5cea0b0ec627364860340cdc2a71ca4143c7",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "89a9a79ccafc089b28079e43f9b5ec3f89b34c7e11edfb6814d7e8a022a8a033",
+        "renderedHash": "1b4db020d67e34cdf766a4eeb70bc652cff786c23abe1d85119a3bd758de89e6",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8680,
+      "lossTokens": 18,
+      "inputHash": "d36c68686d0b0864c90208cef9cdf489cfdda90d063ce23b5cbbf34ed24b169d",
+      "maskHash": "d739cb2b3fee406f0cb12c73a1625bce3aa76ff07cc73dac22b82a30028cb5ba",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "81f9982aeef3473bc3c5ef950e3942962da5186619d160fccc6a31534dabe25f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4172ccdc09d53f33089c5eb528299701163d48a9c29441c88ee3475fe501e98b",
+        "renderedHash": "dadc2269e0079a2431790a664af4dac5916d4a6612f2c9de0e8104d3c639adc6",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8344,
+      "lossTokens": 30,
+      "inputHash": "4bdf53dc48d1e840b4129b48c8d7047f196dd05347b07d54c8d99bb1280fddeb",
+      "maskHash": "55cf6e890d72552139ab97bf730f7bf5444c309ecb6dd293deae71a920e4c1d4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "cad6742bce869ab3af3613e039ccc7bc3807803ab3eac64b88d564e1a72f18ae",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "20e3dd89f83cfedc1fba7a6ffd1ad8eaa4ab30934305154e9120e02c437a32d7",
+        "renderedHash": "1536bbb5fb08e7ef5ef78d31b28d3c2795d2216391c1dc54c2fa8598733a5d28",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8345,
+      "lossTokens": 17,
+      "inputHash": "5d0d0380b2bc3303ff6289dcfb68ec177fcf0b13e1b72fd9ec660b33727d643a",
+      "maskHash": "80cdb3469bb4d10cb7be0e802c5bef4a05438395252957685019af1edbb8e937",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "105cab95f54edb7cff4d5c7d6a1e4a8fd7a0c376393f68f5645889d62133fa1d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "3ab34344b9aade1dfb4f4200bd14851369a670a0c2c4aa8da5559121d7317495",
+        "renderedHash": "e3dc36794d20301fea73d1ae125ca532476f7fec576df49b8dc5c7ab3d6ebde7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8329,
+      "lossTokens": 23,
+      "inputHash": "18a1df7f5b468c53c361a16a195a130ca3d222357a1a3c8fe3c341b4b153a7c3",
+      "maskHash": "acacaecb3e38a17f3db8299ae06856270df676f302a45eee7b1983142cf54b09",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "2335fc6bdd93694aa8b9bf20ce0ef07e6c20a953ad1634f650849112a991e999",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "acb1f1ee1c442a461739c7a4f5c1294b713df40f9405c502b3e87d4d7e4a6eb5",
+        "renderedHash": "e62cc1ace2e824f35cf9851701a95631f99a0a400c7fe7c4cc682041940ee7ce",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8299,
+      "lossTokens": 15,
+      "inputHash": "8008d55269a967b9257dbd79a2b9e7ed01714ee45fc2dbf29a378943548a3390",
+      "maskHash": "5f980f70091bcef4c5f567d539e63943a85ecd2c7a6c794c6b3269d174903c2b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "0682f5bc070fe9961e90ab928fa2410290eaf81a300e78f6ad990fb280ed04dc",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "670b1eeee98b484381adbbf458d2413a86ad799ce03d85bea494946bc35816b5",
+        "renderedHash": "04447a84a3d46c84336ac8ce24da415a4fe67e9e3aebdfdffa2195f492b6ae8d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8426,
+      "lossTokens": 27,
+      "inputHash": "e1836a99f3cab1c577696b61c5de37c8e0d20bf2b19fcbb93826af79f6fc2729",
+      "maskHash": "e9eac93e9008bcfb1e3857ed122ab1b16d2c1501c6ba460962c0d198b69a855d",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "0fe07efb0bdf106cf995c1707756ebfd369c8af11819b8535b0416c8baf93d02",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ce527930189d4f37758709c75c31dde57584bcb1b6a59f3458d43aaf5a8efd83",
+        "renderedHash": "54b8cff570a3372ad08cb99c2b64826f6131db4f3a06a9b6c14dbf2d04ef3565",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9350,
+      "lossTokens": 16,
+      "inputHash": "04ffa25acf64f644ddc21b8b968d7be647b2e3c8a99d24b6eae9348d7edc5edf",
+      "maskHash": "3d504b38d87533266d3f2cadec32b0e0cec1577592d1dd0701f1bd12e8449f47",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3e89968a34d7acecea40331fbab7ef3fe7850f34599fdd6dc765601fb8915825",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6a9835f27c123caf5251c164103a3d081e758ce4f5bf92385ed04a6abb8c56ba",
+        "renderedHash": "8a02b85ba3d0bbf2ef24761c4ff485029b975bfd929276afe3d05d1248d23766",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8415,
+      "lossTokens": 27,
+      "inputHash": "6864b0bfe025b2c6856e76c4aabed9fa0948bb7f52c8dd33d5b93fb97ad37f9c",
+      "maskHash": "f6cf7b097ff953ad6146a76e739c6219409cbf1e579efac04ae69fb572d79c0a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "a6ef6cbc9ad4d7ff0ad30ccc20514195d1b5f5f7525fb379e5025b0ba635c35a",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "7488ac0284828c378b04fca60510d0c9438b5e5b7317fbed49406398a47174b8",
+        "renderedHash": "41c328473abdaaf889baf8a9b714a89dcf16c9960454cb8a5c0947845d59ab78",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8646,
+      "lossTokens": 15,
+      "inputHash": "44fffacbd1499ec1f14839fdc7129f91f5bcbc33dc406c5fbdcf52268c6011cd",
+      "maskHash": "0bd6b5e9df1d614000a9ab9241987c64671c38e36806cefa363177f76204dcb7",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "e618028b9cb87af74de624a70b346751c5a87d2c045d09e9e1c135a3a304c97b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "91965ddd9c9452feb06608f71152310b4c1246477ad1765db1b1aab03701cd25",
+        "renderedHash": "2ac67276078d9e56f3d013e0b50b7c0dfc43f8f2c21d4a7b64a119f40d3efd5c",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8346,
+      "lossTokens": 23,
+      "inputHash": "f6ba1ea9bf0d4ee74195291751829f595ebee2d6a68e598540519d4dee1a536f",
+      "maskHash": "52edadac8343d4fd5409918150763677674fcfa8295a59fa8bfccd891c54ffa6",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "7932b9e72b06e42a9339646e55b7d838a1d1910f9bd182dc7a3f8a08937da71f",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "e155b7a51f02ef0d1f4e55d48b64b2115615d5ee1f0e8d6d026f7a0a1ce0f4c4",
+        "renderedHash": "01a77ce3279a1b2194252b164d192157caff31760ceb6a9e72c89bf915eacaa0",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8439,
+      "lossTokens": 15,
+      "inputHash": "8b71e3cc489f1c8526671e2d1fe07f7139edd94c52a6360a14c57475e95993ba",
+      "maskHash": "b3b58d497937f49809145b408be6b5a1f18f237cb6d065088eee6fdf40df59a2",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "4ad18177e5ff8fc40d0d8b21123dcf01c09145cecc05d2001360459092cb7654",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "89b0838065e543818a07316f9b31b5b0d86b3a5ae048513ed4697f70b60ff3ce",
+        "renderedHash": "3f46de41ba43995de4d78904714f84f54011de2cb8264e486a5a94530d6fe619",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9017,
+      "lossTokens": 15,
+      "inputHash": "e48e3c1ce2772dd4e6e5256be20c30409e66fcc3493771efade21c4e88ccd98b",
+      "maskHash": "262cd8355efe1893e6d468f02cd47a4de452e7387d71598ee9c73138483ab1bf",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "0c6f324153b4864e6e730dbc2d589aa73b483012468b259d6e316ccc97b20431",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "9aa3acca8dc4e5878b0b56f1287caad827b9ce4e403bfe2c9a9915be565baf9e",
+        "renderedHash": "6508350d5ee70478e9a6a75bd6cd2b3d28f5018790c3677d5957ccbe55ff352f",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8435,
+      "lossTokens": 15,
+      "inputHash": "9e8ca280d3b2db4d32237e38281d4dbb36151aff51b2400d64cc6bded838d0f0",
+      "maskHash": "7c1ce4ec658bcc95f9c8d422d4e5ff64ef3bcc20d5c5dfbe589b68fefbc80087",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "ab182c8e81cf5a3ff37c5ad539d2c4eee99e404b62e88356508a5fd3a9c7f4f7",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5d8d4200caad8de06845685a8a9cb77cbc101148e5da31760f16a2f410ef97e6",
+        "renderedHash": "293e87c8e3f51a6d4ff911af86376b0c2bbb24661142dd73857d5da8c18b36c5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8841,
+      "lossTokens": 27,
+      "inputHash": "5cf9d5bbcb4cef18898eb4cc2b08f331229efbdfca2a7e89edb7a740d021c002",
+      "maskHash": "0a6e3836576e4271e8ff04417b1d61dcf8dd950444915f9dca2bd5ae69d4b552",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "6cb6a1fbdc36325900e78aa2c5073834b21ef1faeec6dfb9b6536c119d841f4d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4aa70fcf0f03930e4e8ce9e7181d0513427a0f3c9860f47e191f6c7f4ef38bb4",
+        "renderedHash": "1f7341e712dbe6bc20b6a34b6eb461d8bfbc4e53c1cd4e9f43c12ffee467019a",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8766,
+      "lossTokens": 17,
+      "inputHash": "2d987f5487779c8f69babc7d17d5a9d7ce34f9e387061fcead23598b31197a47",
+      "maskHash": "28cc50874f9845e8e5f50e608c352aa3998847c9794353c2b924c5464ebfb936",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "d62ad381a33e921e1b09d61198b1a5eadf4742c0f24bb3c8ada01fdbe10d1782",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fe17863a37328f72c1f243c2775c8158a7fd06543041984f25291aca95beb895",
+        "renderedHash": "4900581a93c939c59607fef32dda2ad3301b5cd32a54570617b770151dabed36",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8555,
+      "lossTokens": 15,
+      "inputHash": "b9f573d7d7330a627a9833134afd2e1feea017f410cfe8b1b9db1eb4da2fd917",
+      "maskHash": "a570ae3c1dbe4795b08d637f814b985b0856d5aef158ff568458a3927303c77c",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "1f4431c75384dd7fa087f501dc0df8353fad0f2b83ba1a46735402a010011f6c",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4172ccdc09d53f33089c5eb528299701163d48a9c29441c88ee3475fe501e98b",
+        "renderedHash": "dadc2269e0079a2431790a664af4dac5916d4a6612f2c9de0e8104d3c639adc6",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8344,
+      "lossTokens": 30,
+      "inputHash": "11e50f309001f56d99783a4fd4a70e45ab994006e4dbf3ed4a091c987977f3ed",
+      "maskHash": "55cf6e890d72552139ab97bf730f7bf5444c309ecb6dd293deae71a920e4c1d4",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "a3138802837a391948244352891efa119d582a49f87eff6a0d1409e221f1aed0",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "63e42585032e172129014c9bd210b4679ebff0aa3fab037af9f1e1c827effc23",
+        "renderedHash": "5ea697fbabe3931a5c7bfa2f9d149947dfb1100c407d55a0d3d46acce8c60268",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 11718,
+      "lossTokens": 14,
+      "inputHash": "be77fa486512e92127979ab3a1b299889afe671c8dd681087bec4b5d2391becd",
+      "maskHash": "415a10e958c955edc2b94ff05c633a9f27c346233894c86d32281b9388b3f119",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "863654ef38f388e4798c50a46be047725cfec2188808f87edbf91dc3aafc63ee",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6028def2dc2b4f71109acb0261428bbbf711eab86f0e8ddb6fdc35f105a89f9d",
+        "renderedHash": "87c2543f6960268714f2a9097ae62e98069fca11206129b465092981bbe6a4a7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8316,
+      "lossTokens": 15,
+      "inputHash": "945d26db2a575dcc0d19f2fd0d986f31b67b8393e8a610a8b0c26864716b568c",
+      "maskHash": "8094f16e50c4ffc1c52555ab18d192668c6344a616bd8b1dafaac56e3b940345",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "9b53bd01752c1bec328fa8fdd14082c954f14a28050da684d5dca79bb9bef24e",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "50b42094943b4724208445b4c041ee5ca7dc4e68a3c78eecce64fb9d45fe50bb",
+        "renderedHash": "7ad973166562f664afdb1461d30021eeb0a4cd60255b75e9444a2e60c1ea35fc",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 10940,
+      "lossTokens": 14,
+      "inputHash": "7e2b8f5b488f1c59f3c824cba6e847bcdaec63859a8e0db50a489c9f79448ff0",
+      "maskHash": "35492f5ec21e02d35522b203c60969d101ef593dad34ab18a696e253e650f254",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "664595c6af41c9cbcb1576ad5a570c9808acd12d9f1d7f6907f8b7b95ee2ffd2",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "89b0838065e543818a07316f9b31b5b0d86b3a5ae048513ed4697f70b60ff3ce",
+        "renderedHash": "3f46de41ba43995de4d78904714f84f54011de2cb8264e486a5a94530d6fe619",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9079,
+      "lossTokens": 15,
+      "inputHash": "efe74472e18882c1b003c9d4b866efbffcb98ef101b67eec5a0b921bd129f676",
+      "maskHash": "087722259244ab0fe72c74418b1ad98640d120bdcf7b8dcbc313e4ddd907dc8b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "3d8383597835bed96610652a602ecad6c2c162ea8b8ec3386cc1d5104cd2f53a",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "e155b7a51f02ef0d1f4e55d48b64b2115615d5ee1f0e8d6d026f7a0a1ce0f4c4",
+        "renderedHash": "01a77ce3279a1b2194252b164d192157caff31760ceb6a9e72c89bf915eacaa0",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8478,
+      "lossTokens": 15,
+      "inputHash": "ec536c49848a58d931c60418b01009cc65d6d25601538361edaa267c4e0e6a22",
+      "maskHash": "6be0bdeefef9495e9f9718e649fa15da200b4d515f2a40f027dc9126a282f4cc",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "544222d659c8f292360162030186a9ff900793793d3bbd657ca68c55b9dded1b",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "894f63f960891271473d9ee9726ed86f19eccc0902684968c8bf794325e47f1f",
+        "renderedHash": "2e246b0641016d5d2a8c0b62ce0ba16392bb5d77e0a66b67fddd9adee55388b7",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8436,
+      "lossTokens": 15,
+      "inputHash": "56436a947b7113bbafc4a71bf28a04a4a72b215f95c2f495d012dd2ce9d9d87d",
+      "maskHash": "6005e84925b83cfcf05dda0b400805268e8efaf594d6ac0aca9b6bf584ce140b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "83f1b939330234df6e1cf2d310d8879dc39ef6d0fa015b44fc47fb7e8b4486e8",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "20b01f8401a6c168166c0cbfd788a3e190a629e0b05c7bf155785f92fd39a59f",
+        "renderedHash": "d0c3891eb89bea9be8dc286f3ab6ee953b10d486adbd3547cd3743f49727e754",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9317,
+      "lossTokens": 14,
+      "inputHash": "99f139be6dab66efd59b2f68f1faa2d491b366c922ae37e9e51b9ffdf8f9dff7",
+      "maskHash": "195a933e42161bdf2f42988ac592e65104b4de66109d81dac4118e6d89f6f2cf",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "f7ba388dabcef59a5a69027d5c55f0779e986e481ed71c822745c5ae51a28520",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "20b01f8401a6c168166c0cbfd788a3e190a629e0b05c7bf155785f92fd39a59f",
+        "renderedHash": "d0c3891eb89bea9be8dc286f3ab6ee953b10d486adbd3547cd3743f49727e754",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 15552,
+      "lossTokens": 14,
+      "inputHash": "7cd9e76555b1bd552da1bb26b79b43535bdf698b891076cd24b8f4513b0c845a",
+      "maskHash": "d0a9a000f5d1ca624d4d8369b50e67ef0739f27c201538fc0ae15145c5dbbf3b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "af6f749bd12fdb4a0eb3f83ab6dbd68d9306b6eb089dfe7520df862efaea4399",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1c0eae6408ec43a4196821e20426091cf38d203975cbf6b3aee49c30118db35e",
+        "renderedHash": "d16e391565429eaa2f2b85ef139471cc5db9d169c8370e34eb96a281264ff9e1",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8335,
+      "lossTokens": 23,
+      "inputHash": "d80c01c8e56db95217af10b65b61e177ecf4124e0217b446c4e3ddc3076ce914",
+      "maskHash": "d474c53b89070ad81e7f01959d3706d3db826bdfb8e5b728e036a709a04c7480",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "1fd583c971be257cdbd4b2f6c439bb33bc55cc936cdf6ac0a8eba4cea14ffded",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "670b1eeee98b484381adbbf458d2413a86ad799ce03d85bea494946bc35816b5",
+        "renderedHash": "04447a84a3d46c84336ac8ce24da415a4fe67e9e3aebdfdffa2195f492b6ae8d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8415,
+      "lossTokens": 27,
+      "inputHash": "46585a5b2fe9a7a1a6ef9cc8554fb95aa50a2571759cbbff6a9875eadc06a388",
+      "maskHash": "f6cf7b097ff953ad6146a76e739c6219409cbf1e579efac04ae69fb572d79c0a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "58f87cc5642945c819f234e719d1db29a337c676de073fd49d48fa8964298b5c",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1a792e1f4a13a451c514d7779f052fe4d188406ded2c0cde5058fc007e9b565a",
+        "renderedHash": "8ac72fd7a3066e80014d27a88624d6ad676081936720a5bb06073f4ad5f4948e",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8334,
+      "lossTokens": 23,
+      "inputHash": "afc8529d45328cf00f3bd8c3b8e566dca2a72951d1b15420c058734fd1e95876",
+      "maskHash": "e4521aa95f804172c32d8c364a1a1710c99572fb06bca4393320a2e54f20280d",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "e3b4c58c38680eacdcb44e07fb2bea754290a83b538cc7d4b9fc01441efc181d",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2cd027fa1cb0239faeb1c4c701215d10a0ecddb7d27c5c91a39ccae3a189350d",
+        "renderedHash": "d81684c14fdf968e2f8a3febf4e80c753940203a41b8730f8dc73d1ffcf5a72a",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8406,
+      "lossTokens": 27,
+      "inputHash": "11b70541af2ea6318bb21668673e8b9dcdf0fdb74cf07c7ddbb8ebaee884fd8f",
+      "maskHash": "a395f2bddd303dab2478055cf43f8fa0449b585192c35d1bdf8c9b8f82c15093",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "e2f0d04fca9c617242ddb13da926926c1a7067212ffced4fa8924ef5e78f1dc6",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "d00fa5de2b012a2a99e3e5b586acc628c88907f7d0e2c0160d5b7091df241d43",
+        "renderedHash": "95b436cdc29a4cfff9ceff6cbe058b2d459c904c1a36428fe01cde17b7392eb9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9323,
+      "lossTokens": 17,
+      "inputHash": "2ef43d1b0a2947bdde188cde8f627906abb1765a44f679ef7ae4fd99f82a7e9a",
+      "maskHash": "4e362f7355aaa9d0f899d540ae6508838c5eac24e440d61490e98a9828211f5b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "b0b0bd845a76b8528c82520b1c879085edb97a5a4a5839e2559c950c3c69fba5",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "eb1e97f3e48ca32e633c7f8b82b07a309aa8535e106d169701e58663f1df5816",
+        "renderedHash": "7b200139a706529aa74c32f7db0c6894afcd09b0bd28da0c2c79378efc075b97",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8327,
+      "lossTokens": 17,
+      "inputHash": "48de11d0f90fc5f0d25eb8ef1327972c588447b6092d782a6bec85f92d5738b8",
+      "maskHash": "7b443dfab01c5aba24a772e3fe95e281e6235b8bd093cc3cacf8303bfd17d339",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "cf32aa63b9e701b677c76967b597a9646cd876fa24568e8a75036f33ee2093a0",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "29c67c1e62c56ef4f9433ea2eb48733832c6e668f61ebf33c3dd88349c32d271",
+        "renderedHash": "18f8a680ca4eaac895fc6cbfc920283148397ac306dd869fe6f33525f870a8c9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8351,
+      "lossTokens": 36,
+      "inputHash": "1f7d2621d2ea74d95eb8fa38cd85dc583ed6eb4573ad23ec802daa55e51314d7",
+      "maskHash": "7af5598e14c9e3e74636291ee12185e8662037a173455f86eb9448fa11776d72",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "8768d1dad775b8b30bd3255be2a46286c1c6d59e0d086ce81ab597fbf7513939",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4e904f2cd82fb41bc749b175b3ef55d2a7a748cf8872c80dad3369dba0d5b29e",
+        "renderedHash": "3b05ae8ccfd77487c4764da764ac53fd5a294caba6ff2d763ceacb10ad9a4743",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 31638,
+      "lossTokens": 15,
+      "inputHash": "9222b604058da67b4d0f851fbd358934d9bb6c68b902b7bb7829967b90659225",
+      "maskHash": "aef71096fc890b85f4a8e67782f8adfa13e1643cac22473c18bba90ce030508f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "25a8ff312e32cad00508c1c090f09792a511515abf3f660e3de88265fed0d5ad",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6a9835f27c123caf5251c164103a3d081e758ce4f5bf92385ed04a6abb8c56ba",
+        "renderedHash": "8a02b85ba3d0bbf2ef24761c4ff485029b975bfd929276afe3d05d1248d23766",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8812,
+      "lossTokens": 27,
+      "inputHash": "05f302758f873e24dc07e52ea498497136e832f1901bfbfe7be66a906745e662",
+      "maskHash": "69966cfcf74ed4975c8964c3d05c330fdcb2336a9286c693c46bb591bb2f2d6b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "f71721b476e06912dec507da8a9895100326c6eb2052c94d6e626f3818540211",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "acb1f1ee1c442a461739c7a4f5c1294b713df40f9405c502b3e87d4d7e4a6eb5",
+        "renderedHash": "e62cc1ace2e824f35cf9851701a95631f99a0a400c7fe7c4cc682041940ee7ce",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8299,
+      "lossTokens": 15,
+      "inputHash": "2281ae225dfcd6c177d7d08051c8f7eb5e6de784b8994ecc8f49e183dded70c4",
+      "maskHash": "5f980f70091bcef4c5f567d539e63943a85ecd2c7a6c794c6b3269d174903c2b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "c0ea454d38d5a235bf2554dc094c92204465e75c40dedff326234a1651948fd1",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "5d8d4200caad8de06845685a8a9cb77cbc101148e5da31760f16a2f410ef97e6",
+        "renderedHash": "293e87c8e3f51a6d4ff911af86376b0c2bbb24661142dd73857d5da8c18b36c5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8418,
+      "lossTokens": 27,
+      "inputHash": "e7aab1062bd58569a531e2f22e6b7157cd2cb3e532dc93747fc3f7cb7bfad4f0",
+      "maskHash": "2b8bdb89abb4bd574a00f9111776a30aa8ad64d0f96609e04f4e9e67276df387",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "fe19224d71130f5961862d77661e45ca53955256ad3b7d2b765b8a2c3e8b9d71",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "fc322efa5278cb41fc98c8597eac5485cea06793865e65be702ce206cbf294eb",
+        "renderedHash": "12f2ee70b7f9415d8b02c86c6813d9f05ef4b071cf2f2114f6e0549ef42fb1c4",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9369,
+      "lossTokens": 17,
+      "inputHash": "3df72b2835b52126494b121a0d75753402954d3300dd230a8dce44f7ef82b8b6",
+      "maskHash": "e286ce5285623ecc33024abb685497df894d7c2da7dcd2f54015852751077e14",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "4b22e9e8b121e2636e4d6ab13cf12340e9e810eadf66ba2c45c23417046d2092",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "f68ca4379a6a4ddf553a623a043a90dc0b38c1ed82eadc73765ce8caa88713c1",
+        "renderedHash": "dd4ef32431434567b970e7abc610e4aa806be11321270bec55d5a72e93727697",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8308,
+      "lossTokens": 15,
+      "inputHash": "b090a61907e89aa5ef0b3b3e87e4c1140e6963534230d62dbc82186be44facf3",
+      "maskHash": "41c18a2a71ad43f870962635cd1661c9ec8ec5c859b1a515296e0b948bbe8e3b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "51c92eb94b78c0c94ee807b6956df215fcee37949359472116276ef5b10c64e4",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6f928ea011247bc34098e312b33ba62de64d2614eb252414b3a49b4d65ec4c57",
+        "renderedHash": "994b77ef6aafb3f087aff6883f6e1e3acdde3eb25f30e076b080a96a8ade0b40",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8448,
+      "lossTokens": 15,
+      "inputHash": "9953859b96106777edf31e0b68a5576555bdf9b6f0de10384525b2662eb992e2",
+      "maskHash": "471000ded074b0432f7e4a30a63f73bf98829baa8a64252c6dceec72f78c082b",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "05f41970a4cff323fe2d403c2c71094ed19ef4b13303607a6e1475a92362c7a0",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "1a792e1f4a13a451c514d7779f052fe4d188406ded2c0cde5058fc007e9b565a",
+        "renderedHash": "8ac72fd7a3066e80014d27a88624d6ad676081936720a5bb06073f4ad5f4948e",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8323,
+      "lossTokens": 23,
+      "inputHash": "351de9489ad01fea1881eb04a1bc39efa44ee4890e3912c4c095616be382b946",
+      "maskHash": "11c8cc87a1ef3da03df0dcf48645852441070f04e15e2f4526780582b10044ed",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "8b13015a4736ba682c0f952c0fc0d3381d86cfc9f952d3dc34b80c6534d36f36",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "2f9dd5a7a5643bd070942e60080f2c1a841e95cf8154c150a0ba27476fbff133",
+        "renderedHash": "5ab2f8d0043d911fa1258502eeb8527e026123e2a84bbb817aa9b10c7d66d659",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8292,
+      "lossTokens": 15,
+      "inputHash": "402ac195434671d07dd7d5cd186874b3d21ebd37fc749ef1fa6b0adee71788ce",
+      "maskHash": "7aed69be5b9e8e78a612227b8ce6861cdeda70087ef51cb64291e81a7f449a7d",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "4c64d8bc48fc6270ea80f266262b9a160551ff85a9eee716e19c82c2216302de",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "d00fa5de2b012a2a99e3e5b586acc628c88907f7d0e2c0160d5b7091df241d43",
+        "renderedHash": "95b436cdc29a4cfff9ceff6cbe058b2d459c904c1a36428fe01cde17b7392eb9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9339,
+      "lossTokens": 17,
+      "inputHash": "abd9fc6dd3db1c1d50366985242023277d7ac289e2457c842a4bea8d0aa964e5",
+      "maskHash": "6875fc48e834fa51f39d384dae609c2e8fea74cd4a33157bc44d3201a8cf3c6f",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "9a4e261457dc4fd6772a120c9415d5f7ccf846dabcf6a8366577b0d3d21bea08",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "6aa5eb63908bf8177e799bc7bf2cfaabbbc1502848f9ba0091d046ff3ad7d445",
+        "renderedHash": "f91693de81d8f1542aa393d3e46393c56000f6e5e583566ad7308ad6efd9b8b5",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8430,
+      "lossTokens": 15,
+      "inputHash": "0b24c79325ae92feb5889eda8af31e1c72bf97a32ff09c1f9dc72c98c2448c69",
+      "maskHash": "d7ce6e394f2f7da6f26b27b711aa32d876bc2613b012086a5b9a0cabdb101489",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "fd9759799c45c644f61bc6e266453a4af334b24f00ca98482f6454d8e11f1582",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "4aa70fcf0f03930e4e8ce9e7181d0513427a0f3c9860f47e191f6c7f4ef38bb4",
+        "renderedHash": "1f7341e712dbe6bc20b6a34b6eb461d8bfbc4e53c1cd4e9f43c12ffee467019a",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8354,
+      "lossTokens": 17,
+      "inputHash": "53c9633f0ba7772b8965e1af8c4bf1137a5aaec434a7c0e6124ff7e137b1bd9e",
+      "maskHash": "e639e1244eaaca96f62ea74064e160b5f1f766b2232271af9f7fc7c685480067",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "9f72ae034ae399cf51b8ccde528e0208cf1ec8c103a85034df08c5c5ec42baba",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "63e42585032e172129014c9bd210b4679ebff0aa3fab037af9f1e1c827effc23",
+        "renderedHash": "5ea697fbabe3931a5c7bfa2f9d149947dfb1100c407d55a0d3d46acce8c60268",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9875,
+      "lossTokens": 14,
+      "inputHash": "086d203365fa097bca5124c63ba38a8c64e06e73c0e32264f04f6e637cceb55d",
+      "maskHash": "a6dd3f00d8210c74b1d794e8d0225d43f37a5cc2ee23cdd82b2e3f88fb72609c",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "d11b50aa225b6946514064650ce7227c4f16ccce4d1acf15ea7bd0cbc338cfa7",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "29c67c1e62c56ef4f9433ea2eb48733832c6e668f61ebf33c3dd88349c32d271",
+        "renderedHash": "18f8a680ca4eaac895fc6cbfc920283148397ac306dd869fe6f33525f870a8c9",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8351,
+      "lossTokens": 36,
+      "inputHash": "dd78ecac9ef40bd62530f799038e286728f6642bcbe0b42a38be18f951dc89bb",
+      "maskHash": "7af5598e14c9e3e74636291ee12185e8662037a173455f86eb9448fa11776d72",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "689d7bd147557eb82cd9c37bae9a8583be7f4e1bb71764855d9a0a1593691e28",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "670b1eeee98b484381adbbf458d2413a86ad799ce03d85bea494946bc35816b5",
+        "renderedHash": "04447a84a3d46c84336ac8ce24da415a4fe67e9e3aebdfdffa2195f492b6ae8d",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8415,
+      "lossTokens": 27,
+      "inputHash": "72bab4b3e9c5796570b368cb94a48d30fe6730bd5e05a1aa3b5f5d1c2705e590",
+      "maskHash": "f6cf7b097ff953ad6146a76e739c6219409cbf1e579efac04ae69fb572d79c0a",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "93ca6d3e768aaccd87b77af0c1265afc074180a59bde8cde9661d03fbab893ee",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "ce527930189d4f37758709c75c31dde57584bcb1b6a59f3458d43aaf5a8efd83",
+        "renderedHash": "54b8cff570a3372ad08cb99c2b64826f6131db4f3a06a9b6c14dbf2d04ef3565",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 9364,
+      "lossTokens": 16,
+      "inputHash": "4985fd74a7e4289624c366b8e40d5cab7cbf55f8832fcfc9f221829799a7bfad",
+      "maskHash": "71493c063fd35e8e03c2fbf74951e24cb184c3355dca13719c7e929e315e11c0",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    },
+    {
+      "campaign": "baseline-r5",
+      "rowHash": "9824cece317613a64e92a52cbba255b185e1de0b01c30166ef67a474bed6b4bb",
+      "sftEligible": true,
+      "renderer": {
+        "name": "gh-qwen-final-answer",
+        "version": 1
+      },
+      "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "tokenizerFiles": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "529f30018c36dca5387c99b5edf368287f386f2c32d3790aa7141956bc5119fa"
+      },
+      "targetTransformation": {
+        "policy": "template-trim",
+        "operation": "strip-boundary-whitespace",
+        "sourceHash": "7488ac0284828c378b04fca60510d0c9438b5e5b7317fbed49406398a47174b8",
+        "renderedHash": "41c328473abdaaf889baf8a9b714a89dcf16c9960454cb8a5c0947845d59ab78",
+        "removedLeading": "\n\n",
+        "removedTrailing": ""
+      },
+      "tokens": 8358,
+      "lossTokens": 15,
+      "inputHash": "7851e26956a4e48d764ad5d42879a3972b0e178854bdbeb045e796e0ada48492",
+      "maskHash": "9bf6011a50d35a1665578f86a5d66c2c19fefa50a57b80b00536a7a85fd96646",
+      "requestParity": true,
+      "fullExampleParity": true,
+      "canonicalCandidateUnchanged": true,
+      "terminatorSupervised": false,
+      "sourceFileHash": "2ab161ebf33a48963e7f224b21d3a193934da873cd290afe58c97ad5b22434d9"
+    }
+  ],
+  "negativeControl": {
+    "sourceRowHash": "fa35b13bbc804bbaee57adda4763576c34fcfd143d790633a6be833cfea08b05",
+    "change": "append one X to final answer",
+    "originalInputHash": "c199fb005c34e45a4f3a230bb176f311ba8dbbf089f93047963d4ffec4f588d3",
+    "alteredInputHash": "1a8378e88e4e4888c15d32fde8f2fd3c08f696b54964a0f761b06c0f8b0bbcaa",
+    "divergenceObserved": true
+  },
+  "policy": "template-trim",
+  "complete": true,
+  "trainingReady": false,
+  "objective": "final-answer content only; earlier reasoning is context; final reasoning and terminator are unmasked",
+  "limitation": "Engine tokenization verifies serialization, not a training loss implementation or production thinking suitability."
+}

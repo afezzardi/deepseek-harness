@@ -1,0 +1,522 @@
+{
+  "read-1": {
+    "span_count": 11,
+    "trace_count": 5,
+    "root_spans": 5,
+    "orphan_children": 0,
+    "spans": [
+      {
+        "name": "invoke_agent dsh",
+        "kind": "AGENT",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "93524a8e8eaa1977",
+        "parent_span_id": null,
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "c260eca484c65eab",
+        "parent_span_id": "93524a8e8eaa1977",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "3e59572b3fcc353c",
+        "parent_span_id": "c260eca484c65eab",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "18d88cd6259a60ab",
+        "parent_span_id": "93524a8e8eaa1977",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "execute_tool read",
+        "kind": "TOOL",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "bff83738e65ad7ee",
+        "parent_span_id": "18d88cd6259a60ab",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "7db90517e6ab2225",
+        "parent_span_id": "18d88cd6259a60ab",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "13541134eecee1f8c30ef555ff3dcc98",
+        "span_id": "8a72036bd3730a7a",
+        "parent_span_id": "93524a8e8eaa1977",
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh agent/inbox/spliced",
+        "kind": "UNKNOWN",
+        "trace_id": "b8e5f150b8a2491915ee4c6661df76e1",
+        "span_id": "e74680f16571bcff",
+        "parent_span_id": null,
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh approval/policy",
+        "kind": "UNKNOWN",
+        "trace_id": "2cad74b0391d5902cc97f83b110f20de",
+        "span_id": "0c5bffa1e6912029",
+        "parent_span_id": null,
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh sandbox/mode",
+        "kind": "UNKNOWN",
+        "trace_id": "9ce2886e314afc8eae485eddb6e502b2",
+        "span_id": "abacfd76689b3f3d",
+        "parent_span_id": null,
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh permission/preset",
+        "kind": "UNKNOWN",
+        "trace_id": "f4375e0d2a910f5c806a487dc7e60974",
+        "span_id": "c8b38d8424016119",
+        "parent_span_id": null,
+        "session_id": "session-29f22719-1ed1-4287-b377-f205b62c7a48",
+        "parent_session_id": null
+      }
+    ]
+  },
+  "workflow-1": {
+    "span_count": 45,
+    "trace_count": 17,
+    "root_spans": 17,
+    "orphan_children": 0,
+    "spans": [
+      {
+        "name": "invoke_agent dsh",
+        "kind": "AGENT",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "8f27c906792f64e6",
+        "parent_span_id": null,
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "2fd5c79062356550",
+        "parent_span_id": "8f27c906792f64e6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "cded8ee9fb96cc1b",
+        "parent_span_id": "2fd5c79062356550",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "a8304ba711a156d6",
+        "parent_span_id": "8f27c906792f64e6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "execute_tool workflow",
+        "kind": "TOOL",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "8c6d06dd9961c5e2",
+        "parent_span_id": "a8304ba711a156d6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "invoke_workflow dsh",
+        "kind": "UNKNOWN",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "07aac24b77b75085",
+        "parent_span_id": "a8304ba711a156d6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "invoke_agent dsh",
+        "kind": "AGENT",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "e2920e0f87e5da32",
+        "parent_span_id": null,
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "078bf6a22f09ad3e",
+        "parent_span_id": "e2920e0f87e5da32",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool structured_output",
+        "kind": "TOOL",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "ad7bd589e175ed06",
+        "parent_span_id": "078bf6a22f09ad3e",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "2e12c7584d7db71b",
+        "parent_span_id": "078bf6a22f09ad3e",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": null
+      },
+      {
+        "name": "invoke_agent dsh",
+        "kind": "AGENT",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "0204b9d56af38e03",
+        "parent_span_id": null,
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "92325d5444d88a98",
+        "parent_span_id": "0204b9d56af38e03",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool structured_output",
+        "kind": "TOOL",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "7bbb89fcc728c1aa",
+        "parent_span_id": "92325d5444d88a98",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "05b4f9748f99459f",
+        "parent_span_id": "92325d5444d88a98",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": null
+      },
+      {
+        "name": "invoke_agent dsh",
+        "kind": "AGENT",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "e3f42c3331a4c1b2",
+        "parent_span_id": null,
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "f42c8cadccbb95d0",
+        "parent_span_id": "e3f42c3331a4c1b2",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool structured_output",
+        "kind": "TOOL",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "859114cb2fb8aef2",
+        "parent_span_id": "f42c8cadccbb95d0",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "0877551894cd764e",
+        "parent_span_id": "f42c8cadccbb95d0",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "2d631a1904eb3bb2",
+        "parent_span_id": "e2920e0f87e5da32",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool read",
+        "kind": "TOOL",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "0f551aa33157c7e3",
+        "parent_span_id": "2d631a1904eb3bb2",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "e98fe0b4859115c59b1ec798a48a1f6d",
+        "span_id": "d2632dbc810e057f",
+        "parent_span_id": "2d631a1904eb3bb2",
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "0d1fd1f16e40a3ea",
+        "parent_span_id": "e3f42c3331a4c1b2",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool read",
+        "kind": "TOOL",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "bf534829edd349b4",
+        "parent_span_id": "0d1fd1f16e40a3ea",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "185a442ca74c9df1526a2dd6c0376f31",
+        "span_id": "61f2cbdfbcb45d05",
+        "parent_span_id": "0d1fd1f16e40a3ea",
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "54f1eed6dbc47b68",
+        "parent_span_id": "0204b9d56af38e03",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "execute_tool read",
+        "kind": "TOOL",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "a7655b5832f46a43",
+        "parent_span_id": "54f1eed6dbc47b68",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "e2803edb07fb4b542741100116e819a0",
+        "span_id": "9c3b67b581716e4b",
+        "parent_span_id": "54f1eed6dbc47b68",
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh agent/inbox/spliced",
+        "kind": "UNKNOWN",
+        "trace_id": "350993d2f70ce76b29321d3904b31d83",
+        "span_id": "24ec384f8a021a03",
+        "parent_span_id": null,
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh approval/policy",
+        "kind": "UNKNOWN",
+        "trace_id": "87d8984817143cbc18b4ee045d5e58b2",
+        "span_id": "8eaeea464ceeb6cb",
+        "parent_span_id": null,
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh sandbox/mode",
+        "kind": "UNKNOWN",
+        "trace_id": "fd80259482ce41272debccbdbb077f7e",
+        "span_id": "24b0b5a5c362f00d",
+        "parent_span_id": null,
+        "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh agent/inbox/spliced",
+        "kind": "UNKNOWN",
+        "trace_id": "2c198f4afe4d8e122edb7d3c3655725e",
+        "span_id": "e67fda75e341d96c",
+        "parent_span_id": null,
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh approval/policy",
+        "kind": "UNKNOWN",
+        "trace_id": "c75674fd717fc4c009f7730665b6d0db",
+        "span_id": "ddfc9611cdf702e9",
+        "parent_span_id": null,
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh sandbox/mode",
+        "kind": "UNKNOWN",
+        "trace_id": "933b798d727de512987cea8125be82e6",
+        "span_id": "01bc00e777577598",
+        "parent_span_id": null,
+        "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh agent/inbox/spliced",
+        "kind": "UNKNOWN",
+        "trace_id": "a8a684e3503d138d2e42293441c445a9",
+        "span_id": "cec03ccc194693c6",
+        "parent_span_id": null,
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh approval/policy",
+        "kind": "UNKNOWN",
+        "trace_id": "efd2678b51c8592f2489d224528b158f",
+        "span_id": "7745fb133d36c6b2",
+        "parent_span_id": null,
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "dsh sandbox/mode",
+        "kind": "UNKNOWN",
+        "trace_id": "98fc5f69691ca260e20dbde4772ecbee",
+        "span_id": "a6d8e630f84ffb77",
+        "parent_span_id": null,
+        "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+        "parent_session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4"
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "07ec6751b25403c1",
+        "parent_span_id": "a8304ba711a156d6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh step",
+        "kind": "UNKNOWN",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "d419c476ac2c6bfc",
+        "parent_span_id": "8f27c906792f64e6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "execute_tool read",
+        "kind": "TOOL",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "969ba21dab7ec99a",
+        "parent_span_id": "d419c476ac2c6bfc",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "820bc26725c28c55",
+        "parent_span_id": "d419c476ac2c6bfc",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "chat chat-model",
+        "kind": "LLM",
+        "trace_id": "9fe672b86ab4fbd0d77862bcf7fea18d",
+        "span_id": "7a84639d846a991a",
+        "parent_span_id": "8f27c906792f64e6",
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh agent/inbox/spliced",
+        "kind": "UNKNOWN",
+        "trace_id": "8ea746cfea29be77c21f538f47985ab5",
+        "span_id": "532ec35bc0681be1",
+        "parent_span_id": null,
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh approval/policy",
+        "kind": "UNKNOWN",
+        "trace_id": "520594f6e4fae7ba4be82e34916cdb66",
+        "span_id": "f61707f275945a0c",
+        "parent_span_id": null,
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh sandbox/mode",
+        "kind": "UNKNOWN",
+        "trace_id": "5d59463b0d7df5064f680ed2aafb7ac9",
+        "span_id": "c4c1738532aac3a4",
+        "parent_span_id": null,
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      },
+      {
+        "name": "dsh permission/preset",
+        "kind": "UNKNOWN",
+        "trace_id": "b6438eebbeced26dfbdbd9da9def81e0",
+        "span_id": "a21bca3f4c2a1bc4",
+        "parent_span_id": null,
+        "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+        "parent_session_id": null
+      }
+    ]
+  }
+}

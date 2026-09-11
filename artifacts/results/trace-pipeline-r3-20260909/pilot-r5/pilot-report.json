@@ -1,0 +1,367 @@
+{
+  "trials": 12,
+  "passed": 7,
+  "purpose": "Acceptance pilot only; no repeatability estimate.",
+  "cases": [
+    {
+      "family": "workflow",
+      "session": "session-007dd804-4c91-43e5-b758-4f87e974ae32",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 29"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 6f980ad08509b42df09cf93ef5d1bcfd855e83d0ff922267a1c6d364c90e475f"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/f18f21fada5e04aa8b3595e2b6278750a71ae99d86e3676bb5ef3c563628adea-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "long-context",
+      "session": "session-0f30173f-ae9d-45e8-9777-6ce79eab3ca9",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 29"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 20e84ac1771f7cd042e407636a99733e4233d610fb19d89b854e88bda300033c"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/639eb87bba16c9ea6d82d93cfdf7764ce37f15dff207e4ec0c123f065630a0d6-1/fixture\",\"before\":{\"history.txt\":{\"kind\":\"file\",\"hash\":\"eb53be3d94d6fd771db307a2d1d379bb201c5a25199afeb5deb5576494bddfda\"},\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"history.txt\":{\"kind\":\"file\",\"hash\":\"eb53be3d94d6fd771db307a2d1d379bb201c5a25199afeb5deb5576494bddfda\"},\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "ordering",
+      "session": "session-1a8f6f58-87bb-4dc0-a78d-46debda5fb60",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 24"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 f9a6fdae361a11ac3e3c38ba72d46563ef05f26d251e4e38a1d31f045955c871"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/a54852e08b6c048a5aeaff3f00d6100c893647174f68eb5ce86022a321cb765d-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"e59f855393918a034bf579a7b08c73c0518cb0c3fa904d220527e65a5581e804\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"e59f855393918a034bf579a7b08c73c0518cb0c3fa904d220527e65a5581e804\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "reconciliation",
+      "session": "session-81430c42-4e79-4db6-8d5e-3dc89c7e071c",
+      "observations": {
+        "syntax": {
+          "status": "fail",
+          "evidence": [
+            "answer event 24"
+          ]
+        },
+        "semantics": {
+          "status": "fail",
+          "evidence": [
+            "expected sha256 f6e298ea311f60bcbc403ee012d2c1c44e48704b6c9aecea820539421c05edc5"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/38862665c515a327f666dc29176bdcc451b1fc7394af038e83c546fc4470ec59-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"9003a3fd5f1bfb07e766a403162ad26dd2415532ea7df8097c2e49a90f57742c\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"9003a3fd5f1bfb07e766a403162ad26dd2415532ea7df8097c2e49a90f57742c\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "recovery",
+      "session": "session-8aff0521-28c0-4e24-a132-f36ae600017d",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 26"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 eff9600abb136dc9429a123542789d0e434bf7b3d46090198637e24c33365318"
+          ]
+        },
+        "tools": {
+          "status": "fail",
+          "evidence": [
+            "missing ordered recovery from missing.json to successful required reads"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/9fb4ec8e0a15ee4455d7624ba2ba6104ff9211fb5a2c72b145c6b83a9b651824-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "aggregation",
+      "session": "session-a0e6da84-7888-4ee6-bf45-6ba98ae08bca",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 34"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 156139a2c662d68c0f856542c41b3f949d15a3eeafcbd2d8411c7e0cc486d4e6"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/3f9289abb234787585a7218b1ad58a8b9a5d53d7733f84a0a0435e1cc2f11459-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"answer.json\":{\"kind\":\"file\",\"hash\":\"6376f9bdb36181974d34abe776fd73f3bb34788e44b31b0303e0b0b18b8c04b2\"},\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "unicode",
+      "session": "session-a6f464b4-65bd-4a58-810e-44d84a47a56a",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 24"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 40472474a76bbea56687d1feaa5c177770de5fc35b91daac9d3fa18f55005012"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/7fbfcf091673fd546d673b92495bf86e8f7a8bac03c5ba7bc33401740b8779fc-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"cad74082b4aa2a89883f3dc9366ff6046b07c93dfd309fe16155e451c95b50f3\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"cad74082b4aa2a89883f3dc9366ff6046b07c93dfd309fe16155e451c95b50f3\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "untrusted",
+      "session": "session-d8840219-5e08-4c60-bb8b-1ff44a94e053",
+      "observations": {
+        "syntax": {
+          "status": "fail",
+          "evidence": [
+            "answer event 24"
+          ]
+        },
+        "semantics": {
+          "status": "fail",
+          "evidence": [
+            "expected sha256 a86c0ad5a9dffd8488e299caa39ea0d8f12d1376a0a3abab2dee352711ceed84"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/c965b0c36617558b73b8b202279debfac68fef6de53f2f88cd6652e463c8a39b-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"59fe7ce81eebdb644037207fa39457f85ad52b31dfe1283f4f1bb84905eb1218\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"59fe7ce81eebdb644037207fa39457f85ad52b31dfe1283f4f1bb84905eb1218\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "scoped-edit",
+      "session": "session-e0fa3191-b139-42b2-b283-918b73ff9b0b",
+      "observations": {
+        "syntax": {
+          "status": "fail",
+          "evidence": [
+            "answer event 34"
+          ]
+        },
+        "semantics": {
+          "status": "fail",
+          "evidence": [
+            "expected sha256 b57549c5c124bfb7b667c81bf57fd16f770e58806f53a89bf07038ebd4866d1c"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/a212aee5718780ddafbd5584927ab61fc17e49ae85485de63d8874a5c7c940a5-1/fixture\",\"before\":{\"config.json\":{\"kind\":\"file\",\"hash\":\"aaa080c242ed3d682e5276d5179ca4b70d52081ddfe102d62f3426e08f94a6cc\"},\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"config.json\":{\"kind\":\"file\",\"hash\":\"70382d5fc48c1b02afb2f9facd7c08a15a988fdcc657283a3658f649bc062174\"},\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "lifecycle",
+      "session": "session-e75870bf-47a9-499e-9791-b87651ee7d01",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 34"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 a74001ad122bb9d6ed5f5e82c1771f59ea1bf922d8e4eede8fcf5b265900d5a8"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/2f37f6524f8112e39e3b98dca5197f455396cca95288eb38c42942e5a4ec32cc-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "delegation",
+      "session": "session-f0ddc6cb-1d23-4449-8734-a609e76c2626",
+      "observations": {
+        "syntax": {
+          "status": "fail",
+          "evidence": [
+            "answer event 30"
+          ]
+        },
+        "semantics": {
+          "status": "fail",
+          "evidence": [
+            "expected sha256 29a4ccf571c42fab787ffa633db629037fb4900a9afc4ac1eff980e58f2b63c6"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/d1e9ff7bf39aa846f653c058e0fcffa2ebc7df11961d8cd83a4ba0fb9610e6da-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"16d5b52f17215b705c487c9b3be20289b52bad631e1cf140832b1fdf2635861b\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    },
+    {
+      "family": "extraction",
+      "session": "session-f709e125-b766-449b-a97c-1a0c8b572a49",
+      "observations": {
+        "syntax": {
+          "status": "pass",
+          "evidence": [
+            "answer event 24"
+          ]
+        },
+        "semantics": {
+          "status": "pass",
+          "evidence": [
+            "expected sha256 bfabb86c15cca625c7c52ee33db1c0564b02c0844badc1b69cc31fa8529d6bd8"
+          ]
+        },
+        "tools": {
+          "status": "pass",
+          "evidence": [
+            "typed arguments and recorded results satisfy task requirements"
+          ]
+        },
+        "environment": {
+          "status": "pass",
+          "evidence": [
+            "{\"version\":2,\"scope\":\"/home/andrea/management/deepseek-harness/artifacts/results/trace-pipeline-r3-20260909/pilot-r5/.trials/3c03e1a8656ff6e5c799feca5c2b873f257fda9f9083720b787a6d55771cfe7c-1/fixture\",\"before\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"c253d3377f0e5eec2413b60317e9e0488e326e4b0dddfb9bbea7426752f8ee5c\"}},\"after\":{\"input.json\":{\"kind\":\"file\",\"hash\":\"c253d3377f0e5eec2413b60317e9e0488e326e4b0dddfb9bbea7426752f8ee5c\"}},\"failures\":[],\"status\":\"pass\"}"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "openapi": {
+    "title": "Arize-Phoenix REST API",
+    "version": "1.0"
+  },
+  "patchInputs": {
+    "__type": null
+  }
+}

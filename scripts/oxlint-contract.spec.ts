@@ -1,15 +1,39 @@
 import { spawnSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { join, relative } from 'node:path'
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { flattenDiagnosticMessageText, parseConfigFileTextToJson } from 'typescript'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-const repositoryRoot = fileURLToPath(new URL('..', import.meta.url))
+const sourceRoot = fileURLToPath(new URL('..', import.meta.url))
+let repositoryRoot: string
 const oxlintCli = fileURLToPath(new URL('../node_modules/oxlint/bin/oxlint', import.meta.url))
 const tsxCli = fileURLToPath(new URL('../node_modules/tsx/dist/cli.mjs', import.meta.url))
+
+// Type-aware probes need the real project layout, but source scanners in other
+// processes must never discover their transient files. Dependencies and native
+// declarations are shared read-only; probes live in the copied TypeScript trees.
+beforeAll(async () => {
+  repositoryRoot = await mkdtemp(join(tmpdir(), 'dsh-oxlint-contract-'))
+  const trees = new Set(['packages', 'apps', 'scripts', 'vendor', 'website', 'examples'])
+  for (const entry of await readdir(sourceRoot, { withFileTypes: true })) {
+    if (entry.isDirectory() ? !trees.has(entry.name) : !/\.(?:json|ya?ml|[cm]?js|ts)$/.test(entry.name)) continue
+    await cp(join(sourceRoot, entry.name), join(repositoryRoot, entry.name), {
+      recursive: true,
+      filter: path => !relative(sourceRoot, path).split(sep).some(part =>
+        part === 'node_modules' || part === 'lib' || part === '.generated' || part === '.sessions'),
+    })
+  }
+  await symlink(join(sourceRoot, 'node_modules'), join(repositoryRoot, 'node_modules'), 'junction')
+  await symlink(join(sourceRoot, 'native'), join(repositoryRoot, 'native'), 'junction')
+}, 90_000)
+
+afterAll(async () => {
+  if (repositoryRoot !== undefined) await rm(repositoryRoot, { recursive: true, force: true })
+}, 90_000)
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -56,7 +80,7 @@ describe('Oxlint executable contract', () => {
       // A test under packages/client states its face in the filename, so the
       // probe carries the Client suffix to reach the Client aggregate.
       ['client package test', 'packages/client/ui-trajectory/tests', 'tsconfig.client.json', '.client.ts'],
-      ['example', 'examples/headless-agent/tests', 'tsconfig.host.json'],
+      ['CLI profile test', 'apps/cli/tests/profiles/headless/tests', 'tsconfig.host.json'],
       ['website', 'website', 'tsconfig.host.json'],
     ] as const
     const source = `export function probePromise(): Promise<void> {
@@ -71,6 +95,7 @@ probePromise()
       for (const [label, parent, tsconfig, extension = '.ts'] of probes) {
         const path = join(repositoryRoot, parent, `oxlint-contract-${suffix}${extension}`)
         await writeFile(path, source)
+        expect(existsSync(join(sourceRoot, parent, `oxlint-contract-${suffix}${extension}`))).toBe(false)
         paths.push([label, relative(repositoryRoot, path), tsconfig])
       }
       const clientScript = 'scripts/client-bundle-purity.spec.ts'
@@ -105,7 +130,7 @@ probePromise()
         rm(configPath, { force: true }),
       ])
     }
-  }, 20_000)
+  }, 90_000)
 
   it('runs JavaScript compatibility and nursery rules', async () => {
     const suffix = randomUUID()
@@ -152,7 +177,7 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
         rm(configPath, { force: true }),
       ])
     }
-  }, 20_000)
+  }, 90_000)
 
   it('keeps the complete stylistic contract in Oxlint', async () => {
     const oxlintPath = join(repositoryRoot, '.oxlintrc.json')
@@ -252,7 +277,100 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
         rm(configPath, { force: true }),
       ])
     }
-  }, 20_000)
+  }, 90_000)
+
+  it('allows Session history reads only in tests or with existing-call waivers', async () => {
+    const suffix = randomUUID()
+    const configPath = await writeContractConfig(suffix)
+    const exampleRoot = `examples/oxlint-contract-${suffix}`
+    const examplePath = `${exampleRoot}/tests/reads.ts`
+    const testPaths = [
+      `packages/core/session/tests/oxlint-contract-${suffix}.ts`,
+      `apps/cli/tests/oxlint-contract-${suffix}.ts`,
+      examplePath,
+      `scripts/oxlint-contract-${suffix}.spec.ts`,
+    ]
+    const productionPaths = [
+      `packages/core/session/src/oxlint-contract-${suffix}.ts`,
+      `scripts/oxlint-contract-${suffix}.ts`,
+    ]
+    const paths = [...testPaths, ...productionPaths]
+    const reads = `import { Session, SessionSeq } from '@deepseek-ai/dsh-session'
+
+export function reads(session: Session): void {
+  session.snapshotEvents()
+  session.eventAt(SessionSeq(0))
+  session.ownEvents()
+}
+`
+    const existing = `import { Session, SessionSeq } from '@deepseek-ai/dsh-session'
+
+export function reads(session: Session): void {
+  // oxlint-disable-next-line typescript/no-deprecated -- Existing Session history read; migration deferred.
+  session.snapshotEvents()
+  // oxlint-disable-next-line typescript/no-deprecated -- Existing Session history read; migration deferred.
+  session.eventAt(SessionSeq(0))
+  // oxlint-disable-next-line typescript/no-deprecated -- Existing Session history read; migration deferred.
+  session.ownEvents()
+}
+`
+    const unrelated = `
+/** @deprecated Use the replacement API. */
+function oldApi(): void {}
+
+export function unrelatedRead(): void {
+  oldApi()
+}
+`
+
+    try {
+      await mkdir(join(repositoryRoot, exampleRoot, 'tests'), { recursive: true })
+      await writeFile(join(repositoryRoot, exampleRoot, 'tsconfig.json'), JSON.stringify({
+        extends: '../../tsconfig.base.json',
+        include: ['tests/**/*.ts'],
+      }))
+      await Promise.all([
+        ...testPaths.map(path => writeFile(join(repositoryRoot, path), reads)),
+        ...productionPaths.map(path => writeFile(join(repositoryRoot, path), existing)),
+      ])
+      const args = ['--config', relative(repositoryRoot, configPath), '--format', 'unix', ...paths]
+      const allowed = runRepositoryOxlint(args)
+      expect(allowed.error).toBeUndefined()
+      expect(allowed.signal).toBeNull()
+      expect(allowed.status, normalizedOutput(allowed)).toBe(0)
+
+      await Promise.all([
+        ...testPaths.map(path => writeFile(join(repositoryRoot, path), reads + unrelated)),
+        ...productionPaths.map(path => writeFile(join(repositoryRoot, path), reads)),
+      ])
+      const rejected = runRepositoryOxlint(args)
+      const output = normalizedOutput(rejected)
+      expect(rejected.error).toBeUndefined()
+      expect(rejected.signal).toBeNull()
+      expect(rejected.status, output).toBe(1)
+      const diagnostics = output.split('\n').filter(line => /:\d+:\d+: `\w+` is deprecated\./.test(line))
+      for (const path of testPaths) {
+        const reported = diagnostics.filter(line => line.startsWith(`${path}:`))
+        expect(reported, output).toHaveLength(1)
+        expect(reported[0]).toContain('`oldApi` is deprecated')
+      }
+      for (const path of productionPaths) {
+        expect(diagnostics.filter(line => line.startsWith(`${path}:`)), output).toHaveLength(3)
+      }
+      for (const method of ['snapshotEvents', 'eventAt', 'ownEvents', 'oldApi']) {
+        expect(output).toContain(`\`${method}\` is deprecated`)
+      }
+      expect(output).toContain(
+        'See the [Agent Note](../../../../.agents/notes/implemented/architecture/2026-09-09-deprecate-synchronous-session-event-reads.md).',
+      )
+    } finally {
+      await Promise.all([
+        ...paths.filter(path => path !== examplePath).map(path => rm(join(repositoryRoot, path), { force: true })),
+        rm(join(repositoryRoot, exampleRoot), { recursive: true, force: true }),
+        rm(configPath, { force: true }),
+      ])
+    }
+  }, 90_000)
 
   it('accepts an ignored-only staged selection', () => {
     const result = runOxlint([
@@ -371,6 +489,6 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
         await rm(directory, { recursive: true, force: true })
       }
     },
-    20_000,
+    90_000,
   )
 })

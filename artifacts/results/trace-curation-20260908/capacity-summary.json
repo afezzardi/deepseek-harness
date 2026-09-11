@@ -1,0 +1,39 @@
+{
+  "requests": 865,
+  "status": {
+    "200": 865
+  },
+  "peak_forwarded": 4,
+  "peak_waiting_at_admission": 10,
+  "queue_seconds": {
+    "count": 865,
+    "p50": 5.364418029785156e-05,
+    "p95": 4.27698278427124,
+    "max": 15.895700454711914
+  },
+  "provider_seconds": {
+    "count": 865,
+    "p50": 1.945366621017456,
+    "p95": 9.52427887916565,
+    "max": 34.00635838508606
+  },
+  "end_to_end_seconds": {
+    "count": 865,
+    "p50": 2.543036937713623,
+    "p95": 11.562890529632568,
+    "max": 36.77390694618225
+  },
+  "streamed": 0,
+  "first_byte_observed": 0,
+  "scope": "Recording proxy phases only; Web and audit traffic used direct deployment route.",
+  "engine": {
+    "samples": 240,
+    "failed_samples": 0,
+    "peak_running": 4.0,
+    "peak_waiting": 0.0,
+    "scope": "Sampled lower bounds; shared engine counters include other consumers.",
+    "prefix_cache_queries_total_delta": 2538931.0,
+    "prefix_cache_hits_total_delta": 1756160.0,
+    "request_success_total_delta": 371.0
+  }
+}

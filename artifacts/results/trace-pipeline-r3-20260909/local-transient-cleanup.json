@@ -1,0 +1,8 @@
+{
+  "removed": [
+    "artifacts/results/trace-pipeline-r3-20260909/.restore-before",
+    "artifacts/results/trace-pipeline-r3-20260909/.restore-final",
+    "artifacts/results/trace-pipeline-r3-20260909/.experiment-columns.log"
+  ],
+  "retained": "Both private backup directories and public restore receipts; canonical stores and recordings retained"
+}

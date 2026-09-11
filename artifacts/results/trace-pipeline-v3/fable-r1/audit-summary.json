@@ -1,0 +1,1748 @@
+{
+  "version": 2,
+  "sessions": 206,
+  "graded": 144,
+  "failures": 87,
+  "instances": 48,
+  "families": 12,
+  "candidates": 211,
+  "eligibleTargets": 126,
+  "toolDecisions": {
+    "considered": 295,
+    "selected": 69,
+    "rejections": [
+      {
+        "session": "session-00cdbd26-e45b-4303-b0fb-12cde76b9bb6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-00cdbd26-e45b-4303-b0fb-12cde76b9bb6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-00cdbd26-e45b-4303-b0fb-12cde76b9bb6",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-03c4b708-bd1f-4019-89d5-57fe248ee256",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-03c4b708-bd1f-4019-89d5-57fe248ee256",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-046742ed-9061-42c3-9a00-bfa8a1fa28d6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-088a3dd3-be9c-4cda-9291-ca976fb1746e",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-088a3dd3-be9c-4cda-9291-ca976fb1746e",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-088a3dd3-be9c-4cda-9291-ca976fb1746e",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-08e57877-c4f2-4f05-aa91-dccfa3117211",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-08e57877-c4f2-4f05-aa91-dccfa3117211",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-08e57877-c4f2-4f05-aa91-dccfa3117211",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-0a780eea-38ba-477e-9e54-3501ab0046da",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-0a780eea-38ba-477e-9e54-3501ab0046da",
+        "event": 23,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-0a780eea-38ba-477e-9e54-3501ab0046da",
+        "event": 30,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-0d287ba5-29aa-415c-a43b-b5d612e01840",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-0d287ba5-29aa-415c-a43b-b5d612e01840",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-11e7b1c7-64b0-4b04-8cfe-05f3f1a236d2",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-11e7b1c7-64b0-4b04-8cfe-05f3f1a236d2",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-1514bbf4-b61f-492c-9222-2faac75e95c7",
+        "event": 16,
+        "reason": "Error: Mixed tool/text target is unsupported"
+      },
+      {
+        "session": "session-17a254ca-428a-4d8c-8cfb-f7e0294940e8",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-19d473b1-d7ab-48cd-936c-89e79d6f2d8d",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-1df994cf-8584-4b66-b82b-a0a1f5781133",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-23dfca0d-ffbb-43b0-9e2d-5483d675a15e",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-23dfca0d-ffbb-43b0-9e2d-5483d675a15e",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-28c47e29-ae32-40ed-a3c0-e381b480fc96",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-28c47e29-ae32-40ed-a3c0-e381b480fc96",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-2c1957cc-d22d-4eab-9018-230f3d7f222a",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-2c1ed7a5-5c08-434a-a907-5a182487b256",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-2c1ed7a5-5c08-434a-a907-5a182487b256",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-2e2689ba-3f3c-499e-ae9e-4e6fb7e324e7",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-2e493c3b-0300-4823-9bb7-f071bc7d86b6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-2e493c3b-0300-4823-9bb7-f071bc7d86b6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-33e0d9ac-137c-477e-a1f2-2baee0660482",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-33e0d9ac-137c-477e-a1f2-2baee0660482",
+        "event": 23,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3720e39a-ee1e-40ac-9c84-acd78693ed3c",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3720e39a-ee1e-40ac-9c84-acd78693ed3c",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3720e39a-ee1e-40ac-9c84-acd78693ed3c",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3720e39a-ee1e-40ac-9c84-acd78693ed3c",
+        "event": 38,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-37f0b42d-94b7-4198-8f70-268cf0aed635",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-37f0b42d-94b7-4198-8f70-268cf0aed635",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-37f0b42d-94b7-4198-8f70-268cf0aed635",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-37f0b42d-94b7-4198-8f70-268cf0aed635",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-37f0b42d-94b7-4198-8f70-268cf0aed635",
+        "event": 51,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3bc3537c-b478-4664-bfe3-bd21f4bd3bf1",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3bc3537c-b478-4664-bfe3-bd21f4bd3bf1",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3cdee992-b225-4ab7-8fe2-c23fab4a6130",
+        "event": 24,
+        "reason": "Error: Mixed tool/text target is unsupported"
+      },
+      {
+        "session": "session-3d7f05cb-89e8-476b-9c88-c361944ec918",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3ec94697-7560-4e86-8cbc-9e59d62dd0e4",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3ec94697-7560-4e86-8cbc-9e59d62dd0e4",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-3ec94697-7560-4e86-8cbc-9e59d62dd0e4",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-47db7729-102d-4635-99b3-bd2d5094e22f",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-47db7729-102d-4635-99b3-bd2d5094e22f",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-48b26482-8775-431a-831d-7633df3eb3b6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-48b26482-8775-431a-831d-7633df3eb3b6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-48b26482-8775-431a-831d-7633df3eb3b6",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-48b26482-8775-431a-831d-7633df3eb3b6",
+        "event": 34,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-48b26482-8775-431a-831d-7633df3eb3b6",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4c0c5e75-b777-48fc-af29-76d685b3aab6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4c0c5e75-b777-48fc-af29-76d685b3aab6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4c178014-b0cc-4a80-99a4-bf8aa2c2fffd",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4c178014-b0cc-4a80-99a4-bf8aa2c2fffd",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4df0e1fb-e4e4-427b-825d-2be56b4c7afa",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4f909e7c-a275-4570-a556-668eb3b69442",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4f909e7c-a275-4570-a556-668eb3b69442",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-4fe0f008-c388-45c8-bff7-0278956287c0",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-50f59fb7-d0e6-409e-af83-98e951d7b217",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-50f59fb7-d0e6-409e-af83-98e951d7b217",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-53870435-f930-48a7-b3f5-8b9380afba65",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-53870435-f930-48a7-b3f5-8b9380afba65",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-548b4a7a-62c4-470c-a74f-19f99397057b",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-548b4a7a-62c4-470c-a74f-19f99397057b",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-548b4a7a-62c4-470c-a74f-19f99397057b",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-55beef79-c9fe-458b-82d1-87d1cfb3074d",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-55beef79-c9fe-458b-82d1-87d1cfb3074d",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-5d467472-145e-4649-9fab-e8f7760a8da5",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-63af0306-bace-4189-baf8-de1a3a816da4",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-63af0306-bace-4189-baf8-de1a3a816da4",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-63af0306-bace-4189-baf8-de1a3a816da4",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-63af0306-bace-4189-baf8-de1a3a816da4",
+        "event": 34,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-63af0306-bace-4189-baf8-de1a3a816da4",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-67aa4ad4-70a8-410c-98f8-9db5528cf10c",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-67aa4ad4-70a8-410c-98f8-9db5528cf10c",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-67aa4ad4-70a8-410c-98f8-9db5528cf10c",
+        "event": 37,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6906ea17-2bc7-4dfb-8030-ab75bd10088a",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6906ea17-2bc7-4dfb-8030-ab75bd10088a",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6aa33528-e5a3-4ba1-bcef-0fec0c9b50d6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6aa33528-e5a3-4ba1-bcef-0fec0c9b50d6",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6ea05a24-8d25-4505-8ca9-7745b06722d1",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-6ea05a24-8d25-4505-8ca9-7745b06722d1",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-745cef44-b4a8-4b97-9817-83c49894b116",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-745cef44-b4a8-4b97-9817-83c49894b116",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-745cef44-b4a8-4b97-9817-83c49894b116",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-76e2c047-abc3-4b5a-8f7b-3fa38d81e790",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-79020185-fe94-48aa-8340-5c5636ebedfc",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 34,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 44,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 49,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 54,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7abbb90e-fd23-46a0-8bb3-218ffee10b4f",
+        "event": 59,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-7e8853fa-4a4f-4a92-bb1e-7d6f6d6628fc",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-81f19cfd-40ce-487b-93d9-22158480c3da",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-82dbeef1-f5c7-49ab-9ec7-78aa8326abb1",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-82dbeef1-f5c7-49ab-9ec7-78aa8326abb1",
+        "event": 23,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-82dbeef1-f5c7-49ab-9ec7-78aa8326abb1",
+        "event": 32,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-83d87149-31d9-4e72-9cf4-df111d0da4ef",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-83d87149-31d9-4e72-9cf4-df111d0da4ef",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-85f1609b-2e0a-4dc4-bf21-193dace753f8",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-85f1609b-2e0a-4dc4-bf21-193dace753f8",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-85f1609b-2e0a-4dc4-bf21-193dace753f8",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-89a77dd8-a609-440e-ac55-fcde888aad0a",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-89a77dd8-a609-440e-ac55-fcde888aad0a",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-8f066da3-4bb3-44a1-bfa3-bf29dee8e700",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-8f066da3-4bb3-44a1-bfa3-bf29dee8e700",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-92780174-57e4-4654-89ea-aa69de915619",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-92780174-57e4-4654-89ea-aa69de915619",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-92780174-57e4-4654-89ea-aa69de915619",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-95d90e07-2609-40cf-a24e-c8226b740ee1",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-95d90e07-2609-40cf-a24e-c8226b740ee1",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-95d90e07-2609-40cf-a24e-c8226b740ee1",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-95d90e07-2609-40cf-a24e-c8226b740ee1",
+        "event": 44,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-95d90e07-2609-40cf-a24e-c8226b740ee1",
+        "event": 53,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9c03764f-7a6d-465a-a5f3-6c9b7974b117",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9c03764f-7a6d-465a-a5f3-6c9b7974b117",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9c03764f-7a6d-465a-a5f3-6c9b7974b117",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9c1f7ec1-cd0d-46ab-840b-e27c493f48bb",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-9da49917-6ed0-44bb-8a38-a83635a18d71",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9da49917-6ed0-44bb-8a38-a83635a18d71",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9fecdf3d-aa4c-4a81-880d-b910ffe2176f",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9fecdf3d-aa4c-4a81-880d-b910ffe2176f",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-9fecdf3d-aa4c-4a81-880d-b910ffe2176f",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a05bca22-b458-4e1c-9b36-c84682de9c4e",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a05bca22-b458-4e1c-9b36-c84682de9c4e",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a05bca22-b458-4e1c-9b36-c84682de9c4e",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a05c9332-075e-4749-995c-c9783ffd7c10",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a05c9332-075e-4749-995c-c9783ffd7c10",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a6582f71-8b12-4d76-b121-411bd9227517",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a6582f71-8b12-4d76-b121-411bd9227517",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a6582f71-8b12-4d76-b121-411bd9227517",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a6efc53f-d628-48de-ad5d-053888813ef4",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a787f7d0-b02d-4387-a7e2-30673b835c64",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a787f7d0-b02d-4387-a7e2-30673b835c64",
+        "event": 23,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-a787f7d0-b02d-4387-a7e2-30673b835c64",
+        "event": 30,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ae3095db-9c9d-450d-aec9-04e8ba440025",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ae3095db-9c9d-450d-aec9-04e8ba440025",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ae3095db-9c9d-450d-aec9-04e8ba440025",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b1aa9f57-1a76-4b89-83d8-0930f041eac4",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-b29872a7-2822-495c-96a2-ac48402eaf41",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-b4715789-cf11-4577-8d73-405f8282a524",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b4715789-cf11-4577-8d73-405f8282a524",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 34,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 44,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 49,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b49f7f1c-74c6-4512-803b-c56c7ae7bb76",
+        "event": 54,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b8979ba1-aacf-4742-aa98-183f374eb573",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-b8979ba1-aacf-4742-aa98-183f374eb573",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-bce4089d-ffd2-4c27-a938-7ca61bcb0b91",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-bce4089d-ffd2-4c27-a938-7ca61bcb0b91",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-bfc66438-239b-46d7-b15a-26183e6d8dc4",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-c0a2aa4d-05a0-4131-87b0-f37a1cb62dc0",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-c3c71018-9e59-486d-9394-0cae07e50630",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-c3c71018-9e59-486d-9394-0cae07e50630",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-c3c71018-9e59-486d-9394-0cae07e50630",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-c3c71018-9e59-486d-9394-0cae07e50630",
+        "event": 34,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-c3c71018-9e59-486d-9394-0cae07e50630",
+        "event": 39,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-cad04c3e-53eb-4c9d-972a-fd317d2d2434",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-cad04c3e-53eb-4c9d-972a-fd317d2d2434",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-cfd31986-681b-4c7d-8816-3d9b29f2b6be",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-cfd31986-681b-4c7d-8816-3d9b29f2b6be",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d020a074-cc8e-4f9c-b255-2ece12bef0fd",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d020a074-cc8e-4f9c-b255-2ece12bef0fd",
+        "event": 23,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d020a074-cc8e-4f9c-b255-2ece12bef0fd",
+        "event": 30,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d359f282-6a79-477b-8b9e-ba6fc10fed95",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d359f282-6a79-477b-8b9e-ba6fc10fed95",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d5e86cb7-d7db-4889-9193-24f93bc5dfa7",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d5e86cb7-d7db-4889-9193-24f93bc5dfa7",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-d8e3b5ab-d841-4cbd-9685-849bf2e486a0",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-daf26882-1422-4b64-9895-428b38afbf38",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-db10726f-26ae-4bae-9c0d-f8f5a5c13019",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-dfcb78b4-6bba-4785-8dcd-74d16091a73a",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-dfcb78b4-6bba-4785-8dcd-74d16091a73a",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e0eb5093-4ff5-4fb5-af31-6c7a9343814d",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e0eb5093-4ff5-4fb5-af31-6c7a9343814d",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e0eb5093-4ff5-4fb5-af31-6c7a9343814d",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e2d02d73-184c-4d31-9b1a-867697a13e0c",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e2d02d73-184c-4d31-9b1a-867697a13e0c",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e5051401-01ca-44fe-83cf-1058d515c277",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-e534911f-9789-4343-92bb-43182a2ca15c",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e534911f-9789-4343-92bb-43182a2ca15c",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e628fc31-2dd3-4353-a2ec-bc5249b63661",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e628fc31-2dd3-4353-a2ec-bc5249b63661",
+        "event": 21,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e628fc31-2dd3-4353-a2ec-bc5249b63661",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e628fc31-2dd3-4353-a2ec-bc5249b63661",
+        "event": 42,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e6fbf136-891b-454e-ac80-5d0e6ff7cd71",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e6fbf136-891b-454e-ac80-5d0e6ff7cd71",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-e6fbf136-891b-454e-ac80-5d0e6ff7cd71",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-eb35bd79-95fd-4ace-8e67-6b219be5c6b6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-eb35bd79-95fd-4ace-8e67-6b219be5c6b6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-eb35bd79-95fd-4ace-8e67-6b219be5c6b6",
+        "event": 31,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-eba4cb23-c9f8-4f73-ae51-0bf96a24b7a8",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ec00ae68-f022-4ad5-9815-632c6572e0d6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ec00ae68-f022-4ad5-9815-632c6572e0d6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ec00ae68-f022-4ad5-9815-632c6572e0d6",
+        "event": 29,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ed4991d1-637f-42ed-8b38-90199f468f1b",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ed4991d1-637f-42ed-8b38-90199f468f1b",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-edca1f83-9e76-4808-9bf7-183858d8b77d",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-edca1f83-9e76-4808-9bf7-183858d8b77d",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ee75a93d-ddbc-479f-9eaf-d640d5d52ebf",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-ee75a93d-ddbc-479f-9eaf-d640d5d52ebf",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-f2b1be41-c31f-46ea-a5ee-d8a5c7c2a7b6",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-f2b1be41-c31f-46ea-a5ee-d8a5c7c2a7b6",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-f7685b35-f0d9-4409-91ea-4192f796379b",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-f7685b35-f0d9-4409-91ea-4192f796379b",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-f8d04fa7-fc3f-4504-abad-750222f7ec5d",
+        "event": 16,
+        "reason": "Error: Tool-decision selection is limited to the terminal completed turn"
+      },
+      {
+        "session": "session-fa20adf8-07a0-401a-85d1-dc4959acae98",
+        "event": 15,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-fa20adf8-07a0-401a-85d1-dc4959acae98",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-fdebe08c-2859-4f0b-a4e9-154e80f8e452",
+        "event": 16,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      },
+      {
+        "session": "session-fdebe08c-2859-4f0b-a4e9-154e80f8e452",
+        "event": 24,
+        "reason": "Error: Root trajectory has no eligible final-answer candidate"
+      }
+    ]
+  },
+  "conflicts": [],
+  "rejected": [
+    {
+      "session": "003c4595-1fdd-4055-89c2-410dc7ab6d04",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "01fabd4c-f876-4bc8-96ce-dfad00aa7513",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "080bc8a6-c149-4015-8413-0e7aa99ac739",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "08c456e3-a071-415b-b9bc-74ed3033f80a",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "0a5deff9-1cc4-4b72-941c-d1e7b2d6182b",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "0da4a839-5347-4a30-b114-92843b66a9bc",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "15418ea1-be79-4b68-b3a3-4ad733edca10",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "15fe46e0-b146-4647-aede-321c0d3981d8",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "18b18dc7-9dcb-434b-b4f5-bafb6c42fc01",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "21466308-2ad0-417f-94b4-852eefdc00f6",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "26ff7553-e205-43f7-b3e7-5142a58b5a35",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "30a68e49-23ad-4547-b0f0-ee6692f4d2d7",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3300bf52-f63f-4e0b-88cb-1bea2f35f246",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3766b76b-eb05-4e23-b84f-21bd3cd72f6a",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "39b9efff-f1f5-4963-bf7b-896a3a09aba0",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3b9a06b7-a475-4778-9ef3-a5905e2d3ff0",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3bfde43e-231a-4c8e-ab79-d6d4aa336784",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3c313ac9-10e5-4d8f-b169-8cf46a6b5f3b",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "3fe61e01-f389-454c-b6bf-72f769b6a075",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "4596f322-ea4f-4d4d-9a1b-7f23efdb4169",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "4e522d9b-37bc-4976-9ba9-dff589634839",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "4eb8c2f0-e88c-475e-a7c7-e59259eeada2",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "518be7e1-13c9-4e12-9a17-78460ca623ab",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "532ba724-4733-4948-bb0a-11e2f69785b9",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "57e93baa-3292-4004-a871-04a11fb0eb63",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "5887e15d-a9cb-42c4-a97a-29d4dcd549de",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "5ba842a9-53f3-4e38-b465-0ddca34cd2ba",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "5bbae615-310f-4398-a37b-1d5ef8d8440e",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "5f1b5334-77d2-45e9-80a9-3ede95114097",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "608b67e7-ef7a-4edf-92ad-3eb7156e192c",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "620bb1ff-9297-452a-9d2b-b1039d7358b3",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "699f99c0-1cd9-4f17-8530-ccdeb79e5a56",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "6e84f9f0-6135-4058-8c5f-b6848da8a36a",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "6f815c5e-7988-4d41-b08d-d4fa77a278f2",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "8528a3aa-9835-4187-996a-4af911566da9",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "855ea448-3344-42d9-901f-c355fa278bca",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "8b40a265-6e49-45b7-b2d1-da944be5af6c",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "8c5ad415-1a7d-42d8-aa9b-30e816b16d25",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "8d6ab9b1-c7af-47c3-a00c-89daa2ffe5b1",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "8fd8cfaa-8d2f-4baa-ab91-852958fef540",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "963d946f-76c4-447e-b35e-ea7a7eef2873",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "9884e361-2af9-44dc-9c1e-19ca9b9b397f",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "99329c56-4f3c-4a0d-8947-51129b62d0dd",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "9c157989-e406-4608-9e9b-dbb634844d68",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "a0da7baf-f810-4b2a-9466-a1d67a787eea",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "a3ff6a5d-aa41-4405-9b28-a856f6bb31f5",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "a46bc5e8-85e7-4d2a-806d-097756edc8d6",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "a7e3067c-476d-4b66-9f27-8f69eff354d4",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "af8962ec-c83a-49bd-9789-9e12c64516fd",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "bde32d6b-473c-4c64-8d26-5f21ccc6f65b",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "be80109b-8d89-48ba-a3e6-341f4cf552c6",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "c293b919-2d4a-42d0-b774-d7b224da121f",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "d2f20873-02b7-4476-aba8-43d8264e08c8",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "d3522de8-b973-4317-a806-37d4a2b5d114",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "d529472d-d7cc-4b8f-aad2-ef4893a5f7d4",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "e3a55e27-a227-44e6-983a-b2ac7f83ca40",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "e567406d-eebf-4392-8a41-b5a05f862411",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "e68089f2-f3d9-4c49-94c4-84da43ccb4b9",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "f272e2f3-3de1-45c0-942e-91b097dd5fd2",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "f4454d76-577b-4b3a-ada7-4f5537d9e416",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "f86022d2-f288-4a6c-884c-1f48daba4706",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "fdeb26c4-3399-40d2-9c7f-521abaffedc0",
+      "reason": "Error: Missing independent unambiguous task grade",
+      "retryable": false
+    },
+    {
+      "session": "session-1099a5d9-16ac-4173-a95f-863657668f85",
+      "reason": "Error: Missing owned assistant target"
+    },
+    {
+      "session": "session-bfc66438-239b-46d7-b15a-26183e6d8dc4",
+      "reason": "Error: Incomplete or failed turn"
+    }
+  ],
+  "telemetry": [],
+  "exportRejections": [
+    {
+      "session": "session-00df0f44-96ea-42f2-8a7c-fd87544958bd",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-0e444481-51f1-46c6-95ee-0cb2fc54901b",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1401568d-3b21-4e11-8c6e-e5bcf6c3080a",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eafb86b-d791-4382-9e70-ef2f2fe720e0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eafb86b-d791-4382-9e70-ef2f2fe720e0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eafb86b-d791-4382-9e70-ef2f2fe720e0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eb931c4-1a26-4a9c-98f6-216c41fea03c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eb931c4-1a26-4a9c-98f6-216c41fea03c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-1eb931c4-1a26-4a9c-98f6-216c41fea03c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-254385be-f992-4f04-864a-6f993e00848e",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-25b0d0ea-ae18-4edf-957b-10f0ceb71575",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-284e55ba-4f29-4e00-9e3c-e681d55f300b",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-2e112c44-41be-44b8-9f4d-450e4f35b54f",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-3542b8e1-4b93-4042-8cfe-99c815b75e85",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-3c54323e-b914-442f-bead-51d35a526a02",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-3cdee992-b225-4ab7-8fe2-c23fab4a6130",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-3cdee992-b225-4ab7-8fe2-c23fab4a6130",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-42a9594a-fafc-4051-b80b-5aba01c00f01",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-42a9594a-fafc-4051-b80b-5aba01c00f01",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-58ed18e7-2fe3-4b7d-87c9-14ab93374575",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-61b82aec-9439-4651-9779-315fc036189c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-61b82aec-9439-4651-9779-315fc036189c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-61b82aec-9439-4651-9779-315fc036189c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-648faa79-204d-4fd2-9003-61e9dbd94625",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-6a73cace-8b4f-48a1-b0a8-05538f92de6f",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-6bb0f49c-f60a-4061-8de8-eaa3448eb75e",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-6bb0f49c-f60a-4061-8de8-eaa3448eb75e",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-6bb0f49c-f60a-4061-8de8-eaa3448eb75e",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-73b340e4-fd9c-4946-b759-94c2fa09fa5c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-73b340e4-fd9c-4946-b759-94c2fa09fa5c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-73b340e4-fd9c-4946-b759-94c2fa09fa5c",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-74301b95-0161-4742-88fa-1a753c2d7661",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-74301b95-0161-4742-88fa-1a753c2d7661",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-7b3e4772-0ab9-4a76-9cc0-ebe94262aceb",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-7d3b12b5-aa68-4863-a741-e053c5c9cee8",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-85e225db-b4b3-4c3e-8b8f-be82f88e1893",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-869f04c4-0b7a-4604-9322-6505b4aee417",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-8beecdff-76b5-4ea1-831b-bc3b19019c0b",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-8beecdff-76b5-4ea1-831b-bc3b19019c0b",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-8beecdff-76b5-4ea1-831b-bc3b19019c0b",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-913ce32c-44ac-40c7-a1ed-7f2a536e6173",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-913ce32c-44ac-40c7-a1ed-7f2a536e6173",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-913ce32c-44ac-40c7-a1ed-7f2a536e6173",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-91d432d4-6d14-4054-a0db-394fc5bfff92",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-9b3e84d5-aa13-4539-bef6-4c38bed00933",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-9d1044aa-a769-4f3a-b2e6-ba53bc5aecf0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-9d1044aa-a769-4f3a-b2e6-ba53bc5aecf0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-a55b300b-91a0-4ec7-9b8e-33b55ff30b92",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-ab90dca3-96c4-46fe-818a-490bdb71c94f",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-ab90dca3-96c4-46fe-818a-490bdb71c94f",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-ad389d14-520e-414c-b2d6-dce98f671b20",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-ad988c9b-df46-4848-8094-4764b4d9aef2",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-ad988c9b-df46-4848-8094-4764b4d9aef2",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-bd50fecc-e26d-4374-8944-75540bad30c9",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-bd50fecc-e26d-4374-8944-75540bad30c9",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-bfe71aa1-4d06-4550-9edb-646ddceefcde",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-c0bdf69c-54c9-4f69-88bc-7a547f539898",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-c53b1260-8661-42d6-a915-f538949b4aaf",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-d08a5c41-cffc-4990-90e0-608cf2107e01",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-d67d08e3-795f-42be-9a25-3806d7945acb",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-dd31ab67-cfb6-43ad-8bf8-001fbb9adc7a",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-dd31ab67-cfb6-43ad-8bf8-001fbb9adc7a",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-f2336aa5-0f59-4a58-82c0-631ca3e8f57d",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-f47b8c88-723c-41e3-b8aa-0932389a21d5",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-f47b8c88-723c-41e3-b8aa-0932389a21d5",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-f47b8c88-723c-41e3-b8aa-0932389a21d5",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-fd73c2e7-709a-4ea2-bfb5-9e90010c19f0",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-fed872b2-6212-4b75-95b4-661c31cdc2c6",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    },
+    {
+      "session": "session-fed872b2-6212-4b75-95b4-661c31cdc2c6",
+      "reason": "Error: Fireworks exporter cannot express the selected loss mask"
+    }
+  ],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

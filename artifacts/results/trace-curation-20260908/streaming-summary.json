@@ -1,0 +1,25 @@
+{
+  "trials": 100,
+  "syntax": 97,
+  "semantics": 88,
+  "process_failures": 0,
+  "requests": 270,
+  "streamed": 270,
+  "http_failures": 0,
+  "first_byte_seconds": {
+    "p50": 0.4652596712112427,
+    "p95": 1.7271521091461182,
+    "max": 1.801809549331665
+  },
+  "completion_seconds": {
+    "p50": 2.1153899431228638,
+    "p95": 5.862853765487671,
+    "max": 9.617328643798828
+  },
+  "queue_seconds": {
+    "p50": 5.996227264404297e-05,
+    "p95": 1.85280179977417,
+    "max": 4.754626989364624
+  },
+  "peak_forwarded": 4
+}

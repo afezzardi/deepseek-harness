@@ -1,0 +1,159 @@
+[
+  {
+    "case": "long-input",
+    "session_id": "session-c1d08511-a4fd-4e38-a17a-5b7440a63d99",
+    "inherited_events": 0,
+    "own_events": 17,
+    "parent_id": null,
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": []
+  },
+  {
+    "case": "redaction",
+    "session_id": "session-6b724535-d34a-4766-883d-30f3f321db21",
+    "inherited_events": 0,
+    "own_events": 19,
+    "parent_id": null,
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": []
+  },
+  {
+    "case": "workflow",
+    "session_id": "15aa8b9c-e5ec-46f6-ac93-0b099309627e",
+    "inherited_events": 0,
+    "own_events": 27,
+    "parent_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": [
+      "read",
+      "structured_output"
+    ],
+    "workflow_events": []
+  },
+  {
+    "case": "workflow",
+    "session_id": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b",
+    "inherited_events": 0,
+    "own_events": 27,
+    "parent_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": [
+      "read",
+      "structured_output"
+    ],
+    "workflow_events": []
+  },
+  {
+    "case": "workflow",
+    "session_id": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3",
+    "inherited_events": 0,
+    "own_events": 27,
+    "parent_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": [
+      "read",
+      "structured_output"
+    ],
+    "workflow_events": []
+  },
+  {
+    "case": "workflow",
+    "session_id": "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4",
+    "inherited_events": 0,
+    "own_events": 40,
+    "parent_id": null,
+    "last_event": "turn/end",
+    "outcome": {
+      "kind": "completed"
+    },
+    "tool_calls": [
+      "read",
+      "workflow"
+    ],
+    "workflow_events": [
+      {
+        "type": "tool-workflow/run-start",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "name": "read-fixture-codes"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-start",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 1,
+          "label": "read fixture member-1",
+          "phase": "Read fixture",
+          "childId": "b3fb3c5e-052c-4297-9d1e-b8f40df919b3"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-start",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 2,
+          "label": "read fixture member-2",
+          "phase": "Read fixture",
+          "childId": "83ebe1c3-b407-4a96-851e-0aa4f6f6843b"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-start",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 3,
+          "label": "read fixture member-3",
+          "phase": "Read fixture",
+          "childId": "15aa8b9c-e5ec-46f6-ac93-0b099309627e"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-end",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 2,
+          "outcome": "completed"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-end",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 1,
+          "outcome": "completed"
+        }
+      },
+      {
+        "type": "tool-workflow/agent-end",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "seq": 3,
+          "outcome": "completed"
+        }
+      },
+      {
+        "type": "tool-workflow/run-end",
+        "data": {
+          "runId": "6605a9e5-3601-4c1d-a711-ed11daf0e1a5",
+          "stopReason": "completed"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "changes": [
+    {
+      "path": "baseline-r5-fidelity.log",
+      "rawSha256": "248a6a7ca8a1416e4d5cb01467f6e53b1e43b3bb90c10a8aebec0df280fc425b",
+      "presentationSha256": "dbd0e25b78bef0874994a8413ff509690c13857c35853f4dc72aab8811582d45"
+    },
+    {
+      "path": "checkpoint-lint.log",
+      "rawSha256": "2fdcda2529c8aa984c0f5ff635a5a0e735a7d057d8b6951a4c83af57df4a46bd",
+      "presentationSha256": "cce8344901b49a5fcaf823439530f9c139cb9a04cc3b0ee1aae36ac82aa2618a"
+    },
+    {
+      "path": "hf-tokenizer.log",
+      "rawSha256": "6c17bb2862b474f21ee004ecccae74ec7de07896f808f952c0084f57bbd06af7",
+      "presentationSha256": "1f8b987f77a904438164600c15aa43bc485f442846658ba044a2479352cb9e40"
+    },
+    {
+      "path": "lint.log",
+      "rawSha256": "8c2042bc5b4d9bfbff4da5db50a4d85c0f128df918bd7067e511bea13563be3d",
+      "presentationSha256": "577ee687b60f33f3970f809ebac2fe7351713b508bd61ea102117b5b324adc5d"
+    },
+    {
+      "path": "pilot-r5-fidelity.log",
+      "rawSha256": "aed68712f022e7b1d26fe5e36021cf4aa1b14512d5d25eca54eb9fd09a4611e7",
+      "presentationSha256": "c78e19e856e5d51cd9718f52042c0405ec1c7bfc26efb5202b09255d3656828e"
+    },
+    {
+      "path": "plugin-tests.log",
+      "rawSha256": "756de3fcf2fcb984b311a9e9319c37e2cf8899853e744a8e7f20bdb1ba7da1d7",
+      "presentationSha256": "bb46aa1e5601fb244a450589b27a472a99614a83b34d11300cf79d182f4edc1e"
+    },
+    {
+      "path": "r5-typecheck.log",
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "presentationSha256": "44e78e662a900c7fef6d2336317d3d5a5779f77575108180cadfce5dbd4e2b93"
+    },
+    {
+      "path": "typecheck.log",
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "presentationSha256": "44e78e662a900c7fef6d2336317d3d5a5779f77575108180cadfce5dbd4e2b93"
+    }
+  ],
+  "policy": "Trim trailing whitespace and surplus final blank lines in public logs; retain original bytes privately under .raw-command-logs. Label empty output explicitly."
+}

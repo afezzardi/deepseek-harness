@@ -1,0 +1,80 @@
+{
+  "route": {
+    "checkpoint": "unsloth/Qwen3.8-27B-NVFP4@7d6f8d4d72f56b92b3cdbf22f156b90e1bab0108",
+    "tokenizer": "unsloth/Qwen3.8-27B-NVFP4@7d6f8d4d72f56b92b3cdbf22f156b90e1bab0108",
+    "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+    "modelAlias": "chat-model",
+    "inspectionEvidence": "engine-command.json; deployed-tokenizer-hashes.log",
+    "tokenizeEndpoint": "http://100.108.76.12:4000/engine/tokenize",
+    "apiKeyEnv": "LITELLM_MASTER_KEY"
+  },
+  "templateKwargs": {
+    "enable_thinking": true,
+    "reasoning_effort": "medium"
+  },
+  "cases": [
+    {
+      "case": "tool-trajectory",
+      "syntheticFixture": true,
+      "rowHash": "ac81b1cb08c46070711353f57b683efd64027d8846dd156ec8ed71460d51b2e8",
+      "tokens": 8514,
+      "lossTokens": 15,
+      "requestParity": true,
+      "fullExampleParity": true,
+      "maskHash": "118a0f923e61fd57a8bc8256f94f867c07a0d7e931d538226a1cdfba4b749867",
+      "renderHash": "ef9b0e0f09191650cd3120a77721912a9abb2d228ed72b824839fa3c80e22a3b"
+    },
+    {
+      "case": "final-answer",
+      "syntheticFixture": true,
+      "rowHash": "c820eca0468dde2d94992d9e0c93fc0a7eebd4d295bcbc2a7dd820519d3f2bcc",
+      "tokens": 7735,
+      "lossTokens": 15,
+      "requestParity": true,
+      "fullExampleParity": true,
+      "maskHash": "dee7044d3b9123c962a6bb66b1f71a40682c74de0b1e78f4734e5c38d1a28c4f",
+      "renderHash": "f61516fc02eddc73f79445e54906abc121397ab70261e4e476c81904834faedf"
+    },
+    {
+      "case": "reasoning-bearing",
+      "syntheticFixture": true,
+      "rowHash": "30d5413aecfe29adfaa9360fd53543f528862dce87e700aae1ccb4154b5b3da1",
+      "tokens": 8514,
+      "lossTokens": 15,
+      "requestParity": true,
+      "fullExampleParity": true,
+      "maskHash": "118a0f923e61fd57a8bc8256f94f867c07a0d7e931d538226a1cdfba4b749867",
+      "renderHash": "ef9b0e0f09191650cd3120a77721912a9abb2d228ed72b824839fa3c80e22a3b"
+    },
+    {
+      "case": "recovery",
+      "syntheticFixture": true,
+      "rowHash": "2def17878fc6dda307a996f65940fab203040ca6b8a04db0f027b0d1ca4aaf18",
+      "tokens": 8324,
+      "lossTokens": 15,
+      "requestParity": true,
+      "fullExampleParity": true,
+      "maskHash": "9b51b1ea1e8d61e7641ee6b82b0796f6dc54e9c298cefd4f81de4e066eae5d7a",
+      "renderHash": "ca71d65d813705d8ea3d9284cc2696ebf2d765cc80538e4c9abd0333e97cf058"
+    },
+    {
+      "case": "long-context",
+      "syntheticFixture": true,
+      "rowHash": "42ef898fc72def69a281d893f3eb7fdb9d704fed8bb12b55bec625832e8675f2",
+      "tokens": 44514,
+      "lossTokens": 15,
+      "requestParity": true,
+      "fullExampleParity": true,
+      "maskHash": "cbd6cbddff8cec068c8fd0817d5170fd42e4fd559e81ea4bad181ae190bd5b04",
+      "renderHash": "85b73e2ae088c5107ae3a57bc69df7649338898cf9965701adf6f69afabb75e7"
+    }
+  ],
+  "reasoningTransportField": "reasoning",
+  "objective": "synthetic final-answer format only; target reasoning omitted; source answer whitespace stripped explicitly for these controls",
+  "realCandidateAccepted": false,
+  "realCandidateRejection": "renderer-real-candidate-rejection.json",
+  "toolDecisionMasksSupported": false,
+  "productionThinkingTrainingApproved": false,
+  "sampledTokenIdsAvailable": false,
+  "limitation": "The engine tokenization endpoint validates tokens, not a trainer loss implementation. No training job executed."
+}

@@ -1,0 +1,33 @@
+{
+  "artifact-check": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-review-artifact-check.log",
+    "sha256": "e322dc756a9c93619c147542607ea6cde9e07326e6aeef1701242d15d960d8b4"
+  },
+  "doc-sync": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-review-doc-sync.log",
+    "sha256": "8b879162edbe124f6487e99724dbc16d6c4609b9bdde6ee84182d58304c07f90"
+  },
+  "lint": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-review-lint.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "phoenix": {
+    "exitCode": 0,
+    "log": "/tmp/dsh-v3-review-phoenix.log",
+    "sha256": "8c3a46a4b8e05fa0deb89dab7d32515eff29815fc103a931043c815585d46b36"
+  },
+  "auditIdentity": {
+    "matchedFiles": 18,
+    "algorithm": "SHA-256",
+    "path": "artifacts/plugins/gh-genai-traces/lib/audit-code-identity.json"
+  },
+  "finalDocumentation": {
+    "exitCode": 0,
+    "passedGates": 16,
+    "log": "/tmp/dsh-v3-review-docs-final.log",
+    "sha256": "84b55a5ed3618b52e414152c6bf55cbe9bbe7a44052a3f0709b6c8b61af4019e"
+  }
+}

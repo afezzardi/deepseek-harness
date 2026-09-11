@@ -1,0 +1,56 @@
+{
+  "name": "accounts/fireworks/models/qwen3p8-27b",
+  "display_name": "Qwen3.8 27B",
+  "description": "Qwen3.8-27B: 27B-parameter vision-language model from Qwen with hybrid linear/full attention (4:1 interval) and 262K context.",
+  "create_time": "2026-08-14T16:45:00.989936Z",
+  "state": "READY",
+  "status": {},
+  "kind": "HF_BASE_MODEL",
+  "hugging_face_url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+  "base_model_details": {
+    "world_size": 1,
+    "checkpoint_format": "HUGGINGFACE",
+    "parameter_count": "27356728560",
+    "model_type": "qwen3_5",
+    "supports_fireattention": true
+  },
+  "peft_details": {},
+  "public": true,
+  "conversation_config": {},
+  "context_length": 262144,
+  "supports_image_input": true,
+  "supports_tools": true,
+  "sku_infos": [
+    {
+      "sku": "LLM input tokens (cached)",
+      "amount": {
+        "currency_code": "USD",
+        "nanos": 450000000
+      },
+      "unit": "1M tokens"
+    },
+    {
+      "sku": "LLM output tokens",
+      "amount": {
+        "currency_code": "USD",
+        "nanos": 900000000
+      },
+      "unit": "1M tokens"
+    },
+    {
+      "sku": "LLM input tokens (uncached)",
+      "amount": {
+        "currency_code": "USD",
+        "nanos": 900000000
+      },
+      "unit": "1M tokens"
+    }
+  ],
+  "supports_lora": true,
+  "update_time": "2026-08-21T18:28:50.998334Z",
+  "training_context_length": 131072,
+  "use_training_v2": true,
+  "supervised_lora_tunable": true,
+  "rl_lora_tunable": true,
+  "encryption_state": "ENCRYPTION_STATE_PLAINTEXT"
+}

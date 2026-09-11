@@ -1,0 +1,207 @@
+{
+  "projects": [
+    {
+      "id": "UHJvamVjdDo1Mg==",
+      "name": "gh-v3-replay-25364520-451b-4d2d-8993-f70a1710d6f4"
+    },
+    {
+      "id": "UHJvamVjdDo1MQ==",
+      "name": "gh-v3-live-02d8ac03-2aa9-4fc0-99a0-942eac1e9b37"
+    },
+    {
+      "id": "UHJvamVjdDo0OQ==",
+      "name": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237"
+    },
+    {
+      "id": "UHJvamVjdDo0Ng==",
+      "name": "gh-validation-be7cbedf-28f8-427d-ae7c-a99d22131668"
+    },
+    {
+      "id": "UHJvamVjdDo0MQ==",
+      "name": "gh-genai-traces"
+    },
+    {
+      "id": "UHJvamVjdDozNw==",
+      "name": "gh-discovery-20260908-canonical-replay"
+    },
+    {
+      "id": "UHJvamVjdDozNg==",
+      "name": "gh-discovery-20260908-workflow-1"
+    },
+    {
+      "id": "UHJvamVjdDozNQ==",
+      "name": "gh-discovery-20260908-redaction-1"
+    },
+    {
+      "id": "UHJvamVjdDozNA==",
+      "name": "gh-discovery-20260908-long-input-1"
+    },
+    {
+      "id": "UHJvamVjdDozMg==",
+      "name": "gh-discovery-20260908-write-4"
+    },
+    {
+      "id": "UHJvamVjdDozMQ==",
+      "name": "gh-discovery-20260908-injection-4"
+    },
+    {
+      "id": "UHJvamVjdDozMA==",
+      "name": "gh-discovery-20260908-recover-4"
+    },
+    {
+      "id": "UHJvamVjdDoyOQ==",
+      "name": "gh-discovery-20260908-aggregate-4"
+    },
+    {
+      "id": "UHJvamVjdDoyOA==",
+      "name": "gh-discovery-20260908-extract-4"
+    },
+    {
+      "id": "UHJvamVjdDoyNw==",
+      "name": "gh-discovery-20260908-read-4"
+    },
+    {
+      "id": "UHJvamVjdDoyNg==",
+      "name": "gh-discovery-20260908-write-3"
+    },
+    {
+      "id": "UHJvamVjdDoyNQ==",
+      "name": "gh-discovery-20260908-injection-3"
+    },
+    {
+      "id": "UHJvamVjdDoyNA==",
+      "name": "gh-discovery-20260908-recover-3"
+    },
+    {
+      "id": "UHJvamVjdDoyMw==",
+      "name": "gh-discovery-20260908-aggregate-3"
+    },
+    {
+      "id": "UHJvamVjdDoyMg==",
+      "name": "gh-discovery-20260908-extract-3"
+    },
+    {
+      "id": "UHJvamVjdDoyMQ==",
+      "name": "gh-discovery-20260908-read-3"
+    },
+    {
+      "id": "UHJvamVjdDoyMA==",
+      "name": "gh-discovery-20260908-write-2"
+    },
+    {
+      "id": "UHJvamVjdDoxOQ==",
+      "name": "gh-discovery-20260908-injection-2"
+    },
+    {
+      "id": "UHJvamVjdDoxOA==",
+      "name": "gh-discovery-20260908-recover-2"
+    },
+    {
+      "id": "UHJvamVjdDoxNw==",
+      "name": "gh-discovery-20260908-aggregate-2"
+    },
+    {
+      "id": "UHJvamVjdDoxNg==",
+      "name": "gh-discovery-20260908-extract-2"
+    },
+    {
+      "id": "UHJvamVjdDoxNQ==",
+      "name": "gh-discovery-20260908-read-2"
+    },
+    {
+      "id": "UHJvamVjdDoxNA==",
+      "name": "gh-discovery-20260908-write-1"
+    },
+    {
+      "id": "UHJvamVjdDoxMw==",
+      "name": "gh-discovery-20260908-injection-1"
+    },
+    {
+      "id": "UHJvamVjdDoxMg==",
+      "name": "gh-discovery-20260908-recover-1"
+    },
+    {
+      "id": "UHJvamVjdDoxMQ==",
+      "name": "gh-discovery-20260908-extract-1"
+    },
+    {
+      "id": "UHJvamVjdDoxMA==",
+      "name": "gh-discovery-20260908-aggregate-1"
+    },
+    {
+      "id": "UHJvamVjdDo5",
+      "name": "gh-discovery-20260908-read-1"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "RGF0YXNldDoxNQ==",
+      "name": "gh-reconciliation-8ba1495bc7024685869eab1ffd784f72-conflict",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDoxNA==",
+      "name": "gh-reconciliation-8ba1495bc7024685869eab1ffd784f72",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDoxMg==",
+      "name": "gh-reconciliation-23aa0f23b8e74331b317a4f82a07da15-conflict",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDoxMQ==",
+      "name": "gh-reconciliation-23aa0f23b8e74331b317a4f82a07da15",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDoxMA==",
+      "name": "gh-reconciliation-6098b1b0fdda47b38fb26f2497048ff4-conflict",
+      "example_count": 0
+    },
+    {
+      "id": "RGF0YXNldDo5",
+      "name": "gh-reconciliation-6098b1b0fdda47b38fb26f2497048ff4",
+      "example_count": 2
+    },
+    {
+      "id": "RGF0YXNldDo3",
+      "name": "gh-validation-34b6581d-1174-4074-94e4-e293318fc237-evaluated",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDo2",
+      "name": "gh-validation-be7cbedf-28f8-427d-ae7c-a99d22131668-evaluated",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDoz",
+      "name": "gh-discovery-20260908-evaluated",
+      "example_count": 24
+    },
+    {
+      "id": "RGF0YXNldDoy",
+      "name": "gh-validation-9cd2f62e-3c01-4979-bc92-098ccbd82f23-evaluated",
+      "example_count": 1
+    },
+    {
+      "id": "RGF0YXNldDox",
+      "name": "gh-validation-8c14cb77-aa35-4c8f-a178-58caff48808b-evaluated",
+      "example_count": 1
+    }
+  ],
+  "retainProjects": [
+    "gh-training-v3-live",
+    "gh-training-v3-replay",
+    "gh-training-replay",
+    "gh-training-live",
+    "default"
+  ],
+  "retainDatasets": [
+    "gh-benchmark-v3-20260909-r3",
+    "gh-curated-v3-baseline-r2",
+    "gh-benchmark-v3-20260908-r2",
+    "gh-benchmark-v3-20260908",
+    "gh-training-20260908-canonical"
+  ]
+}

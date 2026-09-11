@@ -1,0 +1,12 @@
+358:     reasoning: str | None
+359:     """The reasoning content for interleaved thinking."""
+392:     reasoning: str | None
+393:     """The reasoning content for interleaved thinking."""
+395:     reasoning_content: str | None
+396:     """Deprecated: The reasoning content for interleaved thinking."""
+1843:     reasoning = message.get("reasoning")
+1867:             # Include reasoning if present for interleaved thinking.
+1868:             if reasoning is not None:
+1869:                 result_msg["reasoning"] = cast(str, reasoning)
+1870:                 result_msg["reasoning_content"] = cast(
+1871:                     str, reasoning

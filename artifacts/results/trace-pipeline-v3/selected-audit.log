@@ -1,0 +1,2 @@
+$ node --import tsx/esm apps/cli/src/bin.ts --profile headless --patch artifacts/plugins/gh-genai-traces/lib/overlay.yml --patch artifacts/results/trace-pipeline-v3/.selected-audit/audit.patch.yml
+[ELIFECYCLE] Command failed.

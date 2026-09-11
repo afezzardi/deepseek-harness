@@ -1,0 +1,25 @@
+# Fable review dispositions — 2026-09-09
+
+The review was read-only. Collection resumed after it landed. All implementation changes remain under `artifacts/`; inference configuration was inspected but not changed.
+
+| Finding | Disposition | Evidence |
+|---|---|---|
+| Workflow prompt contradicts complete child-value comparison | Revision 5 explicitly requires the workflow script to return every complete `agent()` result in launch order; only the final message uses the parent schema. New task identities and a separate pinned dataset preserve revision isolation. | [r5 tasks receipt](benchmark-r5/tasks-receipt.json), [pilot report](pilot-r5/pilot-report.json) |
+| Campaign identity omits dirty sources and overlay | Identity includes the tracked working-tree diff, porcelain status, untracked file hashes, the proxy, all built files including the overlay, and experiment/source files. Exact bytes and Git evidence are copied into each campaign's private `.implementation/` directory. Results are excluded from executable identity. | [campaign manifest](baseline-r5/manifest.json), [regressions](../../plugins/gh-genai-traces/experiments/test_campaign.py) |
+| Preflight asserts a constant traffic count | The profile's literal count is removed. The runner inspects the proxy log after shutdown and rejects any event, including admission without a response. | [measured traffic](preflight-r5/preflight-traffic.json), [negative control](preflight-negative/negative-control.json) |
+| Dead launch failure classification | An `OSError` during process launch is retained as an execution error owned by the harness. | [regressions](../../plugins/gh-genai-traces/experiments/test_campaign.py), [Python results](r5-python-tests.log) |
+| Interrupted trial blocks an opaque rerun | A directory without `result.json` causes an explicit error naming the interrupted directory and requiring a fresh campaign. Completed trials are persisted incrementally, and collection errors retain their own report. Existing workspaces are not overwritten. | [regressions](../../plugins/gh-genai-traces/experiments/test_campaign.py) |
+
+The r3 runner was subsequently recovered byte-for-byte: its SHA-256 matches the pilot manifest. The [recovery record](pilot-r3/runner-recovery.json) and [recovered source](pilot-r3/recovered-runner.py) preserve that evidence. This does not recover every executable input from that pilot; its complete runtime identity remains unavailable. This checkpoint preserves the recovered runner without claiming complete recovery.
+
+The r5 pilot's workflow passes the unchanged deterministic-v6 grader. This supplies the missing observed case where runtime child values agree with the logged structured outputs and the exact member-order comparison. The Unicode family also passes with the ASCII-escaped fixture, without normalizing the graded output. The pilot has seven passing trials out of twelve; it is acceptance evidence, not a repeatability estimate.
+
+The [additional receipt checks](cleanup-extra-receipt-checks.json) verify the older benchmark. A restored-database [comparison](cleanup-retained-revision-comparison.json) matches all 588 retained example revisions across the four inspected historical datasets against the pre-cleanup dump. The [orphan receipt](cleanup-orphan-receipt.json) records deletion of seven experiment projects without surviving experiment rows. Both retained experiment projects remain. The older canonical dataset's source projects were deleted; its source spans survive only in the private local dump. The dump has a [successful restore receipt](restore-before-receipt.json), but no off-host copy is established.
+
+The verified tool filtering, child guards, medium reasoning, Unicode repair, strict output grading, and historical revision isolation require no grader relaxation. The r4 pinned dataset remains historical evidence; collection uses revision 5.
+
+## Renderer design review
+
+Fable recommended accepting explicit template trimming without changing inference. The accepted revisions add rendered-row identity, literal removed whitespace, the unambiguous `renderedTargetText` field, rejection of tokenizer added-token strings and unsupported text blocks, and runtime mask contiguity/decoding checks. The route-enabled CLI verifies the complete final-assistant example as well as the request. Twelve [focused tests](renderer-revision-tests.log) cover the actual parser newline pattern, Unicode whitespace, a newline-only template that must reject, control tokens, extra blocks, and invalid offsets.
+
+The [new real-row acceptance](renderer-real-acceptance.json) verifies all twelve pilot answers and all 111 eligible baseline final answers. Every row removes only leading `\n\n`, preserves canonical candidate content, and passes request and full-example engine token parity. A single-character change produces different engine tokens. The original exact-policy rejection scan and synthetic acceptance remain historical evidence. The renderer excludes the message terminator from supervision as an explicit format-objective choice; no training approval follows from token parity.

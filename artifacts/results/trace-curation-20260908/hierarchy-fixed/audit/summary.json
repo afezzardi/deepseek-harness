@@ -1,0 +1,31 @@
+{
+  "sessions": 4,
+  "graded": 1,
+  "candidates": 1,
+  "sft": 1,
+  "splits": {
+    "train": 1,
+    "validation": 0,
+    "test": 0
+  },
+  "duplicateRows": 0,
+  "requestGroups": 1,
+  "preferencePairs": 0,
+  "preferenceRejections": {},
+  "rejected": [
+    {
+      "session": "1e2ca2e4-4d11-4215-afb6-ca642633789a",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "7a9635de-b590-4cfb-bcc0-d7bf7bc5907f",
+      "reason": "Child requires its own independent grade"
+    },
+    {
+      "session": "969e2fd7-30d4-412c-8d84-d9ec767eb95a",
+      "reason": "Child requires its own independent grade"
+    }
+  ],
+  "rendererValidated": false,
+  "tokenRlReady": false
+}

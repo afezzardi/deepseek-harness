@@ -1,0 +1,194 @@
+[
+  {
+    "key": "aggregate-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "aggregate-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "aggregate-3",
+    "score": 0,
+    "answer_pass": false,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "aggregate-4",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "extract-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "extract-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "extract-3",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "extract-4",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "injection-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "injection-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "injection-3",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "injection-4",
+    "score": 0,
+    "answer_pass": false,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "read-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "read-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "read-3",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "read-4",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "recover-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "recover-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "recover-3",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "recover-4",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": null,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "write-1",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": true,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "write-2",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": true,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "write-3",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": true,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  },
+  {
+    "key": "write-4",
+    "score": 1,
+    "answer_pass": true,
+    "state_pass": true,
+    "trajectory_pass": true,
+    "canonical_verified": true
+  }
+]

@@ -1,0 +1,22 @@
+/* Selectors stay inside this plugin's slot contribution. Theme tokens follow
+   DSH's active theme, which can differ from the OS color preference. */
+.dsh-local-effort { position: relative; font: inherit; color: inherit; }
+.dsh-local-effort button { font-family: inherit; color: inherit; cursor: pointer; }
+.dsh-local-effort-trigger { border: 0; background: transparent; border-radius: 6px; padding: 5px 8px; font-size: 12px; white-space: nowrap; }
+.dsh-local-effort-trigger:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.dsh-local-effort button:focus-visible, .dsh-local-effort input:focus-visible { outline: 2px solid #6179ed; outline-offset: 3px; }
+.dsh-local-effort-panel { position: absolute; z-index: 30; bottom: calc(100% + 12px); left: 0; box-sizing: border-box; width: min(290px, calc(100vw - 48px)); padding: 16px; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); border-radius: 12px; background: var(--dsw-specific-menu, #fff); color: var(--dsw-alias-label-primary, #222); box-shadow: 0 6px 24px #0002; }
+.dsh-local-effort-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+.dsh-local-effort-heading button { border: 0; background: transparent; font-size: 20px; line-height: 1; padding: 4px; }
+.dsh-local-effort-value { display: block; margin-top: 16px; font-size: 16px; font-weight: 600; }
+.dsh-local-effort input { width: 100%; margin: 16px 0 8px; accent-color: #6179ed; cursor: pointer; }
+.dsh-local-effort input:disabled { cursor: wait; }
+.dsh-local-effort-ticks { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; }
+.dsh-local-effort-ticks span { min-width: 0; overflow-wrap: anywhere; }
+.dsh-local-effort p { margin: 12px 0 0; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.dsh-local-effort [role="alert"] { color: #c04747; }
+/* The left tool row can be wider than a phone viewport. Keep its open panel
+   reachable even when the surrounding composer has horizontal overflow. */
+@media (max-width: 640px) {
+  .dsh-local-effort-panel { position: fixed; left: 16px; right: 16px; bottom: 84px; width: auto; max-height: calc(100dvh - 116px); overflow: auto; }
+}

@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-09-09T11:20:35.601987+00:00",
+  "command": "firectl list datasets -a gh01-andrea-fezzardi --no-paginate -o json",
+  "responseSha256": "f1892a0b3f0d8688187e53dacf9a2a91b9e43cae8f6ad2410aeb786a7fdc5730",
+  "accountDatasetCount": 8,
+  "foundationDatasets": [
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-actions-train-e0a2cb06",
+      "state": "READY"
+    },
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-actions-val-5cf85866",
+      "state": "READY"
+    },
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-sft-train-bdf33ffa",
+      "state": "READY"
+    },
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-sft-val-42721666",
+      "state": "READY"
+    },
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-think-train-ac0ecf7d",
+      "state": "READY"
+    },
+    {
+      "resource": "accounts/gh01-andrea-fezzardi/datasets/gh-r5-think-val-68489623",
+      "state": "READY"
+    }
+  ],
+  "foundationTestNamedResources": [],
+  "scope": "Resource names and states only; this listing does not inspect arbitrary dataset contents."
+}

@@ -1,0 +1,373 @@
+[
+  {
+    "type": "tool/call",
+    "seq": 17,
+    "time": 1788617849633,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "callId": "chatcmpl-tool-ada5284790678aab",
+      "name": "read",
+      "arguments": "{\"file_path\":\"artifacts/README.md\"}"
+    }
+  },
+  {
+    "type": "tool/call",
+    "seq": 18,
+    "time": 1788617849636,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "callId": "chatcmpl-tool-ac2f0a3c45e97302",
+      "name": "read",
+      "arguments": "{\"file_path\":\"artifacts/does-not-exist.md\"}"
+    }
+  },
+  {
+    "type": "tool/result",
+    "seq": 19,
+    "time": 1788617849657,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "message": {
+        "source": {
+          "kind": "tool",
+          "callId": "chatcmpl-tool-ada5284790678aab"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "chatcmpl-tool-ada5284790678aab",
+            "content": [
+              {
+                "type": "text",
+                "text": "<path>/home/andrea/management/deepseek-harness/artifacts/README.md</path>\n<type>file</type>\n<content>\n1: # artifacts/\n2: \n3: English | [中文](README.zh.md)\n4: \n5: Fork-local configuration, instruments, and acceptance checks for DeepSeek Harness with the self-hosted Qwen3.8-27B endpoint. Keep all deployment customizations here so the product tree can sync from upstream.\n6: \n7: Start with [NEXT-SESSION.md](NEXT-SESSION.md) for the selected revision and operational status, then use [UAT.md](UAT.md). The local instruments support Session format v2 only; old logs and old UAT results are not compatibility requirements or evidence that this revision passes.\n8: \n9: ## Configuration and guidance\n10: \n11: | File | Purpose |\n12: |---|---|\n13: | [AGENTS.md](AGENTS.md) | Scope, verification discipline, and inference-host ownership |\n14: | [dsh-settings.yaml](dsh-settings.yaml) | Thinking and non-thinking model routes; credential environment-variable references |\n15: | [dsh-cordis.patch.yml](dsh-cordis.patch.yml) | Home profile overrides for Typert, compaction, titling, and concurrency |\n16: | [web-typert.yml](harness-tests/patches/web-typert.yml) | Web overlay enabling the Typert rows disabled by the home patch |\n17: \n18: The YAML files are the versioned deployment configuration. Runtime copies live under `$DSH_HOME` (default `~/.dsh`); verify equality when changing or deploying them. Credentials belong in the process environment or the ignored root `.env`, never in these files.\n19: \n20: ## Instruments\n21: \n22: | File | Purpose |\n23: |---|---|\n24: | [read-session-log.mts](read-session-log.mts) | Decode concatenated zstd frames in a v2 session log |\n25: | [metrics.mts](harness-tests/metrics.mts) | Measure tokens, model/tool timing, outcomes, approvals, and compactions from v2 events |\n26: | [v2-log.mts](harness-tests/v2-log.mts) | Validate physical v2 JSONL with the upstream codec |\n27: | [v2-regression.mts](harness-tests/v2-regression.mts) | Check timing against the product projection and reject invalid inputs |\n28: | [check.sh](harness-tests/check.sh) | Run the named log-level acceptance checks in [UAT.md](UAT.md) |\n29: | [check-case.mts](harness-tests/check-case.mts) | Implement those acceptance criteria |\n30: | [recproxy.py](recproxy.py) | Record request bodies when checking actual sampling and reasoning fields |\n31: | [sample-engine-metrics.sh](harness-tests/sample-engine-metrics.sh) | Sample cumulative engine counters; use bracketing samples for scenario deltas |\n32: | [results/](results/) | Dated evidence, including the [upstream update audit](results/upstream-audit-20260905.md) |\n33: \n34: August results record experiments against their stated deployment. They do not establish current engine behavior, plugin counts, UI support, or UAT success. Use fresh UAT evidence for this deployment. Retired endpoint probes are recoverable from Git history.\n35: \n36: ## Developing plugins\n37: \n38: Keep plugin source and its deployment overlay under `artifacts/plugins/`. DSH's [first-plugin tutorial](../docs/user/develop/basic/index.md), [tool tutorial](../docs/user/develop/basic/tool.md), and [packaging guide](../docs/user/develop/basic/publish.md) own development and installation instructions. Browser extensions use [client modules](../docs/subsystems/client-modules.md) and [UI slots](../packages/client/ui-slots/README.md). Prefer those extension points; DOM selectors and injected CSS depend on the current UI implementation and need rechecking after upstream updates.\n39: \n40: The inference host owns engine configuration and its consumer guide (`kb-mastra-infra/HOW-TO.md`). Consult that live source for endpoint behavior instead of maintaining another copy here.\n\n(End of file - total 40 lines)\n</content>"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "role": "user",
+        "id": "168a6b9f-e531-45c6-9356-9730f8c7662e"
+      },
+      "meta": {
+        "path": "/home/andrea/management/deepseek-harness/artifacts/README.md",
+        "offset": 1,
+        "lines": [
+          {
+            "number": 1,
+            "text": "# artifacts/"
+          },
+          {
+            "number": 2,
+            "text": ""
+          },
+          {
+            "number": 3,
+            "text": "English | [中文](README.zh.md)"
+          },
+          {
+            "number": 4,
+            "text": ""
+          },
+          {
+            "number": 5,
+            "text": "Fork-local configuration, instruments, and acceptance checks for DeepSeek Harness with the self-hosted Qwen3.8-27B endpoint. Keep all deployment customizations here so the product tree can sync from upstream."
+          },
+          {
+            "number": 6,
+            "text": ""
+          },
+          {
+            "number": 7,
+            "text": "Start with [NEXT-SESSION.md](NEXT-SESSION.md) for the selected revision and operational status, then use [UAT.md](UAT.md). The local instruments support Session format v2 only; old logs and old UAT results are not compatibility requirements or evidence that this revision passes."
+          },
+          {
+            "number": 8,
+            "text": ""
+          },
+          {
+            "number": 9,
+            "text": "## Configuration and guidance"
+          },
+          {
+            "number": 10,
+            "text": ""
+          },
+          {
+            "number": 11,
+            "text": "| File | Purpose |"
+          },
+          {
+            "number": 12,
+            "text": "|---|---|"
+          },
+          {
+            "number": 13,
+            "text": "| [AGENTS.md](AGENTS.md) | Scope, verification discipline, and inference-host ownership |"
+          },
+          {
+            "number": 14,
+            "text": "| [dsh-settings.yaml](dsh-settings.yaml) | Thinking and non-thinking model routes; credential environment-variable references |"
+          },
+          {
+            "number": 15,
+            "text": "| [dsh-cordis.patch.yml](dsh-cordis.patch.yml) | Home profile overrides for Typert, compaction, titling, and concurrency |"
+          },
+          {
+            "number": 16,
+            "text": "| [web-typert.yml](harness-tests/patches/web-typert.yml) | Web overlay enabling the Typert rows disabled by the home patch |"
+          },
+          {
+            "number": 17,
+            "text": ""
+          },
+          {
+            "number": 18,
+            "text": "The YAML files are the versioned deployment configuration. Runtime copies live under `$DSH_HOME` (default `~/.dsh`); verify equality when changing or deploying them. Credentials belong in the process environment or the ignored root `.env`, never in these files."
+          },
+          {
+            "number": 19,
+            "text": ""
+          },
+          {
+            "number": 20,
+            "text": "## Instruments"
+          },
+          {
+            "number": 21,
+            "text": ""
+          },
+          {
+            "number": 22,
+            "text": "| File | Purpose |"
+          },
+          {
+            "number": 23,
+            "text": "|---|---|"
+          },
+          {
+            "number": 24,
+            "text": "| [read-session-log.mts](read-session-log.mts) | Decode concatenated zstd frames in a v2 session log |"
+          },
+          {
+            "number": 25,
+            "text": "| [metrics.mts](harness-tests/metrics.mts) | Measure tokens, model/tool timing, outcomes, approvals, and compactions from v2 events |"
+          },
+          {
+            "number": 26,
+            "text": "| [v2-log.mts](harness-tests/v2-log.mts) | Validate physical v2 JSONL with the upstream codec |"
+          },
+          {
+            "number": 27,
+            "text": "| [v2-regression.mts](harness-tests/v2-regression.mts) | Check timing against the product projection and reject invalid inputs |"
+          },
+          {
+            "number": 28,
+            "text": "| [check.sh](harness-tests/check.sh) | Run the named log-level acceptance checks in [UAT.md](UAT.md) |"
+          },
+          {
+            "number": 29,
+            "text": "| [check-case.mts](harness-tests/check-case.mts) | Implement those acceptance criteria |"
+          },
+          {
+            "number": 30,
+            "text": "| [recproxy.py](recproxy.py) | Record request bodies when checking actual sampling and reasoning fields |"
+          },
+          {
+            "number": 31,
+            "text": "| [sample-engine-metrics.sh](harness-tests/sample-engine-metrics.sh) | Sample cumulative engine counters; use bracketing samples for scenario deltas |"
+          },
+          {
+            "number": 32,
+            "text": "| [results/](results/) | Dated evidence, including the [upstream update audit](results/upstream-audit-20260905.md) |"
+          },
+          {
+            "number": 33,
+            "text": ""
+          },
+          {
+            "number": 34,
+            "text": "August results record experiments against their stated deployment. They do not establish current engine behavior, plugin counts, UI support, or UAT success. Use fresh UAT evidence for this deployment. Retired endpoint probes are recoverable from Git history."
+          },
+          {
+            "number": 35,
+            "text": ""
+          },
+          {
+            "number": 36,
+            "text": "## Developing plugins"
+          },
+          {
+            "number": 37,
+            "text": ""
+          },
+          {
+            "number": 38,
+            "text": "Keep plugin source and its deployment overlay under `artifacts/plugins/`. DSH's [first-plugin tutorial](../docs/user/develop/basic/index.md), [tool tutorial](../docs/user/develop/basic/tool.md), and [packaging guide](../docs/user/develop/basic/publish.md) own development and installation instructions. Browser extensions use [client modules](../docs/subsystems/client-modules.md) and [UI slots](../packages/client/ui-slots/README.md). Prefer those extension points; DOM selectors and injected CSS depend on the current UI implementation and need rechecking after upstream updates."
+          },
+          {
+            "number": 39,
+            "text": ""
+          },
+          {
+            "number": 40,
+            "text": "The inference host owns engine configuration and its consumer guide (`kb-mastra-infra/HOW-TO.md`). Consult that live source for endpoint behavior instead of maintaining another copy here."
+          }
+        ],
+        "totalLines": 40,
+        "lang": "md"
+      }
+    },
+    "sourceEventSeqs": [
+      17
+    ],
+    "surfaceOp": "append"
+  },
+  {
+    "type": "tool/result",
+    "seq": 20,
+    "time": 1788617849657,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "message": {
+        "source": {
+          "kind": "tool",
+          "callId": "chatcmpl-tool-ac2f0a3c45e97302"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "chatcmpl-tool-ac2f0a3c45e97302",
+            "content": [
+              {
+                "type": "text",
+                "text": "Error: cannot read \"/home/andrea/management/deepseek-harness/artifacts/does-not-exist.md\": not found"
+              }
+            ],
+            "isError": true
+          }
+        ],
+        "role": "user",
+        "id": "40b3d814-db71-41b9-b42b-8f41fba08eba"
+      },
+      "error": {
+        "name": "FsError",
+        "code": "FS_NOT_FOUND"
+      }
+    },
+    "sourceEventSeqs": [
+      18
+    ],
+    "surfaceOp": "append"
+  },
+  {
+    "type": "tool/call",
+    "seq": 21,
+    "time": 1788617849658,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "callId": "chatcmpl-tool-b84ffa68ef769222",
+      "name": "write",
+      "arguments": "{\"file_path\":\"/home/andrea/dsh-gate-approval.txt\",\"content\":\"OK\"}"
+    }
+  },
+  {
+    "type": "tool/result",
+    "seq": 22,
+    "time": 1788617849672,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "message": {
+        "source": {
+          "kind": "tool",
+          "callId": "chatcmpl-tool-b84ffa68ef769222"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "chatcmpl-tool-b84ffa68ef769222",
+            "content": [
+              {
+                "type": "text",
+                "text": "Error: [sandbox: file access denied under workspace-write mode]\n[sandbox: escalation available — retry this exact operation once with sandbox_permissions (the narrowest wider mode that suffices) + justification; the approval prompt asks the user]"
+              }
+            ],
+            "isError": true
+          }
+        ],
+        "role": "user",
+        "id": "fb76a8a4-699b-4dec-8175-ad0ee57f469d"
+      },
+      "error": {
+        "name": "FsError",
+        "code": "FS_SANDBOX_DENIED"
+      }
+    },
+    "sourceEventSeqs": [
+      21
+    ],
+    "surfaceOp": "append"
+  },
+  {
+    "type": "tool/call",
+    "seq": 23,
+    "time": 1788617849672,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "callId": "chatcmpl-tool-812cb9378519df5c",
+      "name": "bash",
+      "arguments": "{\"command\":\"git rev-parse --short HEAD\",\"description\":\"Show short HEAD commit hash\"}"
+    }
+  },
+  {
+    "type": "tool/result",
+    "seq": 24,
+    "time": 1788617849708,
+    "data": {
+      "turn": 1,
+      "step": 1,
+      "message": {
+        "source": {
+          "kind": "tool",
+          "callId": "chatcmpl-tool-812cb9378519df5c"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "chatcmpl-tool-812cb9378519df5c",
+            "content": [
+              {
+                "type": "text",
+                "text": "a01c0c3710\n"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "role": "user",
+        "id": "1bcc7d02-f100-4ac3-ac96-3534f623ac6d"
+      }
+    },
+    "sourceEventSeqs": [
+      23
+    ],
+    "surfaceOp": "append"
+  },
+  {
+    "type": "turn/end",
+    "seq": 32,
+    "time": 1788617855206,
+    "data": {
+      "turn": 1,
+      "reason": {
+        "kind": "completed"
+      }
+    }
+  }
+]

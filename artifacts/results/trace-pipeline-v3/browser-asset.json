@@ -1,0 +1,15 @@
+{
+  "path": "artifacts/results/trace-pipeline-v3/.phoenix-review.gif",
+  "sha256": "4691dd8bd690ed295d7513bef13f5b4769fa9ed734a4c3fbd4a7394cb7794f9b",
+  "bytes": 369725,
+  "width": 1200,
+  "height": 750,
+  "durationSeconds": 8,
+  "modelRound": false,
+  "origin": "http://127.0.0.1:6006",
+  "datasetVersion": "RGF0YXNldFZlcnNpb246NQ==",
+  "server": "Phoenix 20.8.0",
+  "tree": "uncommitted artifact implementation; existing local Compose server",
+  "sourceFrames": 4,
+  "published": false
+}

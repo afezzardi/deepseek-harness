@@ -1,0 +1,12 @@
+{
+  "/tmp/dsh-v3-artifact-check.log": "10222bf3b2dc51f6f44d15ef779e203d9d1a038c9e628ba92d61b101880d1813",
+  "/tmp/dsh-v3-phoenix-tests.log": "d878ba5af0a4c0b3a9ab53a64891d2fbc5f8330cfa99dae3a3784e7f8fa42d1a",
+  "/tmp/dsh-v3-doc-sync.log": "9bfe49bb8f89ca654208c557306700ac087f42a8c1a89d613be8e7291ab42780",
+  "/tmp/dsh-v3-lint.log": "7d339d095c816883b39c4a139e2488cd25c4ba6b5ced7ccd97f5d774a4cf36fa",
+  "/tmp/dsh-v3-preflight.log": "27c36a11bf44dc2b0c700b064af3d9389291b604ae4f69585174be4a6aa8ff85",
+  "/tmp/dsh-v3-final-acceptance.log": "176074e2bee017d958da750f3e9ce424d4b178bdfe56f983e1a828c6b1973f39",
+  "/tmp/dsh-v3-fidelity.log": "0d8071b923e246de346301a9e9063ee4b3fbf97c74eeeb9d123d6157d5fee99d",
+  "/tmp/dsh-v3-feedback-final.log": "c28abb1420a06773df4213f76c91939a42b1ac17e6c53f472736754edf5d954d",
+  "/tmp/dsh-v3-typecheck-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "/tmp/dsh-v3-build-final.log": "e511210861d1dc5b748d8c8a12aa3e8b362acc60db88e2dccf0793a001bae9a8"
+}

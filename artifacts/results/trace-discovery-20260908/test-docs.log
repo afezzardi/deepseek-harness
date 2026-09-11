@@ -1,0 +1,65 @@
+$ tsx scripts/run-gates.ts doc-quick
+run-gates: doc-quick running 15 gate(s) with 4 worker(s) from 24 available CPU(s), doc-quick cap 4.
+run-gates: start markdown links
+run-gates: start type equivalence
+run-gates: start translation pairing
+run-gates: start markdown wrap
+
+== FAILED markdown wrap (1.35s) ==
+command: pnpm run verify-md-wrap
+outcome: exit 1
+$ tsx scripts/verify-md-wrap.ts
+node:fs:1701
+  const stats = binding.lstat(
+                        ^
+
+Error: ENOTDIR: not a directory, lstat '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+    at lstatSync (node:fs:1701:25)
+    at getDirentSync (node:internal/fs/glob:68:16)
+    at Cache.statSync (node:internal/fs/glob:134:17)
+    at #addSubpatterns (node:internal/fs/glob:395:32)
+    at Glob.globSync (node:internal/fs/glob:312:29)
+    at globSync (node:fs:3224:37)
+    at uniqueRepoFiles (/home/andrea/management/deepseek-harness/scripts/repo-files.ts:44:25)
+    at <anonymous> (/home/andrea/management/deepseek-harness/scripts/verify-md-wrap.ts:73:15)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26) {
+  errno: -20,
+  code: 'ENOTDIR',
+  syscall: 'lstat',
+  path: '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+}
+
+Node.js v24.12.0
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start public repository links
+run-gates: PASS public repository links (5.91s)
+run-gates: start doc refs
+run-gates: PASS doc refs (1.61s)
+run-gates: start package README model experience
+run-gates: PASS type equivalence (15.06s)
+run-gates: start agent note classification
+run-gates: PASS agent note classification (1.37s)
+run-gates: start agent note format
+run-gates: PASS agent note format (1.93s)
+run-gates: start archived agent notes
+run-gates: PASS archived agent notes (1.90s)
+run-gates: start skill invocation metadata
+run-gates: PASS skill invocation metadata (1.23s)
+run-gates: start translation prompt
+run-gates: PASS package README model experience (12.62s)
+run-gates: start doc budgets
+run-gates: PASS translation prompt (1.09s)
+run-gates: start documentation standard tests
+run-gates: PASS doc budgets (1.08s)
+run-gates: start package README limitations
+run-gates: PASS markdown links (28.12s)
+run-gates: PASS documentation standard tests (5.63s)
+run-gates: PASS translation pairing (28.56s)
+run-gates: PASS package README limitations (10.90s)
+
+run-gates: 14 passed, 1 failed, 0 skipped in 33.48s.
+run-gates: unsuccessful gates:
+  - FAILED markdown wrap (1.35s, exit 1)
+    pnpm run verify-md-wrap
+[ELIFECYCLE] Command failed with exit code 1.

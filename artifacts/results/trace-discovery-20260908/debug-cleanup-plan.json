@@ -1,0 +1,29 @@
+{
+  "status": "completed_after_explicit_user_confirmation",
+  "deleted_projects": [
+    "gh-discovery-20260908-audit",
+    "gh-discovery-20260908-canonical",
+    "gh-discovery-20260908-edge-audit",
+    "gh-discovery-20260908-medium-smoke",
+    "gh-discovery-20260908-smoke",
+    "gh-queue-validation-76e9edd45d2744aabf975992ac0f51b0",
+    "gh-validation-8c14cb77-aa35-4c8f-a178-58caff48808b",
+    "gh-validation-9cd2f62e-3c01-4979-bc92-098ccbd82f23"
+  ],
+  "proposed_debug_projects": [
+    "gh-discovery-20260908-audit",
+    "gh-discovery-20260908-canonical",
+    "gh-discovery-20260908-edge-audit",
+    "gh-discovery-20260908-medium-smoke",
+    "gh-discovery-20260908-smoke",
+    "gh-queue-validation-76e9edd45d2744aabf975992ac0f51b0",
+    "gh-validation-8c14cb77-aa35-4c8f-a178-58caff48808b",
+    "gh-validation-9cd2f62e-3c01-4979-bc92-098ccbd82f23"
+  ],
+  "preserve": "All 24 evaluated live trial projects, canonical-replay, workflow, long-input, redaction, default, datasets and experiments",
+  "backup": "artifacts/results/trace-discovery-20260908/.cleanup/phoenix-before-cleanup.dump",
+  "backup_bytes": 9987892,
+  "backup_sha256": "3696fdf531bf0a1109e99145c09e355d07bc78e4ad4135fbeaec3936d7c6e7f9",
+  "backup_validation": "pg_restore --list completed and catalog is saved beside dump",
+  "reason": "Automatic approval review requires explicit approval to permanently delete these eight projects, despite a verified backup."
+}

@@ -1,0 +1,71 @@
+{
+  "artifacts/results/trace-pipeline-r3-20260909/benchmark-r5/tasks-receipt.json": {
+    "verified": 48,
+    "datasetVersion": "RGF0YXNldFZlcnNpb246MjQ="
+  },
+  "artifacts/results/trace-pipeline-r3-20260909/baseline-r5/curated-receipt.json": {
+    "verified": 300,
+    "datasetVersion": "RGF0YXNldFZlcnNpb246MjU="
+  },
+  "artifacts/results/trace-pipeline-v3/baseline-r2/curated-receipt.json": {
+    "verified": 126,
+    "datasetVersion": "RGF0YXNldFZlcnNpb246MjE="
+  },
+  "nativeExperimentRuns": 144,
+  "retention": {
+    "gh-training-v3-live": {
+      "data": {
+        "project_id": "UHJvamVjdDo1Mw==",
+        "policy_id": "UHJvamVjdFRyYWNlUmV0ZW50aW9uUG9saWN5OjE="
+      }
+    },
+    "gh-training-v3-replay": {
+      "data": {
+        "project_id": "UHJvamVjdDo0OA==",
+        "policy_id": "UHJvamVjdFRyYWNlUmV0ZW50aW9uUG9saWN5OjE="
+      }
+    }
+  },
+  "projects": [
+    {
+      "name": "Experiment-e3c6d90af61a876a5fb9dc86",
+      "description": "dataset_id: RGF0YXNldDoxOA==\ndataset_version_id: RGF0YXNldFZlcnNpb246MjQ=",
+      "id": "UHJvamVjdDo1Nw=="
+    },
+    {
+      "name": "Experiment-1cbb93428a90498ddb4756a4",
+      "description": "dataset_id: RGF0YXNldDo4\ndataset_version_id: RGF0YXNldFZlcnNpb246OQ==",
+      "id": "UHJvamVjdDo1NQ=="
+    },
+    {
+      "name": "gh-training-v3-live",
+      "description": null,
+      "id": "UHJvamVjdDo1Mw=="
+    },
+    {
+      "name": "gh-training-v3-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0OA=="
+    },
+    {
+      "name": "Experiment-6f73f63a8d1f5918fef866d2",
+      "description": "dataset_id: RGF0YXNldDo0\ndataset_version_id: RGF0YXNldFZlcnNpb246NA==",
+      "id": "UHJvamVjdDo0NQ=="
+    },
+    {
+      "name": "gh-training-replay",
+      "description": null,
+      "id": "UHJvamVjdDo0Mw=="
+    },
+    {
+      "name": "gh-training-live",
+      "description": null,
+      "id": "UHJvamVjdDo0Mg=="
+    },
+    {
+      "name": "default",
+      "description": "Default project",
+      "id": "UHJvamVjdDox"
+    }
+  ]
+}

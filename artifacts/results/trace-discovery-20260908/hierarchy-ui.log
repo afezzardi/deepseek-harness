@@ -1,0 +1,960 @@
+- navigation:
+  - 'link "version: 20.8.0"':
+    - /url: /
+    - img
+    - img
+  - list:
+    - listitem:
+      - button "Search Ctrl K":
+        - img
+        - text: Search Ctrl K
+    - listitem:
+      - link "Tracing 37":
+        - /url: /projects
+        - img
+        - text: Tracing 37
+    - listitem:
+      - link "Dashboards":
+        - /url: /dashboards
+        - img
+        - text: Dashboards
+    - listitem:
+      - link "Datasets & Experiments 3":
+        - /url: /datasets
+        - img
+        - text: Datasets & Experiments 3
+    - listitem:
+      - link "Evaluators 0":
+        - /url: /evaluators
+        - img
+        - text: Evaluators 0
+    - separator
+    - listitem:
+      - link "Prompts 0":
+        - /url: /prompts
+        - img
+        - text: Prompts 0
+    - listitem:
+      - link "Playground":
+        - /url: /playground
+        - img
+        - text: Playground
+    - listitem:
+      - link "Chat":
+        - /url: /chat
+        - img
+        - text: Chat
+    - separator
+    - listitem:
+      - link "REST API":
+        - /url: /apis/rest
+        - img
+        - text: REST API
+    - listitem:
+      - link "GraphQL":
+        - /url: /apis/graphql
+        - img
+        - text: GraphQL
+  - list:
+    - listitem:
+      - button "Star on GitHub 11.4k":
+        - img
+        - text: Star on GitHub 11.4k
+    - listitem:
+      - link "Settings":
+        - /url: /settings
+        - img
+        - text: Settings
+    - listitem:
+      - button "Account":
+        - img
+        - text: Account
+- navigation:
+  - button "Collapse side navigation":
+    - img
+  - list "Breadcrumbs":
+    - listitem:
+      - link "Projects":
+        - /url: /projects
+      - img
+    - listitem:
+      - link "gh-discovery-20260908-workflow-1":
+        - /url: /projects/UHJvamVjdDozNg==
+      - button "Copy":
+        - img
+  - group "Time range":
+    - text: 7d
+    - button "Last 7 Days"
+    - text: GMT+2
+  - group "Time range controls":
+    - button "Pan back in time":
+      - img
+    - button "Zoom out":
+      - img
+    - button "Stop live streaming" [pressed]:
+      - img
+    - button "Zoom in":
+      - img
+    - button "Pan forward in time" [disabled]:
+      - img
+  - button "Ask PXI"
+- main:
+  - tablist:
+    - tab "Spans" [selected]
+    - tab "Traces"
+    - tab "Sessions"
+    - tab "Metrics"
+    - tab "Config"
+  - tabpanel "Spans":
+    - heading "Traffic" [level=4]
+    - text: Spans by status
+    - list:
+      - listitem:
+        - button "Hide error" [pressed]: error
+      - listitem:
+        - button "Hide ok" [pressed]: ok
+      - listitem:
+        - button "Hide unset" [pressed]: unset
+    - img: 9/1 9/2 9/3 9/4 9/5 9/6 9/7 9/8 0 15 30 45 60
+    - separator
+    - img
+    - textbox "Filter spans"
+    - button "Plain-English query":
+      - img
+    - button "AI query settings":
+      - img
+    - button "Clear filter condition":
+      - img
+    - status
+    - status
+    - button "Select metric charts":
+      - img
+      - text: Charts
+    - button "Columns":
+      - img
+      - text: Columns
+    - button "Wrap each row over as many lines as it needs":
+      - img
+    - button "Hide aside panel":
+      - img
+    - table:
+      - rowgroup:
+        - row "Reorder status column status Reorder kind column kind Reorder name column name Reorder input column input Reorder output column output Reorder error column error More information Reorder user column user Reorder annotations column annotations More information Reorder start time column start time Reorder latency column latency Reorder cumulative tokens column cumulative tokens Reorder cumulative cost column cumulative cost":
+          - columnheader:
+            - checkbox
+          - columnheader "Reorder status column status":
+            - button "Reorder status column":
+              - img
+            - text: status
+          - columnheader "Reorder kind column kind":
+            - button "Reorder kind column":
+              - img
+            - text: kind
+          - columnheader "Reorder name column name":
+            - button "Reorder name column":
+              - img
+            - text: name
+          - columnheader "Reorder input column input":
+            - button "Reorder input column":
+              - img
+            - text: input
+          - columnheader "Reorder output column output":
+            - button "Reorder output column":
+              - img
+            - text: output
+          - columnheader "Reorder error column error More information":
+            - button "Reorder error column":
+              - img
+            - text: error
+            - button "More information":
+              - img
+          - columnheader "Reorder user column user":
+            - button "Reorder user column":
+              - img
+            - text: user
+          - columnheader "Reorder annotations column annotations More information":
+            - button "Reorder annotations column":
+              - img
+            - text: annotations
+            - button "More information":
+              - img
+          - columnheader "Reorder start time column start time":
+            - button "Reorder start time column":
+              - img
+            - text: start time
+          - columnheader "Reorder latency column latency":
+            - button "Reorder latency column":
+              - img
+            - text: latency
+          - columnheader "Reorder cumulative tokens column cumulative tokens":
+            - button "Reorder cumulative tokens column":
+              - img
+            - text: cumulative tokens
+          - columnheader "Reorder cumulative cost column cumulative cost":
+            - button "Reorder cumulative cost column":
+              - img
+            - text: cumulative cost
+      - rowgroup:
+        - row "UNSET agent invoke_agent dsh -- -- -- -- 09/08/2026, 02:08:44 PM 8.3s 27,904 $0":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "agent"
+          - cell "invoke_agent dsh":
+            - link "invoke_agent dsh":
+              - /url: /projects/UHJvamVjdDozNg==/spans/e98fe0b4859115c59b1ec798a48a1f6d?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MjU%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "8.3s":
+            - img
+            - text: 8.3s
+          - cell "27,904":
+            - button "27,904":
+              - img
+              - text: 27,904
+          - cell "$0":
+            - button "$0"
+        - row "UNSET unknown dsh agent/inbox/spliced -- -- -- -- 09/08/2026, 02:08:44 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh agent/inbox/spliced":
+            - link "dsh agent/inbox/spliced":
+              - /url: /projects/UHJvamVjdDozNg==/spans/350993d2f70ce76b29321d3904b31d83?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDQ%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET agent invoke_agent dsh -- -- -- -- 09/08/2026, 02:08:44 PM 6.5s 27,779 $0":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "agent"
+          - cell "invoke_agent dsh":
+            - link "invoke_agent dsh":
+              - /url: /projects/UHJvamVjdDozNg==/spans/185a442ca74c9df1526a2dd6c0376f31?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MTc%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "6.5s":
+            - img
+            - text: 6.5s
+          - cell "27,779":
+            - button "27,779":
+              - img
+              - text: 27,779
+          - cell "$0":
+            - button "$0"
+        - row "UNSET unknown dsh agent/inbox/spliced -- -- -- -- 09/08/2026, 02:08:44 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh agent/inbox/spliced":
+            - link "dsh agent/inbox/spliced":
+              - /url: /projects/UHJvamVjdDozNg==/spans/2c198f4afe4d8e122edb7d3c3655725e?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDE%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET agent invoke_agent dsh -- -- -- -- 09/08/2026, 02:08:44 PM 6.8s 27,792 $0":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "agent"
+          - cell "invoke_agent dsh":
+            - link "invoke_agent dsh":
+              - /url: /projects/UHJvamVjdDozNg==/spans/e2803edb07fb4b542741100116e819a0?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MjE%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "6.8s":
+            - img
+            - text: 6.8s
+          - cell "27,792":
+            - button "27,792":
+              - img
+              - text: 27,792
+          - cell "$0":
+            - button "$0"
+        - row "UNSET unknown dsh agent/inbox/spliced -- -- -- -- 09/08/2026, 02:08:44 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh agent/inbox/spliced":
+            - link "dsh agent/inbox/spliced":
+              - /url: /projects/UHJvamVjdDozNg==/spans/a8a684e3503d138d2e42293441c445a9?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTg%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:44 PM":
+            - time: 09/08/2026, 02:08:44 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh approval/policy -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh approval/policy":
+            - link "dsh approval/policy":
+              - /url: /projects/UHJvamVjdDozNg==/spans/87d8984817143cbc18b4ee045d5e58b2?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDM%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh sandbox/mode -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh sandbox/mode":
+            - link "dsh sandbox/mode":
+              - /url: /projects/UHJvamVjdDozNg==/spans/fd80259482ce41272debccbdbb077f7e?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDI%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh approval/policy -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh approval/policy":
+            - link "dsh approval/policy":
+              - /url: /projects/UHJvamVjdDozNg==/spans/c75674fd717fc4c009f7730665b6d0db?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDA%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh sandbox/mode -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh sandbox/mode":
+            - link "dsh sandbox/mode":
+              - /url: /projects/UHJvamVjdDozNg==/spans/933b798d727de512987cea8125be82e6?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTk%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh approval/policy -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh approval/policy":
+            - link "dsh approval/policy":
+              - /url: /projects/UHJvamVjdDozNg==/spans/efd2678b51c8592f2489d224528b158f?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTc%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh sandbox/mode -- -- -- -- 09/08/2026, 02:08:43 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh sandbox/mode":
+            - link "dsh sandbox/mode":
+              - /url: /projects/UHJvamVjdDozNg==/spans/98fc5f69691ca260e20dbde4772ecbee?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTY%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:08:43 PM":
+            - time: 09/08/2026, 02:08:43 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET agent invoke_agent dsh -- -- -- -- 09/08/2026, 02:07:50 PM 1m 3s 45,476 $0":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "agent"
+          - cell "invoke_agent dsh":
+            - link "invoke_agent dsh":
+              - /url: /projects/UHJvamVjdDozNg==/spans/9fe672b86ab4fbd0d77862bcf7fea18d?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MzE%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:07:50 PM":
+            - time: 09/08/2026, 02:07:50 PM
+          - cell "1m 3s":
+            - img
+            - text: 1m 3s
+          - cell "45,476":
+            - button "45,476":
+              - img
+              - text: 45,476
+          - cell "$0":
+            - button "$0"
+        - row "UNSET unknown dsh agent/inbox/spliced -- -- -- -- 09/08/2026, 02:07:50 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh agent/inbox/spliced":
+            - link "dsh agent/inbox/spliced":
+              - /url: /projects/UHJvamVjdDozNg==/spans/8ea746cfea29be77c21f538f47985ab5?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozOTE%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:07:50 PM":
+            - time: 09/08/2026, 02:07:50 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh approval/policy -- -- -- -- 09/08/2026, 02:07:50 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh approval/policy":
+            - link "dsh approval/policy":
+              - /url: /projects/UHJvamVjdDozNg==/spans/520594f6e4fae7ba4be82e34916cdb66?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozOTA%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:07:50 PM":
+            - time: 09/08/2026, 02:07:50 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh sandbox/mode -- -- -- -- 09/08/2026, 02:07:50 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh sandbox/mode":
+            - link "dsh sandbox/mode":
+              - /url: /projects/UHJvamVjdDozNg==/spans/5d59463b0d7df5064f680ed2aafb7ac9?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozODk%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:07:50 PM":
+            - time: 09/08/2026, 02:07:50 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+        - row "UNSET unknown dsh permission/preset -- -- -- -- 09/08/2026, 02:07:50 PM 0ms 0 --":
+          - cell:
+            - checkbox
+          - cell "UNSET":
+            - img
+          - cell "unknown"
+          - cell "dsh permission/preset":
+            - link "dsh permission/preset":
+              - /url: /projects/UHJvamVjdDozNg==/spans/b6438eebbeced26dfbdbd9da9def81e0?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozODg%3D
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell "--"
+          - cell
+          - cell "09/08/2026, 02:07:50 PM":
+            - time: 09/08/2026, 02:07:50 PM
+          - cell "0ms":
+            - img
+            - text: 0ms
+          - cell "0":
+            - button "0":
+              - img
+              - text: "0"
+          - cell "--"
+    - separator
+    - button "Project Info"
+    - text: Name
+    - textbox "Name": gh-discovery-20260908-workflow-1
+    - button "Copy to clipboard":
+      - img
+    - text: ID
+    - textbox "ID": UHJvamVjdDozNg==
+    - button "Copy to clipboard":
+      - img
+    - text: Description
+    - textbox "Description"
+    - button "Copy to clipboard":
+      - img
+    - separator
+    - button "Stats" [expanded]
+    - heading "Total Traces" [level=3]
+    - text: "17"
+    - heading "Total Cost" [level=3]
+    - button "$0"
+    - heading "Latency P50" [level=3]
+    - img
+    - text: 0ms
+    - heading "Latency P99" [level=3]
+    - img
+    - text: 54.4s
+- complementary "Detail drawer":
+  - separator "Resize drawer"
+  - dialog "Trace Copy ID 9fe672b86ab4fbd0d77862bcf7fea18d":
+    - button:
+      - img
+    - button "Next trace":
+      - img
+    - button "Previous trace":
+      - img
+    - heading "Trace Copy ID 9fe672b86ab4fbd0d77862bcf7fea18d" [level=2]:
+      - heading "Trace" [level=3]
+      - button "Copy ID 9fe672b86ab4fbd0d77862bcf7fea18d":
+        - img
+        - text: 9fe672b86ab4fbd0d77862bcf7fea18d
+        - img
+    - button "Share":
+      - img
+      - text: Share
+    - main:
+      - heading "Status" [level=3]
+      - text: Unset
+      - heading "Total Cost" [level=3]
+      - button "$0"
+      - heading "Latency" [level=3]
+      - img
+      - text: 1m 3s
+      - link "View Session":
+        - /url: /projects/UHJvamVjdDozNg==/sessions/UHJvamVjdFNlc3Npb246MzI=?timeRangeKey=7d
+        - img
+        - text: View Session
+      - img
+      - searchbox "Search trace tree"
+      - button "Collapse all":
+        - img
+      - button "Hide metrics in trace tree":
+        - img
+      - list:
+        - button "agent invoke_agent dsh":
+          - img
+          - text: invoke_agent dsh
+          - button
+        - list:
+          - listitem:
+            - button "unknown dsh step":
+              - img
+              - text: dsh step
+              - button
+            - list:
+              - listitem:
+                - button "llm chat chat-model 15,416":
+                  - img
+                  - text: chat chat-model
+                  - button "15,416":
+                    - img
+                    - text: 15,416
+              - listitem:
+                - button "tool execute_tool read":
+                  - img
+                  - text: execute_tool read
+          - listitem:
+            - button "llm chat chat-model 205":
+              - img
+              - text: chat chat-model
+              - button "205":
+                - img
+                - text: "205"
+          - listitem:
+            - button "unknown dsh step":
+              - img
+              - text: dsh step
+              - button
+            - list:
+              - listitem:
+                - button "llm chat chat-model 14,867":
+                  - img
+                  - text: chat chat-model
+                  - button "14,867":
+                    - img
+                    - text: 14,867
+              - listitem:
+                - button "tool execute_tool workflow":
+                  - img
+                  - text: execute_tool workflow
+              - listitem:
+                - button "unknown invoke_workflow dsh":
+                  - img
+                  - text: invoke_workflow dsh
+          - listitem:
+            - button "unknown dsh step":
+              - img
+              - text: dsh step
+              - button
+            - list:
+              - listitem:
+                - button "llm chat chat-model 14,988":
+                  - img
+                  - text: chat chat-model
+                  - button "14,988":
+                    - img
+                    - text: 14,988
+      - separator
+      - text: agent invoke_agent dsh Unset
+      - link "Prompt Playground":
+        - /url: /playground/spans/U3Bhbjo3MzE=
+        - img
+      - button:
+        - img
+      - button "Download span":
+        - img
+      - button "Copy Span ID 8f27c906792f64e6":
+        - text: 8f27c906792f64e6
+        - img
+      - text: · 1m 3s · 09/08/2026, 02:07:50 PM
+      - tablist:
+        - tab "Info" [selected]
+        - tab "Attributes"
+        - tab "Events 5"
+      - button "Collapse all sections":
+        - img
+      - tabpanel "Info":
+        - button "Annotations"
+        - heading "Annotations 0" [level=3]
+        - button "Annotate this span":
+          - img
+        - button "Attributes" [expanded]
+        - heading "Attributes 18 More information" [level=3]:
+          - text: Attributes 18
+          - button "More information":
+            - img
+        - img
+        - searchbox "Search JSON keys and values"
+        - button "Search JSON keys and values"
+        - button "Wrap each row over as many lines as it needs":
+          - img
+        - radiogroup "JSON view mode":
+          - radio "Table" [checked]
+          - radio "JSON"
+        - button:
+          - img
+        - table:
+          - rowgroup:
+            - row "Key Value":
+              - columnheader "Key":
+                - button "Key"
+              - columnheader "Value":
+                - button "Value"
+          - rowgroup:
+            - row "gh. turn Copy key 1 Copy value":
+              - cell "gh. turn Copy key":
+                - text: gh.turn
+                - button "Copy key":
+                  - img
+              - cell "1 Copy value":
+                - text: "1"
+                - button "Copy value":
+                  - img
+            - row "gh. event. seq Copy key 4 Copy value":
+              - cell "gh. event. seq Copy key":
+                - text: gh.event.seq
+                - button "Copy key":
+                  - img
+              - cell "4 Copy value":
+                - text: "4"
+                - button "Copy value":
+                  - img
+            - row "gh. events. dropped Copy key 0 Copy value":
+              - cell "gh. events. dropped Copy key":
+                - text: gh.events.dropped
+                - button "Copy key":
+                  - img
+              - cell "0 Copy value":
+                - text: "0"
+                - button "Copy value":
+                  - img
+            - row "gh. source. id Copy key session-c7fce340-e73a-44cd-83c4-2cde1440e5c4/turn/1 Copy value":
+              - cell "gh. source. id Copy key":
+                - text: gh.source.id
+                - button "Copy key":
+                  - img
+              - cell "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4/turn/1 Copy value":
+                - text: session-c7fce340-e73a-44cd-83c4-2cde1440e5c4/turn/1
+                - button "Copy value":
+                  - img
+            - row "gh. capture. origin Copy key live Copy value":
+              - cell "gh. capture. origin Copy key":
+                - text: gh.capture.origin
+                - button "Copy key":
+                  - img
+              - cell "live Copy value":
+                - text: live
+                - button "Copy value":
+                  - img
+            - row "gh. capture. content Copy key rich-redacted Copy value":
+              - cell "gh. capture. content Copy key":
+                - text: gh.capture.content
+                - button "Copy key":
+                  - img
+              - cell "rich-redacted Copy value":
+                - text: rich-redacted
+                - button "Copy value":
+                  - img
+            - row "gh. capture. incomplete Copy key false Copy value":
+              - cell "gh. capture. incomplete Copy key":
+                - text: gh.capture.incomplete
+                - button "Copy key":
+                  - img
+              - cell "false Copy value":
+                - text: "false"
+                - button "Copy value":
+                  - img
+            - row "gh. mapping. version Copy key 1 Copy value":
+              - cell "gh. mapping. version Copy key":
+                - text: gh.mapping.version
+                - button "Copy key":
+                  - img
+              - cell "1 Copy value":
+                - text: "1"
+                - button "Copy value":
+                  - img
+            - row "gh. session. format_version Copy key 2 Copy value":
+              - cell "gh. session. format_version Copy key":
+                - text: gh.session.format_version
+                - button "Copy key":
+                  - img
+              - cell "2 Copy value":
+                - text: "2"
+                - button "Copy value":
+                  - img
+            - row "gh. turn. usage. total_tokens Copy key 45271 Copy value":
+              - cell "gh. turn. usage. total_tokens Copy key":
+                - text: gh.turn.usage.total_tokens
+                - button "Copy key":
+                  - img
+              - cell "45271 Copy value":
+                - text: "45271"
+                - button "Copy value":
+                  - img
+            - row "gh. turn. usage. output_tokens Copy key 3184 Copy value":
+              - cell "gh. turn. usage. output_tokens Copy key":
+                - text: gh.turn.usage.output_tokens
+                - button "Copy key":
+                  - img
+              - cell "3184 Copy value":
+                - text: "3184"
+                - button "Copy value":
+                  - img
+            - row "gh. turn. usage. uncached_input_tokens Copy key 42087 Copy value":
+              - cell "gh. turn. usage. uncached_input_tokens Copy key":
+                - text: gh.turn.usage.uncached_input_tokens
+                - button "Copy key":
+                  - img
+              - cell "42087 Copy value":
+                - text: "42087"
+                - button "Copy value":
+                  - img
+            - row "gh. turn. outcome Copy key completed Copy value":
+              - cell "gh. turn. outcome Copy key":
+                - text: gh.turn.outcome
+                - button "Copy key":
+                  - img
+              - cell "completed Copy value":
+                - text: completed
+                - button "Copy value":
+                  - img
+            - row "gen_ai. agent. name Copy key dsh Copy value":
+              - cell "gen_ai. agent. name Copy key":
+                - text: gen_ai.agent.name
+                - button "Copy key":
+                  - img
+              - cell "dsh Copy value":
+                - text: dsh
+                - button "Copy value":
+                  - img
+            - row "gen_ai. operation. name Copy key invoke_agent Copy value":
+              - cell "gen_ai. operation. name Copy key":
+                - text: gen_ai.operation.name
+                - button "Copy key":
+                  - img
+              - cell "invoke_agent Copy value":
+                - text: invoke_agent
+                - button "Copy value":
+                  - img
+            - row "gen_ai. conversation. id Copy key session-c7fce340-e73a-44cd-83c4-2cde1440e5c4 Copy value":
+              - cell "gen_ai. conversation. id Copy key":
+                - text: gen_ai.conversation.id
+                - button "Copy key":
+                  - img
+              - cell "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4 Copy value":
+                - text: session-c7fce340-e73a-44cd-83c4-2cde1440e5c4
+                - button "Copy value":
+                  - img
+            - row "session. id Copy key session-c7fce340-e73a-44cd-83c4-2cde1440e5c4 Copy value":
+              - cell "session. id Copy key":
+                - text: session.id
+                - button "Copy key":
+                  - img
+              - cell "session-c7fce340-e73a-44cd-83c4-2cde1440e5c4 Copy value":
+                - text: session-c7fce340-e73a-44cd-83c4-2cde1440e5c4
+                - button "Copy value":
+                  - img
+            - row "openinference. span. kind Copy key AGENT Copy value":
+              - cell "openinference. span. kind Copy key":
+                - text: openinference.span.kind
+                - button "Copy key":
+                  - img
+              - cell "AGENT Copy value":
+                - text: AGENT
+                - button "Copy value":
+                  - img
+        - button "Notes 0":
+          - heading "Notes 0" [level=3]
+        - button "Take notes":
+          - img
+      - separator
+      - button "Edit Annotations" [expanded]
+      - button "Add Annotation":
+        - img
+        - text: Annotation
+      - button "Close annotations":
+        - img
+      - img
+      - text: No annotation configurations for this project.
+- status
+[{"text":"Search\nCTRL\nCTRLK","title":"","label":null},{"text":"Account","title":"","label":"Account"},{"text":"","title":"","label":"Collapse side navigation"},{"text":"","title":"","label":"Copy"},{"text":"Last 7 Days","title":"","label":null},{"text":"","title":"","label":"Pan back in time"},{"text":"","title":"","label":"Zoom out"},{"text":"","title":"","label":"Stop live streaming"},{"text":"","title":"","label":"Zoom in"},{"text":"","title":"","label":"Pan forward in time"},{"text":"Ask PXI","title":"","label":null},{"text":"error","title":"error","label":"Hide error"},{"text":"ok","title":"ok","label":"Hide ok"},{"text":"unset","title":"unset","label":"Hide unset"},{"text":"","title":"","label":"Plain-English query"},{"text":"","title":"","label":"AI query settings"},{"text":"","title":"","label":"Clear filter condition"},{"text":"Charts","title":"","label":"Select metric charts"},{"text":"Columns","title":"","label":null},{"text":"","title":"","label":"Wrap each row over as many lines as it needs"},{"text":"","title":"","label":"Hide aside panel"},{"text":"","title":"","label":"Reorder status column"},{"text":"","title":"","label":"Reorder kind column"},{"text":"","title":"","label":"Reorder name column"},{"text":"","title":"","label":"Reorder input column"},{"text":"","title":"","label":"Reorder output column"},{"text":"","title":"","label":"Reorder error column"},{"text":"","title":"","label":"More information"},{"text":"","title":"","label":"Reorder user column"},{"text":"","title":"","label":"Reorder annotations column"},{"text":"","title":"","label":"More information"},{"text":"","title":"","label":"Reorder start time column"},{"text":"","title":"","label":"Reorder latency column"},{"text":"","title":"","label":"Reorder cumulative tokens column"},{"text":"","title":"","label":"Reorder cumulative cost column"},{"text":"Project Info","title":"","label":null},{"text":"","title":"","label":"Copy to clipboard"},{"text":"","title":"","label":"Copy to clipboard"},{"text":"","title":"","label":"Copy to clipboard"},{"text":"Stats","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":"Next trace"},{"text":"","title":"","label":"Previous trace"},{"text":"9fe672b86ab4fbd0d77862bcf7fea18d","title":"","label":"Copy ID 9fe672b86ab4fbd0d77862bcf7fea18d"},{"text":"Share","title":"","label":null},{"text":"","title":"","label":"Clear search"},{"text":"","title":"","label":"Collapse all"},{"text":"","title":"","label":"Hide metrics in trace tree"},{"text":"","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":"Download span"},{"text":"8f27c906792f64e6","title":"","label":"Copy Span ID 8f27c906792f64e6"},{"text":"","title":"","label":"Collapse all sections"},{"text":"","title":"","label":"Annotations"},{"text":"","title":"","label":"Annotate this span"},{"text":"","title":"","label":"Attributes"},{"text":"","title":"","label":"More information"},{"text":"","title":"","label":"Clear search"},{"text":"","title":"","label":"Search JSON keys and values"},{"text":"","title":"","label":"Wrap each row over as many lines as it needs"},{"text":"Table","title":"","label":null},{"text":"JSON","title":"","label":null},{"text":"","title":"","label":null},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"","title":"","label":"Copy key"},{"text":"","title":"","label":"Copy value"},{"text":"Notes\n0","title":"","label":null},{"text":"","title":"","label":"Take notes"},{"text":"Edit Annotations","title":"","label":null},{"text":"Annotation","title":"","label":"Add Annotation"},{"text":"","title":"","label":"Close annotations"}]
+[{"text":"","href":"/"},{"text":"Tracing\n37","href":"/projects"},{"text":"Dashboards","href":"/dashboards"},{"text":"Datasets & Experiments\n3","href":"/datasets"},{"text":"Evaluators\n0","href":"/evaluators"},{"text":"Prompts\n0","href":"/prompts"},{"text":"Playground","href":"/playground"},{"text":"Chat","href":"/chat"},{"text":"REST API","href":"/apis/rest"},{"text":"GraphQL","href":"/apis/graphql"},{"text":"Star on GitHub\n11.4k","href":"https://github.com/Arize-ai/phoenix"},{"text":"Settings","href":"/settings"},{"text":"Projects","href":"/projects"},{"text":"gh-discovery-20260908-workflow-1","href":"/projects/UHJvamVjdDozNg=="},{"text":"invoke_agent dsh","href":"/projects/UHJvamVjdDozNg==/spans/e98fe0b4859115c59b1ec798a48a1f6d?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MjU%3D"},{"text":"dsh agent/inbox/spliced","href":"/projects/UHJvamVjdDozNg==/spans/350993d2f70ce76b29321d3904b31d83?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDQ%3D"},{"text":"invoke_agent dsh","href":"/projects/UHJvamVjdDozNg==/spans/185a442ca74c9df1526a2dd6c0376f31?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MTc%3D"},{"text":"dsh agent/inbox/spliced","href":"/projects/UHJvamVjdDozNg==/spans/2c198f4afe4d8e122edb7d3c3655725e?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDE%3D"},{"text":"invoke_agent dsh","href":"/projects/UHJvamVjdDozNg==/spans/e2803edb07fb4b542741100116e819a0?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MjE%3D"},{"text":"dsh agent/inbox/spliced","href":"/projects/UHJvamVjdDozNg==/spans/a8a684e3503d138d2e42293441c445a9?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTg%3D"},{"text":"dsh approval/policy","href":"/projects/UHJvamVjdDozNg==/spans/87d8984817143cbc18b4ee045d5e58b2?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDM%3D"},{"text":"dsh sandbox/mode","href":"/projects/UHJvamVjdDozNg==/spans/fd80259482ce41272debccbdbb077f7e?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDI%3D"},{"text":"dsh approval/policy","href":"/projects/UHJvamVjdDozNg==/spans/c75674fd717fc4c009f7730665b6d0db?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MDA%3D"},{"text":"dsh sandbox/mode","href":"/projects/UHJvamVjdDozNg==/spans/933b798d727de512987cea8125be82e6?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTk%3D"},{"text":"dsh approval/policy","href":"/projects/UHJvamVjdDozNg==/spans/efd2678b51c8592f2489d224528b158f?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTc%3D"},{"text":"dsh sandbox/mode","href":"/projects/UHJvamVjdDozNg==/spans/98fc5f69691ca260e20dbde4772ecbee?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo2OTY%3D"},{"text":"invoke_agent dsh","href":"/projects/UHJvamVjdDozNg==/spans/9fe672b86ab4fbd0d77862bcf7fea18d?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo3MzE%3D"},{"text":"dsh agent/inbox/spliced","href":"/projects/UHJvamVjdDozNg==/spans/8ea746cfea29be77c21f538f47985ab5?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozOTE%3D"},{"text":"dsh approval/policy","href":"/projects/UHJvamVjdDozNg==/spans/520594f6e4fae7ba4be82e34916cdb66?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozOTA%3D"},{"text":"dsh sandbox/mode","href":"/projects/UHJvamVjdDozNg==/spans/5d59463b0d7df5064f680ed2aafb7ac9?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozODk%3D"},{"text":"dsh permission/preset","href":"/projects/UHJvamVjdDozNg==/spans/b6438eebbeced26dfbdbd9da9def81e0?timeRangeKey=7d&selectedSpanNodeId=U3BhbjozODg%3D"},{"text":"View Session","href":"/projects/UHJvamVjdDozNg==/sessions/UHJvamVjdFNlc3Npb246MzI=?timeRangeKey=7d"},{"text":"","href":"/playground/spans/U3Bhbjo3MzE="}]

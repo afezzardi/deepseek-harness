@@ -1,0 +1,129 @@
+{
+  "cases": [
+    {
+      "family": "recovery",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "scoped-edit",
+      "rootTools": [
+        "edit",
+        "read",
+        "write"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "delegation",
+      "rootTools": [
+        "job_output",
+        "subagent"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "workflow",
+      "rootTools": [
+        "workflow"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "long-context",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "lifecycle",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "aggregation",
+      "rootTools": [
+        "read",
+        "write"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "extraction",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "untrusted",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "reconciliation",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "ordering",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    },
+    {
+      "family": "unicode",
+      "rootTools": [
+        "read"
+      ],
+      "childTools": [
+        "read"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "recordedRequests": 0
+}

@@ -1,0 +1,62 @@
+{
+  "observed_at_utc": "2026-09-06T07:07:16.829730+00:00",
+  "harness_sha": "6aceda0aca26418629b1aabb8a25f7d0d43e2050",
+  "node": "v24.12.0",
+  "clones": [
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/ReMe",
+      "remote": "https://github.com/agentscope-ai/ReMe.git",
+      "sha": "0eba6ea831c915ca92e4c501785951dc00538a41"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/awesome-dsh-plugin",
+      "remote": "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin.git",
+      "sha": "9b2c19020ba37bb0f34a27320171c6bb6a45d2ce"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-milvus",
+      "remote": "https://github.com/zilliztech/dsh-milvus.git",
+      "sha": "604b041bab952a57c713974f85c97bf4dc1c9386"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-native-memory",
+      "remote": "https://github.com/highland0971/dsh-native-memory.git",
+      "sha": "9acd2ca676fc58a8c8d7a17e59f2d39fcb4c9b58"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-plugin-tavily",
+      "remote": "https://github.com/1624318455/dsh-plugin-tavily.git",
+      "sha": "d5c52f87ecd7e688390f2a45444bd1b0a4d3a160"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-project-memory",
+      "remote": "https://github.com/00080000/dsh-project-memory.git",
+      "sha": "8bbe237c631b172de1491a744cca92ce250fb512"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-shell-card-plus",
+      "remote": "https://github.com/antnesswcm/dsh-shell-card-plus.git",
+      "sha": "03d9a19fea94b33d405cefa8deababb32a66ea12"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-skill-picker",
+      "remote": "https://github.com/a735624258/dsh-skill-picker.git",
+      "sha": "55dc8ccdff70b08f6419fe2c9d55fef593ba1387"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-spotlight",
+      "remote": "https://github.com/0xsline/dsh-spotlight.git",
+      "sha": "b3565e8629d9a393d764681e96f4c41100cc12fa"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-web-fetch-playwright",
+      "remote": "https://github.com/chendefine/dsh-web-fetch-playwright.git",
+      "sha": "e32f205e01f434626afb2cf2388951e3f7ccedaf"
+    },
+    {
+      "directory": "/home/andrea/management/deepseek-plugins/dsh-web-search-multi",
+      "remote": "https://github.com/zmh2000829/dsh-web-search-multi.git",
+      "sha": "c4dce6e14283be7b5c10c5f4b8ab353f307f649d"
+    }
+  ]
+}

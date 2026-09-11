@@ -4,7 +4,7 @@ Status: implemented
 
 [English](2026-07-06-parallel-pre-push-gates.md) | 中文
 
-本记录中的本地钩子部分已由[快速本地 Git 钩子](2026-07-22-fast-local-git-hooks.md) 取代。有界门禁调度器和包级 `publint` 并行机制仍用于 CI、`doc-sync` 和显式本地命令。
+本记录中的本地钩子部分已由[快速本地 Git 钩子](../../archived/process/2026-07-22-fast-local-git-hooks.md) 取代。有界门禁调度器和包级 `publint` 并行机制仍用于 CI、`doc-sync` 和显式本地命令。调度器的快速失败选项记录在[门禁运行器快速失败](../../archived/process/2026-08-27-gate-runner-fail-fast.md)。
 
 ## 问题
 
@@ -20,11 +20,13 @@ Node 24 消费方任务采用单个包含 10 道门禁的模式，而非由 shel
 
 [scripts/publint-all.ts](../../../../scripts/publint-all.ts) 从 `packages/<group>/<pkg>` 发现包，并以根据 `availableParallelism()` 确定大小的 worker 池运行 `publint`。`DSH_PUBLINT_CONCURRENCY` 可以针对资源配置不同的本地机器和 CI runner 限制或提高 worker 数量。结果按包缓冲，并按确定性的包顺序打印，因此并行执行不会打乱各包的日志块。
 
-各门禁的包脚本仍是临时本地运行所用的命令入口。`hygiene` 继续作为聚合 `&&` 链，而 `doc-sync` 的成员列表由调度器管理（[通过门禁调度器运行 doc-sync](../../archived/process/2026-07-21-doc-sync-through-gate-scheduler.md)）。
+各门禁的包脚本仍是临时本地运行所用的命令入口。`hygiene` 调用包含相同十三道检查且限制为本地四个 worker 的调度器模式，而 `doc-sync` 的成员列表由调度器管理（[通过门禁调度器运行 doc-sync](../../archived/process/2026-07-21-doc-sync-through-gate-scheduler.md)）。
 
 ## 验证
 
-[scripts/run-gates.spec.ts](../../../../scripts/run-gates.spec.ts) 在执行器运行前拒绝无效图，锁定必须通过与只等结算两种顺序，锁定消费方与原生 Windows 清单及其失败语义，通过真实子进程验证信号终止，并证明流式输出会立即显示且不被缓冲。[scripts/publint-all.spec.ts](../../../../scripts/publint-all.spec.ts) 在下游产物消费方运行前拒绝缺失的公开导出。
+快速失败采样器将 PID 关系视为图：Windows 可以复用父进程标识符，因此遍历只访问每个 PID 一次，并排除根进程。队列独立于邻接列表，逐个追加子进程可以避免宽表触及 JavaScript 的函数参数数量限制。环、重复行和宽表回归测试覆盖采样与终止所用的同一遍历函数。
+
+[scripts/run-gates.spec.ts](../../../../scripts/run-gates.spec.ts) 在执行器运行前拒绝无效图，锁定必须通过与只等结算两种顺序，锁定 hygiene、消费方与原生 Windows 清单及其失败语义，通过真实子进程验证信号终止，并证明流式输出会立即显示且不被缓冲。[scripts/publint-all.spec.ts](../../../../scripts/publint-all.spec.ts) 在下游产物消费方运行前拒绝缺失的公开导出。
 
 ## 曾考虑的替代方案
 
@@ -36,6 +38,8 @@ Node 24 消费方任务采用单个包含 10 道门禁的模式，而非由 shel
 - **以无界并发运行 `publint`**：虽能最大限度缩短小型仓库的耗时，却会拿进程数量、内存压力、包 tarball 创建开销和日志可读性冒险。
 
 ## 后果
+
+进程表中的环不会使采样器队列无限增长或导致协调器崩溃。已访问集合的内存开销与观察到的 PID 数量成正比；仅凭 PID 的观察仍无法在标识符复用后证明进程身份。
 
 由调度器支持的命令耗时取决于最慢的依赖链，而非各独立门禁耗时之和，并会报告决定总耗时的门禁。无效图会直接失败，不会先执行其中一部分。代价是维护一个具有显式模式清单的定制调度器。
 

@@ -1,0 +1,9 @@
+{
+  "checkpoint": "unsloth/Qwen3.8-27B-NVFP4@7d6f8d4d72f56b92b3cdbf22f156b90e1bab0108",
+  "tokenizer": "unsloth/Qwen3.8-27B-NVFP4@7d6f8d4d72f56b92b3cdbf22f156b90e1bab0108",
+  "templateHash": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+  "modelAlias": "chat-model",
+  "inspectionEvidence": "deployed-inspection.log; deployed-tokenizer-hashes.log",
+  "tokenizeEndpoint": "http://100.108.76.12:4000/engine/tokenize",
+  "apiKeyEnv": "LITELLM_MASTER_KEY"
+}

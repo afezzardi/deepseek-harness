@@ -1,0 +1,25 @@
+# Agent Note: private workspace for executable lint probes
+
+Status: implemented
+
+English | [中文](2026-09-11-private-lint-contract-workspace.zh.md)
+
+## Problem
+
+The executable lint tests create temporary TypeScript sources to exercise project discovery and source-versus-test rules. A concurrent catalog scan can enumerate a probe before its owner deletes it, then fail with ENOENT while opening it. Unique filenames prevent collisions between writers but do not isolate readers of the source tree.
+
+## Decision
+
+The [lint spec](../../../../scripts/oxlint-contract.spec.ts) copies the TypeScript project layout into an exclusive temporary workspace, shares dependency and native-declaration directories read-only, and removes the workspace after its synchronous subprocesses complete. Probes never enter the real checkout. An assertion checks that placement while each project-discovery probe exists.
+
+The [runner temporary-storage policy](2026-09-06-pr-ci-runner-temporary-storage.md) continues to own job cleanup and capacity. This decision adds reader isolation within that storage; it does not replace the runner policy.
+
+## Alternatives considered
+
+**Ignore missing files in catalog generation.** This would hide source mutations and leave ownership of the transient files unresolved.
+
+**Serialize tests inside one Vitest process.** This would not protect scans in other coverage partitions.
+
+## Consequences
+
+The copied workspace adds setup I/O and temporary disk usage. Catalog scans can run concurrently with lint probes without reading their transient sources.

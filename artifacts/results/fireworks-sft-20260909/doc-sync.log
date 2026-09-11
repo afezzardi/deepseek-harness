@@ -1,0 +1,101 @@
+$ tsx scripts/run-gates.ts doc-sync
+run-gates: doc-sync running 33 gate(s) with 4 worker(s) from 24 available CPU(s), doc-sync cap 4.
+run-gates: start doc-typecheck
+run-gates: start documentation build
+run-gates: start doc graphs
+run-gates: start markdown links
+run-gates: PASS markdown links (32.07s)
+run-gates: start type equivalence
+run-gates: PASS doc-typecheck (38.66s)
+run-gates: start cordis catalog
+run-gates: PASS type equivalence (15.13s)
+run-gates: start Cordis inspect catalog
+run-gates: PASS doc graphs (50.28s)
+run-gates: start verify-mermaid
+run-gates: PASS Cordis inspect catalog (9.68s)
+run-gates: start scoped events
+run-gates: PASS cordis catalog (26.55s)
+run-gates: start translation pairing
+run-gates: PASS verify-mermaid (17.53s)
+run-gates: start markdown wrap
+
+== FAILED markdown wrap (1.43s) ==
+command: pnpm run verify-md-wrap
+outcome: exit 1
+$ tsx scripts/verify-md-wrap.ts
+node:fs:1701
+  const stats = binding.lstat(
+                        ^
+
+Error: ENOTDIR: not a directory, lstat '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+    at lstatSync (node:fs:1701:25)
+    at getDirentSync (node:internal/fs/glob:68:16)
+    at Cache.statSync (node:internal/fs/glob:134:17)
+    at #addSubpatterns (node:internal/fs/glob:395:32)
+    at Glob.globSync (node:internal/fs/glob:312:29)
+    at globSync (node:fs:3224:37)
+    at uniqueRepoFiles (/home/andrea/management/deepseek-harness/scripts/repo-files.ts:44:25)
+    at <anonymous> (/home/andrea/management/deepseek-harness/scripts/verify-md-wrap.ts:73:15)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26) {
+  errno: -20,
+  code: 'ENOTDIR',
+  syscall: 'lstat',
+  path: '/home/andrea/management/deepseek-harness/snapshots/acp/image-compaction/system-prompt.expected.md/system-prompt.expected.md'
+}
+
+Node.js v24.12.0
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start client catalog
+run-gates: PASS documentation build (71.60s)
+run-gates: start export jsdoc
+run-gates: PASS client catalog (6.43s)
+run-gates: start tool catalog
+run-gates: PASS tool catalog (4.07s)
+run-gates: start config catalog
+run-gates: PASS export jsdoc (11.69s)
+run-gates: start persistence catalog
+run-gates: PASS config catalog (4.58s)
+run-gates: start Session format catalog
+run-gates: PASS Session format catalog (0.86s)
+run-gates: start public repository links
+run-gates: PASS persistence catalog (3.09s)
+run-gates: start doc refs
+run-gates: PASS public repository links (3.17s)
+run-gates: start subsystem pages
+run-gates: PASS doc refs (2.13s)
+run-gates: start package paths
+run-gates: PASS scoped events (32.36s)
+run-gates: start tsconfig paths
+run-gates: PASS subsystem pages (1.41s)
+run-gates: start config source ownership
+run-gates: PASS tsconfig paths (0.87s)
+run-gates: start package README model experience
+run-gates: PASS package paths (1.67s)
+run-gates: start agent note classification
+run-gates: PASS config source ownership (0.84s)
+run-gates: start agent note format
+run-gates: PASS agent note classification (0.91s)
+run-gates: start archived agent notes
+run-gates: PASS agent note format (0.93s)
+run-gates: start skill invocation metadata
+run-gates: PASS archived agent notes (0.99s)
+run-gates: start translation prompt
+run-gates: PASS skill invocation metadata (0.81s)
+run-gates: start doc budgets
+run-gates: PASS translation prompt (0.77s)
+run-gates: start documentation standard tests
+run-gates: PASS doc budgets (0.76s)
+run-gates: start documentation site checks
+run-gates: PASS translation pairing (28.84s)
+run-gates: start package README limitations
+run-gates: PASS documentation standard tests (3.12s)
+run-gates: PASS package README model experience (8.44s)
+run-gates: PASS package README limitations (7.91s)
+run-gates: PASS documentation site checks (9.21s)
+
+run-gates: 32 passed, 1 failed, 0 skipped in 102.34s.
+run-gates: unsuccessful gates:
+  - FAILED markdown wrap (1.43s, exit 1)
+    pnpm run verify-md-wrap
+[ELIFECYCLE] Command failed with exit code 1.

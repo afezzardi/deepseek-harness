@@ -1,0 +1,83 @@
+$ node --import tsx/esm apps/cli/src/bin.ts --profile headless 'Run one workflow using the workflow tool. This is an explicitly requested nine-agent workflow acceptance test. Submit the following meta and script exactly. Do not use plain subagent calls, add children, retry failed children, or modify files. After the workflow completes, report all nine results and any failures in under 200 words.
+
+meta: {"name":"uat-nine-readers","description":"Nine concurrent read-only agents and an ordered join"}
+
+script:
+return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));'
+dsh: reasoning:
+The user has explicitly requested a workflow test using the workflow tool. Let me check the requirements.
+
+What the user wants is to submit the following exactly:
+- meta: `{"name":"uat-nine-readers","description":"Nine concurrent read-only agents and an ordered join"}`
+- script:
+```js
+return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));
+```
+
+The user said to submit it exactly. The script is the plain JS body. Let me pass it as-is.
+
+A note on the script description: `parallel(thunks)` executes zero-argument functions concurrently and awaits all of them. The script returns a Promise. `parallel` returns the array of results.
+
+Let me verify: `Array.from({length: 9}, (_, i) => () => agent(...))` creates an array of 9 thunks, each calling `agent(...)` with a label option. That's valid.
+
+`agent(prompt, opts)` — opts.label is a valid option (display). Good.
+
+The script is:
+```js
+return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));
+```
+
+That's a single statement ending in `return await parallel(...)`. Top-level await is allowed, and ending with `return <json-value>` is also allowed.
+
+The result of parallel is an array of 9 strings (each agent's final text). That's JSON-serializable. Good.
+
+Now, does `artifacts/README.md` exist? The user didn't say to verify. Instructed to submit exactly and report the results. Even if the file doesn't exist, the agents will read it and report, or fail. But the user said "report all 9 results and failures." So I just need to run it and report.
+
+That said, let me consider whether the file exists — not required by the instructions, but might be relevant. The instructions say to submit exactly and report results and failures. I'll just run it. If the file doesn't exist, the agent may return null or report it.
+
+Actually wait — the file sandbox is workspace-write, and agents operate within the workspace. Let me just run the workflow as instructed. No need to check whether the file exists. The user wants the test executed exactly.
+
+However, there's one concern: the `script` parameter must be the plain JS body only, with no `export const meta` statement. The script I'm passing is exactly the body. Good.
+
+Let me construct the tool call.
+
+meta:
+```json
+{"name":"uat-nine-readers","description":"Nine concurrent read-only agents and an ordered join"}
+```
+
+I could add `whenToUse` or `phases`, but the user said "submit the following meta and script exactly." So I'll submit exactly the given meta with no extra fields. The meta has only name and description, both required. Good.
+
+script: exact string.
+
+Let me pass the script as-is:
+`return await parallel(Array.from({length: 9}, (_, i) => () => agent("Read artifacts/README.md using the read tool. Return only your assigned number " + (i + 1) + " and the first Markdown heading. Do not delegate, modify files, or run other tools.", {label: "reader-" + (i + 1)})));`
+
+Let me submit.
+dsh: reasoning:
+The workflow completed successfully with 9 agents, all returning results. Reporting all 9 results and failures within 200 words.
+
+All 9 returned the first Markdown heading `# artifacts/`, each prefixed with the assigned number. No failures (no nulls in the array).
+
+Let me report concisely.
+
+
+Workflow `uat-nine-readers` completed successfully — all 9 readers returned, no failures, no nulls. Ordered join preserved (array index 0→8 maps to readers 1→9).
+
+| # | Result |
+|---|--------|
+| 1 | `1.` + `# artifacts/` |
+| 2 | `2` + `# artifacts/` |
+| 3 | `3 — # artifacts/` |
+| 4 | `4` + `# artifacts/` |
+| 5 | `5` + `# artifacts/` |
+| 6 | `6` + `# artifacts/` |
+| 7 | `7` + `# artifacts/` |
+| 8 | `8:` + `# artifacts/` |
+| 9 | `9` + `# artifacts/` |
+
+All nine agents read `artifacts/README.md`, returned their assigned number, and correctly reported the first Markdown heading: `# artifacts/`. Numbering format varied slightly (leading newlines, `:`, `—`, backticks, a `First Markdown heading:` prefix on #6) — each agent phrased it on its own, but every response contained the correct number and heading.
+
+**Failures: none.** No retries, no added children, no file modifications. The ordered join held: `parallel` returned results in thunk order 1→9.
+
+Acceptance test passed: 9/9 concurrent read-only agents resolved and joined in order.

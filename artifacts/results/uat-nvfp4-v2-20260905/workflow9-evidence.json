@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "parent": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/session-aba40898-f296-49e5-b7a7-75f5f8404217/session.v2.jsonl.zstd",
+  "runId": "11c92bfd-2f7d-4f70-8931-45524185ad28",
+  "peakActiveChildren": 9,
+  "workflowMs": 15349,
+  "parentWallMs": 38989,
+  "totalInputTokens": 295027,
+  "totalOutputTokens": 2539,
+  "children": [
+    {
+      "seq": 1,
+      "sessionId": "d1147380-d1c3-49bb-be37-644f4565bdae",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/d1147380-d1c3-49bb-be37-644f4565bdae/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n1. `# artifacts/`"
+    },
+    {
+      "seq": 2,
+      "sessionId": "003ff661-a2c5-4c4c-b052-25839d5bda2a",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/003ff661-a2c5-4c4c-b052-25839d5bda2a/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n2\n# artifacts/"
+    },
+    {
+      "seq": 3,
+      "sessionId": "8272f537-7301-45b2-9e4b-fb533af89ee2",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/8272f537-7301-45b2-9e4b-fb533af89ee2/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n3 — # artifacts/"
+    },
+    {
+      "seq": 4,
+      "sessionId": "068ac855-249a-4248-88c8-0bbad141ec8b",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/068ac855-249a-4248-88c8-0bbad141ec8b/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n4\n# artifacts/"
+    },
+    {
+      "seq": 5,
+      "sessionId": "0d544f72-068a-4301-9bca-a10685b3ea6c",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/0d544f72-068a-4301-9bca-a10685b3ea6c/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n5\n\n# artifacts/"
+    },
+    {
+      "seq": 6,
+      "sessionId": "2f2eeca9-7845-43d0-b21c-770d0aaea272",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/2f2eeca9-7845-43d0-b21c-770d0aaea272/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n6\n\nFirst Markdown heading: `# artifacts/`"
+    },
+    {
+      "seq": 7,
+      "sessionId": "8764b75a-c6e0-4496-8bf1-0168c697004d",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/8764b75a-c6e0-4496-8bf1-0168c697004d/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n7\n\n# artifacts/"
+    },
+    {
+      "seq": 8,
+      "sessionId": "8c8d2a1f-e915-4a7c-ab72-67ca0881317b",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/8c8d2a1f-e915-4a7c-ab72-67ca0881317b/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n8: # artifacts/"
+    },
+    {
+      "seq": 9,
+      "sessionId": "2c63bbc0-2124-4eef-95de-31015198f070",
+      "file": "/home/andrea/.dsh/sessions/--home-andrea-management-deepseek-harness--/2c63bbc0-2124-4eef-95de-31015198f070/session.v2.jsonl.zstd",
+      "outcome": "completed",
+      "tools": {
+        "read": 1
+      },
+      "result": "\n\n9\n# artifacts/"
+    }
+  ]
+}
