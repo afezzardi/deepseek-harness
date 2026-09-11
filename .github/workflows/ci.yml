@@ -120,9 +120,9 @@ jobs:
     name: node 24 / coverage
     env:
       # Partitioning replaces the instrumented share; this budget gives the
-      # exempt-heavy gate two workers on both hosted and failover runners.
+      # exempt-heavy gate one worker in forks and two upstream.
       DSH_COVERAGE_MAX_WORKERS: ${{ github.event.repository.fork && '2' || '6' }}
-      DSH_COVERAGE_PARTITIONS: '4'
+      DSH_COVERAGE_PARTITIONS: ${{ github.event.repository.fork && '2' || '4' }}
       DSH_GATE_CONCURRENCY: ${{ github.event.repository.fork && '2' || '3' }}
       # Managed-scope teardown cases run past the default per-test budget when
       # this lane's partitions, workers, and sibling gates share one host: the
@@ -528,7 +528,7 @@ jobs:
     timeout-minutes: 120
     env:
       DSH_COVERAGE_MAX_WORKERS: ${{ github.event.repository.fork && '2' || '6' }}
-      DSH_COVERAGE_PARTITIONS: '4'
+      DSH_COVERAGE_PARTITIONS: ${{ github.event.repository.fork && '2' || '4' }}
       DSH_COVERAGE_TEST_TIMEOUT_MS: '90000'
       DSH_GATE_CONCURRENCY: ${{ github.event.repository.fork && '2' || '3' }}
       # A gate failure aborts the sibling gate instead of waiting out its
@@ -644,7 +644,8 @@ jobs:
             });
           });
           '@ | Set-Content -LiteralPath $diagnostics
-          node --import "$diagnostics" ./node_modules/vitest/vitest.mjs run `
+          $diagnosticsUrl = node --input-type=module -e 'import { pathToFileURL } from "node:url"; console.log(pathToFileURL(process.argv[1]).href)' "$diagnostics"
+          node --import "$diagnosticsUrl" ./node_modules/vitest/vitest.mjs run `
             --no-file-parallelism `
             --reporter=verbose `
             --testTimeout 90000 `

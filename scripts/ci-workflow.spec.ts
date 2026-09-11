@@ -216,7 +216,6 @@ describe('CI workflow', () => {
 
     // windows-coverage uses the lower 4-partition profile.
     expect(windowsCoverage.name).toBe('windows node 24 / coverage')
-    expect(windowsCoverage.env).toMatchObject({ DSH_COVERAGE_PARTITIONS: '4' })
     const coverageSteps = windowsCoverage.steps as unknown[]
     const coverageCommands = coverageSteps.filter((step): step is Record<string, unknown> & { run: string } => (
       isRecord(step) && typeof step.run === 'string'
@@ -334,6 +333,13 @@ describe('CI workflow', () => {
         fromJSON: JSON.parse,
         github: { event: { repository: { fork }, pull_request: { user: { login } } } },
       }, { timeout: 1000 })
+    }
+    for (const job of [node24Coverage, windowsCoverage]) {
+      if (!isRecord(job.env)) throw new TypeError('Coverage job must define its worker budgets')
+      const partitions = job.env.DSH_COVERAGE_PARTITIONS
+      expect(typeof partitions).toBe('string')
+      expect(evaluate(partitions as string, {}, 'maintainer', true)).toBe('2')
+      expect(evaluate(partitions as string, {})).toBe('4')
     }
     for (const [name, selector, variable, pool, hosted] of [
       ['linux gates', selectors.linux, 'DSH_CI_FAILOVER_LINUX', ['self-hosted', 'linux', 'x64', 'vm-backup'], 'dsh-ubuntu-24-04-16core'],

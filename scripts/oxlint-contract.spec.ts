@@ -1,15 +1,39 @@
 import { spawnSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { join, relative } from 'node:path'
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { flattenDiagnosticMessageText, parseConfigFileTextToJson } from 'typescript'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-const repositoryRoot = fileURLToPath(new URL('..', import.meta.url))
+const sourceRoot = fileURLToPath(new URL('..', import.meta.url))
+let repositoryRoot: string
 const oxlintCli = fileURLToPath(new URL('../node_modules/oxlint/bin/oxlint', import.meta.url))
 const tsxCli = fileURLToPath(new URL('../node_modules/tsx/dist/cli.mjs', import.meta.url))
+
+// Type-aware probes need the real project layout, but source scanners in other
+// processes must never discover their transient files. Dependencies and native
+// declarations are shared read-only; probes live in the copied TypeScript trees.
+beforeAll(async () => {
+  repositoryRoot = await mkdtemp(join(tmpdir(), 'dsh-oxlint-contract-'))
+  const trees = new Set(['packages', 'apps', 'scripts', 'vendor', 'website', 'examples'])
+  for (const entry of await readdir(sourceRoot, { withFileTypes: true })) {
+    if (entry.isDirectory() ? !trees.has(entry.name) : !/\.(?:json|ya?ml|[cm]?js|ts)$/.test(entry.name)) continue
+    await cp(join(sourceRoot, entry.name), join(repositoryRoot, entry.name), {
+      recursive: true,
+      filter: path => !relative(sourceRoot, path).split(sep).some(part =>
+        part === 'node_modules' || part === 'lib' || part === '.generated' || part === '.sessions'),
+    })
+  }
+  await symlink(join(sourceRoot, 'node_modules'), join(repositoryRoot, 'node_modules'), 'junction')
+  await symlink(join(sourceRoot, 'native'), join(repositoryRoot, 'native'), 'junction')
+}, 90_000)
+
+afterAll(async () => {
+  if (repositoryRoot !== undefined) await rm(repositoryRoot, { recursive: true, force: true })
+}, 90_000)
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -71,6 +95,7 @@ probePromise()
       for (const [label, parent, tsconfig, extension = '.ts'] of probes) {
         const path = join(repositoryRoot, parent, `oxlint-contract-${suffix}${extension}`)
         await writeFile(path, source)
+        expect(existsSync(join(sourceRoot, parent, `oxlint-contract-${suffix}${extension}`))).toBe(false)
         paths.push([label, relative(repositoryRoot, path), tsconfig])
       }
       const clientScript = 'scripts/client-bundle-purity.spec.ts'
