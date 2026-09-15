@@ -1,8 +1,10 @@
 # AGENTS.md — artifacts/
 
-Keep this fork's configuration, instruments, plugins, and documentation under `artifacts/`. Do not patch upstream product files to maintain a local instrument. Read [NEXT-SESSION.md](NEXT-SESSION.md) for operational status and [README.md](README.md) for the inventory.
+Keep this fork's configuration, instruments, plugins, and documentation under `artifacts/`. Authorized product corrections outside this directory require package documentation, an Agent Note, and an entry in [FORK-SOURCE-CHANGES.md](FORK-SOURCE-CHANGES.md); do not patch product files merely to maintain a local instrument. Read [NEXT-SESSION.md](NEXT-SESSION.md) for operational status and [README.md](README.md) for the inventory.
 
 ## Upstream updates
+
+Before updating from `origin` or `upstream`, inspect the [source-change register](FORK-SOURCE-CHANGES.md). Recheck each listed correction against incoming provider/dependency behavior, preserve or explicitly retire it, and execute its regression even when Git reports no conflicts.
 
 Work on `fork/qwen38-deployment`; keep `master` as the upstream mirror. Verify the fork-only diff before an update. A conflict-free sync does not prove that instruments still understand product events: inspect their current imports and run focused checks against the selected revision.
 

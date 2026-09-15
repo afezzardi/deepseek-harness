@@ -2,6 +2,8 @@
 
 English | [中文](README.zh.md)
 
+[Fork source-change register](FORK-SOURCE-CHANGES.md) — authorized product corrections and origin/upstream merge checks.
+
 Fork-local configuration, instruments, and acceptance checks for DeepSeek Harness with the self-hosted Qwen3.8-27B endpoint. Keep all deployment customizations here so the product tree can sync from upstream.
 
 Start with [NEXT-SESSION.md](NEXT-SESSION.md) for the selected revision and operational status, then use [UAT.md](UAT.md). Current tracing and replay use upstream session services through [gh-genai-traces](plugins/gh-genai-traces/README.md). Dated UAT results remain historical evidence for their recorded revisions.

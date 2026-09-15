@@ -1,5 +1,9 @@
 # Next-session entry point
 
+## SDK/PTC provider correction — 2026-09-15
+
+The SDK/PTC live attempt failed at synthesis because the provider emitted an empty tool array. Its original failure remains captured. A local provider correction and origin/upstream maintenance requirements are recorded in [FORK-SOURCE-CHANGES.md](FORK-SOURCE-CHANGES.md). The manager has not adopted the rebuilt artifact; no second live run is authorized by this handoff. Resume from the register and SOFIA’s retained trial evidence.
+
 ## Start here
 
 Resume in `/home/andrea/management/deepseek-harness` on `features/road-to-agent`, created from the fork's merged `master`. [PR #1](https://github.com/afezzardi/deepseek-harness/pull/1) is merged as `77b16a8229f07790d91771622173a397c711ba67`; it includes upstream `c291e7961a515f6d7af9304e7fd1d257929aef26`, the Session V3 tracing transition, and CI corrections. The user requested this branch and a local commit of the session work. No push is authorized by the handoff request. No rebase is needed. The `upstream` remote remains read-only; the older branch instructions in [artifacts/AGENTS.md](AGENTS.md) predate this decision.

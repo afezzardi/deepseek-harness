@@ -4,6 +4,8 @@ DeepSeek Harness is an all-plugin Cordis agent harness. Read [docs/architecture.
 
 ## Pre-stable APIs and released Session data
 
+**Fork maintenance.** This checkout carries authorized source changes outside `artifacts/`. Record each such change, rationale, regression checks, and retirement condition in [the fork source-change register](artifacts/FORK-SOURCE-CHANGES.md). Before merging or updating from `origin` or `upstream`, inspect that register and the fork-only diff; preserve or explicitly retire each correction and rerun its focused regression. A conflict-free merge is not compatibility evidence.
+
 Public APIs are pre-stable; update every consumer. [Session version/status](docs/session-format-status.md) defines the authorities. [Adjacent migration](.agents/notes/implemented/architecture/2026-08-31-released-session-format-migrations.md) may add a version-named successor but never move, overwrite, or delete committed generations; predecessors imply neither fallback nor downgrade support. SQLite uses monotonic `SCHEMA_VERSION`.
 
 **Application launch.** Only `dsh` profiles launch supported Node apps; package bins, demos, and public SDK argv escapes are forbidden ([rule](docs/architecture.md#application-launch)).

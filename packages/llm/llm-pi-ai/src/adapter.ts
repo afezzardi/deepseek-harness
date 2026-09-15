@@ -379,6 +379,14 @@ export class PiAiAdapter extends LlmAdapter {
         }, onReplayDegrade)
       const events = snapshot.models.streamSimple(model, context, {
         ...profileOptions(profile, reasoning, apiKey),
+        ...profile.omitEmptyTools === true && model.api === 'openai-completions' ? {
+          onPayload: (payload: unknown): unknown => {
+            if (typeof payload !== 'object' || payload === null || !('tools' in payload)
+              || !Array.isArray(payload.tools) || payload.tools.length !== 0) return payload
+            const { tools: _emptyTools, ...request } = payload
+            return request
+          },
+        } : {},
         ...options.temperature === undefined ? {} : { temperature: options.temperature },
         ...options.maxTokens === undefined ? {} : { maxTokens: options.maxTokens },
         ...options.sessionId === undefined ? {} : { sessionId: String(options.sessionId) },

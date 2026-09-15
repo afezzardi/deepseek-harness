@@ -2,6 +2,8 @@
 
 [English](README.md) | 中文
 
+[分叉源码变更登记表](FORK-SOURCE-CHANGES.md) — 已授权的产品修正及 origin/upstream 合并检查。
+
 这里保存 DeepSeek Harness 使用自托管 Qwen3.8-27B 端点时所需的分支本地配置、观测工具和验收检查。所有部署定制都应放在此处，以便产品代码树能够同步上游。
 
 先阅读 [NEXT-SESSION.md](NEXT-SESSION.md) 了解选定版本和运行状态，再使用 [UAT.md](UAT.md)。当前追踪和回放通过 [gh-genai-traces](plugins/gh-genai-traces/README.zh.md) 使用上游会话服务。带日期的 UAT 结果仅作为其记录版本的历史证据。

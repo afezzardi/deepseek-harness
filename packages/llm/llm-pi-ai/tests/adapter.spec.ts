@@ -9,7 +9,7 @@ import type {
   SaveImageAttachment,
   StoredImageAttachment,
 } from '@deepseek-ai/dsh-attachment'
-import LlmRuntime, { createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, ReasoningEffortId, userAgent } from '@deepseek-ai/dsh-llm'
+import LlmRuntime, { createMessage, createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, ReasoningEffortId, ToolCallId, type ToolSchema, userAgent } from '@deepseek-ai/dsh-llm'
 import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
 import { PiAiAdapter } from '@deepseek-ai/dsh-llm-pi-ai'
 import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
@@ -73,6 +73,46 @@ beforeEach(() => {
 })
 
 describe('PiAiAdapter provider routing', () => {
+  it.each([undefined, false, true])('preserves tool history with omitEmptyTools=%s', async (omitEmptyTools) => {
+    const server = await mockServer([{ events: textEvents }, { events: textEvents }])
+    const ctx = await harness(server.url, { omitEmptyTools })
+    try {
+      const callId = ToolCallId('lookup-1')
+      const messages = [
+        createMessage({
+          role: 'assistant',
+          content: [{ type: 'tool-call', id: callId, name: 'lookup', arguments: '{}' }],
+          source: { kind: 'model', provider: 'deepseek', model: 'deepseek-v4-flash' },
+        }),
+        createUserMessage({
+          content: [{ type: 'tool-result', toolCallId: callId, content: [{ type: 'text', text: 'retained evidence' }] }],
+          source: { kind: 'plugin', plugin: 'test' },
+        }),
+      ]
+      const tools: ToolSchema[] = []
+      Object.freeze(tools)
+      const result = await assemble(ctx, { model: 'deepseek-v4-flash', messages, tools })
+      expect(result.finish).toEqual({ kind: 'stop' })
+      const request = server.requests[0] as Record<string, unknown>
+      if (omitEmptyTools === true) expect(request).not.toHaveProperty('tools')
+      else expect(request.tools).toEqual([])
+      expect(request.messages).toEqual(expect.arrayContaining([
+        expect.objectContaining({ role: 'assistant', tool_calls: [expect.objectContaining({ id: callId })] }),
+        expect.objectContaining({ role: 'tool', tool_call_id: callId, content: 'retained evidence' }),
+      ]))
+      expect(tools).toEqual([])
+      await assemble(ctx, {
+        model: 'deepseek-v4-flash', messages,
+        tools: [{ name: 'lookup', description: 'Read evidence', parameters: { type: 'object', properties: {} } }],
+      })
+      expect(server.requests[1]).toHaveProperty('tools', [expect.objectContaining({
+        type: 'function', function: expect.objectContaining({ name: 'lookup' }) as unknown,
+      })])
+    } finally {
+      await ctx.fiber.dispose()
+    }
+  })
+
   it('resolves a catalog model dynamically and uses a private endpoint', async () => {
     const server = await mockServer([{ events: textEvents }])
     const ctx = await harness(server.url)
